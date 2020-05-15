@@ -44,4 +44,79 @@
     
   </entry>
   
+  <entry>
+    <title>Search Hacking信息收集姿势</title>
+    <link href="http://c.cat.plus/2013/03/12/pentest/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/"/>
+    <id>http://c.cat.plus/2013/03/12/pentest/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/</id>
+    <published>2013-03-12T12:11:12.000Z</published>
+    <updated>2020-05-15T08:36:27.132Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>SHODAN</p></blockquote><pre><code>net:8.8.8.8    or net:8.8.8.0/24 country:CN city:beijing port:22os:&quot;windows&quot;server:apachehostname:google.com</code></pre><p>example:<br>200 OK cisco country:JP<br>user:amdin pass:password<br>linux upnp avtech</p><blockquote><p>google hacking</p></blockquote><p><a href="https://www.exploit-db.com/google-hacking-database" target="_blank" rel="noopener">GHDB</a></p><pre><code>title:关键字 indext:关键字 indext:关键字inurl:/../../inurl:/admin/login.phpinurl:qq.txtinurl:ftp &quot;password&quot; filetype:xls inurl:service.pwdfiletype:xls &quot;username | password&quot;intitle:&quot;netbotz appliance&quot; &quot;ok&quot;</code></pre><blockquote><p>theHarvester （并发多引擎搜索）<br>metagoofil    (并发多引擎文件搜索)<br>Maltego</p></blockquote><p>CUPP– common User Password Proliler (根据用户信息生成密码字典)</p><pre><code>get clone https://github.com/Mebus/cupp.get</code></pre><blockquote><p>METADATA图片源信息查看</p></blockquote><p>exiftool x.jpg  #查看图片exif信息<br>foca            #windows查看图片源数据工具</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;SHODAN&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;net:8.8.8.8    or net:8.8.8.0/24 
+country:CN city:beijing port:22
+os:&amp;quot;windows&amp;quot;
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="信息收集" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    
+    
+      <category term="被动信息收集" scheme="http://c.cat.plus/tags/%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    
+      <category term="SHODAN" scheme="http://c.cat.plus/tags/SHODAN/"/>
+    
+      <category term="GOOGLE HACKING" scheme="http://c.cat.plus/tags/GOOGLE-HACKING/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>已知域名解析查询</title>
+    <link href="http://c.cat.plus/2013/03/11/pentest/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/"/>
+    <id>http://c.cat.plus/2013/03/11/pentest/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/</id>
+    <published>2013-03-11T11:21:33.000Z</published>
+    <updated>2020-05-15T08:07:31.244Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>nslookup</p></blockquote><pre><code>nslookup sina.com type=any</code></pre><blockquote><p>DIG</p></blockquote><pre><code>dig sina.com any @1.1.1.1dig mail.163.com anydig +trace www.sian.com  #根域追踪  劫持查询</code></pre><blockquote><p>DNS区域传输</p></blockquote><pre><code>dig sina.com nsdig @ns1.example.com example.com axfrhost -T -l sina.com ns2.sina.com</code></pre><blockquote><p>DNS字典爆破</p></blockquote><pre><code>fierce -dnsserver 8.8.8.8 -dns sina.com.cn -wordlist hosts.txtdnsdict6 -d4 -t 16 -x sina.com #字典质量高，速度块dnsenum -f dnsbig.txt -dnsserver 8.8.8.8 sina.com -a sina.xmldnsmap sina.com -w dns.txtdnsrecon -d sina.com --lifetime 10 -t brt -D dnsbig.txt  #快dnsrecon -t std -d sina.com</code></pre><blockquote><p>查找字典位置</p></blockquote><pre><code>dpkg -L fiercefind / -name dnsenum</code></pre><blockquote><p>DNS注册信息</p></blockquote><pre><code>whois whois -h whois.apnic.net 1.1.1.1</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;nslookup&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;nslookup sina.com type=any&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;DIG&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;cod
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="信息收集" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    
+    
+      <category term="被动信息收集" scheme="http://c.cat.plus/tags/%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    
+      <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
+    
+      <category term="渗透" scheme="http://c.cat.plus/tags/%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
 </feed>
