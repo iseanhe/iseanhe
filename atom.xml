@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://c.cat.plus/"/>
-  <updated>2020-05-14T15:12:54.169Z</updated>
+  <updated>2020-04-06T04:24:53.524Z</updated>
   <id>http://c.cat.plus/</id>
   
   <author>
@@ -15,6 +15,140 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/WEP加密-RC4算法</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-06T04:24:53.524Z</updated>
+    
+    <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;加密&lt;br&gt;    无线安全根源&lt;br&gt;        802.11基于无线电波发射信息&lt;br&gt;        嗅探侦听是主要问题&lt;br&gt;        加密机制是必须手段&lt;br&gt;    Wired Equivalent Privacy(WEP)&lt;br&gt;        80
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/WPA安全系统</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-06T07:27:20.089Z</updated>
+    
+    <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;WPA安全系统&lt;br&gt;    Wi-Fi Protected Access&lt;br&gt;    802.11i 组为提高无线安全,开发两个新的链路层加密协议&lt;br&gt;        Temporal Key Integrity Protocol(TKIP)&lt;br&gt;         
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/Management Frame</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-05T14:38:02.876Z</updated>
+    
+    <content type="html"><![CDATA[<p>Management Frame(管理帧)<br>用于协商和控制STA与AP之间的关系</p><p>Beacon Frames(是由AP发出来的帧)<br>AP发送的广播帧,通告无线网络的存在(BSSID)<br>发包频率<br>    102.4ms(可变)<br>    时间单位1024microsecond(60秒)<br>SSID网络名<br>    隐藏AP不发SSID广播<br>IBSSI Status<br>    0:intrastructure<br>    1:ad-hcc<br>Privicy<br>    WEP\WPA加密<br>ESSID<br>    名称,长度<br>速率<br>    802.11 g(1–54Mbit)<br>信道<br>    11</p><p>Probe Request Frames(由STA发出的扫描请求帧)<br>用于STA扫描现有AP<br>    发现连接过的AP<br>    发现未连接过的AP</p><p>Probe Response Frames(由AP返回的响应帧)<br>发现连接过的AP时,速率和ESSID相同的AP响应</p><p>Authentication Frames(身份认证)<br>    Authentication Algorithm身份认证类型<br>    0:开放系统身份验证<br>    1:共享密钥身份验证<br>身份认证由多个帧交换过程组成<br>Authentication Seq<br>    每次身份验证过程Seq唯一<br>    1-65535<br>Challenge text<br>    只有共享密钥方式才有此字段<br>Status Code:成功/失败</p><p>Association/Reassociation Frames(关联/重关联帧)<br>身份验证成功后,STA执行关联操作,加入无线网络<br>    Association Request    Frames<br>    Reassociation Request Frames<br>    Association Response Frames</p><p>Disassociation/Deauthentication(由AP发出)<br>由AP发出<br>    2个字节</p><p>ATIM Frames<br>只在ad-hoc网络下使用<br>    STA使用此帧通知接收者其有缓存的数据要发送</p><p>Data Frames(数据帧)<br>传输用户数据<br>    DATA Frame<br>空数据帧<br>    Null data frame<br>    只包含MAC头和FCS<br>    STA用于声明自己将要进入省电模式</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Management Frame(管理帧)&lt;br&gt;用于协商和控制STA与AP之间的关系&lt;/p&gt;
+&lt;p&gt;Beacon Frames(是由AP发出来的帧)&lt;br&gt;AP发送的广播帧,通告无线网络的存在(BSSID)&lt;br&gt;发包频率&lt;br&gt;    102.4ms(可变)&lt;br&gt;  
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/RADIOTAP头部</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-04T15:01:51.276Z</updated>
+    
+    <content type="html"><![CDATA[<p>Radiotap Head<br>802.11侦发射和接收的事实标准,802.11依赖Radiotap完成通信过程<br>Linux系统在驱动和API中内建支持Radiotap<br>802.11帧发射之前,网卡驱动在802.11头前面添加Radiotap头,反之当网卡接收到无线帧时,驱动通知MAC层,此帧头包含Radiotap头<br>Radiotap为802.11帧传递额外信息,厂家可自定义,因此头长度不固定<br>不破坏原始头结构,增加传递的信息</p><p>分为Header和data<br>Version(8bit)<br>    值始终为0<br>Pad(8bit)<br>    未使用,只作为字段强制对其占位；<br>Length(16bit)<br>    整个radiotap头长度(可变),作用是确定802.11头的开始位置<br>Present(32bit)<br>    Data段的掩码<br>    Ext(1,0)<br>    MAC不能理解的头部直接忽略</p><p>802.11头部信息<br>    DU(Data Unit)即数据单元,信息传输的最小数据集合<br>    传递过程逐层封装(Encapsulation)<br>    SDU(Service Data Unit) /PDU(Protocol Data Unit)<br>    MSDU–&gt;MIC–&gt;分帧–&gt;添加IV–&gt;加密–&gt;添加MAC头部–&gt;MPDU<br>    MPDU/PSDU+物理头=PPDU–&gt;RF发射<br>802.11 MAC头结构<br>Frame Control<br>    Protocol Version(2bit)    :802.11协议版本,始终为0,1,2,3<br>    Type(2bit)    :规定帧的具体用途(3种帧类型)<br>        控制帧(1)<br>        数据帧(2)<br>        管理帧(0)<br>    SubType(4bit)<br>        每个类型对应多个子类型,协议规定不同类型/子类型的帧完成不同功能的操作<br>    To DS/From (1/1bit)<br>        标识帧的传输方向,传向DS或者来自DS；这两个字段的值决定着MAC头中4个Adddress字段的不同定义.<br>    0x00:出现在IBSS环境中(可能是Management帧或者是Control帧类型)；或者是STSL(Stantion to Station Link)中两个STA间通信,这种情况下通信不通过AP；<br>    0x01:表示Data帧从AP向STA传递;<br>    0x02:表示Data帧从Sta向AP传递;<br>    0x03:表示两个AP间通信,这是典型的WDS(Wireless Distribution System)环境下AP间的通信,或者表示Mesh环境下MP间的通信；只有此时才会使用到Address4字段；    </p><pre><code>More frag(1bit):表示是否还有后续帧    值为1时表示有后续分段,可能是Data或Management帧类型.只有单播接收地址的帧会被分段；Retry(1bit):重传    值为1表示重传帧,可能是Data或Management帧类型,接收端进程使用此值防止帧重复；Power Mgmt(1bit):活动模式(0)/省电模式(1)    STA处于省电模式时,向关联的AP发送该值为1的帧(AP从不使用此字段),省电模式下STA不接收数据,发送给它的Data帧由AP暂时缓存；More Data(1bit)    当AP缓存了至少一个MSDU时,会向省电模式的STA发送该值为1的帧,表示有数据要传输给STA,接收到此帧的STA唤醒自己并向AP发送PS-Poll帧,    取回由AP为其缓存的数据.也被用于AP有更多的广播/多播帧需要发送的情况；Protected Frame(1bit)    可能是Data或Management帧类型,表示MSDU是否被加密；也被用于表示PSK身份验证Frame#3帧;数据载荷为空时,该字段值为0；Order(1bit)    在非QoS帧的情况下,值为1表示数据必须按严格顺序处理,通常为0；</code></pre><p>Duration/ID(16bit)<br>    所有Control帧都使用该字段,其作用随Type/SubType变化有所不同；<br>    帧类型为PS Poll(type:1,subtype:10)时,表示STA关联的AIP(association identity);<br>    其他情况下该字段作为一种载波侦听机制,表示接收下一帧之前需要保持的时间间隔,用于NAV(Network Allocation Vector)计算,单位是微秒；<br>MAC Layer Address<br>    前面已经提到了4种,这里补充最后一种:Basic service set ID(BSSID); 它是BSS的2层唯一标识,Infrastructure模式中BSSID就是AP的MAC地址,当AP支持多BSS时,随机生成每个BSSID；<br>Sequence Control(16bit)<br>    这个字段包含两个子字段:Sequence Number和Fragment Number;<br>    Sequence Number是每个帧的编号,数值范围是0–4095,以1为步长递增.当帧被分段时,同一帧中不同分段的Sequence Number相同；<br>    Fragment Number是被分段的帧用于标识分段位置顺序的编号,数值范围是0–15,以1为步长递增；</p><p>DATA部分<br>Frame Body(变长)<br>    数据字段,未加密的最大MSDU长度为2304字节(其中包含最大256字节的上层头信息,和可被传递的数据2048字节).<br>    不同的加密方法会增加一定的内容长度；<br>    WEP:8 bytes–&gt;2312bytes<br>    TKIP(WPA1):20bytes–&gt;2324bytes<br>    CCMP(WPA2):16bytes–&gt;2320bytes<br>    注:Control类型的帧没有Frame Body内容.</p><p>FCS(32bit)<br>    发送端对全部MAC包头和Frame Body内容进行CRC计算,计算结果即为FCS(Frame Check Sequence)值,接收端进行同样的计算,结果一致时,<br>    则接收端向发送端返回ACK,否则丢弃帧(只对单播帧有效,FCS错误的广播/多播帧可能被接收)<br>    注:wireshark抓包时已经删除了FCS值</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Radiotap Head&lt;br&gt;802.11侦发射和接收的事实标准,802.11依赖Radiotap完成通信过程&lt;br&gt;Linux系统在驱动和API中内建支持Radiotap&lt;br&gt;802.11帧发射之前,网卡驱动在802.11头前面添加Radiotap头,反之当网卡接收
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/Linux无线协议栈及配置命令</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-03T07:42:31.706Z</updated>
+    
+    <content type="html"><![CDATA[<p>802.11协议栈<br>leee80211<br>    iwconfig<br>    iwlist<br>mac80211<br>    iw</p><p>查看无线网卡<br>    ifconfig<br>    iwconfig<br>    iw list<br>信道频率<br>    iwlist wlan2 frequency<br>    iw list<br>扫描附近AP<br>iw dev wlan2 scan | grep SSID<br>iw dev wlan2 scan | egrep “DS\ Parameter\ set | SSID”    #扫描查看附近AP信道<br>iwlist wlan2 scanning | egrep “ESSID | Channel”            #扫描查看附近AP信道及频宽</p><p>log(signal/1mW)        #singnal无线强度接收值计算,0~-50 信号好,超过-130信号不可达</p><p>添加删除侦听端口<br>iw dev wlan2 interface add wlan2mon type monitor    #把无线网卡设置成monitor模式,进行无线数据抓包<br>    tcpdump -s 0 –i wlan2mon -p                    #tcpdump命令行抓包工具<br>    ifconfig wlan2mon up            #把wlan2mon设置成up状态<br>    service network-manager stop    #如果up不成功,停用network-manager服务<br>    service network-manager status    #network-manager服务状态查询<br>    vi ./bashrc                        #服务启动项配置<br>iw dev wlan2mon interface del</p><p>802.11<br>协议栈<br>    <a href="https://www.kernel.org/doc/htmldocs/80211/index.html" target="_blank" rel="noopener">https://www.kernel.org/doc/htmldocs/80211/index.html</a><br>无线驱动<br>    <a href="http://linuxwireless.org/en/users/Drivers/" target="_blank" rel="noopener">http://linuxwireless.org/en/users/Drivers/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;802.11协议栈&lt;br&gt;leee80211&lt;br&gt;    iwconfig&lt;br&gt;    iwlist&lt;br&gt;mac80211&lt;br&gt;    iw&lt;/p&gt;
+&lt;p&gt;查看无线网卡&lt;br&gt;    ifconfig&lt;br&gt;    iwconfig&lt;br&gt;    iw list&lt;b
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/Control Frame</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/</id>
+    <published>2020-05-18T05:59:28.899Z</published>
+    <updated>2020-04-04T15:01:43.928Z</updated>
+    
+    <content type="html"><![CDATA[<p>Control Frame(控制帧)<br>    控制帧是一些通知设备开始,停止传输或连接失败等情况的短消息;<br>ACK<br>    接收端正确接收数据之后向发送端返回ACK确认<br>    每个单播帧需要ACK立刻确认<br>        组播和广播不需要ACK确认<br>    尽快响应<br>        由硬件完成,而非驱动层<br>    T/S:1/13<br>PS-POLL<br>    RF系统的放大器<br>        主要耗电的组件<br>        发射前放大信号,接收并放大还原信号<br>    省电模式<br>        关闭信号发射器节省电源耗电(几乎完全关闭)<br>    AID—-Association ID<br>    STA省电模式唤醒<br>        数据发送至AP(AP缓存数据包)<br>        通过Beacon发送TIM(traffic indication map)<br>            其中包含AID<br>        STA对比AID后唤醒网卡<br>        STA发送PS-Poll帧,请求从AP缓存中取回数据<br>            每个帧都需要ACK确认<br>            ACK确认完后AP从缓存中删除数据帧<br>            传输过程中STA保持唤醒状态<br>            传输结束后STA恢复省电状态<br>    AP接收PS-Poll帧<br>        立刻响应<br>        延迟响应<br>            简单响应帧<br>    AID:关联ID<br>    BSSID:STA正关联的AP地址<br>    TA:发送此帧的STA地址</p><p>RTS/CTS<br>    RTS/CTS是CSMA/CA方法的一种补充手段<br>        降低冲突产生的可能性<br>        正式通信之前通过请求应答机制,确信通信介质的可用性<br>        并锁定传输介质和预约通信时间<br>        只有在传输长帧时使用,传输短帧时不会使用<br>            驱动接口提供阈值的自定义<br>            大于阈值的帧被视为长帧,反之则视为短帧.<br>        Node1发送Request to Send包给Node2<br>        如果未发生冲突,Node2返回Clear to Send给Node1<br>        Node1传输数据<br>        数据正常接收,Node2返回ACK,否则Node1什么也不会收到.<br>    有线网络介质访问方式:CSMA/CD<br>    无线网络介质访问方法:CSMA/CA<br>    隐藏节点<br>    RTS帧长度20字节<br>    CTS帧长度14字节</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Control Frame(控制帧)&lt;br&gt;    控制帧是一些通知设备开始,停止传输或连接失败等情况的短消息;&lt;br&gt;ACK&lt;br&gt;    接收端正确接收数据之后向发送端返回ACK确认&lt;br&gt;    每个单播帧需要ACK立刻确认&lt;br&gt;        组播和广播不需要AC
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Python花式导包的几种方法</title>
@@ -41,6 +175,40 @@
     
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HTTPS漏洞及攻击方法</title>
+    <link href="http://c.cat.plus/2014/05/18/web_attacks/HTTPS%E6%BC%8F%E6%B4%9E%E5%8F%8A%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/"/>
+    <id>http://c.cat.plus/2014/05/18/web_attacks/HTTPS%E6%BC%8F%E6%B4%9E%E5%8F%8A%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/</id>
+    <published>2014-05-18T14:22:32.000Z</published>
+    <updated>2020-05-19T06:24:18.883Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="HTTPS攻击"><a href="#HTTPS攻击" class="headerlink" title="HTTPS攻击"></a><strong>HTTPS攻击</strong></h3></blockquote><p>全站HTTPS正成为潮流趋势<br>    淘宝,百度<br>HTTPS的作用<br>    信息安全3要素: <strong><code>CIA</code></strong> (安全性,完整性,可用性)<br>    解决的是信息传输过程中数据被篡改,窃取<br>    加密:对称,非对称,单向<br>HTTPS攻击方法<br>    降级攻击<br>    解密攻击(明文,证书伪造)<br>    协议漏洞,实现方法的漏洞,配置不严格</p><p><strong>SSL</strong>(Secure Socket Layer)    // <em>1安全套接层</em><br>保证网络通信安全的加密协议<br>1994年由Netscape开发成为统一标准<br>1999年 <strong>TLS</strong>(Transport Layer Security)取代SSL v3<br>近年来发现的SSL协议漏洞使业界认为其漏洞已不可软件修复<br>    Heartbleed<br>    POODIE<br>    BEAST<br>TLS 当前最新版本 1.2<br>TLS/SSL,HTTPS,HTTP over SSL 通俗上表示同一含义</p><p>SSL/TLS也被用于其它场景的传输通道加密<br>邮件传输(服务器间,客户端与服务器间)<br>数据库服务器间<br>LDAP身份认证服务器间<br>SSL VPN<br>远程桌面RDP通信过程中的加密和身份认证</p><h4 id="Web通信中的SSL加密"><a href="#Web通信中的SSL加密" class="headerlink" title="Web通信中的SSL加密"></a><strong>Web通信中的SSL加密</strong></h4><p>公钥证书(受信任的第三方证书颁发机构签名颁发)<br>    VeriSign<br>    Thawte<br>    GlobalSign<br>    Symantec</p><h4 id="加密过程"><a href="#加密过程" class="headerlink" title="加密过程"></a><strong>加密过程</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A(握手) --&gt;B(协商加密算法) </span><br><span class="line">B --&gt; C(获取公钥证书)</span><br><span class="line">C --&gt; D(验证公钥证书)</span><br><span class="line">D --&gt; E(交换会话密钥)</span><br><span class="line">E --&gt; F(加密信息传输)</span><br></pre></td></tr></table></figure><h4 id="常见加密算法"><a href="#常见加密算法" class="headerlink" title="常见加密算法"></a><strong>常见加密算法</strong></h4><p><strong>非对称加密算法</strong><br>    Diffie-Hellman key exchange<br>    Rivest Shamir Adleman (RSA)<br>    Elliptic Curve Cryptography (ECC)<br><strong>对称加密算法</strong><br>    Data Encryption Standard (DES) / 3DES<br>    Advance Encryption Standard (AES)<br>    International Data Encryption Algorithm (IDEA)<br>    Rivest Cipher 4 (RC4)<br>        WEP̵TLS/SSL̵RDP̵Secure shell<br><strong>单向加密算法</strong></p><table><thead><tr><th>HASH算法</th><th>HASH值长度(bit)</th></tr></thead><tbody><tr><td>MD5</td><td>128</td></tr><tr><td>SHA-1</td><td>160</td></tr><tr><td>SHA-2</td><td>224, 256, 384, 512</td></tr></tbody></table><p>SHA-3已经设计完成,但尚未广泛使用<br>SHA-2是TLS 1.2唯一支持的单向加密算法<br>碰撞攻击针对单向加密算法<br>    两个不同的文件生成相同的HASH值</p><h4 id="SSL的弱点"><a href="#SSL的弱点" class="headerlink" title="SSL的弱点"></a><strong>SSL的弱点</strong></h4><p>SSL是不同的对称,非对称,单向加密算法的组合加密实现(cipher suite)</p><table><thead><tr><th>加密算法</th><th>SSL实现中的用途</th></tr></thead><tbody><tr><td>RAS / Diffle-Hellman</td><td>密钥交换,身份认证</td></tr><tr><td>AES</td><td>加密数据,由RAS/DH完成密钥交换</td></tr><tr><td>HMAC-SHA2</td><td>摘要信息</td></tr></tbody></table><p>服务器端为提供更好的兼容性,选择支持大量过时cipher suite<br>协商过程中强迫降级加密强度<br>现代处理器计算能力可以在可接受的时间内破解过时加密算法<br>购买云计算资源破解</p><h4 id="Openssl"><a href="#Openssl" class="headerlink" title="Openssl"></a><strong>Openssl</strong></h4><p>直接调用openssl库识别目标服务器支持的SSL/TLS cipher suite</p><pre><code>openssl s_client -connect www.baidu.com:443openssl s_client -tls1_2 -cipher &apos;ECDH-RSA-RC4-SHA&apos; -connect www.taobao.com:443    密钥交换-身份认证-数据加密-HASH算法openssl s_client -tls1_2 -cipher “NULL,EXPORT,LOW,DES” -connect  www.taobao.com:443    (协商低安全级别cipher suite)可被破解的cipher suite    openssl ciphers -v &quot;NULL,EXPORT,LOW,DES&quot;https://www.openssl.org/docs/apps/ciphers.html</code></pre><p>Openssl需要大量密码学相关知识,命令复杂,结果可读性差</p><h4 id="SSLScan"><a href="#SSLScan" class="headerlink" title="SSLScan"></a><strong>SSLScan</strong></h4><p>自动识别SSAL配置错误,过期协议,过时cipher suite和hash算法<br>    默认会检查CRIME,heartbleed漏洞<br>    绿色表示安全,红色黄色需要引起注意<br>    TLS支持的cipher suite<br>        <code>sslscan --tlsall www.taobao.com:443</code><br>    分析证书详细数据<br>        <code>sslscan --show-certificate --no-ciphersuites www.taobao.com:443</code></p><h4 id="SSLyze"><a href="#SSLyze" class="headerlink" title="SSLyze"></a><strong>SSLyze</strong></h4><p>Python语言编写<br>    检查SSL过时版本<br>    检查存在弱点的cipther suite<br>    扫描多站点时,支持来源文件<br>    检查是否支持会话恢复<br><code>sslyze --regular  www.taobao.com:443</code></p><h4 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a><strong>Nmap</strong></h4><pre><code>nmap --script=ssl-enum-ciphers.nse www.taobao.comdpkg -L nmap | grep script | grep ssl    #查看nmap扫描ssl相关脚本</code></pre><p><a href="https://www.ssllabs.com/ssltest" target="_blank" rel="noopener">https://www.ssllabs.com/ssltest</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;HTTPS攻击&quot;&gt;&lt;a href=&quot;#HTTPS攻击&quot; class=&quot;headerlink&quot; title=&quot;HTTPS攻击&quot;&gt;&lt;/a&gt;&lt;strong&gt;HTTPS攻击&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;全站HTTP
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="Web渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"/>
+    
+    
+      <category term="sslscan" scheme="http://c.cat.plus/tags/sslscan/"/>
+    
+      <category term="Heartbleed" scheme="http://c.cat.plus/tags/Heartbleed/"/>
+    
+      <category term="加密算法" scheme="http://c.cat.plus/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
@@ -80,10 +248,10 @@
   
   <entry>
     <title>Aircrack-ng无线攻击套件</title>
-    <link href="http://c.cat.plus/2013/06/12/pentest/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/"/>
-    <id>http://c.cat.plus/2013/06/12/pentest/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/</id>
+    <link href="http://c.cat.plus/2013/06/12/wireless_attacks/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/"/>
+    <id>http://c.cat.plus/2013/06/12/wireless_attacks/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/</id>
     <published>2013-06-11T16:12:02.000Z</published>
-    <updated>2020-05-18T03:58:22.520Z</updated>
+    <updated>2020-05-18T07:22:09.723Z</updated>
     
     <content type="html"><![CDATA[<blockquote><h3 id="AIRCRACK-NG基础"><a href="#AIRCRACK-NG基础" class="headerlink" title="AIRCRACK-NG基础"></a><strong>AIRCRACK-NG基础</strong></h3></blockquote><p>无线渗透和审计神器<br>包含各种功能的工具套件<br>    网络检测<br>    嗅探抓包<br>    包注入<br>    密码破解</p><blockquote><h4 id="AIRMON-NG"><a href="#AIRMON-NG" class="headerlink" title="AIRMON-NG"></a>AIRMON-NG</h4></blockquote><p>检查完网卡驱动<br>    airmon-ng    #检查无线网卡驱动及芯片型号</p><blockquote><h5 id="开启和停止无线侦听"><a href="#开启和停止无线侦听" class="headerlink" title="开启和停止无线侦听"></a>开启和停止无线侦听</h5></blockquote><pre><code>airmon-ng check            #检查aircrack-ng套件和当前使用系统的兼容性airmon-ng check kill    #kill掉影响aircrack-ng使用的进程airmon-ng start wlan2 3    #开启无线网卡侦听,并指定3信道iwlist wlan2mon channel    #查看工作信道airmon-ng stop wlan2mon    #停止无线侦听</code></pre><blockquote><h4 id="AIRODUMP-NG"><a href="#AIRODUMP-NG" class="headerlink" title="AIRODUMP-NG"></a>AIRODUMP-NG</h4><pre><code>无线抓包airodump-ng wlan2mon    #扫描发现每一个信道里的APairodump-ng wlan2mon -c 1 --bssid 00:11:22:33:44:55 -w file.cap #抓指定信道1,指定AP的数据,并写入文件aireplay -9 wlan2mon airreplay</code></pre></blockquote><pre><code>airodump-ng wlan2monairodump-ng wlan2mon -c 1 --bssid 00:11:22:33:44:55 -w file.capairodump-ng wlan2mon -c 1 --bssid 00:11:22:33:44:55 -w file.cap --ivs</code></pre><p>BSSID:AP的MAC地址<br>PWR:网卡接收到的信号强度,距离越近信号越强<br>    -1:驱动不支持信号强度,STA距离超出信号接受范围<br>RXQ:最近10秒成功接收的数据帧的百分比(数据帧,管理帧),只有在固定信道时才会出现.<br>Beacons:接收到此AP发送的beacon帧数量<br>Data:抓到的数据帧数量(WEP表示IV数量),包含广播数据帧<br>/s:最近10秒内,每秒平均抓到的帧的数量<br>CH:信道号(从beacon帧中获得),信道重叠时可能发现其它信道<br>MB:AP支持的最大速率<br>ENC:采用的无线安全技术 WEP,WPA,WPA2,OPEN</p><p>CIPHER:采用的加密套件CCMP,TKIP,WEP40,WEP104<br>AUTH:身份认证方法MGT,PSK,SKA,OPEN<br>ESSID:无线网络名称,隐藏AP此值可能为空,airodump从probe和association request帧中发现隐藏AP<br>STATION:STA的MAC地址<br>Lost:通过sequence number判断最近10秒STA发送丢失的数据包数量(管理帧,数据帧)<br>    干扰,距离<br>    发包不能收,收包不能发<br>Packets:STA发送的数据包数量<br>Probes:STA探测的ESSID</p><blockquote><h4 id="AIRODUMP-NG排错"><a href="#AIRODUMP-NG排错" class="headerlink" title="AIRODUMP-NG排错"></a>AIRODUMP-NG排错</h4></blockquote><p>不显示任何AP和STA信息<br>    物理机场景下使用笔记本内置无线网卡时,确保BIOS中已启用无线网卡<br>    确认无线网卡在managed模式下可以正常工作<br>    尝试禁用network-manager服务<br>    尝试卸载rmmod和重新加载modprobe驱动<br>工作一段时间后airodump-ng无法继续抓包<br>    airmon-ng check kill<br>    确认wpa_supplicant进程已停止</p><blockquote><h4 id="AIREPLAY-NG"><a href="#AIREPLAY-NG" class="headerlink" title="AIREPLAY-NG"></a>AIREPLAY-NG</h4></blockquote><p>产生或者加速无线通信流量<br>    向无线网络中注入数据包<br>        伪造身份验证<br>        强制重新身份验证<br>        抓包重放<br>    用于后续WEP和WPA密码破解<br>    支持10种包注入<br>    获取包的两种途径<br>        指定接口(-i)<br>        抓包文件pcap(-r)</p><pre><code>aireplay-ng &lt;options&gt;&lt;interface name&gt;</code></pre><p>Filter命令选项(除0,1两种攻击方式)<br>Replay命令选项</p><p>AIREPLAY-NG排错<br>    Aireplay-ng命令挂起没有任何输出<br>        无线网卡与AP工作在不同信道<br>    报错”write failed:Cannot allocate memory wi_write():illegal seek”<br>        无线网卡使用Broadcom芯片(bcm43xx),替换为b43驱动可解决<br>    可注入但速度很慢,并提示内核消息”rtc:lost some interrupts at 1024Hz”<br>        没有修正方法,此时可以启动多个aireplay-ng命令提高速度<br>    使用-h参数指定注入MAC地址与网卡MAC地址不一致报错<br>        建议保持一致(macchange)</p><p>AIREPLAY-NG包注入测试<br>    检测网卡是否可以注入包<br>    检测AP的响应时间<br>        回包率反应链路质量<br>    如果有两个无线网卡,可以检测具体可以注入哪种攻击<br>    基本测试检测AP对probe广播的响应<br>        向每AP发30包<br>        网卡成功发送并可接收包的能力<br>    基本测试<br>        <code>aireplay -9 wlan2mon</code><br>    向隐藏AP/指定SSID注入<br>        <code>aireplay-ng -9 -e leven -a EC:26:CA:FA:03:DC wlan2mon</code><br>    card to card 注入测试    #网卡到网卡<br>        <code>aireplay-ng -9 -i wlan0mon wlan2mon</code><br>        具体攻击方式<br>        -i 作为AP的网卡<br>        5/7 Faild<br>            注入MAC和真实MAC<br>            相同时可以正常使用</p>]]></content>
     
@@ -102,10 +270,14 @@
     
       <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
     
+      <category term="无线攻击" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB/"/>
+    
     
       <category term="Aircrack-ng" scheme="http://c.cat.plus/tags/Aircrack-ng/"/>
     
-      <category term="无线攻击" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB/"/>
+      <category term="无线抓包" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%8A%93%E5%8C%85/"/>
+    
+      <category term="无线破解" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E7%A0%B4%E8%A7%A3/"/>
     
   </entry>
   
@@ -167,6 +339,145 @@
       <category term="提权" scheme="http://c.cat.plus/tags/%E6%8F%90%E6%9D%83/"/>
     
       <category term="pinjector" scheme="http://c.cat.plus/tags/pinjector/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无线网络运行模式</title>
+    <link href="http://c.cat.plus/2013/05/25/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/"/>
+    <id>http://c.cat.plus/2013/05/25/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/</id>
+    <published>2013-05-25T14:31:06.000Z</published>
+    <updated>2020-05-19T07:03:59.383Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h4 id="无线网络架构"><a href="#无线网络架构" class="headerlink" title="无线网络架构"></a><strong>无线网络架构</strong></h4></blockquote><p>Infrastructure    // 基础架构模式<br>    AP 维护SSID<br>Ad-Hoc<br>    STA维护SSID<br>Service Set Identifier(SSID)<br>    AP每秒钟约10次通过Beacon帧广播SSID<br>    客户端连接到无线网络后也会宣告SSID</p><h5 id="Infrastructure"><a href="#Infrastructure" class="headerlink" title="Infrastructure"></a><strong>Infrastructure</strong></h5><p>至少包含一个AP和一个Station,形成一个Basic Service Set(BSS)<br>AP连接到有线网络,称为Distribution System(DS)<br>连接到同一个DS的多个AP形成一个Extended Service Set(ESS)</p><h5 id="AD-HOC"><a href="#AD-HOC" class="headerlink" title="AD-HOC"></a><strong>AD-HOC</strong></h5><p>也被称为Independent Basic Service Set(BISS) #独立的架构模式<br>有至少2个Station直接通信组成<br>也称为peer to peer模式        //点到点<br>其中一个STA负责AP的工作<br>    通过beacon广播SSID<br>    对其它STAs进行身份验证</p><h5 id="WIRELESS-DISTRIBUTION-SYSTEM-WDS"><a href="#WIRELESS-DISTRIBUTION-SYSTEM-WDS" class="headerlink" title="WIRELESS DISTRIBUTION SYSTEM(WDS)"></a><strong>WIRELESS DISTRIBUTION SYSTEM(WDS)</strong></h5><p>与有线DS类似,只是通过无线连接的多个AP组成的网络<br>Bridging—-只有AP间彼此通信        // 桥接<br>Repeating—-允许所有AP和STA进行通信        // 中继</p><h5 id="Monitor-Mode"><a href="#Monitor-Mode" class="headerlink" title="Monitor Mode"></a><strong>Monitor Mode</strong></h5><p>Monitor不是一种真的无线模式<br>但是对无线渗透至关重要<br>允许无线 网上没有任何筛选的抓包(802.11包头)<br>与有线网络的混杂模式可以类比<br>适合的网卡和驱动但不可以monitor,更可以Injection</p><p>无线网硬件设备及基本概念<br>无线网卡准备<br>物理机运行kali<br>虚拟机运行kali<br>外置USB无线网卡<br>TL-WN722N(个人建议)</p><pre><code>dmesg -T    // 显示系统硬件设备使用纪录iwconfig    // 无线网卡配置查询</code></pre><h5 id="选择无线网卡"><a href="#选择无线网卡" class="headerlink" title="选择无线网卡"></a><strong>选择无线网卡</strong></h5><p>这是个痛苦和受挫的过程<br>无线网卡的芯片型号是成败的关键<br>台式机<br>    USB无线网卡(不支持扩展天线)<br>    PCMCIA(16Bit已停产802.11b)<br>    Cardbus(32bit PCMCIA 8.0标准)<br>    Express Cards<br>    MiniPCI<br>    MiniPCI Express<br>    PCI接口卡<br>发送功率:远程连接<br>接收灵敏性:适当降低灵敏度,接收效果更佳<br>经验但不是铁律<br>    Atheros或Realtek芯片<br>    没有神器<br>    兼容aircrack-ng suite<br><a href="http://www.aircrack-ng.org/" target="_blank" rel="noopener">http://www.aircrack-ng.org/</a><br>无线渗透网卡没有所谓的标准,但是Aircrack-ng suite作者给出建议<br>Alfa Networks AWUS036H无线网卡<br>    Realtek 8187芯片<br>    1000 mW发送功率<br>    天线:RP-SMA<br>        可扩展</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h4 id=&quot;无线网络架构&quot;&gt;&lt;a href=&quot;#无线网络架构&quot; class=&quot;headerlink&quot; title=&quot;无线网络架构&quot;&gt;&lt;/a&gt;&lt;strong&gt;无线网络架构&lt;/strong&gt;&lt;/h4&gt;&lt;/blockquote&gt;
+&lt;p&gt;Infrastruc
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="Monitor" scheme="http://c.cat.plus/tags/Monitor/"/>
+    
+      <category term="无线模式" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="WDS" scheme="http://c.cat.plus/tags/WDS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无线通信过程</title>
+    <link href="http://c.cat.plus/2013/05/24/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B/"/>
+    <id>http://c.cat.plus/2013/05/24/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B/</id>
+    <published>2013-05-24T11:32:22.000Z</published>
+    <updated>2020-05-19T06:41:32.191Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="连接到无线网络"><a href="#连接到无线网络" class="headerlink" title="连接到无线网络"></a><strong>连接到无线网络</strong></h4><h5 id="Probe"><a href="#Probe" class="headerlink" title="Probe"></a>Probe</h5><p>STA向所有信道发出probe帧,发现AP<br>AP响应信道Response</p><h5 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a>Authentication</h5><p>STA向AP发出验证请求<br>发生认证过程(步骤可变)<br>AP相应STA的认证结果</p><h5 id="Association"><a href="#Association" class="headerlink" title="Association"></a>Association</h5><p>STA发出关联请求<br>AP响应关联请求<br>关联成功,开始通信</p><h4 id="WEP探测过程"><a href="#WEP探测过程" class="headerlink" title="WEP探测过程"></a><strong>WEP探测过程</strong></h4><p>Beacon标识使用WEP加密<br>STA发送普通Probe帧<br>AP响应Probe Response帧声明其采用WEP加密</p><h4 id="WPA探测过程"><a href="#WPA探测过程" class="headerlink" title="WPA探测过程"></a><strong>WPA探测过程</strong></h4><p>两个AP的Beacon包内容不同,但都声明采用了WPA加密<br>不同厂商对802.11标准的实现方式不同<br>包头包含WPA1字段信息</p><h4 id="WEP-OPEN认证过程"><a href="#WEP-OPEN认证过程" class="headerlink" title="WEP OPEN认证过程"></a><strong>WEP OPEN认证过程</strong></h4><p>WEP OPEN认证与open认证通信过程相同<br>正确认证后通信数据被WEP加密<br>如果认证时客户端输入错误密码<br>    认证依然可以通过<br>    AP将丢弃该STA的数据包<br>        起始向量被错误地密钥解密后完整性被破坏<br>        但数据传输被失败<br>    认证响应正确,身份验证成功</p><h4 id="WEP-PSK认证过程"><a href="#WEP-PSK认证过程" class="headerlink" title="WEP PSK认证过程"></a><strong>WEP PSK认证过程</strong></h4><p>STA发认证请求<br>AP返回随机Challenge消息<br>STA便用PSK加密Cha并发回给AP<br>AP使用PSK解密密文,获得Cha并与原始Cha比对,相同则验证成功,不同则验证失败;<br>大部分无线驱动首先尝试open验证,如果失败则尝试PSK</p><h4 id="WEP共享密钥认证过程"><a href="#WEP共享密钥认证过程" class="headerlink" title="WEP共享密钥认证过程"></a>WEP共享密钥认证过程</h4><p>无论使用什么加密架构,关联过程完全相同<br>    STA向AP发送关联请求<br>    AP向STA发送关联成功或失败结果<br>隐藏AP<br>    STA关联包中必须包含目标的ESSID<br>    嗅探到此关联包,说明有隐藏AP存在</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;连接到无线网络&quot;&gt;&lt;a href=&quot;#连接到无线网络&quot; class=&quot;headerlink&quot; title=&quot;连接到无线网络&quot;&gt;&lt;/a&gt;&lt;strong&gt;连接到无线网络&lt;/strong&gt;&lt;/h4&gt;&lt;h5 id=&quot;Probe&quot;&gt;&lt;a href=&quot;#Probe&quot; clas
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
+    
+      <category term="无线通信" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/"/>
+    
+      <category term="Probe" scheme="http://c.cat.plus/tags/Probe/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无线技术概念</title>
+    <link href="http://c.cat.plus/2013/05/23/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5/"/>
+    <id>http://c.cat.plus/2013/05/23/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5/</id>
+    <published>2013-05-23T13:11:04.000Z</published>
+    <updated>2020-05-18T07:13:50.643Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="无线技术概念"><a href="#无线技术概念" class="headerlink" title="无线技术概念"></a><strong>无线技术概念</strong></h3></blockquote><h4 id="分贝dB"><a href="#分贝dB" class="headerlink" title="分贝dB"></a><strong>分贝dB</strong></h4><p>测量无线信号强度<br>B:向Alexander Graham Bell 致敬<br>    今天大部分声学设备的发明者和理论奠基人<br>dB:表示2个信号之间的差异比率,用于描述设备的信号强度<br>    是一个相对值<br>dBm:功率值与1mW进行比较的dB值结果<br>dBpower=10.log(singnal/reference)<br>10.log(100mW/1mW)=10*2=20dBm<br>每增加3dBm,功率增加约1倍<br>每增加10dBm,功率增加约10倍<br>Example:<br>    dBm        mW<br>    0        1<br>    10        10<br>    15        32<br>    17        50<br>    20        100<br>    23        200<br>    27        512<br>    30        1000</p><h4 id="dBi-全向天线辐射强度"><a href="#dBi-全向天线辐射强度" class="headerlink" title="dBi:全向天线辐射强度"></a><strong>dBi:全向天线辐射强度</strong></h4><p>全向天线的信号功率增益<br>增益是指信号功率强度增加了多少dB<br>300mW=24.8dBi的无线路由器,添加一个9dBi的天线后功率如何变化(假设2dBi的电缆和接头耗损)<br>24.8dBi+9dBi-2dBi=31.8dBi<br>换算回mW功率<br>10(31.8dBi/10)次方=10*3.18次方=1513mW<br>dBm功率相加等于mW功率相乘</p><h4 id="dBd-定向天线辐射强度"><a href="#dBd-定向天线辐射强度" class="headerlink" title="dBd:定向天线辐射强度"></a><strong><code>dBd</code>:定向天线辐射强度</strong></h4><p>dBd是定向天线的增益值<br>全向天线在所有方向上收发信号,定向天线在指定方向的范围内收发信号<br>天线增益越大信号传输距离越远</p><p>既然有mW来表示功率为什么还要引入dB这个单位?<br>接收信号时无线信号转变为高频电子脉冲,反之发射信号时高频电子脉冲转换为无线电波,<br>这些过程功率往往要产生上万倍的变化,使用W,mW来计数非常不便,而dBm单位通过对功率的对数计算,<br>使用一个较小的数值既可以比较直观的表达功率的变化,因此无线和声学系统都采用了dB这个单位.</p><p>全向天线波形图<br>甜甜圈<br>天线选择的误区<br>益越高越好<br>高功耗<br>对周围环境的信号干扰<br>增益过高的全向天线会变成定向天线</p><h4 id="5dBi-vs-9dBi全向天线波形图对比"><a href="#5dBi-vs-9dBi全向天线波形图对比" class="headerlink" title="5dBi vs 9dBi全向天线波形图对比"></a><strong>5dBi vs 9dBi全向天线波形图对比</strong></h4><p>定向天线<br>双四边形<br>定向发送信号<br>功率相同时,比全向天线传输距离更远(方向正确的情况下)<br>定向天线<br>八木天线,引向反射天线；<br>定向天线<br>平面天线<br>定向天线<br>扇形天线<br>常用于移动电话网络<br>3到4个扇形天线联合使用可实现全向信号覆盖<br>90度扇形天线<br>定向天线<br>120度扇形天线波形<br>定向天线<br>网状天线<br>射束带宽更加集中,功率更强</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;无线技术概念&quot;&gt;&lt;a href=&quot;#无线技术概念&quot; class=&quot;headerlink&quot; title=&quot;无线技术概念&quot;&gt;&lt;/a&gt;&lt;strong&gt;无线技术概念&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;h4 id=&quot;分贝dB&quot;
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="全向天线" scheme="http://c.cat.plus/tags/%E5%85%A8%E5%90%91%E5%A4%A9%E7%BA%BF/"/>
+    
+      <category term="无线技术" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF/"/>
+    
+      <category term="定向天线" scheme="http://c.cat.plus/tags/%E5%AE%9A%E5%90%91%E5%A4%A9%E7%BA%BF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>802_11无线协议结构</title>
+    <link href="http://c.cat.plus/2013/05/23/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/802_11%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E7%BB%93%E6%9E%84/"/>
+    <id>http://c.cat.plus/2013/05/23/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/802_11%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E7%BB%93%E6%9E%84/</id>
+    <published>2013-05-22T21:33:02.000Z</published>
+    <updated>2020-05-18T07:13:27.707Z</updated>
+    
+    <content type="html"><![CDATA[<p>无线技术变化快,难度大<br>行业迅猛发展<br>互联网的重要入口<br>边界模糊<br>安全实施缺失而且困难<br>对技术不了解而造成配置不当<br>企业网络私自接入AP破坏网络边界<br>aircrack-ng suite作者写过一本关于无线渗透的书</p><h4 id="协议结构"><a href="#协议结构" class="headerlink" title="协议结构"></a><strong>协议结构</strong></h4><p>802.11标准<br>IEEE(Institute of Electrical and Electronice Engineers)<br>    由通信航天生物电气电子等方面的科学家组成,目的是制定标准,指导行业技术的发展,目前成员近40万人<br>IEEE分为不同的技术委员会(Committees),其中802委员会负责lan,man标准的制定<br>    以太网<br>    令牌环网<br>    无线局域网<br>    网桥<br>    无线(802.11)<br>        应用层<br>        表示层<br>        会话层<br>        传输层<br>        网络层<br>        数据链路层<br>            逻辑链路控制子层LLC<br>            媒体访问控制子层MAC<br>        物理层</p><h4 id="IEEE-802-1-1-标准"><a href="#IEEE-802-1-1-标准" class="headerlink" title="IEEE 802.1 1 标准"></a><strong>IEEE 802.1 1 标准</strong></h4><p>802委员会下第11组负责开发无线局域网标准<br>IEEE 802.1 1 The Original WLAN Standard - 1 Mbit/s and 2 Mbit/w,2.4 GHz RF and IR<br>IEEE 802.1 1a Up to 54 Mbit/s,5GHz<br>IEEE 802.1 1b 802.11 Enhancerments to Support 5.5 Mbit/s and 11 Mbit/s<br>IEEE 802.1 1c Bridge Operation Procedures<br>IEEE 802.1 1d International (Country to Country) Roaming Extensions<br>IEEE 802.1 1e Quality of Service (QoS),Including Packet Bursting<br>IEEE 802.1 1F Inter-Access Point Protocol<br>IEEE 802.1 1g 54 Mbit/s,2.4 GHz<br>IEEE 802.1 1h Spectrum Managed 802.11a(5 GHz) for European Compatibility<br>IEEE 802.1 1i Enhanced Security<br>IEEE 802.1 1j Extensions for Japan<br>IEEE 802.1 1k Radio Resource Measurement Enhancements<br>IEEE 802.1 1n Higher Throughput Using Multiple Input,Multiple Output (MIMO) Antennas<br>IEEE 802.1 1p Wireless Access for the Vehicular Environment (WAVE)<br>IEEE 802.1 1r Fast BSS Transition (FT)<br>IEEE 802.1 1s Mesh Networking,Extended Service Set (ESS)<br>IEEE 802.1 1T Wireless Performance Prediction(WPP)<br>IEEE 802.1 1u Internetworking with Non -802 Networks (i.e.:Cellular)<br>IEEE 802.1 1v Wireless Network Management<br>IEEE 802.1 1w Protected Management Frames<br>IEEE 802.1 1y 3650-2700 MHz Operation in the US<br>IEEE 802.1 1z Direct Link Setup (DLS) Extensions<br>IEEE 802.1 1mb Maintenance of the Standard<br>IEEE 802.1 1aa Robust Streaming of Audio Video Transport Streams<br>IEEE 802.1 1ac Very High Throughput &lt; 6 GHz<br>IEEE 802.1 1ad Very High Throughput, 60 GHz<br>IEEE 802.1 1ae QoS Management<br>IEEE 802.1 1af TV Whitespace<br>IEEE 802.1 1ah Sub 1 GHz<br>IEEE 802.1 1ai Fast Initial Link Setup</p><blockquote><p>日常使用</p></blockquote><p>IEEE 802.1 1 The Original WLAN Standard - 1 Mbit/s and 2 Mbit/w,2.4 GHz RF and IR<br>IEEE 802.1 1a Up to 54 Mbit/s,5GHz<br>IEEE 802.1 1b 802.11 Enhancerments to Support 5.5 Mbit/s and 11 Mbit/s<br>IEEE 802.1 1g 54 Mbit/s,2.4 GHz<br>IEEE 802.1 1i Enhanced Security<br>IEEE 802.1 1n Higher Throughput Using Multiple Input,Multiple Output (MIMO) Antennas</p><h4 id="802-11"><a href="#802-11" class="headerlink" title="802.11"></a><strong>802.11</strong></h4><p>发布于1997年<br>速率1Mbps或2Mbps<br>红外线传输介质(未实现)<br>无线射频信号编码(调制)(radio frequencies)<br>    Direct-Sequence Spread-Spectrum(DSSS)–十序扩频<br>    Frequency Hopping Spread-Spectrum(FHSS)–跳频扩频<br>媒体访问方式—-CSMA/CA c=b+log2(1+s/n)<br>    根据算法侦听一定时长<br>    发送数据前发包声明<br>Request to Send/Clear to Send(RTS/CTS)</p><h4 id="802-11b"><a href="#802-11b" class="headerlink" title="802.11b"></a><strong>802.11b</strong></h4><p>Complermentary Code Keying(CCK)–补充代码键<br>    5.5 and 1 1Mbit/s<br>    2.4GHz band (2.4GHz-2.485GHz)<br>    14个重叠的信道channets<br>    每个信道22MHz带宽<br>    只有三个完全不重叠的信道<br>美国–1 to 11(2.412 GHz–2.462 GHz)<br>欧洲–1 to 13(2.412 GHz–2.472 GHz)<br>日本–1 to 14(2.412 GHz–2.485 GHz)</p><h4 id="802-11a"><a href="#802-11a" class="headerlink" title="802.11a"></a><strong>802.11a</strong></h4><p>与802.1 1b几乎同时发布<br>    因设备价格问题一直没有得到广泛使用<br>使用5GHz带宽<br>    2.4GHz带宽干扰源多(微波,蓝牙,无线电话)<br>    5GHz频率有更多带宽空间,可容纳更多不重叠的信道<br>    Orthogonal Frequency-Division Multiplexing(OFDM)信号调制方法<br>        正交频分复用技术<br>    更高速率54Mbps,每个信道20MHz带宽<br>    变频<br>        5.15-5.35 GHz室内<br>        5.7-5.8 GHz室外</p><h4 id="802-1-1g"><a href="#802-1-1g" class="headerlink" title="802.1 1g"></a><strong>802.1 1g</strong></h4><p>2.4GHz 频段<br>Orthogonal Frequency-Division Multiplexing(OFDM)信号调制方法<br>与802.11a速率相同<br>可全局降速 向后兼容802.11b,并切换为CCK信号调制方法<br>每个信道20/22MHz带宽</p><h4 id="802-1-1n"><a href="#802-1-1n" class="headerlink" title="802.1 1n"></a><strong>802.1 1n</strong></h4><p>2.4或5GHz频率<br>300Mbps最高600Mbps<br>Multiple-Input Multiple-Output (MIMO)多进多出通信技术    #多个天线<br>多天线,多无线电波,独立收发信号<br>可以使用40MHz信道带宽是数据传输速率翻倍<br>全802.11n设备网络中,可以使用新报文格式,使速率达到最大<br>每个信道20/40MHz带宽</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;无线技术变化快,难度大&lt;br&gt;行业迅猛发展&lt;br&gt;互联网的重要入口&lt;br&gt;边界模糊&lt;br&gt;安全实施缺失而且困难&lt;br&gt;对技术不了解而造成配置不当&lt;br&gt;企业网络私自接入AP破坏网络边界&lt;br&gt;aircrack-ng suite作者写过一本关于无线渗透的书&lt;/p&gt;
+&lt;h4 i
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
+    
+      <category term="无线协议" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
