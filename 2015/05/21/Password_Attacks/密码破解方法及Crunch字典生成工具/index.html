@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!--begin head-->
+
+<head>
+    <meta charset="utf-8">
+<!--begin title-->
+
+<title>
+    
+    密码破解方法及Crunch字典生成工具 |
+    
+    Cat++</title>
+<!--end title-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--begin mete-->
+
+<meta name="description" content="猫大仙儿的修仙之路"/>
+
+<meta name="author" content="Cat"/>
+
+<!--end mete-->
+<!--begin keywords-->
+<meta name="keywords" content="802.11,AJAX,ARP欺骗,Aircrack-ng,CVE,DOM,DOS攻击,GOOGLE HACKING,Heartbleed,Monitor,Probe,SHODAN,SSLsplit,Scapy,WDS,ZAP,crunch,kali,mimikatz,pinjector,python,sslscan,traceroute,主动信息收集,全向天线,加密算法,字典,定向天线,密码破解,扫描开发,拒绝服务攻击,提权,无线协议,无线技术,无线抓包,无线模式,无线破解,无线通信,渗透,漏洞利用,漏洞库,漏洞扫描,漏洞提权,缓冲区溢出,被动信息收集,路由追踪"/>
+<!--end keywords-->
+<!--begin rss-->
+
+<link rel="alternate" href="/atom.xml" title="Cat++" type="application/atom+xml">
+
+<!--end rss-->
+<!--begin favicon-->
+
+<link rel="icon" href="/favicon.ico">
+
+<!--end favicon-->
+<!--begin style-->
+
+<!-- stylesheets list from config.yml -->
+
+<link rel="stylesheet" href="/css/hannah.css">
+
+
+<!--end style-->
+<meta name="generator" content="Hexo 4.2.0"></head>
+<!--end head-->
+<!--begin body-->
+
+<body class="container-fluid">
+
+    <!--begin menu-->
+    <div class="hannah-menu">
+    <i class="fh fh-ravelry fa-2x btn fixed-menu animated bounce" id="btn_menu" aria-hidden="true"></i>
+    <div class="menu-outer container-fluid hide animated" id="div_menu">
+        <div class="row" style="margin-bottom: 5px;">
+            
+            <div class="col-md-offset-2 col-md-3 col-xs-4 text-center left-social">
+                
+                <a target="_blank" href="https://github.com/iseanhe" title="GitHub"><i class="fh fh-github"></i></a>
+                
+                <style>
+                    .left-social {
+                        height: 132px;
+                        line-height: 132px;
+                        font-size: 66px;
+                    }
+
+                    .left-social * {
+                        color: #f1ce8e;
+                    }
+
+                    @media (max-width: 767px) {
+                        .left-social {
+                            line-height: 132px;
+                            font-size: 33px;
+                        }
+                    }
+                </style>
+            </div>
+            <!--begin handImg-->
+            <div class="col-md-2 col-xs-4 text-center">
+                
+                <img src="/img/logo.jpg" alt="Head Image" class="img-circle">
+                
+            </div>
+            <!--end handImg-->
+            <div class="col-md-3 col-xs-4 text-center right-social">
+                
+                <style>
+                    .right-social {
+                        height: 132px;
+                        line-height: 132px;
+                        font-size: 66px;
+                    }
+
+                    @media (max-width: 767px) {
+                        .right-social {
+                            line-height: 132px;
+                            font-size: 33px;
+                        }
+                    }
+
+                    .right-social * {
+                        color: #f1ce8e;
+                    }
+                </style>
+            </div>
+        </div>
+        <div class="row">
+            <div class="menu-content col-md-8 col-md-push-2 col-xs-12 ">
+                <dl class="menu-content-item">
+                    <dt class="menu-content-title">
+                        <i class="fh fh-bars" aria-hidden="true"></i> Menu
+                    </dt>
+                    <dd class="menu-content-content">
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/" class="btn btn-block">
+                                
+                                <i class="fh fh-ravelry"></i>
+                                Home
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/categories" class="btn btn-block">
+                                
+                                <i class="fh fh-cubes"></i>
+                                Category
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/tags" class="btn btn-block">
+                                
+                                <i class="fh fh-tags"></i>
+                                Tag
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/archives" class="btn btn-block">
+                                
+                                <i class="fh fh-archive"></i>
+                                Archives
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/about" class="btn btn-block">
+                                
+                                <i class="fh fh-about"></i>
+                                About
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/doc" class="btn btn-block">
+                                
+                                <i class="fh fh-document"></i>
+                                Doc
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/plug" class="btn btn-block">
+                                
+                                <i class="fh fh-plug"></i>
+                                Plug
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/sitemap" class="btn btn-block">
+                                
+                                <i class="fh fh-sitemap"></i>
+                                SiteMap
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/atom.xml" class="btn btn-block">
+                                <i class="fh fh-rss" aria-hidden="true"></i> RSS
+                            </a>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="menu-content col-md-8 col-md-offset-2 col-xs-12 ">
+                <dl class="col-md-6 col-xs-6 menu-content-item">
+                    <dt class="menu-content-title">
+                        <i class="fh fh-cubes" aria-hidden="true"></i> Category
+                    </dt>
+                    <dd class="menu-content-content animated zoomIn">
+                        <ul class="menu-cate-list"><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/python/"><i class="fh fh-cube" aria-hidden="true"></i> python</a><span class="menu-cate-list-count">1</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="fh fh-cube" aria-hidden="true"></i> 渗透测试</a><span class="menu-cate-list-count">17</span><ul class="menu-cate-list-child"><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Buffer-overflow/"><i class="fh fh-cube" aria-hidden="true"></i> Buffer overflow</a><span class="menu-cate-list-count">1</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"><i class="fh fh-cube" aria-hidden="true"></i> Web渗透</a><span class="menu-cate-list-count">3</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><i class="fh fh-cube" aria-hidden="true"></i> 信息收集</a><span class="menu-cate-list-count">4</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"><i class="fh fh-cube" aria-hidden="true"></i> 密码破解</a><span class="menu-cate-list-count">1</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"><i class="fh fh-cube" aria-hidden="true"></i> 无线渗透</a><span class="menu-cate-list-count">5</span><ul class="menu-cate-list-child"><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"><i class="fh fh-cube" aria-hidden="true"></i> 无线技术理论</a><span class="menu-cate-list-count">4</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB/"><i class="fh fh-cube" aria-hidden="true"></i> 无线攻击</a><span class="menu-cate-list-count">1</span></li></ul></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/"><i class="fh fh-cube" aria-hidden="true"></i> 权限维持</a><span class="menu-cate-list-count">2</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/"><i class="fh fh-cube" aria-hidden="true"></i> 漏洞扫描</a><span class="menu-cate-list-count">1</span></li></ul></li></ul>
+                    </dd>
+                </dl>
+                <dl class="col-md-6 col-xs-6 menu-content-item">
+                    <dt class="menu-content-title">
+                        <i class="fh fh-tag" aria-hidden="true"></i> Tags
+                    </dt>
+                    <dd class="menu-content-content animated zoomIn">
+                        <ul class="menu-tag-list" itemprop="keywords"><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/802-11/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 802.11</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/AJAX/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> AJAX</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/ARP%E6%AC%BA%E9%AA%97/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> ARP欺骗</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Aircrack-ng/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Aircrack-ng</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/CVE/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> CVE</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/DOM/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> DOM</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/DOS%E6%94%BB%E5%87%BB/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> DOS攻击</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/GOOGLE-HACKING/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> GOOGLE HACKING</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Heartbleed/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Heartbleed</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Monitor/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Monitor</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Probe/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Probe</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/SHODAN/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> SHODAN</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/SSLsplit/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> SSLsplit</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Scapy/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Scapy</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/WDS/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> WDS</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/ZAP/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> ZAP</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/crunch/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> crunch</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/kali/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> kali</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/mimikatz/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> mimikatz</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/pinjector/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> pinjector</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/python/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> python</a><span class="menu-tag-list-count">3</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/sslscan/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> sslscan</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/traceroute/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> traceroute</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 主动信息收集</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%85%A8%E5%90%91%E5%A4%A9%E7%BA%BF/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 全向天线</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 加密算法</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%AD%97%E5%85%B8/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 字典</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%AE%9A%E5%90%91%E5%A4%A9%E7%BA%BF/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 定向天线</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 密码破解</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 扫描开发</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 拒绝服务攻击</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%8F%90%E6%9D%83/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 提权</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线协议</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线技术</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E6%8A%93%E5%8C%85/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线抓包</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E6%A8%A1%E5%BC%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线模式</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E7%A0%B4%E8%A7%A3/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线破解</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线通信</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 渗透</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞利用</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E5%BA%93/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞库</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞扫描</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞提权</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 缓冲区溢出</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 被动信息收集</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E8%B7%AF%E7%94%B1%E8%BF%BD%E8%B8%AA/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 路由追踪</a><span class="menu-tag-list-count">1</span></li></ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--end menu-->
+
+    <div class="row hannah-body">
+        <div class="col-md-8 col-md-push-2 col-xs-12">
+            <!--begin breadcrumb-->
+            <div class="bread-crumb">
+    <ul class="bread-crumb-menu animated rubberBand">
+        <li><a href="/"><i class="fh fh-ravelry" aria-hidden="true"></i> Home</a></li>
+        
+        <li><a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="fh fh-cube" aria-hidden="true"></i> 渗透测试</a>
+        </li>
+        
+        <li><a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"><i class="fh fh-cube" aria-hidden="true"></i> 密码破解</a>
+        </li>
+        
+        <li>
+            
+            <i class="fh fh-newspaper-o" aria-hidden="true"></i>
+            
+            密码破解方法及Crunch字典生成工具
+        </li>
+        
+    </ul>
+    <div class="bread-crumb-search">
+        <div class="search">
+    <i class="fh fh-search icon-search"></i>
+    <input placeholder="Search ..." onkeyup="searchFunc(this,event,'/search.xml')"
+           class="input-search animated fadeInRight"/>
+    <div class="search-result animated fadeInRight">
+        <a class="animated tada col-lg-12 search-result-item result-link" href="/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/">Wireless_Attacks/无线技术理论/WPA安全系统</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/">Wireless_Attacks/无线技术理论/WEP加密-RC4算法</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/">Wireless_Attacks/无线技术理论/RADIOTAP头部</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/">Wireless_Attacks/无线技术理论/Management Frame</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/">Wireless_Attacks/无线技术理论/Linux无线协议栈及配置命令</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/">Wireless_Attacks/无线技术理论/Control Frame</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">Python花式导包的几种方法</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/">密码破解方法及Crunch字典生成工具</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2014/05/21/Web_Attacks/AJAX%E6%8A%80%E6%9C%AF%E7%BB%84%E5%90%88%E5%8F%8AWebService%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91/">AJAX技术组合及WebService安全考虑</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2014/05/19/Web_Attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/">SSL_TSL中间人攻击</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2014/05/18/Web_Attacks/HTTPS%E6%BC%8F%E6%B4%9E%E5%8F%8A%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/">HTTPS漏洞及攻击方法</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/08/11/pentest/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/">Windows缓冲区溢出测试</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/06/12/Wireless_Attacks/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/">Aircrack-ng无线攻击套件</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/06/06/pentest/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/">利用漏洞和程序配置不当提权</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/06/03/pentest/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/">本地提权常见手法</a>
+    </div>
+</div>
+    </div>
+</div>
+            <!--end breadcrumb-->
+            <!--begin body-->
+            <article class="post animated rollIn">
+    <h1 class="post-title">密码破解方法及Crunch字典生成工具</h1>
+    <div class="post-subtitle">
+        
+        <time datetime="2015-05-21T09:05:17.000Z" class="item">
+            <i class="fh fh-calendar" aria-hidden="true"></i>&nbsp;&nbsp;2015-05-21
+        </time>
+        
+        
+        <span class="item">
+      <i class="fh fh-cubes" aria-hidden="true"></i>&nbsp;
+            
+            <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
+           <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;渗透测试
+        </a>
+            
+            <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
+           <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;密码破解
+        </a>
+            
+        </span>
+        
+        
+        <span class="item">
+        <i class="fh fh-tags" aria-hidden="true"></i>&nbsp;
+            
+            <a class="label label-info tags" href="/tags/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;密码破解
+            </a>
+            
+            <a class="label label-info tags" href="/tags/%E5%AD%97%E5%85%B8/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;字典
+            </a>
+            
+            <a class="label label-info tags" href="/tags/crunch/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;crunch
+            </a>
+            
+        </span>
+        
+    </div>
+    
+    <h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a><strong>思路</strong></h3><p>目标系统实施了强安全措施</p>
+<ul>
+<li>安装了所有补丁 </li>
+<li>无任何已知漏洞 </li>
+<li>无应用层漏洞 </li>
+<li>攻击面最小化<h4 id="社会工程学"><a href="#社会工程学" class="headerlink" title="社会工程学"></a><strong>社会工程学</strong></h4>获取目标系统用户身份 </li>
+<li>非授权用户不受信，认证用户可以访问守信资源 </li>
+<li>已有用户账号权限受限，需要提权 </li>
+<li>不会触发系统报警</li>
+</ul>
+<h4 id="身份认证方法"><a href="#身份认证方法" class="headerlink" title="身份认证方法"></a><strong>身份认证方法</strong></h4><ul>
+<li>证明你是你声称你是的那个人</li>
+<li>你知道什么（账号密码、pin、passphrase） </li>
+<li>你有什么（令牌、token、key、证书、密宝、手机）</li>
+<li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别） </li>
+<li>以上方法结合使用（多因素身份认证）<br>基于互联网的身份验证仍以账号密码为主要形式</li>
+</ul>
+<blockquote>
+<h3 id="密码破解方法"><a href="#密码破解方法" class="headerlink" title="密码破解方法"></a><strong>密码破解方法</strong></h3></blockquote>
+<h4 id="人工猜解"><a href="#人工猜解" class="headerlink" title="人工猜解"></a><strong>人工猜解</strong></h4><ul>
+<li>垃圾桶工程</li>
+<li>被动信息收集 <h4 id="基于字典暴力破解（主流）"><a href="#基于字典暴力破解（主流）" class="headerlink" title="基于字典暴力破解（主流）"></a>基于字典暴力破解（主流）</h4><h4 id="键盘空间字符暴破"><a href="#键盘空间字符暴破" class="headerlink" title="键盘空间字符暴破"></a>键盘空间字符暴破</h4></li>
+</ul>
+<h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><ul>
+<li>保存有用户名和密码的文本文件 </li>
+<li>/usr/share/wordlist </li>
+<li>/usr/share/wfuzz/wordlist </li>
+<li>/usr/share/seclists</li>
+</ul>
+<blockquote>
+<h3 id="字典-1"><a href="#字典-1" class="headerlink" title="字典"></a><strong>字典</strong></h3></blockquote>
+<h4 id="键盘空间字符爆破"><a href="#键盘空间字符爆破" class="headerlink" title="键盘空间字符爆破"></a>键盘空间字符爆破</h4><ul>
+<li>全键盘空间字符</li>
+<li>部分键盘空间字符 (基于规则)</li>
+<li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li>
+</ul>
+<h4 id="crunch-创建字典"><a href="#crunch-创建字典" class="headerlink" title="crunch 创建字典"></a><strong>crunch 创建字典</strong></h4><pre><code>crunch &lt;min-len&gt; &lt;max-len&gt; [&lt;charset string&gt;] [options]
+&lt;charset string&gt; 默认是小写字符
+crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100
+-b 按大小分割字典文件(kb/kib、mb/mib、gb/gib)
+-c 每个字典的行数
+以上两个参数必须与-o START 结合使用
+-d 同一字符连贯出现数量(11 / aaa)</code></pre><h4 id="使用字符集"><a href="#使用字符集" class="headerlink" title="使用字符集"></a><strong>使用字符集</strong></h4><p><code>crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></p>
+<h4 id="无重复字符"><a href="#无重复字符" class="headerlink" title="无重复字符"></a><strong>无重复字符</strong></h4><p><code>crunch 1 1 -p 1234567890 | more</code><br>    必须是最后一个参数<br>    最大、最小字符长度失效，但必须存在<br>    与-s 参数不兼容（-s 指定起始字符串）<br><code>crunch 4 4 0123456789 -s 9990</code></p>
+<ul>
+<li>读取文件中每行内容作为基本字符生成字典<br><code>crunch 1 1 -q read</code></li>
+</ul>
+<h4 id="字典组成规则"><a href="#字典组成规则" class="headerlink" title="字典组成规则"></a><strong>字典组成规则</strong></h4><pre><code>crunch 6 6 -t @,%%^^ | more</code></pre><ul>
+<li>@：小写字母 lalpha</li>
+<li>,：大写字母 ualpha</li>
+<li>%：数字 numeric</li>
+<li>^：符号 symbols<h4 id="输出文件压缩"><a href="#输出文件压缩" class="headerlink" title="输出文件压缩"></a><strong>输出文件压缩</strong></h4>  <code>crunch 4 4 -t @,%^ -o 1.txt -z 7z</code><br>   其他压缩格式：gzip、bzip2、lzma<br>   7z压缩比率最大</li>
+</ul>
+<p><strong>Use example:</strong></p>
+<pre><code>crunch 4 4 -f /usr/share/crunch/charset.lst mixalphanumeric-all-space -o w.txt -t @d@@ -s cdab
+crunch 4 5 -p dog cat bird
+crunch 5 5 abc DEF + \!@# -t ,@^%,
+    + 占位符
+    \ 转义符(空格、符号)
+crunch 5 5 -t ddd%% -p dog cat bird
+    任何不同于-p 参数指定的值都是占位符
+crunch 5 5 -d 2@ -t @@@%%
+
+组合破解工具应用 
+crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –
+crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd</code></pre>
+</article>
+<ol class="animated rollIn hannah-toc"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-3"><a class="animated rollIn hannah-toc-link" href="#思路"><span class="animated rollIn hannah-toc-text">思路</span></a><ol class="animated rollIn hannah-toc-child"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#社会工程学"><span class="animated rollIn hannah-toc-text">社会工程学</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#身份认证方法"><span class="animated rollIn hannah-toc-text">身份认证方法</span></a></li></ol></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-3"><a class="animated rollIn hannah-toc-link" href="#密码破解方法"><span class="animated rollIn hannah-toc-text">密码破解方法</span></a><ol class="animated rollIn hannah-toc-child"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#人工猜解"><span class="animated rollIn hannah-toc-text">人工猜解</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#基于字典暴力破解（主流）"><span class="animated rollIn hannah-toc-text">基于字典暴力破解（主流）</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#键盘空间字符暴破"><span class="animated rollIn hannah-toc-text">键盘空间字符暴破</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#字典"><span class="animated rollIn hannah-toc-text">字典</span></a></li></ol></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-3"><a class="animated rollIn hannah-toc-link" href="#字典-1"><span class="animated rollIn hannah-toc-text">字典</span></a><ol class="animated rollIn hannah-toc-child"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#键盘空间字符爆破"><span class="animated rollIn hannah-toc-text">键盘空间字符爆破</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#crunch-创建字典"><span class="animated rollIn hannah-toc-text">crunch 创建字典</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#使用字符集"><span class="animated rollIn hannah-toc-text">使用字符集</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#无重复字符"><span class="animated rollIn hannah-toc-text">无重复字符</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#字典组成规则"><span class="animated rollIn hannah-toc-text">字典组成规则</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#输出文件压缩"><span class="animated rollIn hannah-toc-text">输出文件压缩</span></a></li></ol></li></ol>
+<div class="animated bounceInDown paginations">
+    <div class="col-md-8 col-md-push-2 col-xs-12">
+        <nav>
+            
+            <a href="/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" class="prev col-md-2 col-xs-4 text-left">&larr; Prev</a>
+            
+            <span
+                class="page-content col-md-8  col-xs-4 text-center">
+                
+            </span>
+            
+            <a href="/2014/05/21/Web_Attacks/AJAX%E6%8A%80%E6%9C%AF%E7%BB%84%E5%90%88%E5%8F%8AWebService%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91/" class="next col-md-2 col-xs-4 text-right">Next &rarr;</a>
+            
+        </nav>
+        <div>
+            <div class="col-md-6 col-xs-6 text-left">
+                
+                Python花式导包的几种方法
+                
+            </div>
+            <div class="col-md-6 col-xs-6 text-right">
+                
+                AJAX技术组合及WebService安全考虑
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!--end body-->
+            <!--begin comments-->
+            
+<div class="comments">
+    
+
+    
+    
+<div id="gitalk-container">
+</div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script>
+    var loadJs = function (d, a) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document
+            .documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("src", d);
+        if (typeof a === "function") {
+            if (window.attachEvent) {
+                b.onreadystatechange = function () {
+                    var e = b.readyState;
+                    if (e === "loaded" || e === "complete") {
+                        b.onreadystatechange = null;
+                        a()
+                    }
+                }
+            } else {
+                b.onload = a
+            }
+        }
+        c.appendChild(b)
+    };
+    loadJs("https://unpkg.com/gitalk/dist/gitalk.min.js", function () {
+        var gitalk = new Gitalk({
+            clientID: 'e82b50d554e32a851ae7',
+            clientSecret: '95923aeaddb44e6de22d088703c6bbde978f505c',
+            repo: 'iseanhe.github.io',
+            owner: 'iseanhe',
+            admin: ['iseanhe'],
+            id: decodeURIComponent(location.pathname),
+            distractionFreeMode: false
+        })
+
+        gitalk.render('gitalk-container')
+    });
+</script>
+
+</div>
+
+
+            <!--end comments-->
+        </div>
+    </div>
+
+    <!--begin footer-->
+    <footer id="footer" class="footer animated fadeInUp hide">
+    <p><i class="copy">&copy;</i> 2020 <a href="http://c.cat.plus">Cat</a> All Right Reserved.</p>
+    <p>Powered by <a href="http://hexo.io" target="_blank" rel="external nofollow noopener">Hexo</a>. Theme by <a href="https://github.com/objectyan/hexo-theme-hannah" target="_blank" rel="external nofollow noopener">hannah</a></p>
+</footer>
+    <!--end footer-->
+
+    
+    <!-- scripts list from theme config.yml -->
+    
+    <script src="/js/hannah.js"></script>
+    
+    
+    <!--begin analytics-->
+    
+
+    <!--end analytics-->
+</body>
+<!--end body-->
+<!--begin canvas-nest-->
+<script>
+    var nesturl = "https://unpkg.com/canvas-nest.js/dist/canvas-nest.js";
+    var c = document.getElementsByTagName("body")[0] || document.body || document.documentElement;
+    var b = document.createElement("script");
+    b.setAttribute("type", "text/javascript");
+    b.setAttribute("src", nesturl);
+    b.setAttribute("color",
+        `${ Math.floor(Math.random()*256)},${ Math.floor(Math.random()*256)},${ Math.floor(Math.random()*256)}`);
+    b.setAttribute("opacity", Math.random());
+    b.setAttribute("count", parseInt((Math.random() * 500) || 99));
+    c.appendChild(b)
+</script>
+<!--end canvas-nest-->
+
+</html>
