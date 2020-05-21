@@ -4,11 +4,11 @@
   
     
     <entry>
-      <title>wireless_attacks/无线技术理论/WEP加密-RC4算法</title>
-      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
-      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</url>
+      <title>wireless_attacks/无线技术理论/RADIOTAP头部</title>
+      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/"/>
+      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/</url>
       
-        <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
+        <content type="html"><![CDATA[<p>Radiotap Head<br>802.11侦发射和接收的事实标准,802.11依赖Radiotap完成通信过程<br>Linux系统在驱动和API中内建支持Radiotap<br>802.11帧发射之前,网卡驱动在802.11头前面添加Radiotap头,反之当网卡接收到无线帧时,驱动通知MAC层,此帧头包含Radiotap头<br>Radiotap为802.11帧传递额外信息,厂家可自定义,因此头长度不固定<br>不破坏原始头结构,增加传递的信息</p><p>分为Header和data<br>Version(8bit)<br>    值始终为0<br>Pad(8bit)<br>    未使用,只作为字段强制对其占位；<br>Length(16bit)<br>    整个radiotap头长度(可变),作用是确定802.11头的开始位置<br>Present(32bit)<br>    Data段的掩码<br>    Ext(1,0)<br>    MAC不能理解的头部直接忽略</p><p>802.11头部信息<br>    DU(Data Unit)即数据单元,信息传输的最小数据集合<br>    传递过程逐层封装(Encapsulation)<br>    SDU(Service Data Unit) /PDU(Protocol Data Unit)<br>    MSDU–&gt;MIC–&gt;分帧–&gt;添加IV–&gt;加密–&gt;添加MAC头部–&gt;MPDU<br>    MPDU/PSDU+物理头=PPDU–&gt;RF发射<br>802.11 MAC头结构<br>Frame Control<br>    Protocol Version(2bit)    :802.11协议版本,始终为0,1,2,3<br>    Type(2bit)    :规定帧的具体用途(3种帧类型)<br>        控制帧(1)<br>        数据帧(2)<br>        管理帧(0)<br>    SubType(4bit)<br>        每个类型对应多个子类型,协议规定不同类型/子类型的帧完成不同功能的操作<br>    To DS/From (1/1bit)<br>        标识帧的传输方向,传向DS或者来自DS；这两个字段的值决定着MAC头中4个Adddress字段的不同定义.<br>    0x00:出现在IBSS环境中(可能是Management帧或者是Control帧类型)；或者是STSL(Stantion to Station Link)中两个STA间通信,这种情况下通信不通过AP；<br>    0x01:表示Data帧从AP向STA传递;<br>    0x02:表示Data帧从Sta向AP传递;<br>    0x03:表示两个AP间通信,这是典型的WDS(Wireless Distribution System)环境下AP间的通信,或者表示Mesh环境下MP间的通信；只有此时才会使用到Address4字段；    </p><pre><code>More frag(1bit):表示是否还有后续帧    值为1时表示有后续分段,可能是Data或Management帧类型.只有单播接收地址的帧会被分段；Retry(1bit):重传    值为1表示重传帧,可能是Data或Management帧类型,接收端进程使用此值防止帧重复；Power Mgmt(1bit):活动模式(0)/省电模式(1)    STA处于省电模式时,向关联的AP发送该值为1的帧(AP从不使用此字段),省电模式下STA不接收数据,发送给它的Data帧由AP暂时缓存；More Data(1bit)    当AP缓存了至少一个MSDU时,会向省电模式的STA发送该值为1的帧,表示有数据要传输给STA,接收到此帧的STA唤醒自己并向AP发送PS-Poll帧,    取回由AP为其缓存的数据.也被用于AP有更多的广播/多播帧需要发送的情况；Protected Frame(1bit)    可能是Data或Management帧类型,表示MSDU是否被加密；也被用于表示PSK身份验证Frame#3帧;数据载荷为空时,该字段值为0；Order(1bit)    在非QoS帧的情况下,值为1表示数据必须按严格顺序处理,通常为0；</code></pre><p>Duration/ID(16bit)<br>    所有Control帧都使用该字段,其作用随Type/SubType变化有所不同；<br>    帧类型为PS Poll(type:1,subtype:10)时,表示STA关联的AIP(association identity);<br>    其他情况下该字段作为一种载波侦听机制,表示接收下一帧之前需要保持的时间间隔,用于NAV(Network Allocation Vector)计算,单位是微秒；<br>MAC Layer Address<br>    前面已经提到了4种,这里补充最后一种:Basic service set ID(BSSID); 它是BSS的2层唯一标识,Infrastructure模式中BSSID就是AP的MAC地址,当AP支持多BSS时,随机生成每个BSSID；<br>Sequence Control(16bit)<br>    这个字段包含两个子字段:Sequence Number和Fragment Number;<br>    Sequence Number是每个帧的编号,数值范围是0–4095,以1为步长递增.当帧被分段时,同一帧中不同分段的Sequence Number相同；<br>    Fragment Number是被分段的帧用于标识分段位置顺序的编号,数值范围是0–15,以1为步长递增；</p><p>DATA部分<br>Frame Body(变长)<br>    数据字段,未加密的最大MSDU长度为2304字节(其中包含最大256字节的上层头信息,和可被传递的数据2048字节).<br>    不同的加密方法会增加一定的内容长度；<br>    WEP:8 bytes–&gt;2312bytes<br>    TKIP(WPA1):20bytes–&gt;2324bytes<br>    CCMP(WPA2):16bytes–&gt;2320bytes<br>    注:Control类型的帧没有Frame Body内容.</p><p>FCS(32bit)<br>    发送端对全部MAC包头和Frame Body内容进行CRC计算,计算结果即为FCS(Frame Check Sequence)值,接收端进行同样的计算,结果一致时,<br>    则接收端向发送端返回ACK,否则丢弃帧(只对单播帧有效,FCS错误的广播/多播帧可能被接收)<br>    注:wireshark抓包时已经删除了FCS值</p>]]></content>
       
       
       
@@ -17,11 +17,11 @@
     
     
     <entry>
-      <title>wireless_attacks/无线技术理论/WPA安全系统</title>
-      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
-      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</url>
+      <title>wireless_attacks/无线技术理论/Linux无线协议栈及配置命令</title>
+      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/"/>
+      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/</url>
       
-        <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
+        <content type="html"><![CDATA[<p>802.11协议栈<br>leee80211<br>    iwconfig<br>    iwlist<br>mac80211<br>    iw</p><p>查看无线网卡<br>    ifconfig<br>    iwconfig<br>    iw list<br>信道频率<br>    iwlist wlan2 frequency<br>    iw list<br>扫描附近AP<br>iw dev wlan2 scan | grep SSID<br>iw dev wlan2 scan | egrep “DS\ Parameter\ set | SSID”    #扫描查看附近AP信道<br>iwlist wlan2 scanning | egrep “ESSID | Channel”            #扫描查看附近AP信道及频宽</p><p>log(signal/1mW)        #singnal无线强度接收值计算,0~-50 信号好,超过-130信号不可达</p><p>添加删除侦听端口<br>iw dev wlan2 interface add wlan2mon type monitor    #把无线网卡设置成monitor模式,进行无线数据抓包<br>    tcpdump -s 0 –i wlan2mon -p                    #tcpdump命令行抓包工具<br>    ifconfig wlan2mon up            #把wlan2mon设置成up状态<br>    service network-manager stop    #如果up不成功,停用network-manager服务<br>    service network-manager status    #network-manager服务状态查询<br>    vi ./bashrc                        #服务启动项配置<br>iw dev wlan2mon interface del</p><p>802.11<br>协议栈<br>    <a href="https://www.kernel.org/doc/htmldocs/80211/index.html" target="_blank" rel="noopener">https://www.kernel.org/doc/htmldocs/80211/index.html</a><br>无线驱动<br>    <a href="http://linuxwireless.org/en/users/Drivers/" target="_blank" rel="noopener">http://linuxwireless.org/en/users/Drivers/</a></p>]]></content>
       
       
       
@@ -43,11 +43,11 @@
     
     
     <entry>
-      <title>wireless_attacks/无线技术理论/RADIOTAP头部</title>
-      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/"/>
-      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/</url>
+      <title>wireless_attacks/无线技术理论/WPA安全系统</title>
+      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
+      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</url>
       
-        <content type="html"><![CDATA[<p>Radiotap Head<br>802.11侦发射和接收的事实标准,802.11依赖Radiotap完成通信过程<br>Linux系统在驱动和API中内建支持Radiotap<br>802.11帧发射之前,网卡驱动在802.11头前面添加Radiotap头,反之当网卡接收到无线帧时,驱动通知MAC层,此帧头包含Radiotap头<br>Radiotap为802.11帧传递额外信息,厂家可自定义,因此头长度不固定<br>不破坏原始头结构,增加传递的信息</p><p>分为Header和data<br>Version(8bit)<br>    值始终为0<br>Pad(8bit)<br>    未使用,只作为字段强制对其占位；<br>Length(16bit)<br>    整个radiotap头长度(可变),作用是确定802.11头的开始位置<br>Present(32bit)<br>    Data段的掩码<br>    Ext(1,0)<br>    MAC不能理解的头部直接忽略</p><p>802.11头部信息<br>    DU(Data Unit)即数据单元,信息传输的最小数据集合<br>    传递过程逐层封装(Encapsulation)<br>    SDU(Service Data Unit) /PDU(Protocol Data Unit)<br>    MSDU–&gt;MIC–&gt;分帧–&gt;添加IV–&gt;加密–&gt;添加MAC头部–&gt;MPDU<br>    MPDU/PSDU+物理头=PPDU–&gt;RF发射<br>802.11 MAC头结构<br>Frame Control<br>    Protocol Version(2bit)    :802.11协议版本,始终为0,1,2,3<br>    Type(2bit)    :规定帧的具体用途(3种帧类型)<br>        控制帧(1)<br>        数据帧(2)<br>        管理帧(0)<br>    SubType(4bit)<br>        每个类型对应多个子类型,协议规定不同类型/子类型的帧完成不同功能的操作<br>    To DS/From (1/1bit)<br>        标识帧的传输方向,传向DS或者来自DS；这两个字段的值决定着MAC头中4个Adddress字段的不同定义.<br>    0x00:出现在IBSS环境中(可能是Management帧或者是Control帧类型)；或者是STSL(Stantion to Station Link)中两个STA间通信,这种情况下通信不通过AP；<br>    0x01:表示Data帧从AP向STA传递;<br>    0x02:表示Data帧从Sta向AP传递;<br>    0x03:表示两个AP间通信,这是典型的WDS(Wireless Distribution System)环境下AP间的通信,或者表示Mesh环境下MP间的通信；只有此时才会使用到Address4字段；    </p><pre><code>More frag(1bit):表示是否还有后续帧    值为1时表示有后续分段,可能是Data或Management帧类型.只有单播接收地址的帧会被分段；Retry(1bit):重传    值为1表示重传帧,可能是Data或Management帧类型,接收端进程使用此值防止帧重复；Power Mgmt(1bit):活动模式(0)/省电模式(1)    STA处于省电模式时,向关联的AP发送该值为1的帧(AP从不使用此字段),省电模式下STA不接收数据,发送给它的Data帧由AP暂时缓存；More Data(1bit)    当AP缓存了至少一个MSDU时,会向省电模式的STA发送该值为1的帧,表示有数据要传输给STA,接收到此帧的STA唤醒自己并向AP发送PS-Poll帧,    取回由AP为其缓存的数据.也被用于AP有更多的广播/多播帧需要发送的情况；Protected Frame(1bit)    可能是Data或Management帧类型,表示MSDU是否被加密；也被用于表示PSK身份验证Frame#3帧;数据载荷为空时,该字段值为0；Order(1bit)    在非QoS帧的情况下,值为1表示数据必须按严格顺序处理,通常为0；</code></pre><p>Duration/ID(16bit)<br>    所有Control帧都使用该字段,其作用随Type/SubType变化有所不同；<br>    帧类型为PS Poll(type:1,subtype:10)时,表示STA关联的AIP(association identity);<br>    其他情况下该字段作为一种载波侦听机制,表示接收下一帧之前需要保持的时间间隔,用于NAV(Network Allocation Vector)计算,单位是微秒；<br>MAC Layer Address<br>    前面已经提到了4种,这里补充最后一种:Basic service set ID(BSSID); 它是BSS的2层唯一标识,Infrastructure模式中BSSID就是AP的MAC地址,当AP支持多BSS时,随机生成每个BSSID；<br>Sequence Control(16bit)<br>    这个字段包含两个子字段:Sequence Number和Fragment Number;<br>    Sequence Number是每个帧的编号,数值范围是0–4095,以1为步长递增.当帧被分段时,同一帧中不同分段的Sequence Number相同；<br>    Fragment Number是被分段的帧用于标识分段位置顺序的编号,数值范围是0–15,以1为步长递增；</p><p>DATA部分<br>Frame Body(变长)<br>    数据字段,未加密的最大MSDU长度为2304字节(其中包含最大256字节的上层头信息,和可被传递的数据2048字节).<br>    不同的加密方法会增加一定的内容长度；<br>    WEP:8 bytes–&gt;2312bytes<br>    TKIP(WPA1):20bytes–&gt;2324bytes<br>    CCMP(WPA2):16bytes–&gt;2320bytes<br>    注:Control类型的帧没有Frame Body内容.</p><p>FCS(32bit)<br>    发送端对全部MAC包头和Frame Body内容进行CRC计算,计算结果即为FCS(Frame Check Sequence)值,接收端进行同样的计算,结果一致时,<br>    则接收端向发送端返回ACK,否则丢弃帧(只对单播帧有效,FCS错误的广播/多播帧可能被接收)<br>    注:wireshark抓包时已经删除了FCS值</p>]]></content>
+        <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
       
       
       
@@ -56,11 +56,11 @@
     
     
     <entry>
-      <title>wireless_attacks/无线技术理论/Linux无线协议栈及配置命令</title>
-      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/"/>
-      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/</url>
+      <title>wireless_attacks/无线技术理论/WEP加密-RC4算法</title>
+      <link href="/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
+      <url>/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</url>
       
-        <content type="html"><![CDATA[<p>802.11协议栈<br>leee80211<br>    iwconfig<br>    iwlist<br>mac80211<br>    iw</p><p>查看无线网卡<br>    ifconfig<br>    iwconfig<br>    iw list<br>信道频率<br>    iwlist wlan2 frequency<br>    iw list<br>扫描附近AP<br>iw dev wlan2 scan | grep SSID<br>iw dev wlan2 scan | egrep “DS\ Parameter\ set | SSID”    #扫描查看附近AP信道<br>iwlist wlan2 scanning | egrep “ESSID | Channel”            #扫描查看附近AP信道及频宽</p><p>log(signal/1mW)        #singnal无线强度接收值计算,0~-50 信号好,超过-130信号不可达</p><p>添加删除侦听端口<br>iw dev wlan2 interface add wlan2mon type monitor    #把无线网卡设置成monitor模式,进行无线数据抓包<br>    tcpdump -s 0 –i wlan2mon -p                    #tcpdump命令行抓包工具<br>    ifconfig wlan2mon up            #把wlan2mon设置成up状态<br>    service network-manager stop    #如果up不成功,停用network-manager服务<br>    service network-manager status    #network-manager服务状态查询<br>    vi ./bashrc                        #服务启动项配置<br>iw dev wlan2mon interface del</p><p>802.11<br>协议栈<br>    <a href="https://www.kernel.org/doc/htmldocs/80211/index.html" target="_blank" rel="noopener">https://www.kernel.org/doc/htmldocs/80211/index.html</a><br>无线驱动<br>    <a href="http://linuxwireless.org/en/users/Drivers/" target="_blank" rel="noopener">http://linuxwireless.org/en/users/Drivers/</a></p>]]></content>
+        <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
       
       
       
@@ -99,6 +99,37 @@
         <tags>
             
             <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SSL_TSL中间人攻击</title>
+      <link href="/2014/05/19/web_attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+      <url>/2014/05/19/web_attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[<p>攻击者位于客户端和服务器通信链路中<br>    ARP        // Data link层,修改MAC地址,ARP Spoof让流量流经中间人<br>    DHCP    // 动态主机配置协议,用来自动获取IP<br>    修改网关<br>    修改DNS<br>    修改HOSTS<br>    ICMP,STP,OSPF<br>加密流量        // 伪造证书解密</p><p>攻击的前提<br>客户端已经信任伪造证书颁发机构<br>攻击者控制了核发证书颁发机构<br>客户端程序禁止了显示证书错误告警信息<br>攻击者已经控制客户端,并强制其信任伪造证书</p><h4 id="SSLsplit"><a href="#SSLsplit" class="headerlink" title="SSLsplit"></a><strong>SSLsplit</strong></h4><pre><code>透明SSL/TLS中间人攻击工具对客户端伪造成服务器,对服务器伪装成普通客户端伪装服务器需要伪造证书支持SSL/TLS加密的SMTP,POP3,FTP等通信中间人攻击</code></pre><p><strong>利用openssl生成证书私钥</strong><br>    <code>openssl genrsa -out ca.key 2048</code><br><strong>利用私钥签名生成证书</strong><br>    <code>openssl reg -new -x509 -days 1096 -key ca.key -out ca.crt</code></p><h4 id="启动路由"><a href="#启动路由" class="headerlink" title="启动路由"></a><strong>启动路由</strong></h4><pre><code>sysctl -w net.ipv4.ip_forward=1cat /proc/sys/net/ipv4/ip_forwardecho 1 &gt; /proc/sys/net/ipv4/ip_forward</code></pre><h4 id="Iptables端口转发规则"><a href="#Iptables端口转发规则" class="headerlink" title="Iptables端口转发规则"></a><strong>Iptables端口转发规则</strong></h4><pre><code>iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443 #MSAiptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443 #SMTPSiptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443 #IMAPSiptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443 #POP3Siptables -t nat -L        //查看nat规则netstat -pantu | grep :80        //查看80端口是否被占用</code></pre><h4 id="ARP欺骗"><a href="#ARP欺骗" class="headerlink" title="ARP欺骗"></a><strong>ARP欺骗</strong></h4><pre><code>arpspoof -i eth0 -t 1.1.1.2 -r 1.1.1.1</code></pre><h4 id="启动SSLsplit"><a href="#启动SSLsplit" class="headerlink" title="启动SSLsplit"></a><strong>启动SSLsplit</strong></h4><pre><code>mkdir -p test/logdirsslsplit -D -l connect.log -j /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</code></pre><p>被害者访问taobao,baidu,mail.163.com<br>查看日志和浏览器证书及证书报错信息<br>安装服务器根证书之后再次访问</p><h4 id="Mitmproxy"><a href="#Mitmproxy" class="headerlink" title="Mitmproxy"></a><strong>Mitmproxy</strong></h4><pre><code>iptables端口转发规则iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --toport 8080</code></pre><p>Mitmproxy和sslsplit类似,也需要先执行ARP欺骗,且有个BUG,iptables端口只能转发8080有效<br>     mitmproxy -T –host -w mitmproxy.log</p><h4 id="SSLstrip"><a href="#SSLstrip" class="headerlink" title="SSLstrip"></a><strong>SSLstrip</strong></h4><p>与前两种工具不同,将客户端到中间人之间的流量变为明文<br>一样也需要结合ARP欺骗<br>    <code>sslstrip -l 8080</code></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> Web渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SSLsplit </tag>
+            
+            <tag> SSLstrip </tag>
+            
+            <tag> ARP欺骗 </tag>
             
         </tags>
       
@@ -421,9 +452,40 @@
     
     
     <entry>
+      <title>Network三层发现_路由追踪</title>
+      <link href="/2013/03/16/Information_Gethering/Network%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0_%E8%B7%AF%E7%94%B1%E8%BF%BD%E8%B8%AA/"/>
+      <url>/2013/03/16/Information_Gethering/Network%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0_%E8%B7%AF%E7%94%B1%E8%BF%BD%E8%B8%AA/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="network"><a href="#network" class="headerlink" title="network"></a><strong>network</strong></h3></blockquote><p>优点<br>    可路由<br>    速度比较快<br>缺点<br>    速度比二层慢<br>    经常被边界防火墙过滤<br>IP，icmp协议</p><h4 id="ping"><a href="#ping" class="headerlink" title="ping"></a><strong>ping</strong></h4><pre><code>ping 1.1.1.1 -c 5ping 1.1.1.1 ping 1.1.1.1 -c 1 | grep &quot;bytes from&quot; | cut -d &quot;&quot; -f 4 | cut -d &quot;:&quot; -f 1</code></pre><h4 id="路由追踪"><a href="#路由追踪" class="headerlink" title="路由追踪"></a><strong>路由追踪</strong></h4><pre><code>traceroute 1.1.1.1 ping -R 1.1.1.1</code></pre><h4 id="Scapy"><a href="#Scapy" class="headerlink" title="Scapy"></a><strong>Scapy</strong></h4><pre><code>ip=IP()ip.dst=&quot;1.1.1.1&quot;ping=ICMP()a=sr1(ip/ping)a.display()a=sr1(ip/ping,timeout=1)  #ping不存在的地址sr1(IP(dst=&quot;192.168.254.254&quot;)/ICMP()) #合并</code></pre><h4 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a><strong>NMAP</strong></h4><pre><code>nmap -sn 1.1.1.1-255 #如果IP在本网段发二层arp包，如果不同网端发icmp包nmap -iL iplist.txt -sn</code></pre><h4 id="fping"><a href="#fping" class="headerlink" title="fping"></a><strong>fping</strong></h4><pre><code>fping 1.1.1.1 -c 1fping -g 1.1.1.1 1.1.1.2fping -g 1.1.1.0/24fping -f iplist.txt</code></pre><h4 id="Hping"><a href="#Hping" class="headerlink" title="Hping"></a><strong>Hping</strong></h4><p>能够发送几乎所有TCP/IP包头<br>功能强大但每次只能扫描一个目标<br>拒绝服务，压力测试<br>    hping3 1.1.1.1 –icmp -c 2<br>    for addr in $(seq 1 254); do hping3 1.1.1.$addr –icmp -c 1 &gt;&gt;handle.txt &amp;done</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 信息收集 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Scapy </tag>
+            
+            <tag> 路由追踪 </tag>
+            
+            <tag> traceroute </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ARP协议的数据链路层扫描探测</title>
-      <link href="/2013/03/15/pentest/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/"/>
-      <url>/2013/03/15/pentest/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/</url>
+      <link href="/2013/03/15/Information_Gethering/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/"/>
+      <url>/2013/03/15/Information_Gethering/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/</url>
       
         <content type="html"><![CDATA[<p>Data link (Arp) 二层发现<br>优点：扫描速度块，可靠<br>缺点：不可路由<br>Arp协议<br>抓包</p><pre><code>ifconfigdhclient eth0arping 1.1.1.1 -c 1arping 192.168.1.1 -d #arp欺骗检测</code></pre><blockquote><p>Bash脚本：<code>arping1.sh</code>  #扫描网段</p></blockquote><pre><code>#!/bin/bashif [&quot;$#&quot; -ne 1 ]:then  echo &quot;Usage - ./arping.sh [interface]&quot;  echo &quot;Example - ./arping.sh eth0&quot;  echo &quot;Example will preform an ARP scan of the local subnet to which eth0 is assigned&quot;  exitfiinterface=$1prefix=$(ifconfig $interface | grep &apos;inet addr&apos; | cut -d &apos;:&apos; -f 2 | cut -d &apos; &apos; -f 1 | cut -d &apos;.&apos; -f 1-3)for addr in $(seq 1 254); do  arping -c 1 $prefix.$addr | grep &quot;bytes from&quot; | cut -d&quot; &quot; -f 5 | cut -d&quot;(&quot; -f 2 | cut -d&quot;)&quot; -f 1done</code></pre><blockquote><p>NMAP</p></blockquote><pre><code>nmap 191.168.1.1-254 -sn    or    nmap 192.168.1.0/24 -snnmap -iL iplist.txt -sn</code></pre><blockquote><p>Netdiscover</p></blockquote><p>专用于二层发现<br>可用于无线和交换网络环境<br>主动肯被动探测</p><pre><code>主动：    netdiscover -i eth0 -r 1.1.1.0/24    netdiscover -l iplist.txt被动：    netdiscover -p     主动arp容易触发报警</code></pre><blockquote><p>Scapy</p></blockquote><pre><code>作为Python库进行调用也可作为单独工具使用抓包，分析，创建，修改，注入网络流量apt-get install python-gnuplotScapy    ARP().display()    Sr1()</code></pre><blockquote><p>Python脚本:<code>Arp1.py</code> </p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">2</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage - ./arp_disc.py [interface]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example - ./arp_disc.py eth0"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"example will perform an ARP scan of the local subnet to which eht0 is assigned"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">interface=str(sys.argv[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">ip=subprocess.check_output(<span class="string">"ifconfig"</span>+interface+<span class="string">" | grep 'inet addr' | cut -d ':' -f 2 | cut -d ' ' -f 1"</span>,shell=<span class="literal">True</span>).strip()</span><br><span class="line">prefix=ip.split(<span class="string">'.'</span>)[<span class="number">0</span>]+ip.split(<span class="string">'.'</span>)[<span class="number">1</span>]+<span class="string">'.'</span>+ip.split(<span class="string">'.'</span>)[<span class="number">2</span>]+<span class="string">'.'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> addr <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">254</span>):</span><br><span class="line">answer=sr1(ARP(pdst=prefix+str(addr)),timeout=<span class="number">0.1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> answer==<span class="literal">None</span>:</span><br><span class="line"><span class="keyword">pass</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">print</span> prefix+str(addr)</span><br></pre></td></tr></table></figure>]]></content>
       
@@ -453,8 +515,8 @@
     
     <entry>
       <title>Search Hacking信息收集姿势</title>
-      <link href="/2013/03/12/pentest/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/"/>
-      <url>/2013/03/12/pentest/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/</url>
+      <link href="/2013/03/12/Information_Gethering/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/"/>
+      <url>/2013/03/12/Information_Gethering/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/</url>
       
         <content type="html"><![CDATA[<blockquote><p>SHODAN</p></blockquote><pre><code>net:8.8.8.8    or net:8.8.8.0/24 country:CN city:beijing port:22os:&quot;windows&quot;server:apachehostname:google.com</code></pre><p>example:<br>200 OK cisco country:JP<br>user:amdin pass:password<br>linux upnp avtech</p><blockquote><p>google hacking</p></blockquote><p><a href="https://www.exploit-db.com/google-hacking-database" target="_blank" rel="noopener">GHDB</a></p><pre><code>title:关键字 indext:关键字 indext:关键字inurl:/../../inurl:/admin/login.phpinurl:qq.txtinurl:ftp &quot;password&quot; filetype:xls inurl:service.pwdfiletype:xls &quot;username | password&quot;intitle:&quot;netbotz appliance&quot; &quot;ok&quot;</code></pre><blockquote><p>theHarvester （并发多引擎搜索）<br>metagoofil    (并发多引擎文件搜索)<br>Maltego</p></blockquote><p>CUPP– common User Password Proliler (根据用户信息生成密码字典)</p><pre><code>get clone https://github.com/Mebus/cupp.get</code></pre><blockquote><p>METADATA图片源信息查看</p></blockquote><p>exiftool x.jpg  #查看图片exif信息<br>foca            #windows查看图片源数据工具</p>]]></content>
       
@@ -484,8 +546,8 @@
     
     <entry>
       <title>已知域名解析查询</title>
-      <link href="/2013/03/11/pentest/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/"/>
-      <url>/2013/03/11/pentest/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/</url>
+      <link href="/2013/03/11/Information_Gethering/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/"/>
+      <url>/2013/03/11/Information_Gethering/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/</url>
       
         <content type="html"><![CDATA[<blockquote><p>nslookup</p></blockquote><pre><code>nslookup sina.com type=any</code></pre><blockquote><p>DIG</p></blockquote><pre><code>dig sina.com any @1.1.1.1dig mail.163.com anydig +trace www.sian.com  #根域追踪  劫持查询</code></pre><blockquote><p>DNS区域传输</p></blockquote><pre><code>dig sina.com nsdig @ns1.example.com example.com axfrhost -T -l sina.com ns2.sina.com</code></pre><blockquote><p>DNS字典爆破</p></blockquote><pre><code>fierce -dnsserver 8.8.8.8 -dns sina.com.cn -wordlist hosts.txtdnsdict6 -d4 -t 16 -x sina.com #字典质量高，速度块dnsenum -f dnsbig.txt -dnsserver 8.8.8.8 sina.com -a sina.xmldnsmap sina.com -w dns.txtdnsrecon -d sina.com --lifetime 10 -t brt -D dnsbig.txt  #快dnsrecon -t std -d sina.com</code></pre><blockquote><p>查找字典位置</p></blockquote><pre><code>dpkg -L fiercefind / -name dnsenum</code></pre><blockquote><p>DNS注册信息</p></blockquote><pre><code>whois whois -h whois.apnic.net 1.1.1.1</code></pre>]]></content>
       

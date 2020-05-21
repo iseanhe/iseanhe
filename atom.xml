@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://c.cat.plus/"/>
-  <updated>2020-04-06T04:24:53.524Z</updated>
+  <updated>2020-04-04T15:01:51.276Z</updated>
   <id>http://c.cat.plus/</id>
   
   <author>
@@ -15,73 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>wireless_attacks/无线技术理论/WEP加密-RC4算法</title>
-    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
-    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-06T04:24:53.524Z</updated>
-    
-    <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;加密&lt;br&gt;    无线安全根源&lt;br&gt;        802.11基于无线电波发射信息&lt;br&gt;        嗅探侦听是主要问题&lt;br&gt;        加密机制是必须手段&lt;br&gt;    Wired Equivalent Privacy(WEP)&lt;br&gt;        80
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>wireless_attacks/无线技术理论/WPA安全系统</title>
-    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
-    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-06T07:27:20.089Z</updated>
-    
-    <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;WPA安全系统&lt;br&gt;    Wi-Fi Protected Access&lt;br&gt;    802.11i 组为提高无线安全,开发两个新的链路层加密协议&lt;br&gt;        Temporal Key Integrity Protocol(TKIP)&lt;br&gt;         
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>wireless_attacks/无线技术理论/Management Frame</title>
-    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/"/>
-    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-05T14:38:02.876Z</updated>
-    
-    <content type="html"><![CDATA[<p>Management Frame(管理帧)<br>用于协商和控制STA与AP之间的关系</p><p>Beacon Frames(是由AP发出来的帧)<br>AP发送的广播帧,通告无线网络的存在(BSSID)<br>发包频率<br>    102.4ms(可变)<br>    时间单位1024microsecond(60秒)<br>SSID网络名<br>    隐藏AP不发SSID广播<br>IBSSI Status<br>    0:intrastructure<br>    1:ad-hcc<br>Privicy<br>    WEP\WPA加密<br>ESSID<br>    名称,长度<br>速率<br>    802.11 g(1–54Mbit)<br>信道<br>    11</p><p>Probe Request Frames(由STA发出的扫描请求帧)<br>用于STA扫描现有AP<br>    发现连接过的AP<br>    发现未连接过的AP</p><p>Probe Response Frames(由AP返回的响应帧)<br>发现连接过的AP时,速率和ESSID相同的AP响应</p><p>Authentication Frames(身份认证)<br>    Authentication Algorithm身份认证类型<br>    0:开放系统身份验证<br>    1:共享密钥身份验证<br>身份认证由多个帧交换过程组成<br>Authentication Seq<br>    每次身份验证过程Seq唯一<br>    1-65535<br>Challenge text<br>    只有共享密钥方式才有此字段<br>Status Code:成功/失败</p><p>Association/Reassociation Frames(关联/重关联帧)<br>身份验证成功后,STA执行关联操作,加入无线网络<br>    Association Request    Frames<br>    Reassociation Request Frames<br>    Association Response Frames</p><p>Disassociation/Deauthentication(由AP发出)<br>由AP发出<br>    2个字节</p><p>ATIM Frames<br>只在ad-hoc网络下使用<br>    STA使用此帧通知接收者其有缓存的数据要发送</p><p>Data Frames(数据帧)<br>传输用户数据<br>    DATA Frame<br>空数据帧<br>    Null data frame<br>    只包含MAC头和FCS<br>    STA用于声明自己将要进入省电模式</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Management Frame(管理帧)&lt;br&gt;用于协商和控制STA与AP之间的关系&lt;/p&gt;
-&lt;p&gt;Beacon Frames(是由AP发出来的帧)&lt;br&gt;AP发送的广播帧,通告无线网络的存在(BSSID)&lt;br&gt;发包频率&lt;br&gt;    102.4ms(可变)&lt;br&gt;  
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
   
   <entry>
     <title>wireless_attacks/无线技术理论/RADIOTAP头部</title>
@@ -120,6 +53,73 @@
       
         &lt;p&gt;802.11协议栈&lt;br&gt;leee80211&lt;br&gt;    iwconfig&lt;br&gt;    iwlist&lt;br&gt;mac80211&lt;br&gt;    iw&lt;/p&gt;
 &lt;p&gt;查看无线网卡&lt;br&gt;    ifconfig&lt;br&gt;    iwconfig&lt;br&gt;    iw list&lt;b
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/Management Frame</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-05T14:38:02.876Z</updated>
+    
+    <content type="html"><![CDATA[<p>Management Frame(管理帧)<br>用于协商和控制STA与AP之间的关系</p><p>Beacon Frames(是由AP发出来的帧)<br>AP发送的广播帧,通告无线网络的存在(BSSID)<br>发包频率<br>    102.4ms(可变)<br>    时间单位1024microsecond(60秒)<br>SSID网络名<br>    隐藏AP不发SSID广播<br>IBSSI Status<br>    0:intrastructure<br>    1:ad-hcc<br>Privicy<br>    WEP\WPA加密<br>ESSID<br>    名称,长度<br>速率<br>    802.11 g(1–54Mbit)<br>信道<br>    11</p><p>Probe Request Frames(由STA发出的扫描请求帧)<br>用于STA扫描现有AP<br>    发现连接过的AP<br>    发现未连接过的AP</p><p>Probe Response Frames(由AP返回的响应帧)<br>发现连接过的AP时,速率和ESSID相同的AP响应</p><p>Authentication Frames(身份认证)<br>    Authentication Algorithm身份认证类型<br>    0:开放系统身份验证<br>    1:共享密钥身份验证<br>身份认证由多个帧交换过程组成<br>Authentication Seq<br>    每次身份验证过程Seq唯一<br>    1-65535<br>Challenge text<br>    只有共享密钥方式才有此字段<br>Status Code:成功/失败</p><p>Association/Reassociation Frames(关联/重关联帧)<br>身份验证成功后,STA执行关联操作,加入无线网络<br>    Association Request    Frames<br>    Reassociation Request Frames<br>    Association Response Frames</p><p>Disassociation/Deauthentication(由AP发出)<br>由AP发出<br>    2个字节</p><p>ATIM Frames<br>只在ad-hoc网络下使用<br>    STA使用此帧通知接收者其有缓存的数据要发送</p><p>Data Frames(数据帧)<br>传输用户数据<br>    DATA Frame<br>空数据帧<br>    Null data frame<br>    只包含MAC头和FCS<br>    STA用于声明自己将要进入省电模式</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Management Frame(管理帧)&lt;br&gt;用于协商和控制STA与AP之间的关系&lt;/p&gt;
+&lt;p&gt;Beacon Frames(是由AP发出来的帧)&lt;br&gt;AP发送的广播帧,通告无线网络的存在(BSSID)&lt;br&gt;发包频率&lt;br&gt;    102.4ms(可变)&lt;br&gt;  
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/WPA安全系统</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-06T07:27:20.089Z</updated>
+    
+    <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;WPA安全系统&lt;br&gt;    Wi-Fi Protected Access&lt;br&gt;    802.11i 组为提高无线安全,开发两个新的链路层加密协议&lt;br&gt;        Temporal Key Integrity Protocol(TKIP)&lt;br&gt;         
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>wireless_attacks/无线技术理论/WEP加密-RC4算法</title>
+    <link href="http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
+    <id>http://c.cat.plus/2020/05/18/wireless_attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-06T04:24:53.524Z</updated>
+    
+    <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;加密&lt;br&gt;    无线安全根源&lt;br&gt;        802.11基于无线电波发射信息&lt;br&gt;        嗅探侦听是主要问题&lt;br&gt;        加密机制是必须手段&lt;br&gt;    Wired Equivalent Privacy(WEP)&lt;br&gt;        80
       
     
     </summary>
@@ -175,6 +175,38 @@
     
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SSL_TSL中间人攻击</title>
+    <link href="http://c.cat.plus/2014/05/19/web_attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+    <id>http://c.cat.plus/2014/05/19/web_attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</id>
+    <published>2014-05-19T10:02:37.000Z</published>
+    <updated>2020-05-21T02:36:21.882Z</updated>
+    
+    <content type="html"><![CDATA[<p>攻击者位于客户端和服务器通信链路中<br>    ARP        // Data link层,修改MAC地址,ARP Spoof让流量流经中间人<br>    DHCP    // 动态主机配置协议,用来自动获取IP<br>    修改网关<br>    修改DNS<br>    修改HOSTS<br>    ICMP,STP,OSPF<br>加密流量        // 伪造证书解密</p><p>攻击的前提<br>客户端已经信任伪造证书颁发机构<br>攻击者控制了核发证书颁发机构<br>客户端程序禁止了显示证书错误告警信息<br>攻击者已经控制客户端,并强制其信任伪造证书</p><h4 id="SSLsplit"><a href="#SSLsplit" class="headerlink" title="SSLsplit"></a><strong>SSLsplit</strong></h4><pre><code>透明SSL/TLS中间人攻击工具对客户端伪造成服务器,对服务器伪装成普通客户端伪装服务器需要伪造证书支持SSL/TLS加密的SMTP,POP3,FTP等通信中间人攻击</code></pre><p><strong>利用openssl生成证书私钥</strong><br>    <code>openssl genrsa -out ca.key 2048</code><br><strong>利用私钥签名生成证书</strong><br>    <code>openssl reg -new -x509 -days 1096 -key ca.key -out ca.crt</code></p><h4 id="启动路由"><a href="#启动路由" class="headerlink" title="启动路由"></a><strong>启动路由</strong></h4><pre><code>sysctl -w net.ipv4.ip_forward=1cat /proc/sys/net/ipv4/ip_forwardecho 1 &gt; /proc/sys/net/ipv4/ip_forward</code></pre><h4 id="Iptables端口转发规则"><a href="#Iptables端口转发规则" class="headerlink" title="Iptables端口转发规则"></a><strong>Iptables端口转发规则</strong></h4><pre><code>iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443 #MSAiptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443 #SMTPSiptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443 #IMAPSiptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443 #POP3Siptables -t nat -L        //查看nat规则netstat -pantu | grep :80        //查看80端口是否被占用</code></pre><h4 id="ARP欺骗"><a href="#ARP欺骗" class="headerlink" title="ARP欺骗"></a><strong>ARP欺骗</strong></h4><pre><code>arpspoof -i eth0 -t 1.1.1.2 -r 1.1.1.1</code></pre><h4 id="启动SSLsplit"><a href="#启动SSLsplit" class="headerlink" title="启动SSLsplit"></a><strong>启动SSLsplit</strong></h4><pre><code>mkdir -p test/logdirsslsplit -D -l connect.log -j /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</code></pre><p>被害者访问taobao,baidu,mail.163.com<br>查看日志和浏览器证书及证书报错信息<br>安装服务器根证书之后再次访问</p><h4 id="Mitmproxy"><a href="#Mitmproxy" class="headerlink" title="Mitmproxy"></a><strong>Mitmproxy</strong></h4><pre><code>iptables端口转发规则iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --toport 8080</code></pre><p>Mitmproxy和sslsplit类似,也需要先执行ARP欺骗,且有个BUG,iptables端口只能转发8080有效<br>     mitmproxy -T –host -w mitmproxy.log</p><h4 id="SSLstrip"><a href="#SSLstrip" class="headerlink" title="SSLstrip"></a><strong>SSLstrip</strong></h4><p>与前两种工具不同,将客户端到中间人之间的流量变为明文<br>一样也需要结合ARP欺骗<br>    <code>sslstrip -l 8080</code></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;攻击者位于客户端和服务器通信链路中&lt;br&gt;    ARP        // Data link层,修改MAC地址,ARP Spoof让流量流经中间人&lt;br&gt;    DHCP    // 动态主机配置协议,用来自动获取IP&lt;br&gt;    修改网关&lt;br&gt;    修改DNS&lt;
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="Web渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"/>
+    
+    
+      <category term="SSLsplit" scheme="http://c.cat.plus/tags/SSLsplit/"/>
+    
+      <category term="SSLstrip" scheme="http://c.cat.plus/tags/SSLstrip/"/>
+    
+      <category term="ARP欺骗" scheme="http://c.cat.plus/tags/ARP%E6%AC%BA%E9%AA%97/"/>
     
   </entry>
   
@@ -516,9 +548,43 @@
   </entry>
   
   <entry>
+    <title>Network三层发现_路由追踪</title>
+    <link href="http://c.cat.plus/2013/03/16/Information_Gethering/Network%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0_%E8%B7%AF%E7%94%B1%E8%BF%BD%E8%B8%AA/"/>
+    <id>http://c.cat.plus/2013/03/16/Information_Gethering/Network%E4%B8%89%E5%B1%82%E5%8F%91%E7%8E%B0_%E8%B7%AF%E7%94%B1%E8%BF%BD%E8%B8%AA/</id>
+    <published>2013-03-16T11:12:12.000Z</published>
+    <updated>2020-05-20T02:10:29.862Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="network"><a href="#network" class="headerlink" title="network"></a><strong>network</strong></h3></blockquote><p>优点<br>    可路由<br>    速度比较快<br>缺点<br>    速度比二层慢<br>    经常被边界防火墙过滤<br>IP，icmp协议</p><h4 id="ping"><a href="#ping" class="headerlink" title="ping"></a><strong>ping</strong></h4><pre><code>ping 1.1.1.1 -c 5ping 1.1.1.1 ping 1.1.1.1 -c 1 | grep &quot;bytes from&quot; | cut -d &quot;&quot; -f 4 | cut -d &quot;:&quot; -f 1</code></pre><h4 id="路由追踪"><a href="#路由追踪" class="headerlink" title="路由追踪"></a><strong>路由追踪</strong></h4><pre><code>traceroute 1.1.1.1 ping -R 1.1.1.1</code></pre><h4 id="Scapy"><a href="#Scapy" class="headerlink" title="Scapy"></a><strong>Scapy</strong></h4><pre><code>ip=IP()ip.dst=&quot;1.1.1.1&quot;ping=ICMP()a=sr1(ip/ping)a.display()a=sr1(ip/ping,timeout=1)  #ping不存在的地址sr1(IP(dst=&quot;192.168.254.254&quot;)/ICMP()) #合并</code></pre><h4 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a><strong>NMAP</strong></h4><pre><code>nmap -sn 1.1.1.1-255 #如果IP在本网段发二层arp包，如果不同网端发icmp包nmap -iL iplist.txt -sn</code></pre><h4 id="fping"><a href="#fping" class="headerlink" title="fping"></a><strong>fping</strong></h4><pre><code>fping 1.1.1.1 -c 1fping -g 1.1.1.1 1.1.1.2fping -g 1.1.1.0/24fping -f iplist.txt</code></pre><h4 id="Hping"><a href="#Hping" class="headerlink" title="Hping"></a><strong>Hping</strong></h4><p>能够发送几乎所有TCP/IP包头<br>功能强大但每次只能扫描一个目标<br>拒绝服务，压力测试<br>    hping3 1.1.1.1 –icmp -c 2<br>    for addr in $(seq 1 254); do hping3 1.1.1.$addr –icmp -c 1 &gt;&gt;handle.txt &amp;done</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;network&quot;&gt;&lt;a href=&quot;#network&quot; class=&quot;headerlink&quot; title=&quot;network&quot;&gt;&lt;/a&gt;&lt;strong&gt;network&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;p&gt;优点&lt;br&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="信息收集" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    
+    
+      <category term="Scapy" scheme="http://c.cat.plus/tags/Scapy/"/>
+    
+      <category term="路由追踪" scheme="http://c.cat.plus/tags/%E8%B7%AF%E7%94%B1%E8%BF%BD%E8%B8%AA/"/>
+    
+      <category term="traceroute" scheme="http://c.cat.plus/tags/traceroute/"/>
+    
+  </entry>
+  
+  <entry>
     <title>ARP协议的数据链路层扫描探测</title>
-    <link href="http://c.cat.plus/2013/03/15/pentest/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/"/>
-    <id>http://c.cat.plus/2013/03/15/pentest/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/</id>
+    <link href="http://c.cat.plus/2013/03/15/Information_Gethering/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/"/>
+    <id>http://c.cat.plus/2013/03/15/Information_Gethering/ARP%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%89%AB%E6%8F%8F%E6%8E%A2%E6%B5%8B/</id>
     <published>2013-03-15T12:11:32.000Z</published>
     <updated>2020-05-15T11:39:43.624Z</updated>
     
@@ -549,81 +615,6 @@ arping 192.168.1
       <category term="扫描开发" scheme="http://c.cat.plus/tags/%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/"/>
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Search Hacking信息收集姿势</title>
-    <link href="http://c.cat.plus/2013/03/12/pentest/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/"/>
-    <id>http://c.cat.plus/2013/03/12/pentest/Search%20Hacking%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%A7%BF%E5%8A%BF/</id>
-    <published>2013-03-12T12:11:12.000Z</published>
-    <updated>2020-05-15T08:36:27.132Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>SHODAN</p></blockquote><pre><code>net:8.8.8.8    or net:8.8.8.0/24 country:CN city:beijing port:22os:&quot;windows&quot;server:apachehostname:google.com</code></pre><p>example:<br>200 OK cisco country:JP<br>user:amdin pass:password<br>linux upnp avtech</p><blockquote><p>google hacking</p></blockquote><p><a href="https://www.exploit-db.com/google-hacking-database" target="_blank" rel="noopener">GHDB</a></p><pre><code>title:关键字 indext:关键字 indext:关键字inurl:/../../inurl:/admin/login.phpinurl:qq.txtinurl:ftp &quot;password&quot; filetype:xls inurl:service.pwdfiletype:xls &quot;username | password&quot;intitle:&quot;netbotz appliance&quot; &quot;ok&quot;</code></pre><blockquote><p>theHarvester （并发多引擎搜索）<br>metagoofil    (并发多引擎文件搜索)<br>Maltego</p></blockquote><p>CUPP– common User Password Proliler (根据用户信息生成密码字典)</p><pre><code>get clone https://github.com/Mebus/cupp.get</code></pre><blockquote><p>METADATA图片源信息查看</p></blockquote><p>exiftool x.jpg  #查看图片exif信息<br>foca            #windows查看图片源数据工具</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;p&gt;SHODAN&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;net:8.8.8.8    or net:8.8.8.0/24 
-country:CN city:beijing port:22
-os:&amp;quot;windows&amp;quot;
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="信息收集" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
-    
-    
-      <category term="被动信息收集" scheme="http://c.cat.plus/tags/%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
-    
-      <category term="SHODAN" scheme="http://c.cat.plus/tags/SHODAN/"/>
-    
-      <category term="GOOGLE HACKING" scheme="http://c.cat.plus/tags/GOOGLE-HACKING/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>已知域名解析查询</title>
-    <link href="http://c.cat.plus/2013/03/11/pentest/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/"/>
-    <id>http://c.cat.plus/2013/03/11/pentest/%E5%B7%B2%E7%9F%A5%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2/</id>
-    <published>2013-03-11T11:21:33.000Z</published>
-    <updated>2020-05-15T08:07:31.244Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>nslookup</p></blockquote><pre><code>nslookup sina.com type=any</code></pre><blockquote><p>DIG</p></blockquote><pre><code>dig sina.com any @1.1.1.1dig mail.163.com anydig +trace www.sian.com  #根域追踪  劫持查询</code></pre><blockquote><p>DNS区域传输</p></blockquote><pre><code>dig sina.com nsdig @ns1.example.com example.com axfrhost -T -l sina.com ns2.sina.com</code></pre><blockquote><p>DNS字典爆破</p></blockquote><pre><code>fierce -dnsserver 8.8.8.8 -dns sina.com.cn -wordlist hosts.txtdnsdict6 -d4 -t 16 -x sina.com #字典质量高，速度块dnsenum -f dnsbig.txt -dnsserver 8.8.8.8 sina.com -a sina.xmldnsmap sina.com -w dns.txtdnsrecon -d sina.com --lifetime 10 -t brt -D dnsbig.txt  #快dnsrecon -t std -d sina.com</code></pre><blockquote><p>查找字典位置</p></blockquote><pre><code>dpkg -L fiercefind / -name dnsenum</code></pre><blockquote><p>DNS注册信息</p></blockquote><pre><code>whois whois -h whois.apnic.net 1.1.1.1</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;p&gt;nslookup&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;nslookup sina.com type=any&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
-&lt;p&gt;DIG&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;cod
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="信息收集" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
-    
-    
-      <category term="被动信息收集" scheme="http://c.cat.plus/tags/%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
-    
-      <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
-    
-      <category term="渗透" scheme="http://c.cat.plus/tags/%E6%B8%97%E9%80%8F/"/>
     
   </entry>
   
