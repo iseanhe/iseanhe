@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://c.cat.plus/"/>
-  <updated>2020-04-06T07:27:20.089Z</updated>
+  <updated>2020-04-04T15:01:51.276Z</updated>
   <id>http://c.cat.plus/</id>
   
   <author>
@@ -15,28 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Wireless_Attacks/无线技术理论/WPA安全系统</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-06T07:27:20.089Z</updated>
-    
-    <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;WPA安全系统&lt;br&gt;    Wi-Fi Protected Access&lt;br&gt;    802.11i 组为提高无线安全,开发两个新的链路层加密协议&lt;br&gt;        Temporal Key Integrity Protocol(TKIP)&lt;br&gt;         
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
   
   <entry>
     <title>Wireless_Attacks/无线技术理论/RADIOTAP头部</title>
@@ -83,6 +61,28 @@
   </entry>
   
   <entry>
+    <title>Wireless_Attacks/无线技术理论/WPA安全系统</title>
+    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
+    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</id>
+    <published>2020-05-18T05:59:28.907Z</published>
+    <updated>2020-04-06T07:27:20.089Z</updated>
+    
+    <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;WPA安全系统&lt;br&gt;    Wi-Fi Protected Access&lt;br&gt;    802.11i 组为提高无线安全,开发两个新的链路层加密协议&lt;br&gt;        Temporal Key Integrity Protocol(TKIP)&lt;br&gt;         
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Python花式导包的几种方法</title>
     <link href="http://c.cat.plus/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/"/>
     <id>http://c.cat.plus/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</id>
@@ -111,13 +111,46 @@
   </entry>
   
   <entry>
+    <title>hydra在线密码破解</title>
+    <link href="http://c.cat.plus/2015/05/23/Password_Attacks/hydra%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    <id>http://c.cat.plus/2015/05/23/Password_Attacks/hydra%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
+    <published>2015-05-22T19:15:23.000Z</published>
+    <updated>2020-05-22T06:16:18.713Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="Hydra"><a href="#Hydra" class="headerlink" title="Hydra"></a><strong>Hydra</strong></h3></blockquote><ul><li>九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀</li></ul><h4 id="Windows密码破解"><a href="#Windows密码破解" class="headerlink" title="Windows密码破解"></a><strong>Windows密码破解</strong></h4><pre><code>hydra -l administrator -P pass.lst smb://1.1.1.1/admin$ -vVdhydra -l administrator -P pass.lst rdp://1.1.1.1 -t 1 -vV</code></pre><h4 id="Linux密码破解"><a href="#Linux密码破解" class="headerlink" title="Linux密码破解"></a><strong>Linux密码破解</strong></h4><pre><code>hydra -l root -P pass.lst ssh://1.1.1.1 -t 1 -vV</code></pre><h4 id="其他服务密码破解"><a href="#其他服务密码破解" class="headerlink" title="其他服务密码破解"></a><strong>其他服务密码破解</strong></h4><pre><code>hydra -L user.lst -P pass.lst ftp://1.1.1.1 -s 2121 -e nsr -o p.txt -t 64</code></pre><h4 id="hydra图形化界面"><a href="#hydra图形化界面" class="headerlink" title="hydra图形化界面"></a><strong>hydra图形化界面</strong></h4><pre><code>xhydra</code></pre><h4 id="HTTP表单身份认证"><a href="#HTTP表单身份认证" class="headerlink" title="HTTP表单身份认证"></a><strong>HTTP表单身份认证</strong></h4><pre><code>hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=L in:S=index.php&quot; -Vhydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=L in:Login Failed&quot; -V    #失败/foo.php:user=^USER^&amp;pass=^PASS^:S=success:C=/page/cookie:H =X-Foo:FooC:先访问指定页面取得cookieH:指定http头https-post-form、http-get-form、https-get-form-S：使用SSL连接</code></pre><h4 id="pw-inspector-hydra软件包附带工具"><a href="#pw-inspector-hydra软件包附带工具" class="headerlink" title="pw-inspector hydra软件包附带工具"></a><strong>pw-inspector</strong> hydra软件包附带工具</h4><p>按长度和字符集筛选字典</p><pre><code>pw-inspector -i /usr/share/wordlists/nmap.lst -o p.lst -l pw-inspector -i /usr/share/wordlists/nmap.lst -o P.lst -u</code></pre><h4 id="密码破解效率"><a href="#密码破解效率" class="headerlink" title="密码破解效率"></a><strong>密码破解效率</strong></h4><ul><li>密码复杂度(字典命中率)</li><li>带宽、协议、服务器性能、客户端性能</li><li>锁定阈值</li><li>单位时间最大登陆请求次数</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;Hydra&quot;&gt;&lt;a href=&quot;#Hydra&quot; class=&quot;headerlink&quot; title=&quot;Hydra&quot;&gt;&lt;/a&gt;&lt;strong&gt;Hydra&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;九头蛇，砍去一个
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+    
+      <category term="hydra" scheme="http://c.cat.plus/tags/hydra/"/>
+    
+      <category term="密码破解" scheme="http://c.cat.plus/tags/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+  </entry>
+  
+  <entry>
     <title>密码破解方法及Crunch字典生成工具</title>
     <link href="http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/"/>
     <id>http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/</id>
     <published>2015-05-21T09:05:17.000Z</published>
-    <updated>2020-05-21T07:33:19.142Z</updated>
+    <updated>2020-05-22T02:55:36.325Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a><strong>思路</strong></h3><p>目标系统实施了强安全措施</p><ul><li>安装了所有补丁 </li><li>无任何已知漏洞 </li><li>无应用层漏洞 </li><li>攻击面最小化<h4 id="社会工程学"><a href="#社会工程学" class="headerlink" title="社会工程学"></a><strong>社会工程学</strong></h4>获取目标系统用户身份 </li><li>非授权用户不受信，认证用户可以访问守信资源 </li><li>已有用户账号权限受限，需要提权 </li><li>不会触发系统报警</li></ul><h4 id="身份认证方法"><a href="#身份认证方法" class="headerlink" title="身份认证方法"></a><strong>身份认证方法</strong></h4><ul><li>证明你是你声称你是的那个人</li><li>你知道什么（账号密码、pin、passphrase） </li><li>你有什么（令牌、token、key、证书、密宝、手机）</li><li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别） </li><li>以上方法结合使用（多因素身份认证）<br>基于互联网的身份验证仍以账号密码为主要形式</li></ul><blockquote><h3 id="密码破解方法"><a href="#密码破解方法" class="headerlink" title="密码破解方法"></a><strong>密码破解方法</strong></h3></blockquote><h4 id="人工猜解"><a href="#人工猜解" class="headerlink" title="人工猜解"></a><strong>人工猜解</strong></h4><ul><li>垃圾桶工程</li><li>被动信息收集 <h4 id="基于字典暴力破解（主流）"><a href="#基于字典暴力破解（主流）" class="headerlink" title="基于字典暴力破解（主流）"></a>基于字典暴力破解（主流）</h4><h4 id="键盘空间字符暴破"><a href="#键盘空间字符暴破" class="headerlink" title="键盘空间字符暴破"></a>键盘空间字符暴破</h4></li></ul><h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><ul><li>保存有用户名和密码的文本文件 </li><li>/usr/share/wordlist </li><li>/usr/share/wfuzz/wordlist </li><li>/usr/share/seclists</li></ul><blockquote><h3 id="字典-1"><a href="#字典-1" class="headerlink" title="字典"></a><strong>字典</strong></h3></blockquote><h4 id="键盘空间字符爆破"><a href="#键盘空间字符爆破" class="headerlink" title="键盘空间字符爆破"></a>键盘空间字符爆破</h4><ul><li>全键盘空间字符</li><li>部分键盘空间字符 (基于规则)</li><li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li></ul><h4 id="crunch-创建字典"><a href="#crunch-创建字典" class="headerlink" title="crunch 创建字典"></a><strong>crunch 创建字典</strong></h4><pre><code>crunch &lt;min-len&gt; &lt;max-len&gt; [&lt;charset string&gt;] [options]&lt;charset string&gt; 默认是小写字符crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100-b 按大小分割字典文件(kb/kib、mb/mib、gb/gib)-c 每个字典的行数以上两个参数必须与-o START 结合使用-d 同一字符连贯出现数量(11 / aaa)</code></pre><h4 id="使用字符集"><a href="#使用字符集" class="headerlink" title="使用字符集"></a><strong>使用字符集</strong></h4><p><code>crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></p><h4 id="无重复字符"><a href="#无重复字符" class="headerlink" title="无重复字符"></a><strong>无重复字符</strong></h4><p><code>crunch 1 1 -p 1234567890 | more</code><br>    必须是最后一个参数<br>    最大、最小字符长度失效，但必须存在<br>    与-s 参数不兼容（-s 指定起始字符串）<br><code>crunch 4 4 0123456789 -s 9990</code></p><ul><li>读取文件中每行内容作为基本字符生成字典<br><code>crunch 1 1 -q read</code></li></ul><h4 id="字典组成规则"><a href="#字典组成规则" class="headerlink" title="字典组成规则"></a><strong>字典组成规则</strong></h4><pre><code>crunch 6 6 -t @,%%^^ | more</code></pre><ul><li>@：小写字母 lalpha</li><li>,：大写字母 ualpha</li><li>%：数字 numeric</li><li>^：符号 symbols<h4 id="输出文件压缩"><a href="#输出文件压缩" class="headerlink" title="输出文件压缩"></a><strong>输出文件压缩</strong></h4>  <code>crunch 4 4 -t @,%^ -o 1.txt -z 7z</code><br>   其他压缩格式：gzip、bzip2、lzma<br>   7z压缩比率最大</li></ul><p><strong>Use example:</strong></p><pre><code>crunch 4 4 -f /usr/share/crunch/charset.lst mixalphanumeric-all-space -o w.txt -t @d@@ -s cdabcrunch 4 5 -p dog cat birdcrunch 5 5 abc DEF + \!@# -t ,@^%,    + 占位符    \ 转义符(空格、符号)crunch 5 5 -t ddd%% -p dog cat bird    任何不同于-p 参数指定的值都是占位符crunch 5 5 -d 2@ -t @@@%%组合破解工具应用 crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd</code></pre>]]></content>
+    <content type="html"><![CDATA[<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a><strong>思路</strong></h3><p>目标系统实施了强安全措施</p><ul><li>安装了所有补丁 </li><li>无任何已知漏洞 </li><li>无应用层漏洞 </li><li>攻击面最小化<h4 id="社会工程学"><a href="#社会工程学" class="headerlink" title="社会工程学"></a><strong>社会工程学</strong></h4>获取目标系统用户身份 </li><li>非授权用户不受信，认证用户可以访问守信资源 </li><li>已有用户账号权限受限，需要提权 </li><li>不会触发系统报警</li></ul><h4 id="身份认证方法"><a href="#身份认证方法" class="headerlink" title="身份认证方法"></a><strong>身份认证方法</strong></h4><ul><li>证明你是你声称你是的那个人</li><li>你知道什么（账号密码、pin、passphrase） </li><li>你有什么（令牌、token、key、证书、密宝、手机）</li><li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别） </li><li>以上方法结合使用（多因素身份认证）<br>基于互联网的身份验证仍以账号密码为主要形式</li></ul><blockquote><h3 id="密码破解方法"><a href="#密码破解方法" class="headerlink" title="密码破解方法"></a><strong>密码破解方法</strong></h3></blockquote><h4 id="人工猜解"><a href="#人工猜解" class="headerlink" title="人工猜解"></a><strong>人工猜解</strong></h4><ul><li>垃圾桶工程</li><li>被动信息收集 <h4 id="基于字典暴力破解（主流）"><a href="#基于字典暴力破解（主流）" class="headerlink" title="基于字典暴力破解（主流）"></a>基于字典暴力破解（主流）</h4><h4 id="键盘空间字符暴破"><a href="#键盘空间字符暴破" class="headerlink" title="键盘空间字符暴破"></a>键盘空间字符暴破</h4></li></ul><h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><ul><li>保存有用户名和密码的文本文件 </li><li>/usr/share/wordlist </li><li>/usr/share/wfuzz/wordlist </li><li>/usr/share/seclists</li></ul><blockquote><h3 id="字典-1"><a href="#字典-1" class="headerlink" title="字典"></a><strong>字典</strong></h3></blockquote><h4 id="键盘空间字符爆破"><a href="#键盘空间字符爆破" class="headerlink" title="键盘空间字符爆破"></a>键盘空间字符爆破</h4><ul><li>全键盘空间字符</li><li>部分键盘空间字符 (基于规则)</li><li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li></ul><h4 id="crunch-创建字典"><a href="#crunch-创建字典" class="headerlink" title="crunch 创建字典"></a><strong>crunch 创建字典</strong></h4><pre><code>crunch &lt;min-len&gt; &lt;max-len&gt; [&lt;charset string&gt;] [options]&lt;charset string&gt; 默认是小写字符crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100-b 按大小分割字典文件(kb/kib、mb/mib、gb/gib)-c 每个字典的行数以上两个参数必须与-o START 结合使用-d 同一字符连贯出现数量(11 / aaa)</code></pre><h4 id="使用字符集"><a href="#使用字符集" class="headerlink" title="使用字符集"></a><strong>使用字符集</strong></h4><p><code>crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></p><h4 id="无重复字符"><a href="#无重复字符" class="headerlink" title="无重复字符"></a><strong>无重复字符</strong></h4><p><code>crunch 1 1 -p 1234567890 | more</code><br>    必须是最后一个参数<br>    最大、最小字符长度失效，但必须存在<br>    与-s 参数不兼容（-s 指定起始字符串）<br><code>crunch 4 4 0123456789 -s 9990</code></p><ul><li>读取文件中每行内容作为基本字符生成字典<br><code>crunch 1 1 -q read</code></li></ul><h4 id="字典组成规则"><a href="#字典组成规则" class="headerlink" title="字典组成规则"></a><strong>字典组成规则</strong></h4><pre><code>crunch 6 6 -t @,%%^^ | more</code></pre><ul><li>@：小写字母 lalpha</li><li>,：大写字母 ualpha</li><li>%：数字 numeric</li><li>^：符号 symbols<h4 id="输出文件压缩"><a href="#输出文件压缩" class="headerlink" title="输出文件压缩"></a><strong>输出文件压缩</strong></h4>  <code>crunch 4 4 -t @,%^ -o 1.txt -z 7z</code><br>   其他压缩格式：gzip、bzip2、lzma<br>   7z压缩比率最大</li></ul><p><strong>Use example:</strong></p><pre><code>crunch 4 4 -f /usr/share/crunch/charset.lst mixalphanumeric-all-space -o w.txt -t @d@@ -s cdabcrunch 4 5 -p dog cat birdcrunch 5 5 abc DEF + \!@# -t ,@^%,    + 占位符    \ 转义符(空格、符号)crunch 5 5 -t ddd%% -p dog cat bird    任何不同于-p 参数指定的值都是占位符crunch 5 5 -d 2@ -t @@@%%组合破解工具应用 crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd</code></pre><h4 id="按个人信息生成其专属的密码字典"><a href="#按个人信息生成其专属的密码字典" class="headerlink" title="按个人信息生成其专属的密码字典"></a><strong>按个人信息生成其专属的密码字典</strong></h4><p><strong>CUPP：Common User Password Profiler</strong><br>    git clone <a href="https://github.com/Mebus/cupp.git" target="_blank" rel="noopener">https://github.com/Mebus/cupp.git</a><br>    python cup.py -i</p><p>通过收集网站信息生成字典<br>    cewl 1.1.1.1 -m 3 -d 3 -e -c -v -w a.txt<br>    -m：最小单词长度<br>    -e：收集包含email地址信息<br>    -c：每个单词出现次数<br>    支持基本、摘要 身份认证<br>    支持代理<br><strong>用户密码变型</strong></p><ul><li>基于 cewl 的结果进行密码变型 </li><li>末尾增加数字串</li><li>字母大小写变化</li><li>字母与符号互相转换 </li><li>字母与数字互相转换 </li><li>P@$$w0rd</li></ul><p><strong>使用 John the Ripper 配置文件实现密码动态变型</strong><br>    /etc/john/john.conf<br>    [List.Rules:Wordlist]<br>    $[0-9]$[0-9]$[0-9]<br>    john –wordlist=cewl.txt –rules –stdout &gt; m.txt</p><pre><code>[List.Rules:test]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[a-zA-Z]$[a-zA-Z]$[`~!@#$%^&amp;*()\-_=+]john --wordlist=cewl.txt --rules=test --stdout &gt; m.txtjohn --wordlist=ahm.lst --rules=test HASHFILE</code></pre>]]></content>
     
     <summary type="html">
     
@@ -610,40 +643,6 @@
       <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
     
       <category term="无线协议" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>漏洞的基本概念及漏洞发现管理</title>
-    <link href="http://c.cat.plus/2013/04/17/pentest/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/"/>
-    <id>http://c.cat.plus/2013/04/17/pentest/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/</id>
-    <published>2013-04-17T10:41:12.000Z</published>
-    <updated>2020-05-16T09:55:05.742Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h4 id="发现漏洞"><a href="#发现漏洞" class="headerlink" title="发现漏洞"></a>发现漏洞</h4></blockquote><p>基于端口服务扫描结果版本信息(速度慢)<br>搜索已公开的漏洞数据库(数量大)<br>使用弱点扫描器实现漏洞管理</p><blockquote><h4 id="漏洞库"><a href="#漏洞库" class="headerlink" title="漏洞库"></a>漏洞库</h4></blockquote><p><a href="https://www.exploit-db.com/" target="_blank" rel="noopener">https://www.exploit-db.com/</a>    #kali官方漏洞库<br><a href="http://shell-storm.org/shellcode/" target="_blank" rel="noopener">http://shell-storm.org/shellcode/</a><br><code>sandi漏洞库</code> #程序停更<br>    <code>searchsploit tomcat</code><br>    <code>cd /usr/share/exploitdb/exploits/</code></p><blockquote><h4 id="从信息的纬度定义漏洞管理"><a href="#从信息的纬度定义漏洞管理" class="headerlink" title="从信息的纬度定义漏洞管理"></a>从信息的纬度定义漏洞管理</h4></blockquote><p>信息收集:<br>    扫描发现网络IP,OS,服务,配置,漏洞<br>    能力需求:定义扫描方式内容和目标<br>信息管理:<br>    格式化信息,并进行筛选,分组,定义优先级<br>    能力需求:资产分组,指定所有者,向所有者报告漏洞<br>信息输出:<br>    向不同层级的人群展示足够的信息量<br>    能力需求:生成报告,导出数据,与SIEM集成</p><blockquote><h5 id="漏洞扫描类型"><a href="#漏洞扫描类型" class="headerlink" title="漏洞扫描类型"></a>漏洞扫描类型</h5></blockquote><p>主动扫描<br>    有身份验证<br>    无身份验证<br>被动扫描<br>    镜像端口抓包<br>    其它来源输入<br>基于Agent的扫描<br>    支持平台有限</p><blockquote><h4 id="漏洞基本概念"><a href="#漏洞基本概念" class="headerlink" title="漏洞基本概念"></a>漏洞基本概念</h4></blockquote><h5 id="CVSS-Common-Vulnerability-Scoring-System"><a href="#CVSS-Common-Vulnerability-Scoring-System" class="headerlink" title="CVSS (Common Vulnerability Scoring System)"></a><strong>CVSS</strong> (Common Vulnerability Scoring System)</h5><p>通用漏洞评分系统–工业标准<br>描述安全漏洞严重程度的统一评分方案<br>V3版本–2015年6月10日<br>Basic Metric:基础的恒定不变的弱点权重<br>Temporal Metric:依赖时间因素的弱点权重<br>Enviromental Metric:利用弱点的环境要求和实施难度的权重<br>CVSS是安全内容自动化协议(SCAP)的一部分<br>通常CVSS与CVE一同由美国国家漏洞库(NVD)发布并保持数据的更新<br>分值范围:0–10<br>不同机构按CVSS分会定义威胁的中,高,低威胁级别<br>CVSS体现弱点的风险,威胁级别(severity)表示弱点风险对企业的影响程度<br>CVSS分值是工业标准,但威胁级别不是<br>Vulnerability Reference</p><h5 id="CVE-Common-Vulnerabilities-and-Exposures"><a href="#CVE-Common-Vulnerabilities-and-Exposures" class="headerlink" title="CVE (Common Vulnerabilities and Exposures)"></a><strong>CVE</strong> (Common Vulnerabilities and Exposures)</h5><p>已公开的信息安全漏洞字典,统一的漏洞编号标准<br>MITRE公司负责维护(非盈利机构)<br>扫描器的大部分扫描式都对应一个CVE编号<br>实现不同厂商之间信息交换的统一标准</p><h5 id="CVE发布流程"><a href="#CVE发布流程" class="headerlink" title="CVE发布流程"></a>CVE发布流程</h5><ul><li>发现漏洞</li><li>CAN负责指定CVE ID</li><li>发布到CVE List —-CVE-2008-4250</li><li>MITRE负责对内容 进行编辑维护</li><li>很多厂商维护自己的Vulnerability Reference<br>  MS(微软)<br>  MSKB</li><li>其它Vulnerability Reference<br>  CERT    TA08-297A<br>  BID        31874<br>  IAVM    2008-A-0081<br>  OVAL    OVAL6093</li></ul><h5 id="OVAL-Open-Vulnerability-and-Assessment-Language"><a href="#OVAL-Open-Vulnerability-and-Assessment-Language" class="headerlink" title="OVAL (Open Vulnerability and Assessment Language)"></a><strong>OVAL</strong> (Open Vulnerability and Assessment Language)</h5><p>描述漏洞检测方法的机器可识别语言<br>详细的描述漏洞检测的技术细节,可导入自动化检测工具中实施漏洞检测工作<br>OVAL使用XML语言描述,包含了严密的语法逻辑</p><h5 id="CCE"><a href="#CCE" class="headerlink" title="CCE"></a><strong>CCE</strong></h5><p>描述软件配置缺陷的一种标准化格式<br>在信息安全风险评估中,配置缺陷的检测是一项重要内容,使用CCE可让配置缺陷以标准的方式展现出来,便于配置缺陷评估的可量化操作.</p><h5 id="CPE-Common-Product-Enumeration"><a href="#CPE-Common-Product-Enumeration" class="headerlink" title="CPE(Common Product Enumeration)`"></a><strong>CPE</strong>(Common Product Enumeration)`</h5><p>信息技术产品,系统,软件包的机构化命名规范,分类命名</p><h5 id="CWE-Common-Weakness-Enumeration"><a href="#CWE-Common-Weakness-Enumeration" class="headerlink" title="CWE (Common Weakness Enumeration)"></a><strong>CWE</strong> (Common Weakness Enumeration)</h5><p>常见漏洞类型的字典,描述不同类型漏洞的特征(访问控制,信息泄露,拒绝服务)</p><h5 id="SCAP-Security-Content-Automation-Protocol"><a href="#SCAP-Security-Content-Automation-Protocol" class="headerlink" title="SCAP (Security Content Automation Protocol)"></a><strong>SCAP</strong> (Security Content Automation Protocol)</h5><p>SCAP是一个集合了多种安全标准框架<br>六个元素:CVE,OVAL,CCE,CPE,CVSS,XCCDF<br>目的是以标准的方法展示和操作安全数据<br>由NIST负责维护<br>SCAP主要解决三个问题<br>    实现高层政策法规等到底层实施的落地(如FISMA,ISO27000系列)<br>    将信息安全所涉及的各个要素标准化(如统一漏洞的命名及严重性度量)<br>    将复杂的系统配置核查工作自动化<br>SCAP是当前美国比较成熟的一套信息安全评估标准体系,其标准化,自动化的思想对信息安全行业产生了深远的影响.</p><h5 id="NVD-National-Vulnerability-Database"><a href="#NVD-National-Vulnerability-Database" class="headerlink" title="NVD (National Vulnerability Database)"></a><strong>NVD</strong> (National Vulnerability Database)</h5><p>美国政府的漏洞管理标准数据<br>完全基于SCAP框架<br>实现自动化漏洞管理,安全测量,合规要求<br>包含以下库<br>    安全检查列表<br>    软件安全漏洞<br>    配置错误<br>    产品名称<br>    影响度量<br>    <a href="https://nvd.nist.gov" target="_blank" rel="noopener">https://nvd.nist.gov</a></p><blockquote><h4 id="漏洞管理"><a href="#漏洞管理" class="headerlink" title="漏洞管理"></a>漏洞管理</h4></blockquote><p>周期性扫描跟踪漏洞<br>高位漏洞优先处理<br>扫描注意事项<br>漏洞管理三要素<br>    准确性<br>    时间<br>    资源</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h4 id=&quot;发现漏洞&quot;&gt;&lt;a href=&quot;#发现漏洞&quot; class=&quot;headerlink&quot; title=&quot;发现漏洞&quot;&gt;&lt;/a&gt;发现漏洞&lt;/h4&gt;&lt;/blockquote&gt;
-&lt;p&gt;基于端口服务扫描结果版本信息(速度慢)&lt;br&gt;搜索已公开的漏洞数据库(
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="漏洞扫描" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/"/>
-    
-    
-      <category term="漏洞库" scheme="http://c.cat.plus/tags/%E6%BC%8F%E6%B4%9E%E5%BA%93/"/>
-    
-      <category term="漏洞扫描" scheme="http://c.cat.plus/tags/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/"/>
-    
-      <category term="CVE" scheme="http://c.cat.plus/tags/CVE/"/>
     
   </entry>
   

@@ -10,7 +10,7 @@
 
 <title>
     
-    无线数据帧Management Frame原理 |
+    category: 渗透测试 |
     
     Cat++</title>
 <!--end title-->
@@ -219,20 +219,13 @@
     <ul class="bread-crumb-menu animated rubberBand">
         <li><a href="/"><i class="fh fh-ravelry" aria-hidden="true"></i> Home</a></li>
         
-        <li><a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="fh fh-cube" aria-hidden="true"></i> 渗透测试</a>
-        </li>
-        
-        <li><a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"><i class="fh fh-cube" aria-hidden="true"></i> 无线渗透</a>
-        </li>
-        
-        <li><a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"><i class="fh fh-cube" aria-hidden="true"></i> 无线技术理论</a>
-        </li>
+        <li><a href="/categories"><i class="fh fh-cubes" aria-hidden="true"></i> Category</a></li>
         
         <li>
             
-            <i class="fh fh-newspaper-o" aria-hidden="true"></i>
+            <i class="fh fh-cube" aria-hidden="true"></i>
             
-            无线数据帧Management Frame原理
+            渗透测试
         </li>
         
     </ul>
@@ -249,148 +242,101 @@
 </div>
             <!--end breadcrumb-->
             <!--begin body-->
-            <article class="post animated rollIn">
-    <h1 class="post-title">无线数据帧Management Frame原理</h1>
-    <div class="post-subtitle">
+            <div id="category">
+    <h2><i class="fh fh-cubes" aria-hidden="true"></i>&nbsp;渗透测试</h2>
+    
+    <div class="row recent-posts">
+    
+    <h2>
         
-        <time datetime="2013-05-26T15:21:51.000Z" class="item">
-            <i class="fh fh-calendar" aria-hidden="true"></i>&nbsp;&nbsp;2013-05-26
+        <a href="/archives/2013" title="2013">2013</a>
+    </h2>
+    
+    <div class="recent-post-item animated fadeInLeftBig">
+    <div class="item-head">
+        <h3 class="title">
+            <a href="/2013/03/11/Information_Gethering/已知域名查询/">
+                已知域名解析查询
+            </a>
+        </h3>
+        
+        <time datetime="2013-03-11T11:21:33.000Z" class="item">
+            <i class="fh fh-calendar" aria-hidden="true"></i>&nbsp;&nbsp;2013-03-11
         </time>
         
         
         <span class="item">
-      <i class="fh fh-cubes" aria-hidden="true"></i>&nbsp;
+                  <i class="fh fh-cubes" aria-hidden="true"></i>&nbsp;
             
             <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
-           <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;渗透测试
-        </a>
+                       <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;渗透测试
+                    </a>
             
-            <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/">
-           <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;无线渗透
-        </a>
-            
-            <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/">
-           <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;无线技术理论
-        </a>
-            
-        </span>
-        
-        
-        <span class="item">
-        <i class="fh fh-tags" aria-hidden="true"></i>&nbsp;
-            
-            <a class="label label-info tags" href="/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/">
-            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;无线数据帧
-            </a>
-            
-            <a class="label label-info tags" href="/tags/%E7%AE%A1%E7%90%86%E5%B8%A7/">
-            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;管理帧
-            </a>
+            <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">
+                       <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;信息收集
+                    </a>
             
         </span>
         
     </div>
     
-    <h4 id="Management-Frame-管理帧"><a href="#Management-Frame-管理帧" class="headerlink" title="Management Frame(管理帧)"></a><strong>Management Frame(管理帧)</strong></h4><p>用于协商和控制STA与AP之间的关系</p>
-<h4 id="Beacon-Frames-是由AP发出来的帧"><a href="#Beacon-Frames-是由AP发出来的帧" class="headerlink" title="Beacon Frames(是由AP发出来的帧)"></a><strong>Beacon Frames(是由AP发出来的帧)</strong></h4><p>AP发送的广播帧,通告无线网络的存在(BSSID)<br>发包频率<br>    102.4ms(可变)<br>    时间单位1024microsecond(60秒)<br><strong>SSID网络名</strong><br>隐藏AP不发SSID广播<br><strong>IBSSI Status</strong></p>
-<ul>
-<li>0:intrastructure</li>
-<li>1:ad-hcc<br>Privicy</li>
-<li>WEP\WPA加密<br>ESSID</li>
-<li>名称,长度<br>速率</li>
-<li>802.11 g(1–54Mbit)<br>信道</li>
-<li>11</li>
-</ul>
-<h4 id="Probe-Request-Frames-由STA发出的扫描请求帧"><a href="#Probe-Request-Frames-由STA发出的扫描请求帧" class="headerlink" title="Probe Request Frames(由STA发出的扫描请求帧)"></a><strong>Probe Request Frames(由STA发出的扫描请求帧)</strong></h4><p>用于STA扫描现有AP<br>    发现连接过的AP<br>    发现未连接过的AP</p>
-<h4 id="Probe-Response-Frames-由AP返回的响应帧"><a href="#Probe-Response-Frames-由AP返回的响应帧" class="headerlink" title="Probe Response Frames(由AP返回的响应帧)"></a><strong>Probe Response Frames(由AP返回的响应帧)</strong></h4><p>发现连接过的AP时,速率和ESSID相同的AP响应</p>
-<h4 id="Authentication-Frames-身份认证"><a href="#Authentication-Frames-身份认证" class="headerlink" title="Authentication Frames(身份认证)"></a><strong>Authentication Frames(身份认证)</strong></h4><p>Authentication Algorithm身份认证类型<br>0:开放系统身份验证<br>1:共享密钥身份验证<br>身份认证由多个帧交换过程组成<br>Authentication Seq<br>    每次身份验证过程Seq唯一<br>    1-65535<br>Challenge text<br>    只有共享密钥方式才有此字段<br>Status Code:成功/失败</p>
-<h4 id="Association-Reassociation-Frames-关联-重关联帧"><a href="#Association-Reassociation-Frames-关联-重关联帧" class="headerlink" title="Association/Reassociation Frames(关联/重关联帧)"></a><strong>Association/Reassociation Frames(关联/重关联帧)</strong></h4><p>身份验证成功后,STA执行关联操作,加入无线网络<br>    Association Request    Frames<br>    Reassociation Request Frames<br>    Association Response Frames</p>
-<h4 id="isassociation-Deauthentication-由AP发出"><a href="#isassociation-Deauthentication-由AP发出" class="headerlink" title="isassociation/Deauthentication(由AP发出)"></a><strong>isassociation/Deauthentication(由AP发出)</strong></h4><p>由AP发出<br>    2个字节</p>
-<h4 id="ATIM-Frames"><a href="#ATIM-Frames" class="headerlink" title="ATIM Frames"></a><strong>ATIM Frames</strong></h4><p>只在ad-hoc网络下使用<br>    STA使用此帧通知接收者其有缓存的数据要发送</p>
-<h4 id="Data-Frames-数据帧"><a href="#Data-Frames-数据帧" class="headerlink" title="Data Frames(数据帧)"></a><strong>Data Frames(数据帧)</strong></h4><p>传输用户数据<br>    DATA Frame</p>
-<h4 id="空数据帧"><a href="#空数据帧" class="headerlink" title="空数据帧"></a><strong>空数据帧</strong></h4><p>Null data frame<br>只包含MAC头和FCS<br>STA用于声明自己将要进入省电模式</p>
+    <div class="item-footer">
+        
+        <span class="item">
+                    <i class="fh fh-tags" aria-hidden="true"></i>&nbsp;
+            
+            <a class="label label-info tags" href="/tags/%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">
+                        <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;被动信息收集
+                    </a>
+            
+            <a class="label label-info tags" href="/tags/kali/">
+                        <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;kali
+                    </a>
+            
+            <a class="label label-info tags" href="/tags/%E6%B8%97%E9%80%8F/">
+                        <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;渗透
+                    </a>
+            
+        </span>
+        
+        <a class="look" href="/2013/03/11/Information_Gethering/已知域名查询/">Look >></a>
+    </div>
+</div>
+    
+</div>
 
-</article>
-<ol class="animated rollIn hannah-toc"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Management-Frame-管理帧"><span class="animated rollIn hannah-toc-text">Management Frame(管理帧)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Beacon-Frames-是由AP发出来的帧"><span class="animated rollIn hannah-toc-text">Beacon Frames(是由AP发出来的帧)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Probe-Request-Frames-由STA发出的扫描请求帧"><span class="animated rollIn hannah-toc-text">Probe Request Frames(由STA发出的扫描请求帧)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Probe-Response-Frames-由AP返回的响应帧"><span class="animated rollIn hannah-toc-text">Probe Response Frames(由AP返回的响应帧)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Authentication-Frames-身份认证"><span class="animated rollIn hannah-toc-text">Authentication Frames(身份认证)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Association-Reassociation-Frames-关联-重关联帧"><span class="animated rollIn hannah-toc-text">Association&#x2F;Reassociation Frames(关联&#x2F;重关联帧)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#isassociation-Deauthentication-由AP发出"><span class="animated rollIn hannah-toc-text">isassociation&#x2F;Deauthentication(由AP发出)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#ATIM-Frames"><span class="animated rollIn hannah-toc-text">ATIM Frames</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Data-Frames-数据帧"><span class="animated rollIn hannah-toc-text">Data Frames(数据帧)</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#空数据帧"><span class="animated rollIn hannah-toc-text">空数据帧</span></a></li></ol>
 <div class="animated bounceInDown paginations">
     <div class="col-md-8 col-md-push-2 col-xs-12">
         <nav>
             
-            <a href="/2013/05/27/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/" class="prev col-md-2 col-xs-4 text-left">&larr; Prev</a>
+            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/page/2/" class="prev col-md-2 col-xs-4 text-left">&larr; Prev</a>
             
             <span
                 class="page-content col-md-8  col-xs-4 text-center">
                 
+                Page 3 of 3
+                
             </span>
-            
-            <a href="/2013/05/26/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/" class="next col-md-2 col-xs-4 text-right">Next &rarr;</a>
             
         </nav>
         <div>
             <div class="col-md-6 col-xs-6 text-left">
                 
-                Linux无线协议栈及配置命令
-                
             </div>
             <div class="col-md-6 col-xs-6 text-right">
-                
-                无线数据帧Control Frame原理
                 
             </div>
         </div>
     </div>
 </div>
 
+    
+</div>
+
+
             <!--end body-->
             <!--begin comments-->
             
-<div class="comments">
-    
-
-    
-    
-<div id="gitalk-container">
-</div>
-<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script>
-    var loadJs = function (d, a) {
-        var c = document.getElementsByTagName("head")[0] || document.head || document
-            .documentElement;
-        var b = document.createElement("script");
-        b.setAttribute("type", "text/javascript");
-        b.setAttribute("src", d);
-        if (typeof a === "function") {
-            if (window.attachEvent) {
-                b.onreadystatechange = function () {
-                    var e = b.readyState;
-                    if (e === "loaded" || e === "complete") {
-                        b.onreadystatechange = null;
-                        a()
-                    }
-                }
-            } else {
-                b.onload = a
-            }
-        }
-        c.appendChild(b)
-    };
-    loadJs("https://unpkg.com/gitalk/dist/gitalk.min.js", function () {
-        var gitalk = new Gitalk({
-            clientID: 'e82b50d554e32a851ae7',
-            clientSecret: '95923aeaddb44e6de22d088703c6bbde978f505c',
-            repo: 'iseanhe.github.io',
-            owner: 'iseanhe',
-            admin: ['iseanhe'],
-            id: decodeURIComponent(location.pathname),
-            distractionFreeMode: false
-        })
-
-        gitalk.render('gitalk-container')
-    });
-</script>
-
-</div>
-
 
             <!--end comments-->
         </div>
