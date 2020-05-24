@@ -1,0 +1,659 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!--begin head-->
+
+<head>
+    <meta charset="utf-8">
+<!--begin title-->
+
+<title>
+    
+    WAF扫描识别及负载均衡识别 |
+    
+    Cat++</title>
+<!--end title-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--begin mete-->
+
+<meta name="description" content="猫大仙儿的修仙之路"/>
+
+<meta name="author" content="Cat"/>
+
+<!--end mete-->
+<!--begin keywords-->
+<meta name="keywords" content="802.11,ACK,AJAX,ARP欺骗,Aircrack-ng,CVE,DOM,DOS攻击,GOOGLE HACKING,GPU,Heartbleed,Monitor,Probe,RC4,RainbowCrack,SHODAN,SMB扫描,SMTP扫描,SNMP,SSLsplit,Scapy,TCP,UDP,WAF,WDS,WPA,Wordlist,ZAP,amap,crunch,dmitry,enum4linux,hashcat,hashid,hash‐identifier,hping3,hydra,kali,lbd,medusa,mimikatz,nbtscan,nc,nmap,p0f,pinjector,python,snmpcheck,sslscan,traceroute,wafw00f,主动信息收集,僵尸扫描,全向天线,加密算法,在线密码破解,定向天线,彩虹表,扫描开发,拒绝服务攻击,提权,无线加密,无线协议,无线技术,无线抓包,无线数据帧,无线模式,无线破解,无线通信,服务扫描,渗透,漏洞利用,漏洞库,漏洞扫描,漏洞提权,离线密码破解,端口扫描,管理帧,缓冲区溢出,被动信息收集,负载均衡,路由追踪"/>
+<!--end keywords-->
+<!--begin rss-->
+
+<link rel="alternate" href="/atom.xml" title="Cat++" type="application/atom+xml">
+
+<!--end rss-->
+<!--begin favicon-->
+
+<link rel="icon" href="/favicon.ico">
+
+<!--end favicon-->
+<!--begin style-->
+
+<!-- stylesheets list from config.yml -->
+
+<link rel="stylesheet" href="/css/hannah.css">
+
+
+<!--end style-->
+<meta name="generator" content="Hexo 4.2.0"></head>
+<!--end head-->
+<!--begin body-->
+
+<body class="container-fluid">
+
+    <!--begin menu-->
+    <div class="hannah-menu">
+    <i class="fh fh-ravelry fa-2x btn fixed-menu animated bounce" id="btn_menu" aria-hidden="true"></i>
+    <div class="menu-outer container-fluid hide animated" id="div_menu">
+        <div class="row" style="margin-bottom: 5px;">
+            
+            <div class="col-md-offset-2 col-md-3 col-xs-4 text-center left-social">
+                
+                <a target="_blank" href="https://github.com/iseanhe" title="GitHub"><i class="fh fh-github"></i></a>
+                
+                <style>
+                    .left-social {
+                        height: 132px;
+                        line-height: 132px;
+                        font-size: 66px;
+                    }
+
+                    .left-social * {
+                        color: #f1ce8e;
+                    }
+
+                    @media (max-width: 767px) {
+                        .left-social {
+                            line-height: 132px;
+                            font-size: 33px;
+                        }
+                    }
+                </style>
+            </div>
+            <!--begin handImg-->
+            <div class="col-md-2 col-xs-4 text-center">
+                
+                <img src="/img/logo.jpg" alt="Head Image" class="img-circle">
+                
+            </div>
+            <!--end handImg-->
+            <div class="col-md-3 col-xs-4 text-center right-social">
+                
+                <style>
+                    .right-social {
+                        height: 132px;
+                        line-height: 132px;
+                        font-size: 66px;
+                    }
+
+                    @media (max-width: 767px) {
+                        .right-social {
+                            line-height: 132px;
+                            font-size: 33px;
+                        }
+                    }
+
+                    .right-social * {
+                        color: #f1ce8e;
+                    }
+                </style>
+            </div>
+        </div>
+        <div class="row">
+            <div class="menu-content col-md-8 col-md-push-2 col-xs-12 ">
+                <dl class="menu-content-item">
+                    <dt class="menu-content-title">
+                        <i class="fh fh-bars" aria-hidden="true"></i> Menu
+                    </dt>
+                    <dd class="menu-content-content">
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/" class="btn btn-block">
+                                
+                                <i class="fh fh-ravelry"></i>
+                                Home
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/categories" class="btn btn-block">
+                                
+                                <i class="fh fh-cubes"></i>
+                                Category
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/tags" class="btn btn-block">
+                                
+                                <i class="fh fh-tags"></i>
+                                Tag
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/archives" class="btn btn-block">
+                                
+                                <i class="fh fh-archive"></i>
+                                Archives
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/about" class="btn btn-block">
+                                
+                                <i class="fh fh-about"></i>
+                                About
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/doc" class="btn btn-block">
+                                
+                                <i class="fh fh-document"></i>
+                                Doc
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/plug" class="btn btn-block">
+                                
+                                <i class="fh fh-plug"></i>
+                                Plug
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/sitemap" class="btn btn-block">
+                                
+                                <i class="fh fh-sitemap"></i>
+                                SiteMap
+                            </a>
+                        </div>
+                        
+                        <div class="col-md-4 col-xs-6 col-sm-4 text-center animated tada">
+                            <a href="/atom.xml" class="btn btn-block">
+                                <i class="fh fh-rss" aria-hidden="true"></i> RSS
+                            </a>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="menu-content col-md-8 col-md-offset-2 col-xs-12 ">
+                <dl class="col-md-6 col-xs-6 menu-content-item">
+                    <dt class="menu-content-title">
+                        <i class="fh fh-cubes" aria-hidden="true"></i> Category
+                    </dt>
+                    <dd class="menu-content-content animated zoomIn">
+                        <ul class="menu-cate-list"><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/python/"><i class="fh fh-cube" aria-hidden="true"></i> python</a><span class="menu-cate-list-count">1</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="fh fh-cube" aria-hidden="true"></i> 渗透测试</a><span class="menu-cate-list-count">33</span><ul class="menu-cate-list-child"><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Buffer-overflow/"><i class="fh fh-cube" aria-hidden="true"></i> Buffer overflow</a><span class="menu-cate-list-count">1</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"><i class="fh fh-cube" aria-hidden="true"></i> Web渗透</a><span class="menu-cate-list-count">3</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><i class="fh fh-cube" aria-hidden="true"></i> 信息收集</a><span class="menu-cate-list-count">10</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"><i class="fh fh-cube" aria-hidden="true"></i> 密码破解</a><span class="menu-cate-list-count">5</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"><i class="fh fh-cube" aria-hidden="true"></i> 无线渗透</a><span class="menu-cate-list-count">11</span><ul class="menu-cate-list-child"><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"><i class="fh fh-cube" aria-hidden="true"></i> 无线技术理论</a><span class="menu-cate-list-count">10</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB/"><i class="fh fh-cube" aria-hidden="true"></i> 无线攻击</a><span class="menu-cate-list-count">1</span></li></ul></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/"><i class="fh fh-cube" aria-hidden="true"></i> 权限维持</a><span class="menu-cate-list-count">2</span></li><li class="menu-cate-list-item"><a class="menu-cate-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/"><i class="fh fh-cube" aria-hidden="true"></i> 漏洞扫描</a><span class="menu-cate-list-count">1</span></li></ul></li></ul>
+                    </dd>
+                </dl>
+                <dl class="col-md-6 col-xs-6 menu-content-item">
+                    <dt class="menu-content-title">
+                        <i class="fh fh-tag" aria-hidden="true"></i> Tags
+                    </dt>
+                    <dd class="menu-content-content animated zoomIn">
+                        <ul class="menu-tag-list" itemprop="keywords"><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/802-11/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 802.11</a><span class="menu-tag-list-count">4</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/ACK/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> ACK</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/AJAX/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> AJAX</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/ARP%E6%AC%BA%E9%AA%97/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> ARP欺骗</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Aircrack-ng/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Aircrack-ng</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/CVE/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> CVE</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/DOM/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> DOM</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/DOS%E6%94%BB%E5%87%BB/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> DOS攻击</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/GOOGLE-HACKING/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> GOOGLE HACKING</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/GPU/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> GPU</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Heartbleed/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Heartbleed</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Monitor/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Monitor</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Probe/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Probe</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/RC4/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> RC4</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/RainbowCrack/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> RainbowCrack</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/SHODAN/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> SHODAN</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/SMB%E6%89%AB%E6%8F%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> SMB扫描</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/SMTP%E6%89%AB%E6%8F%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> SMTP扫描</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/SNMP/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> SNMP</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/SSLsplit/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> SSLsplit</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Scapy/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Scapy</a><span class="menu-tag-list-count">4</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/TCP/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> TCP</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/UDP/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> UDP</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/WAF/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> WAF</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/WDS/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> WDS</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/WPA/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> WPA</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/Wordlist/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> Wordlist</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/ZAP/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> ZAP</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/amap/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> amap</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/crunch/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> crunch</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/dmitry/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> dmitry</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/enum4linux/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> enum4linux</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/hashcat/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> hashcat</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/hashid/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> hashid</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/hash%E2%80%90identifier/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> hash‐identifier</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/hping3/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> hping3</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/hydra/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> hydra</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/kali/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> kali</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/lbd/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> lbd</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/medusa/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> medusa</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/mimikatz/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> mimikatz</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/nbtscan/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> nbtscan</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/nc/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> nc</a><span class="menu-tag-list-count">4</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/nmap/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> nmap</a><span class="menu-tag-list-count">6</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/p0f/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> p0f</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/pinjector/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> pinjector</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/python/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> python</a><span class="menu-tag-list-count">9</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/snmpcheck/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> snmpcheck</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/sslscan/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> sslscan</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/traceroute/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> traceroute</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/wafw00f/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> wafw00f</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E4%B8%BB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 主动信息收集</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%83%B5%E5%B0%B8%E6%89%AB%E6%8F%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 僵尸扫描</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%85%A8%E5%90%91%E5%A4%A9%E7%BA%BF/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 全向天线</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 加密算法</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 在线密码破解</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%AE%9A%E5%90%91%E5%A4%A9%E7%BA%BF/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 定向天线</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E5%BD%A9%E8%99%B9%E8%A1%A8/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 彩虹表</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%89%AB%E6%8F%8F%E5%BC%80%E5%8F%91/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 扫描开发</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 拒绝服务攻击</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%8F%90%E6%9D%83/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 提权</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E5%8A%A0%E5%AF%86/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线加密</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E5%8D%8F%E8%AE%AE/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线协议</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线技术</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E6%8A%93%E5%8C%85/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线抓包</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线数据帧</a><span class="menu-tag-list-count">3</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E6%A8%A1%E5%BC%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线模式</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E7%A0%B4%E8%A7%A3/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线破解</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 无线通信</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E6%89%AB%E6%8F%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 服务扫描</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 渗透</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞利用</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E5%BA%93/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞库</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞扫描</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 漏洞提权</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 离线密码破解</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 端口扫描</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E7%AE%A1%E7%90%86%E5%B8%A7/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 管理帧</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 缓冲区溢出</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E8%A2%AB%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 被动信息收集</a><span class="menu-tag-list-count">2</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 负载均衡</a><span class="menu-tag-list-count">1</span></li><li class="menu-tag-list-item"><a class="menu-tag-list-link" href="/tags/%E8%B7%AF%E7%94%B1%E8%BF%BD%E8%B8%AA/" rel="tag"><i class="fh fh-tag" aria-hidden="true"></i> 路由追踪</a><span class="menu-tag-list-count">1</span></li></ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--end menu-->
+
+    <div class="row hannah-body">
+        <div class="col-md-8 col-md-push-2 col-xs-12">
+            <!--begin breadcrumb-->
+            <div class="bread-crumb">
+    <ul class="bread-crumb-menu animated rubberBand">
+        <li><a href="/"><i class="fh fh-ravelry" aria-hidden="true"></i> Home</a></li>
+        
+        <li><a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="fh fh-cube" aria-hidden="true"></i> 渗透测试</a>
+        </li>
+        
+        <li><a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><i class="fh fh-cube" aria-hidden="true"></i> 信息收集</a>
+        </li>
+        
+        <li>
+            
+            <i class="fh fh-newspaper-o" aria-hidden="true"></i>
+            
+            WAF扫描识别及负载均衡识别
+        </li>
+        
+    </ul>
+    <div class="bread-crumb-search">
+        <div class="search">
+    <i class="fh fh-search icon-search"></i>
+    <input placeholder="Search ..." onkeyup="searchFunc(this,event,'/search.xml')"
+           class="input-search animated fadeInRight"/>
+    <div class="search-result animated fadeInRight">
+        <a class="animated tada col-lg-12 search-result-item result-link" href="/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">Python花式导包的几种方法</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2015/05/23/Password_Attacks/Hashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">Hash识别及Hashcat离线密码破解</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2015/05/23/Password_Attacks/oclhashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">oclhashcat基于GPU密码破解及彩虹表破解</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2015/05/23/Password_Attacks/medusa%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">Medusa在线密码破解</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2015/05/23/Password_Attacks/hydra%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/">hydra在线密码破解</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/">密码破解方法及Crunch字典生成工具</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2014/05/21/Web_Attacks/AJAX%E6%8A%80%E6%9C%AF%E7%BB%84%E5%90%88%E5%8F%8AWebService%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91/">AJAX技术组合及WebService安全考虑</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2014/05/19/Web_Attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/">SSL_TSL中间人攻击</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2014/05/18/Web_Attacks/HTTPS%E6%BC%8F%E6%B4%9E%E5%8F%8A%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/">HTTPS漏洞及攻击方法</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/08/11/pentest/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/">Windows缓冲区溢出测试</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/06/12/Wireless_Attacks/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/">Aircrack-ng无线攻击套件</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/06/06/pentest/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/">利用漏洞和程序配置不当提权</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/06/03/pentest/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/">本地提权常见手法</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/05/28/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WPA%E5%AE%89%E5%85%A8%E7%B3%BB%E7%BB%9F/">无线加密技术WPA安全系统</a><a class="animated tada col-lg-12 search-result-item result-link" href="/2013/05/28/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/WEP%E5%8A%A0%E5%AF%86-RC4%E7%AE%97%E6%B3%95/">WEP加密及RC4算法</a>
+    </div>
+</div>
+    </div>
+</div>
+            <!--end breadcrumb-->
+            <!--begin body-->
+            <article class="post animated rollIn">
+    <h1 class="post-title">WAF扫描识别及负载均衡识别</h1>
+    <div class="post-subtitle">
+        
+        <time datetime="2013-03-23T10:15:28.000Z" class="item">
+            <i class="fh fh-calendar" aria-hidden="true"></i>&nbsp;&nbsp;2013-03-23
+        </time>
+        
+        
+        <span class="item">
+      <i class="fh fh-cubes" aria-hidden="true"></i>&nbsp;
+            
+            <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
+           <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;渗透测试
+        </a>
+            
+            <a class="label label-primary tags" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">
+           <i class="fh fh-cube" aria-hidden="true"></i>&nbsp;信息收集
+        </a>
+            
+        </span>
+        
+        
+        <span class="item">
+        <i class="fh fh-tags" aria-hidden="true"></i>&nbsp;
+            
+            <a class="label label-info tags" href="/tags/python/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;python
+            </a>
+            
+            <a class="label label-info tags" href="/tags/nmap/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;nmap
+            </a>
+            
+            <a class="label label-info tags" href="/tags/lbd/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;lbd
+            </a>
+            
+            <a class="label label-info tags" href="/tags/WAF/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;WAF
+            </a>
+            
+            <a class="label label-info tags" href="/tags/wafw00f/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;wafw00f
+            </a>
+            
+            <a class="label label-info tags" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+            <i class="fh fh-tag" aria-hidden="true"></i>&nbsp;负载均衡
+            </a>
+            
+        </span>
+        
+    </div>
+    
+    <blockquote>
+<h3 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a><strong>防火墙识别</strong></h3><p>通过检查回包,可能识别端口是否经过防火墙过滤<br>设备多种多样,结果存在一定误差</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">No.</th>
+<th align="center">Send</th>
+<th align="center">Response</th>
+<th align="left">Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">syn</td>
+<td align="center">No</td>
+<td align="left">Filtered</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">ack</td>
+<td align="center">rst</td>
+<td align="left">Filtered</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">syn</td>
+<td align="center">syn+ack/syn+rst</td>
+<td align="left">Filtered</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">ack</td>
+<td align="center">No</td>
+<td align="left">Filtered</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">syn</td>
+<td align="center">syn+ack/syn+rst</td>
+<td align="left">Unfiltered/Open</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">ack</td>
+<td align="center">rst</td>
+<td align="left">Unfiltered/Open</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">syn</td>
+<td align="center">No</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">ack</td>
+<td align="center">No</td>
+<td align="left">Closed</td>
+</tr>
+</tbody></table>
+<h4 id="python–scapy-firewall-detect-py-1-1-1-1-443"><a href="#python–scapy-firewall-detect-py-1-1-1-1-443" class="headerlink" title="python–scapy ./firewall_detect.py 1.1.1.1 443"></a><strong>python–scapy</strong> <code>./firewall_detect.py 1.1.1.1 443</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">3</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Usage - ./firewall_detect.py [Target IP] [Target Port]"</span></span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Example - ./firewall_detect.py 1.1.1.1 443"</span></span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Example will determine if filtering exists on port 443 of host 10.0.0.5"</span></span><br><span class="line">	sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">port=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'A'</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">"S"</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> (ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>):</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Port is either unstatefully filtered or host is down"</span></span><br><span class="line"><span class="keyword">elif</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">or</span> (SYN_response==<span class="literal">None</span>)) <span class="keyword">and</span> <span class="keyword">not</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>)):</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Stateful filtering in place"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">18</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Port is unfiltered and open"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">20</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Port is unfiltered and closed"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"Unable to determine if the port is filtered"</span></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Nmap有系列防火墙过滤检测功能"><a href="#Nmap有系列防火墙过滤检测功能" class="headerlink" title="Nmap有系列防火墙过滤检测功能"></a><strong>Nmap</strong>有系列防火墙过滤检测功能</h4><pre><code>nmap -sA 192.168.254.254 -p 22</code></pre><blockquote>
+<h4 id="负载均衡识别"><a href="#负载均衡识别" class="headerlink" title="负载均衡识别"></a><strong>负载均衡识别</strong></h4><p>广域网负载均衡<br>    DNS轮询<br>    一个域名解析多个A纪录<br>    智能DNS<br>服务器负载均衡<br>HTTP-Loadbalancing<br>    Nginx<br>    Apache</p>
+</blockquote>
+<h4 id="lbd"><a href="#lbd" class="headerlink" title="lbd"></a><strong>lbd</strong></h4><pre><code>lbd www.baidu.com
+lbd mail.163.com</code></pre><blockquote>
+<h3 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a><strong>WAF识别</strong></h3></blockquote>
+<h4 id="wafw00f-web应用防火墙识别"><a href="#wafw00f-web应用防火墙识别" class="headerlink" title="wafw00f web应用防火墙识别"></a><strong>wafw00f</strong> web应用防火墙识别</h4><pre><code>wafw00f -l
+wafw00f http://google.com</code></pre><h3 id="nmap-web应用防火墙识别"><a href="#nmap-web应用防火墙识别" class="headerlink" title="nmap web应用防火墙识别"></a><strong>nmap</strong> web应用防火墙识别</h3><pre><code>nmap google.com --script=http-waf-detect.nse</code></pre><h4 id="nmap所有参数-man-nmap"><a href="#nmap所有参数-man-nmap" class="headerlink" title="nmap所有参数 man nmap"></a><strong>nmap所有参数 man nmap</strong></h4><pre><code>-iL filename                   从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段
+
+-iR hostnum                    随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描
+
+--exclude host1[, host2]      从扫描任务中需要排除的主机
+
+--exculdefile exclude_file     排除文件中的IP,格式和-iL指定扫描文件的格式相同</code></pre><p><strong>主机发现</strong></p>
+<pre><code>-sL                     仅仅是显示,扫描的IP数目,不会进行任何扫描
+
+-sn                     ping扫描,即主机发现
+
+-Pn                     不检测主机存活
+
+-PS/PA/PU/PY[portlist]  TCP SYN Ping/TCP ACK Ping/UDP Ping发现
+
+-PE/PP/PM               使用ICMP echo, timestamp and netmask 请求包发现主机
+
+-PO[prococol list]      使用IP协议包探测对方主机是否开启
+
+-n/-R                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析
+
+--dns-servers 8.8.8.8     根据DNS服务地址扫描
+--system-dns            使用系统在DNS扫描
+--traceroute            路由追踪</code></pre><p><strong>扫描技巧</strong></p>
+<pre><code>-sS/sT/sA/sW/sM                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描
+
+-sU                             UDP扫描
+
+-sN/sF/sX                       TCP Null，FIN，and Xmas扫描
+
+--scanflags                     自定义TCP包中的flags
+
+-sI zombie host[:probeport]     Idlescan
+
+-sY/sZ                          SCTP INIT/COOKIE-ECHO 扫描
+
+-sO                             使用IP protocol 扫描确定目标机支持的协议类型
+
+-b “FTP relay host”             使用FTP bounce scan</code></pre><p><strong>指定端口和扫描顺序</strong></p>
+<pre><code>-p                      特定的端口 -p80,443 或者 -p1-65535
+
+-p U:PORT               扫描udp的某个端口, -p U:53
+
+-F                      快速扫描模式,比默认的扫描端口还少
+
+-r                      不随机扫描端口,默认是随机扫描的
+
+--top-ports &quot;number&quot;    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个
+
+--port-ratio &quot;ratio&quot;    扫描指定频率以上的端口</code></pre><p><strong>服务版本识别</strong></p>
+<pre><code>-sV                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测
+
+--version-intensity &quot;level&quot;     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7
+
+--version-light                 打开轻量级模式,为--version-intensity 2的别名
+
+--version-all                   尝试所有探测,为--version-intensity 9的别名
+
+--version-trace                 显示出详细的版本侦测过程信息</code></pre><p><strong>脚本扫描</strong></p>
+<pre><code>-sC　　根据端口识别的服务,调用默认脚本
+
+--script=”Lua scripts”　　调用的脚本名
+
+--script-args=n1=v1,[n2=v2]　　调用的脚本传递的参数
+
+--script-args-file=filename　　使用文本传递参数
+
+--script-trace　　显示所有发送和接收到的数据
+
+--script-updatedb　　更新脚本的数据库
+
+--script-help=”Lua script”　　显示指定脚本的帮助</code></pre><p><strong>OS识别</strong></p>
+<pre><code>-O              启用操作系统检测,-A来同时启用操作系统检测和版本检测
+
+--osscan-limit 　　 针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)
+
+--osscan-guess  　　推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配</code></pre><p><strong>防火墙/IDS躲避和哄骗</strong></p>
+<pre><code>-f; --mtu value                 指定使用分片、指定数据包的MTU.
+
+-D decoy1,decoy2,ME             使用诱饵隐蔽扫描
+
+-S IP-ADDRESS                   源地址欺骗
+
+-e interface                    使用指定的接口
+
+-g/ --source-port PROTNUM       使用指定源端口
+
+--proxies url1,[url2],...       使用HTTP或者SOCKS4的代理
+
+--data-length NUM               填充随机数据让数据包长度达到NUM
+
+--ip-options OPTIONS            使用指定的IP选项来发送数据包
+
+--ttl VALUE                     设置IP time-to-live域
+
+--spoof-mac ADDR/PREFIX/VEBDOR  MAC地址伪装
+
+--badsum                        使用错误的checksum来发送数据包</code></pre><p><strong>Nmap 输出</strong></p>
+<pre><code>-oN                     将标准输出直接写入指定的文件
+
+-oX                     输出xml文件
+
+-oS                     将所有的输出都改为大写
+
+-oG                     输出便于通过bash或者perl处理的格式,非xml
+
+-oA BASENAME            可将扫描结果以标准格式、XML格式和Grep格式一次性输出
+
+-v                      提高输出信息的详细度
+
+-d level                设置debug级别,最高是9
+
+--reason                显示端口处于带确认状态的原因
+
+--open                  只输出端口状态为open的端口
+
+--packet-trace          显示所有发送或者接收到的数据包
+
+--iflist                显示路由信息和接口,便于调试
+
+--log-errors            把日志等级为errors/warings的日志输出
+
+--append-output         追加到指定的文件
+
+--resume FILENAME       恢复已停止的扫描
+
+--stylesheet PATH/URL   设置XSL样式表，转换XML输出
+
+--webxml                从namp.org得到XML的样式
+
+--no-sytlesheet         忽略XML声明的XSL样式表</code></pre><p><strong>时间性能优化</strong></p>
+<pre><code>-T 　　时间优化(0-5)(paranoid|sneaky|polite|normal|aggressive|insane)
+
+-F　　快速扫描。
+
+--max-retries　　调整重传次数。
+
+--min-hostgroup/--max-hostgroup size 　　设置组的大小
+
+--min-parallelism/--max-parellelism time　　指定时间内的探针数
+
+--min-rtt-timrout/--max-rtt-timrout/initial-rtt-timrouttime 　　指定探针超时
+
+--scan-delay/-max-scan-delay time 　　指定探针之间的时延
+
+--max-retries tries　　指定探针重传转发数
+
+--host-timeout time　　设置扫描主机的最大时间
+
+--defeat-rst-ratelimit　　设置rst的限制</code></pre><p><strong>其他nmap选项</strong></p>
+<pre><code>-6                      开启IPv6
+
+-A                      OS识别,版本探测,脚本扫描和traceroute
+
+--datedir DIRNAME       说明用户Nmap数据文件位置
+
+--send-eth / --send-ip  使用原以太网帧发送/在原IP层发送
+
+--privileged            假定用户具有全部权限
+
+--unprovoleged          假定用户不具有全部权限,创建原始套接字需要root权限
+
+-V                      打印版本信息
+
+-h                      输出帮助</code></pre>
+</article>
+<ol class="animated rollIn hannah-toc"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-3"><a class="animated rollIn hannah-toc-link" href="#防火墙识别"><span class="animated rollIn hannah-toc-text">防火墙识别</span></a><ol class="animated rollIn hannah-toc-child"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#python–scapy-firewall-detect-py-1-1-1-1-443"><span class="animated rollIn hannah-toc-text">python–scapy .&#x2F;firewall_detect.py 1.1.1.1 443</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#Nmap有系列防火墙过滤检测功能"><span class="animated rollIn hannah-toc-text">Nmap有系列防火墙过滤检测功能</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#负载均衡识别"><span class="animated rollIn hannah-toc-text">负载均衡识别</span></a></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#lbd"><span class="animated rollIn hannah-toc-text">lbd</span></a></li></ol></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-3"><a class="animated rollIn hannah-toc-link" href="#WAF识别"><span class="animated rollIn hannah-toc-text">WAF识别</span></a><ol class="animated rollIn hannah-toc-child"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#wafw00f-web应用防火墙识别"><span class="animated rollIn hannah-toc-text">wafw00f web应用防火墙识别</span></a></li></ol></li><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-3"><a class="animated rollIn hannah-toc-link" href="#nmap-web应用防火墙识别"><span class="animated rollIn hannah-toc-text">nmap web应用防火墙识别</span></a><ol class="animated rollIn hannah-toc-child"><li class="animated rollIn hannah-toc-item animated rollIn hannah-toc-level-4"><a class="animated rollIn hannah-toc-link" href="#nmap所有参数-man-nmap"><span class="animated rollIn hannah-toc-text">nmap所有参数 man nmap</span></a></li></ol></li></ol>
+<div class="animated bounceInDown paginations">
+    <div class="col-md-8 col-md-push-2 col-xs-12">
+        <nav>
+            
+            <a href="/2013/04/17/pentest/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/" class="prev col-md-2 col-xs-4 text-left">&larr; Prev</a>
+            
+            <span
+                class="page-content col-md-8  col-xs-4 text-center">
+                
+            </span>
+            
+            <a href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/" class="next col-md-2 col-xs-4 text-right">Next &rarr;</a>
+            
+        </nav>
+        <div>
+            <div class="col-md-6 col-xs-6 text-left">
+                
+                漏洞的基本概念及漏洞发现管理
+                
+            </div>
+            <div class="col-md-6 col-xs-6 text-right">
+                
+                SMB扫描及SMTP扫描
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!--end body-->
+            <!--begin comments-->
+            
+<div class="comments">
+    
+
+    
+    
+<div id="gitalk-container">
+</div>
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script>
+    var loadJs = function (d, a) {
+        var c = document.getElementsByTagName("head")[0] || document.head || document
+            .documentElement;
+        var b = document.createElement("script");
+        b.setAttribute("type", "text/javascript");
+        b.setAttribute("src", d);
+        if (typeof a === "function") {
+            if (window.attachEvent) {
+                b.onreadystatechange = function () {
+                    var e = b.readyState;
+                    if (e === "loaded" || e === "complete") {
+                        b.onreadystatechange = null;
+                        a()
+                    }
+                }
+            } else {
+                b.onload = a
+            }
+        }
+        c.appendChild(b)
+    };
+    loadJs("https://unpkg.com/gitalk/dist/gitalk.min.js", function () {
+        var gitalk = new Gitalk({
+            clientID: 'e82b50d554e32a851ae7',
+            clientSecret: '95923aeaddb44e6de22d088703c6bbde978f505c',
+            repo: 'iseanhe.github.io',
+            owner: 'iseanhe',
+            admin: ['iseanhe'],
+            id: decodeURIComponent(location.pathname),
+            distractionFreeMode: false
+        })
+
+        gitalk.render('gitalk-container')
+    });
+</script>
+
+</div>
+
+
+            <!--end comments-->
+        </div>
+    </div>
+
+    <!--begin footer-->
+    <footer id="footer" class="footer animated fadeInUp hide">
+    <p><i class="copy">&copy;</i> 2020 <a href="http://c.cat.plus">Cat</a> All Right Reserved.</p>
+</footer>
+
+    <!--end footer-->
+
+    
+    <!-- scripts list from theme config.yml -->
+    
+    <script src="/js/hannah.js"></script>
+    
+    
+    <!--begin analytics-->
+    
+
+    <!--end analytics-->
+</body>
+<!--end body-->
+<!--begin canvas-nest-->
+<script>
+    var nesturl = "https://unpkg.com/canvas-nest.js/dist/canvas-nest.js";
+    var c = document.getElementsByTagName("body")[0] || document.body || document.documentElement;
+    var b = document.createElement("script");
+    b.setAttribute("type", "text/javascript");
+    b.setAttribute("src", nesturl);
+    b.setAttribute("color",
+        `${ Math.floor(Math.random()*256)},${ Math.floor(Math.random()*256)},${ Math.floor(Math.random()*256)}`);
+    b.setAttribute("opacity", Math.random());
+    b.setAttribute("count", parseInt((Math.random() * 500) || 99));
+    c.appendChild(b)
+</script>
+<!--end canvas-nest-->
+
+</html>

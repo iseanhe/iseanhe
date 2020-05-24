@@ -70,19 +70,54 @@
       <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
     
+      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
+    
+      <category term="hashcat" scheme="http://c.cat.plus/tags/hashcat/"/>
+    
+      <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
+    
       <category term="hashid" scheme="http://c.cat.plus/tags/hashid/"/>
     
       <category term="hash‐identifier" scheme="http://c.cat.plus/tags/hash%E2%80%90identifier/"/>
     
       <category term="mimikatz" scheme="http://c.cat.plus/tags/mimikatz/"/>
     
-      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
+      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
-      <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
+  </entry>
+  
+  <entry>
+    <title>oclhashcat基于GPU密码破解及彩虹表破解</title>
+    <link href="http://c.cat.plus/2015/05/23/Password_Attacks/oclhashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    <id>http://c.cat.plus/2015/05/23/Password_Attacks/oclhashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
+    <published>2015-05-23T09:55:23.000Z</published>
+    <updated>2020-05-24T09:58:17.785Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="oclhashcat-离线密码破解"><a href="#oclhashcat-离线密码破解" class="headerlink" title="oclhashcat  离线密码破解"></a><strong>oclhashcat</strong>  离线密码破解</h3><p>号称世界上最快、唯一的基于GPGPU的密码破解软件<br>免费开源、支持多平台、支持分布式、150+hash算法 </p></blockquote><p><strong>硬件支持</strong></p><ul><li>虚拟机中无法使用</li><li>支持 CUDA 技术的Nvidia显卡</li><li>支持 OpenCL 技术的AMD显卡</li><li>安装相应的驱动 </li></ul><p><strong>限制</strong></p><ul><li>最大密码长度 55 字符</li><li>使用Unicode的最大密码长度 27 字符</li></ul><p><strong>关于版本</strong><br>oclHashcat-plus、oclHashcat-lite已经合并为oclhashcat</p><h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a><strong>命令</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">oclHashcat -m 0 hash.txt -a 3 ?a?a?a?a?a?a?a</span><br><span class="line"></span><br><span class="line">?l &#x3D; abcdefghijklmnopqrstuvwxyz</span><br><span class="line">?u &#x3D; ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><br><span class="line">?d &#x3D; 0123456789</span><br><span class="line">?s &#x3D;  !&quot;#$%&amp;&#39;()*+,-.&#x2F;:;&lt;&#x3D;&gt;?@[\]^_&#96;&#123;|&#125;~</span><br><span class="line">?a &#x3D; ?l?u?d?s</span><br><span class="line">?b &#x3D; 0x00 - 0xff</span><br></pre></td></tr></table></figure><blockquote><h3 id="RainbowCrack-彩虹表离线密码破解"><a href="#RainbowCrack-彩虹表离线密码破解" class="headerlink" title="RainbowCrack 彩虹表离线密码破解"></a><strong>RainbowCrack</strong> 彩虹表离线密码破解</h3></blockquote><p>基于时间记忆权衡技术生成彩虹表<br>提前计算密码的HASH值,通过比对HASH值破解密码<br>计算HASH的速度很慢,修改版支持CUDA GPU<br>    <code>https://www.freerainbowtables.com/en/download/</code></p><h4 id="KALI-中包含的RainbowCrack工具"><a href="#KALI-中包含的RainbowCrack工具" class="headerlink" title="KALI 中包含的RainbowCrack工具"></a><strong>KALI 中包含的RainbowCrack工具</strong></h4><ul><li>rtgen：预计算，生成彩虹表，耗时的阶段</li><li>rtsort：对rtgen生成的彩虹表进行排序</li><li>rcrack：查找彩虹表破解密码 </li><li>以上命令必须顺序使用</li></ul><h4 id="彩虹表"><a href="#彩虹表" class="headerlink" title="彩虹表"></a><strong>彩虹表</strong></h4><ul><li>密码明文、HASH值、HASH算法、字符集、明文长度范围 </li></ul><h5 id="rtgen"><a href="#rtgen" class="headerlink" title="rtgen"></a><code>rtgen</code></h5><p>LanMan、NTLM、MD2、MD4、MD5、SHA1、RIPEMD160<br><code>rtgen md5 loweralpha 1 5 0 10000 10000 0</code><br>计算彩虹表时间可能很长 </p><p><strong>下载彩虹表</strong><br><code>http://www.freerainbowtables.com/en/tables/</code><br><code>http://rainbowtables.shmoo.com/</code></p><h5 id="彩虹表排序"><a href="#彩虹表排序" class="headerlink" title="彩虹表排序"></a><strong>彩虹表排序</strong></h5><pre><code>/usr/share/rainbowcrackrtsort /md5_loweralpha#1-5_0_1000x1000_0.rt</code></pre><h5 id="彩虹表密码破解"><a href="#彩虹表密码破解" class="headerlink" title="彩虹表密码破解"></a><strong>彩虹表密码破解</strong></h5><pre><code>rcrack *.rt-h 5d41402abc4b2a76b9719d911017c592rcrack *.rt-l hash.txt</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;oclhashcat-离线密码破解&quot;&gt;&lt;a href=&quot;#oclhashcat-离线密码破解&quot; class=&quot;headerlink&quot; title=&quot;oclhashcat  离线密码破解&quot;&gt;&lt;/a&gt;&lt;strong&gt;oclhashcat&lt;/s
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
     
       <category term="hashcat" scheme="http://c.cat.plus/tags/hashcat/"/>
     
-      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+      <category term="彩虹表" scheme="http://c.cat.plus/tags/%E5%BD%A9%E8%99%B9%E8%A1%A8/"/>
+    
+      <category term="GPU" scheme="http://c.cat.plus/tags/GPU/"/>
+    
+      <category term="RainbowCrack" scheme="http://c.cat.plus/tags/RainbowCrack/"/>
     
   </entry>
   
@@ -161,7 +196,7 @@
     <link href="http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/"/>
     <id>http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/</id>
     <published>2015-05-21T09:05:17.000Z</published>
-    <updated>2020-05-22T08:28:09.989Z</updated>
+    <updated>2020-05-24T10:04:37.077Z</updated>
     
     <content type="html"><![CDATA[<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a><strong>思路</strong></h3><p>目标系统实施了强安全措施</p><ul><li>安装了所有补丁 </li><li>无任何已知漏洞 </li><li>无应用层漏洞 </li><li>攻击面最小化<h4 id="社会工程学"><a href="#社会工程学" class="headerlink" title="社会工程学"></a><strong>社会工程学</strong></h4>获取目标系统用户身份 </li><li>非授权用户不受信，认证用户可以访问守信资源 </li><li>已有用户账号权限受限，需要提权 </li><li>不会触发系统报警</li></ul><h4 id="身份认证方法"><a href="#身份认证方法" class="headerlink" title="身份认证方法"></a><strong>身份认证方法</strong></h4><ul><li>证明你是你声称你是的那个人</li><li>你知道什么（账号密码、pin、passphrase） </li><li>你有什么（令牌、token、key、证书、密宝、手机）</li><li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别） </li><li>以上方法结合使用（多因素身份认证）<br>基于互联网的身份验证仍以账号密码为主要形式</li></ul><blockquote><h3 id="密码破解方法"><a href="#密码破解方法" class="headerlink" title="密码破解方法"></a><strong>密码破解方法</strong></h3></blockquote><h4 id="人工猜解"><a href="#人工猜解" class="headerlink" title="人工猜解"></a><strong>人工猜解</strong></h4><ul><li>垃圾桶工程</li><li>被动信息收集 <h4 id="基于字典暴力破解（主流）"><a href="#基于字典暴力破解（主流）" class="headerlink" title="基于字典暴力破解（主流）"></a>基于字典暴力破解（主流）</h4><h4 id="键盘空间字符暴破"><a href="#键盘空间字符暴破" class="headerlink" title="键盘空间字符暴破"></a>键盘空间字符暴破</h4></li></ul><h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><ul><li>保存有用户名和密码的文本文件 </li><li>/usr/share/wordlist </li><li>/usr/share/wfuzz/wordlist </li><li>/usr/share/seclists</li></ul><blockquote><h3 id="字典-1"><a href="#字典-1" class="headerlink" title="字典"></a><strong>字典</strong></h3></blockquote><h4 id="键盘空间字符爆破"><a href="#键盘空间字符爆破" class="headerlink" title="键盘空间字符爆破"></a>键盘空间字符爆破</h4><ul><li>全键盘空间字符</li><li>部分键盘空间字符 (基于规则)</li><li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li></ul><h4 id="crunch-创建字典"><a href="#crunch-创建字典" class="headerlink" title="crunch 创建字典"></a><strong>crunch 创建字典</strong></h4><pre><code>crunch &lt;min-len&gt; &lt;max-len&gt; [&lt;charset string&gt;] [options]&lt;charset string&gt; 默认是小写字符crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100-b 按大小分割字典文件(kb/kib、mb/mib、gb/gib)-c 每个字典的行数以上两个参数必须与-o START 结合使用-d 同一字符连贯出现数量(11 / aaa)</code></pre><h4 id="使用字符集"><a href="#使用字符集" class="headerlink" title="使用字符集"></a><strong>使用字符集</strong></h4><p><code>crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></p><h4 id="无重复字符"><a href="#无重复字符" class="headerlink" title="无重复字符"></a><strong>无重复字符</strong></h4><p><code>crunch 1 1 -p 1234567890 | more</code><br>    必须是最后一个参数<br>    最大、最小字符长度失效，但必须存在<br>    与-s 参数不兼容（-s 指定起始字符串）<br><code>crunch 4 4 0123456789 -s 9990</code></p><ul><li>读取文件中每行内容作为基本字符生成字典<br><code>crunch 1 1 -q read</code></li></ul><h4 id="字典组成规则"><a href="#字典组成规则" class="headerlink" title="字典组成规则"></a><strong>字典组成规则</strong></h4><pre><code>crunch 6 6 -t @,%%^^ | more</code></pre><ul><li>@：小写字母 lalpha</li><li>,：大写字母 ualpha</li><li>%：数字 numeric</li><li>^：符号 symbols<h4 id="输出文件压缩"><a href="#输出文件压缩" class="headerlink" title="输出文件压缩"></a><strong>输出文件压缩</strong></h4>  <code>crunch 4 4 -t @,%^ -o 1.txt -z 7z</code><br>   其他压缩格式：gzip、bzip2、lzma<br>   7z压缩比率最大</li></ul><p><strong>Use example:</strong></p><pre><code>crunch 4 4 -f /usr/share/crunch/charset.lst mixalphanumeric-all-space -o w.txt -t @d@@ -s cdabcrunch 4 5 -p dog cat birdcrunch 5 5 abc DEF + \!@# -t ,@^%,    + 占位符    \ 转义符(空格、符号)crunch 5 5 -t ddd%% -p dog cat bird    任何不同于-p 参数指定的值都是占位符crunch 5 5 -d 2@ -t @@@%%组合破解工具应用 crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd</code></pre><h4 id="按个人信息生成其专属的密码字典"><a href="#按个人信息生成其专属的密码字典" class="headerlink" title="按个人信息生成其专属的密码字典"></a><strong>按个人信息生成其专属的密码字典</strong></h4><p><strong>CUPP：Common User Password Profiler</strong><br>    git clone <a href="https://github.com/Mebus/cupp.git" target="_blank" rel="noopener">https://github.com/Mebus/cupp.git</a><br>    python cup.py -i</p><p>通过收集网站信息生成字典<br>    cewl 1.1.1.1 -m 3 -d 3 -e -c -v -w a.txt<br>    -m：最小单词长度<br>    -e：收集包含email地址信息<br>    -c：每个单词出现次数<br>    支持基本、摘要 身份认证<br>    支持代理<br><strong>用户密码变型</strong></p><ul><li>基于 cewl 的结果进行密码变型 </li><li>末尾增加数字串</li><li>字母大小写变化</li><li>字母与符号互相转换 </li><li>字母与数字互相转换 </li><li>P@$$w0rd</li></ul><p><strong>使用 John the Ripper 配置文件实现密码动态变型</strong><br>    /etc/john/john.conf<br>    [List.Rules:Wordlist]<br>    $[0-9]$[0-9]$[0-9]<br>    john –wordlist=cewl.txt –rules –stdout &gt; m.txt</p><pre><code>[List.Rules:test]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[a-zA-Z]$[a-zA-Z]$[`~!@#$%^&amp;*()\-_=+]john --wordlist=cewl.txt --rules=test --stdout &gt; m.txtjohn --wordlist=ahm.lst --rules=test HASHFILE</code></pre>]]></content>
     
@@ -183,7 +218,7 @@
       <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
     
-      <category term="密码字典" scheme="http://c.cat.plus/tags/%E5%AF%86%E7%A0%81%E5%AD%97%E5%85%B8/"/>
+      <category term="Wordlist" scheme="http://c.cat.plus/tags/Wordlist/"/>
     
       <category term="crunch" scheme="http://c.cat.plus/tags/crunch/"/>
     
@@ -510,9 +545,9 @@
       <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
     
     
-      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
-    
       <category term="无线数据帧" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/"/>
+    
+      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
     
   </entry>
   
@@ -648,40 +683,6 @@
       <category term="无线模式" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%A8%A1%E5%BC%8F/"/>
     
       <category term="WDS" scheme="http://c.cat.plus/tags/WDS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>无线通信过程</title>
-    <link href="http://c.cat.plus/2013/05/24/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B/"/>
-    <id>http://c.cat.plus/2013/05/24/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B/</id>
-    <published>2013-05-24T11:32:22.000Z</published>
-    <updated>2020-05-19T06:41:32.191Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="连接到无线网络"><a href="#连接到无线网络" class="headerlink" title="连接到无线网络"></a><strong>连接到无线网络</strong></h4><h5 id="Probe"><a href="#Probe" class="headerlink" title="Probe"></a>Probe</h5><p>STA向所有信道发出probe帧,发现AP<br>AP响应信道Response</p><h5 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a>Authentication</h5><p>STA向AP发出验证请求<br>发生认证过程(步骤可变)<br>AP相应STA的认证结果</p><h5 id="Association"><a href="#Association" class="headerlink" title="Association"></a>Association</h5><p>STA发出关联请求<br>AP响应关联请求<br>关联成功,开始通信</p><h4 id="WEP探测过程"><a href="#WEP探测过程" class="headerlink" title="WEP探测过程"></a><strong>WEP探测过程</strong></h4><p>Beacon标识使用WEP加密<br>STA发送普通Probe帧<br>AP响应Probe Response帧声明其采用WEP加密</p><h4 id="WPA探测过程"><a href="#WPA探测过程" class="headerlink" title="WPA探测过程"></a><strong>WPA探测过程</strong></h4><p>两个AP的Beacon包内容不同,但都声明采用了WPA加密<br>不同厂商对802.11标准的实现方式不同<br>包头包含WPA1字段信息</p><h4 id="WEP-OPEN认证过程"><a href="#WEP-OPEN认证过程" class="headerlink" title="WEP OPEN认证过程"></a><strong>WEP OPEN认证过程</strong></h4><p>WEP OPEN认证与open认证通信过程相同<br>正确认证后通信数据被WEP加密<br>如果认证时客户端输入错误密码<br>    认证依然可以通过<br>    AP将丢弃该STA的数据包<br>        起始向量被错误地密钥解密后完整性被破坏<br>        但数据传输被失败<br>    认证响应正确,身份验证成功</p><h4 id="WEP-PSK认证过程"><a href="#WEP-PSK认证过程" class="headerlink" title="WEP PSK认证过程"></a><strong>WEP PSK认证过程</strong></h4><p>STA发认证请求<br>AP返回随机Challenge消息<br>STA便用PSK加密Cha并发回给AP<br>AP使用PSK解密密文,获得Cha并与原始Cha比对,相同则验证成功,不同则验证失败;<br>大部分无线驱动首先尝试open验证,如果失败则尝试PSK</p><h4 id="WEP共享密钥认证过程"><a href="#WEP共享密钥认证过程" class="headerlink" title="WEP共享密钥认证过程"></a>WEP共享密钥认证过程</h4><p>无论使用什么加密架构,关联过程完全相同<br>    STA向AP发送关联请求<br>    AP向STA发送关联成功或失败结果<br>隐藏AP<br>    STA关联包中必须包含目标的ESSID<br>    嗅探到此关联包,说明有隐藏AP存在</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;连接到无线网络&quot;&gt;&lt;a href=&quot;#连接到无线网络&quot; class=&quot;headerlink&quot; title=&quot;连接到无线网络&quot;&gt;&lt;/a&gt;&lt;strong&gt;连接到无线网络&lt;/strong&gt;&lt;/h4&gt;&lt;h5 id=&quot;Probe&quot;&gt;&lt;a href=&quot;#Probe&quot; clas
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
-    
-      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
-    
-    
-      <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
-    
-      <category term="无线通信" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/"/>
-    
-      <category term="Probe" scheme="http://c.cat.plus/tags/Probe/"/>
     
   </entry>
   
