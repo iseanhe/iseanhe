@@ -29,6 +29,39 @@
     
     
     <entry>
+      <title>John离线密码破解及Ophcrack 彩虹表密码破解</title>
+      <link href="/2015/05/24/Password_Attacks/John%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E5%8F%8AOphcrack%20%E5%BD%A9%E8%99%B9%E8%A1%A8%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+      <url>/2015/05/24/Password_Attacks/John%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E5%8F%8AOphcrack%20%E5%BD%A9%E8%99%B9%E8%A1%A8%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="John-离线密码破解"><a href="#John-离线密码破解" class="headerlink" title="John 离线密码破解"></a><strong>John</strong> 离线密码破解</h3></blockquote><ul><li>支持众多服务应用的加密破解<br>   <code>john --list=formats</code></li><li>支持某些对称加密算法破解<h4 id="模式"><a href="#模式" class="headerlink" title="模式"></a><strong>模式</strong></h4></li><li>Wordlist：基于规则的字典破解 </li><li>Single crack:默认被首先执行，使用Login/GECOS信息尝试破解<br>  修改GECOS: <code>chfn -f usernamefull -r room_301 -w 12345 -h 12345 -o penetration cat</code></li><li>Incremental:增量,所有或指定字符集的暴力破解</li><li>External：需要在主配配文件中用C语言子集编程</li><li><em>默认破解模式*</em></li><li>Single、wordlist、incremental</li><li>主配置文件中指定默认wordlist</li></ul><h4 id="破解Linux系统账号密码"><a href="#破解Linux系统账号密码" class="headerlink" title="破解Linux系统账号密码"></a><strong>破解Linux系统账号密码</strong></h4><pre><code>unshadow /etc/passwd /etc/shadow &gt; pass.txt        #合并系统账号及密码并输出到文件john pass.txt     #执行破解john --show pass         #查看破解结果</code></pre><h4 id="破解windows密码"><a href="#破解windows密码" class="headerlink" title="破解windows密码"></a><strong>破解windows密码</strong></h4><pre><code>john sam.dump --wordlist=password.lst --format=ntjohn sam.dump --format=nt --show    #查看破解结果</code></pre><h4 id="Johnny-图形化界面的john"><a href="#Johnny-图形化界面的john" class="headerlink" title="Johnny 图形化界面的john"></a><strong>Johnny 图形化界面的john</strong></h4><pre><code>`johnny`</code></pre><p>example:<br><img src="https://github.com/iseanhe/iseanhe.github.io/raw/master/img/mdphotos/johnny.png" alt="johnny"></p><blockquote><h3 id="Ophcrack-离线密码破解"><a href="#Ophcrack-离线密码破解" class="headerlink" title="Ophcrack 离线密码破解"></a><strong>Ophcrack</strong> 离线密码破解</h3></blockquote><ul><li>基于彩虹表的LM、NTLM密码破解软件</li><li>彩虹表: <code>http://ophcrack.sourceforge.net/tables.php</code><br><img src="https://github.com/iseanhe/iseanhe.github.io/raw/master/img/mdphotos/Ophcrack.png" alt="Ophcrack"><br>在线密码破解</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 密码破解 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 离线密码破解 </tag>
+            
+            <tag> 彩虹表 </tag>
+            
+            <tag> John </tag>
+            
+            <tag> Ophcrack </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hash识别及Hashcat离线密码破解</title>
       <link href="/2015/05/23/Password_Attacks/Hashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
       <url>/2015/05/23/Password_Attacks/Hashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</url>
@@ -49,8 +82,6 @@
             
             <tag> nc </tag>
             
-            <tag> hashcat </tag>
-            
             <tag> kali </tag>
             
             <tag> hashid </tag>
@@ -58,6 +89,8 @@
             <tag> hash‐identifier </tag>
             
             <tag> mimikatz </tag>
+            
+            <tag> hashcat </tag>
             
             <tag> 离线密码破解 </tag>
             
@@ -119,9 +152,9 @@
       
         <tags>
             
-            <tag> medusa </tag>
-            
             <tag> 在线密码破解 </tag>
+            
+            <tag> medusa </tag>
             
         </tags>
       
@@ -148,9 +181,9 @@
       
         <tags>
             
-            <tag> 在线密码破解 </tag>
-            
             <tag> hydra </tag>
+            
+            <tag> 在线密码破解 </tag>
             
         </tags>
       
@@ -487,9 +520,9 @@
       
         <tags>
             
-            <tag> 无线数据帧 </tag>
-            
             <tag> 802.11 </tag>
+            
+            <tag> 无线数据帧 </tag>
             
         </tags>
       

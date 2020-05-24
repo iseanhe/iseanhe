@@ -45,6 +45,41 @@
   </entry>
   
   <entry>
+    <title>John离线密码破解及Ophcrack 彩虹表密码破解</title>
+    <link href="http://c.cat.plus/2015/05/24/Password_Attacks/John%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E5%8F%8AOphcrack%20%E5%BD%A9%E8%99%B9%E8%A1%A8%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    <id>http://c.cat.plus/2015/05/24/Password_Attacks/John%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E5%8F%8AOphcrack%20%E5%BD%A9%E8%99%B9%E8%A1%A8%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
+    <published>2015-05-23T22:55:33.000Z</published>
+    <updated>2020-05-24T12:23:21.218Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="John-离线密码破解"><a href="#John-离线密码破解" class="headerlink" title="John 离线密码破解"></a><strong>John</strong> 离线密码破解</h3></blockquote><ul><li>支持众多服务应用的加密破解<br>   <code>john --list=formats</code></li><li>支持某些对称加密算法破解<h4 id="模式"><a href="#模式" class="headerlink" title="模式"></a><strong>模式</strong></h4></li><li>Wordlist：基于规则的字典破解 </li><li>Single crack:默认被首先执行，使用Login/GECOS信息尝试破解<br>  修改GECOS: <code>chfn -f usernamefull -r room_301 -w 12345 -h 12345 -o penetration cat</code></li><li>Incremental:增量,所有或指定字符集的暴力破解</li><li>External：需要在主配配文件中用C语言子集编程</li><li><em>默认破解模式*</em></li><li>Single、wordlist、incremental</li><li>主配置文件中指定默认wordlist</li></ul><h4 id="破解Linux系统账号密码"><a href="#破解Linux系统账号密码" class="headerlink" title="破解Linux系统账号密码"></a><strong>破解Linux系统账号密码</strong></h4><pre><code>unshadow /etc/passwd /etc/shadow &gt; pass.txt        #合并系统账号及密码并输出到文件john pass.txt     #执行破解john --show pass         #查看破解结果</code></pre><h4 id="破解windows密码"><a href="#破解windows密码" class="headerlink" title="破解windows密码"></a><strong>破解windows密码</strong></h4><pre><code>john sam.dump --wordlist=password.lst --format=ntjohn sam.dump --format=nt --show    #查看破解结果</code></pre><h4 id="Johnny-图形化界面的john"><a href="#Johnny-图形化界面的john" class="headerlink" title="Johnny 图形化界面的john"></a><strong>Johnny 图形化界面的john</strong></h4><pre><code>`johnny`</code></pre><p>example:<br><img src="https://github.com/iseanhe/iseanhe.github.io/raw/master/img/mdphotos/johnny.png" alt="johnny"></p><blockquote><h3 id="Ophcrack-离线密码破解"><a href="#Ophcrack-离线密码破解" class="headerlink" title="Ophcrack 离线密码破解"></a><strong>Ophcrack</strong> 离线密码破解</h3></blockquote><ul><li>基于彩虹表的LM、NTLM密码破解软件</li><li>彩虹表: <code>http://ophcrack.sourceforge.net/tables.php</code><br><img src="https://github.com/iseanhe/iseanhe.github.io/raw/master/img/mdphotos/Ophcrack.png" alt="Ophcrack"><br>在线密码破解</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;John-离线密码破解&quot;&gt;&lt;a href=&quot;#John-离线密码破解&quot; class=&quot;headerlink&quot; title=&quot;John 离线密码破解&quot;&gt;&lt;/a&gt;&lt;strong&gt;John&lt;/strong&gt; 离线密码破解&lt;/h3&gt;&lt;/block
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+    
+      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+      <category term="彩虹表" scheme="http://c.cat.plus/tags/%E5%BD%A9%E8%99%B9%E8%A1%A8/"/>
+    
+      <category term="John" scheme="http://c.cat.plus/tags/John/"/>
+    
+      <category term="Ophcrack" scheme="http://c.cat.plus/tags/Ophcrack/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hash识别及Hashcat离线密码破解</title>
     <link href="http://c.cat.plus/2015/05/23/Password_Attacks/Hashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     <id>http://c.cat.plus/2015/05/23/Password_Attacks/Hashcat%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
@@ -72,8 +107,6 @@
     
       <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
     
-      <category term="hashcat" scheme="http://c.cat.plus/tags/hashcat/"/>
-    
       <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
     
       <category term="hashid" scheme="http://c.cat.plus/tags/hashid/"/>
@@ -81,6 +114,8 @@
       <category term="hash‐identifier" scheme="http://c.cat.plus/tags/hash%E2%80%90identifier/"/>
     
       <category term="mimikatz" scheme="http://c.cat.plus/tags/mimikatz/"/>
+    
+      <category term="hashcat" scheme="http://c.cat.plus/tags/hashcat/"/>
     
       <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
@@ -152,9 +187,9 @@
       <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
     
-      <category term="medusa" scheme="http://c.cat.plus/tags/medusa/"/>
-    
       <category term="在线密码破解" scheme="http://c.cat.plus/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
+      <category term="medusa" scheme="http://c.cat.plus/tags/medusa/"/>
     
   </entry>
   
@@ -185,9 +220,9 @@
       <category term="密码破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
     
-      <category term="在线密码破解" scheme="http://c.cat.plus/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
-    
       <category term="hydra" scheme="http://c.cat.plus/tags/hydra/"/>
+    
+      <category term="在线密码破解" scheme="http://c.cat.plus/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
   </entry>
   
@@ -545,9 +580,9 @@
       <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
     
     
-      <category term="无线数据帧" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/"/>
-    
       <category term="802.11" scheme="http://c.cat.plus/tags/802-11/"/>
+    
+      <category term="无线数据帧" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/"/>
     
   </entry>
   
@@ -647,42 +682,6 @@
       <category term="无线数据帧" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E5%B8%A7/"/>
     
       <category term="ACK" scheme="http://c.cat.plus/tags/ACK/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>无线网络运行模式</title>
-    <link href="http://c.cat.plus/2013/05/25/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/"/>
-    <id>http://c.cat.plus/2013/05/25/Wireless_Attacks/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/</id>
-    <published>2013-05-25T14:31:06.000Z</published>
-    <updated>2020-05-19T07:03:59.383Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h4 id="无线网络架构"><a href="#无线网络架构" class="headerlink" title="无线网络架构"></a><strong>无线网络架构</strong></h4></blockquote><p>Infrastructure    // 基础架构模式<br>    AP 维护SSID<br>Ad-Hoc<br>    STA维护SSID<br>Service Set Identifier(SSID)<br>    AP每秒钟约10次通过Beacon帧广播SSID<br>    客户端连接到无线网络后也会宣告SSID</p><h5 id="Infrastructure"><a href="#Infrastructure" class="headerlink" title="Infrastructure"></a><strong>Infrastructure</strong></h5><p>至少包含一个AP和一个Station,形成一个Basic Service Set(BSS)<br>AP连接到有线网络,称为Distribution System(DS)<br>连接到同一个DS的多个AP形成一个Extended Service Set(ESS)</p><h5 id="AD-HOC"><a href="#AD-HOC" class="headerlink" title="AD-HOC"></a><strong>AD-HOC</strong></h5><p>也被称为Independent Basic Service Set(BISS) #独立的架构模式<br>有至少2个Station直接通信组成<br>也称为peer to peer模式        //点到点<br>其中一个STA负责AP的工作<br>    通过beacon广播SSID<br>    对其它STAs进行身份验证</p><h5 id="WIRELESS-DISTRIBUTION-SYSTEM-WDS"><a href="#WIRELESS-DISTRIBUTION-SYSTEM-WDS" class="headerlink" title="WIRELESS DISTRIBUTION SYSTEM(WDS)"></a><strong>WIRELESS DISTRIBUTION SYSTEM(WDS)</strong></h5><p>与有线DS类似,只是通过无线连接的多个AP组成的网络<br>Bridging—-只有AP间彼此通信        // 桥接<br>Repeating—-允许所有AP和STA进行通信        // 中继</p><h5 id="Monitor-Mode"><a href="#Monitor-Mode" class="headerlink" title="Monitor Mode"></a><strong>Monitor Mode</strong></h5><p>Monitor不是一种真的无线模式<br>但是对无线渗透至关重要<br>允许无线 网上没有任何筛选的抓包(802.11包头)<br>与有线网络的混杂模式可以类比<br>适合的网卡和驱动但不可以monitor,更可以Injection</p><p>无线网硬件设备及基本概念<br>无线网卡准备<br>物理机运行kali<br>虚拟机运行kali<br>外置USB无线网卡<br>TL-WN722N(个人建议)</p><pre><code>dmesg -T    // 显示系统硬件设备使用纪录iwconfig    // 无线网卡配置查询</code></pre><h5 id="选择无线网卡"><a href="#选择无线网卡" class="headerlink" title="选择无线网卡"></a><strong>选择无线网卡</strong></h5><p>这是个痛苦和受挫的过程<br>无线网卡的芯片型号是成败的关键<br>台式机<br>    USB无线网卡(不支持扩展天线)<br>    PCMCIA(16Bit已停产802.11b)<br>    Cardbus(32bit PCMCIA 8.0标准)<br>    Express Cards<br>    MiniPCI<br>    MiniPCI Express<br>    PCI接口卡<br>发送功率:远程连接<br>接收灵敏性:适当降低灵敏度,接收效果更佳<br>经验但不是铁律<br>    Atheros或Realtek芯片<br>    没有神器<br>    兼容aircrack-ng suite<br><a href="http://www.aircrack-ng.org/" target="_blank" rel="noopener">http://www.aircrack-ng.org/</a><br>无线渗透网卡没有所谓的标准,但是Aircrack-ng suite作者给出建议<br>Alfa Networks AWUS036H无线网卡<br>    Realtek 8187芯片<br>    1000 mW发送功率<br>    天线:RP-SMA<br>        可扩展</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h4 id=&quot;无线网络架构&quot;&gt;&lt;a href=&quot;#无线网络架构&quot; class=&quot;headerlink&quot; title=&quot;无线网络架构&quot;&gt;&lt;/a&gt;&lt;strong&gt;无线网络架构&lt;/strong&gt;&lt;/h4&gt;&lt;/blockquote&gt;
-&lt;p&gt;Infrastruc
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="无线渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/"/>
-    
-      <category term="无线技术理论" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F/%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E7%90%86%E8%AE%BA/"/>
-    
-    
-      <category term="Monitor" scheme="http://c.cat.plus/tags/Monitor/"/>
-    
-      <category term="无线模式" scheme="http://c.cat.plus/tags/%E6%97%A0%E7%BA%BF%E6%A8%A1%E5%BC%8F/"/>
-    
-      <category term="WDS" scheme="http://c.cat.plus/tags/WDS/"/>
     
   </entry>
   
