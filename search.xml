@@ -49,17 +49,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> backdoor-factory </tag>
-            
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
             
-            <tag> bdfproxy </tag>
+            <tag> msfvenom </tag>
             
             <tag> payload </tag>
             
             <tag> python </tag>
+            
+            <tag> backdoor-factory </tag>
+            
+            <tag> bdfproxy </tag>
             
             <tag> arpspoof </tag>
             
@@ -92,13 +92,13 @@
             
             <tag> msfvenom </tag>
             
+            <tag> Veil-Framework </tag>
+            
             <tag> payload </tag>
             
             <tag> python </tag>
             
             <tag> passing-the-hash </tag>
-            
-            <tag> Veil-Framework </tag>
             
             <tag> shellter </tag>
             
@@ -131,17 +131,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
             
-            <tag> payload </tag>
-            
-            <tag> python </tag>
+            <tag> msfvenom </tag>
             
             <tag> Veil-Framework </tag>
             
             <tag> Hyperion </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> python </tag>
             
             <tag> Veil-evasion </tag>
             
@@ -172,9 +172,9 @@
             
             <tag> 免杀 </tag>
             
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
+            
+            <tag> msfvenom </tag>
             
             <tag> Hyperion </tag>
             
@@ -218,6 +218,115 @@
             <tag> NanoCore </tag>
             
             <tag> crypter </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MSF基本使用和控制台命令</title>
+      <link href="/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/"/>
+      <url>/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h4 id="MSF基本使用"><a href="#MSF基本使用" class="headerlink" title="MSF基本使用"></a>MSF基本使用</h4></blockquote><ul><li><p>使用前先升级: <code>msfupdate</code></p></li><li><p>msfcli 使用接口</p></li><li><p>msfconsole 使用接口<br>  最流行的用户接口<br>  几乎可以使用全部的MSF功能<br>  控制台命令支持TAB自动补齐<br>  支持外部命令的执行(系统命令等)<br>  点击鼠标启动 <code>/ msfconsole -h -q -r -v / exit</code><br>  <code>help / ? / workspace</code></p></li><li><p><code>banner , color , connect -h</code>        </p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line">connect 1.1.1.1 80#connect类似nc</span><br></pre></td></tr></table></figure><h4 id="msfconsole-控制台命令"><a href="#msfconsole-控制台命令" class="headerlink" title="msfconsole 控制台命令"></a>msfconsole 控制台命令</h4><p><strong>show</strong>    #使用频率高</p><pre><code>show all            #显示所有模块show exploits        #显示可利用模块show payloads        #显示可用payload模块show auxiliary        #显示可用辅助模块    show options        #显示选项show encoders        #显示可用编码模块show nops            #显示nops模块show plugins        #显示可用插件</code></pre><p><strong>search</strong>        搜索命令</p><pre><code>search -hsearch ms10-046            #根据关键字搜索search ms08-067search usermap_scriptsearch name:mysql        #搜索名称包含search platform:aix        #根据平台搜索search type:aux            #根据类型搜索search author:aaron        #根据作者名搜索search cve:2011            #根据cve时间搜索                        #可多条件同时搜索</code></pre><p><strong>use</strong>    使用</p><pre><code>use exploit/windows/smb/ms08_067_netapi            #search找到目标模块后use它use auxiliary/dos/windows/smb/ms09_001_write    info            #查看当前模块信息    info edit        #编辑模块信息    show options    #显示当前模块配置选项    show targets    #显示当前模块适用攻击目标    show payload    #显示当前模块适用的payload    show advanced    #显示当前模块高级参数    show missing    #显示当前模块未配置参数    show evasion    #逃避    set rhost 1.1.1.1    #设置当前模块目标IP    chack                #检查配置    back                #返回上一级命令</code></pre><p><strong>msf数据库相关命令</strong></p><pre><code>db_status            #查看数据库状态db_rebuild_cache    #创建数据库缓存,MSF5不推荐使用此命令db_disconnect        #断开数据连接db_connect -h        #连接其它数据库    /usr/share/metasploit-framework/config/database.yml    #指定数据库连接配置文件进行连接db_nmap 1.1.1.1                    #使用nmap扫描并将扫描结果储存到msf数据库    hosts                        #扫描后,hosts查看所有目标机器信息    hosts 192.168.254.254        #指定目标IP查看    hosts -u                    #只看up开机状态的机器    hosts -c address,os_name    #筛选只看IP和系统类型    hosts -S windows            #搜索指定信息查看    services -h                    #和hosts命令类似    services -p 80                #只看开放80端口的机器    services -p 1-200            #指定端口范围查看    services -c port,info,name     #筛选信息查看db_import                        #导入数据    #结合nmap扫描并输出结果为xml    nmap -A 192.168.254.113 -oX namp.xml        db_import /root/nmap.xml    #导入nmap扫描结果db_export -h                        db_export -f xml /root/bak.xml    #导出备份数据</code></pre><p><strong>set</strong> 设置</p><pre><code>set        #设置unset    #取消设置setg    #全局变量设置unsetg    #取消全局变量设置save    #保存配置,下次启动MSF不用重新设置</code></pre><p><strong>执行</strong></p><pre><code>runexploitexploit -j    #后台执行jobs            #查看已执行的任务sessions -l        #查看已建立连接的会话sessions -i 1    #进入已建立连接的会话load            #加载插件load openvas    #加载openvasunload            #取消加载的插件loadpath        #加载路径自定义插件route            #通过指定sessions路由流量route add 10.1.1.0 255.255.255.0 1irb                #开发接口    Framework::Version    puts &apos;hello world&apos;resource r.rc        #调用资源文件msfconsol -r r.rc    #调用资源文件</code></pre><p><strong>msf爆破mysql空密码测试</strong></p><pre><code>msfconsolesearch mysql_loginuse auxiliary/scanner/mysql/mysql_loginshow optionsset USERNAME rootset BLANK_PASSWORDS trueset rhost 192.168.254.113exploit -jcreds        #查看扫描出的密码信息vulns        #查看目标漏洞信息loot        #查看获取的hashdump</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> Metasploit </tag>
+            
+            <tag> Kali </tag>
+            
+            <tag> msfconsole </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MSF架构和技术功能模块</title>
+      <link href="/2016/03/04/MsF/MSF%E6%9E%B6%E6%9E%84%E5%92%8C%E6%8A%80%E6%9C%AF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/"/>
+      <url>/2016/03/04/MsF/MSF%E6%9E%B6%E6%9E%84%E5%92%8C%E6%8A%80%E6%9C%AF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MSF架构"><a href="#MSF架构" class="headerlink" title="MSF架构"></a><strong>MSF架构</strong></h4><p><img src="https://github.com/iseanhe/iseanhe.github.io/raw/master/img/mdphotos/msf.png" alt="MSF架构"></p><p><strong>Rex</strong></p><ul><li>基本功能库,用于完成日常基本任务,无需人工手动编码实现</li><li>处理socket连接访问,协议应答(http/SSL/SMB等)</li><li>编码转换(XOR,Base64,Unicode)</li></ul><p><strong>MsF::Core</strong></p><ul><li>提供MsF的核心基本API,是框架的核心能力实现库</li></ul><p><strong>MsF::Base</strong></p><ul><li>提供友好的API接口,便于模块调用的库</li></ul><p><strong>Plugin 插件</strong></p><ul><li>连接和调用外部扩展功能和系统</li></ul><h4 id="MSF目录结构"><a href="#MSF目录结构" class="headerlink" title="MSF目录结构"></a><strong>MSF目录结构</strong></h4><pre><code>cd /usr/share/metasploit-framework/ &amp;&amp; lsls modules    #模块目录</code></pre><p><strong>技术功能模块</strong>    (不是流程模块)</p><ul><li><p>Exploits: 利用系统漏洞进行攻击的动作,此模块对应每一个具体漏洞的攻击方法(主动,被动)</p></li><li><p>Payload: 成功exploit之后,真正在目标系统执行的代码或指令<br>  shellcode或系统命令<br>  三种payload: <code>cd /usr/share/metasploit-framework/modules/payloads/ &amp;&amp; ls</code></p><p>  Single: all-in-one<br>  Stager: 目标计算机内存有限时,先传输一个较小的payload用于建立连接<br>  Stages: 利用stager建立的连接下载的后续payload<br>  Stager,stages都有多种类型,适用于不同场景<br>  Shellcode 是payload的一种,由于其建立正向/反向shell而得名</p></li><li><p>Auxiliary: 执行信息收集,枚举,指纹探测,扫描等功能的辅助模块(没有payload的exploit模块)</p></li><li><p>Encoders: 对payload进行加密,躲避AV检查的模块</p></li><li><p>Nops: 提高payload稳定性及维持大小</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> shellcode </tag>
+            
+            <tag> exploit </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Metasploit简介及版本</title>
+      <link href="/2016/03/03/MsF/Metasploit%E7%AE%80%E4%BB%8B%E5%8F%8A%E7%89%88%E6%9C%AC/"/>
+      <url>/2016/03/03/MsF/Metasploit%E7%AE%80%E4%BB%8B%E5%8F%8A%E7%89%88%E6%9C%AC/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h4 id="渗透测试者的困扰"><a href="#渗透测试者的困扰" class="headerlink" title="渗透测试者的困扰"></a><strong>渗透测试者的困扰</strong></h4></blockquote><ul><li>需要掌握数百个工具软件,上千个命令参数,实在记不住</li><li>新出现的漏洞PoC/EXP有不同的运行环境要求,准备工作繁琐</li><li>大部分时间都在学习不同工具的使用习惯,如果能统一就好了</li><li>Metasploit 能解决以上困扰吗?</li></ul><h4 id="Metasploit简介"><a href="#Metasploit简介" class="headerlink" title="Metasploit简介"></a><strong>Metasploit简介</strong></h4><ul><li><p>目前最流行,最强大,最具扩展性的渗透测试平台软件</p></li><li><p>基于Metasploit惊醒渗透测试和漏洞分析的流程和方法</p></li><li><p>2003年由HD Moore发布第一版,2007年用ruby语言重写<br>  框架集成了渗透测试标准(PETS)思想<br>  一定程度上统一了渗透测试和漏洞研究的工作环境<br>  新的攻击代码可以比较容易的加入框架</p></li><li><p>开发活跃版本更新频繁(每周)<br>  早期版本基于社区力量维护,被Rapid 7收购后打造出其商业版产品<br>  目前分化为四个版本,社区版依然十分活跃<br>  HD More说: 为Metasploit写书是种自虐!<br>  2014年之后市场上没有再出现新的Metasploit教材</p></li><li><p>Offensive security 出版的Metasploit教材</p></li><li><p>被HD Moore称之为当时最好的Metasploit教材(2011/2012)</p></li></ul><h4 id="版本对比"><a href="#版本对比" class="headerlink" title="版本对比"></a><strong>版本对比</strong></h4><table><thead><tr><th align="center">Feature</th><th align="center">Metasploit Framework</th><th align="center">Metasploit Community</th><th align="center">Metasploit Express</th><th align="center">Metasploit Pro</th></tr></thead><tbody><tr><td align="center">License</td><td align="center">Free</td><td align="center">Free</td><td align="center">$5,000</td><td align="center">授权</td></tr><tr><td align="center">Web APP测试</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">Report</td><td align="center"></td><td align="center"></td><td align="center">Y</td><td align="center">Y</td></tr><tr><td align="center">AV免杀</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">操作界面</td><td align="center">Command-line</td><td align="center">Web</td><td align="center">Web</td><td align="center">Web/cmd/adv cmd</td></tr><tr><td align="center">IDS/IPS绕过</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">社区支持</td><td align="center">Y</td><td align="center">Y</td><td align="center">Y</td><td align="center">Y</td></tr><tr><td align="center">Rapid7支持</td><td align="center"></td><td align="center"></td><td align="center">Y</td><td align="center">Y</td></tr><tr><td align="center">团队协作</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">VPN Pivoting</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr></tbody></table><h4 id="Metasploit-Framework"><a href="#Metasploit-Framework" class="headerlink" title="Metasploit Framework"></a><strong>Metasploit Framework</strong></h4><ul><li>MSF 默认集成于Kali Linux中</li><li>使用postgresql数据库存储数据<br>  早期版本需要先启动数据库再启动msf</li></ul><pre><code>msfdb init        #初始化msf数据库msfdb reinit    #重新初始化msfdb start        #启动msfdb stop        #停止msfdb delete    #删除数据库msfdb status    #查看服务状态msfdb run        #启动数据库并启动msfconsole</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> Metasploit </tag>
+            
+            <tag> Kali </tag>
+            
+            <tag> ruby </tag>
+            
+            <tag> postgresql </tag>
             
         </tags>
       
@@ -306,11 +415,11 @@
       
         <tags>
             
-            <tag> squid3 </tag>
-            
             <tag> proxytunnel </tag>
             
             <tag> HTTP隧道 </tag>
+            
+            <tag> squid3 </tag>
             
         </tags>
       
@@ -438,6 +547,10 @@
       
         <tags>
             
+            <tag> Kali </tag>
+            
+            <tag> squid3 </tag>
+            
             <tag> DNS隧道 </tag>
             
             <tag> 隧道嵌套 </tag>
@@ -446,11 +559,7 @@
             
             <tag> dns2tcp </tag>
             
-            <tag> squid3 </tag>
-            
             <tag> Bodhi </tag>
-            
-            <tag> Kali </tag>
             
         </tags>
       
@@ -695,13 +804,13 @@
             
             <tag> 离线密码破解 </tag>
             
+            <tag> Linux密码破解 </tag>
+            
             <tag> John </tag>
             
             <tag> 彩虹表 </tag>
             
             <tag> Ophcrack </tag>
-            
-            <tag> Linux密码破解 </tag>
             
             <tag> Windows密码 </tag>
             
@@ -732,9 +841,9 @@
       
         <tags>
             
-            <tag> nc </tag>
-            
             <tag> kali </tag>
+            
+            <tag> nc </tag>
             
             <tag> hashid </tag>
             
@@ -839,11 +948,11 @@
       
         <tags>
             
-            <tag> Linux密码破解 </tag>
-            
             <tag> hydra </tag>
             
             <tag> 在线密码破解 </tag>
+            
+            <tag> Linux密码破解 </tag>
             
         </tags>
       
@@ -1033,9 +1142,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> Burpsuit </tag>
-            
             <tag> 联合查询 </tag>
+            
+            <tag> Burpsuit </tag>
             
         </tags>
       
@@ -1066,9 +1175,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> SQL盲注 </tag>
-            
             <tag> Burpsuit </tag>
+            
+            <tag> SQL盲注 </tag>
             
         </tags>
       
@@ -1253,11 +1362,11 @@
             
             <tag> 拒绝服务攻击 </tag>
             
-            <tag> NTP </tag>
-            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
+            
+            <tag> NTP </tag>
             
         </tags>
       
@@ -1288,11 +1397,11 @@
             
             <tag> scapy </tag>
             
+            <tag> SNMP </tag>
+            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
-            
-            <tag> SNMP </tag>
             
         </tags>
       
@@ -1319,11 +1428,11 @@
       
         <tags>
             
+            <tag> 拒绝服务攻击 </tag>
+            
             <tag> DNS </tag>
             
             <tag> dig </tag>
-            
-            <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
@@ -1387,11 +1496,11 @@
             
             <tag> python </tag>
             
-            <tag> C </tag>
-            
             <tag> DoS攻击 </tag>
             
             <tag> 拒绝服务攻击 </tag>
+            
+            <tag> C </tag>
             
             <tag> scapy </tag>
             
@@ -1463,11 +1572,11 @@
             
             <tag> DoS攻击 </tag>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DDoS攻击 </tag>
             
             <tag> CC </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> 缓冲区溢出 </tag>
             
@@ -1620,9 +1729,9 @@
       
         <tags>
             
-            <tag> WPA </tag>
-            
             <tag> 无线加密 </tag>
+            
+            <tag> WPA </tag>
             
         </tags>
       
@@ -2045,9 +2154,9 @@
             
             <tag> python </tag>
             
-            <tag> nmap </tag>
-            
             <tag> SNMP </tag>
+            
+            <tag> nmap </tag>
             
             <tag> Scapy </tag>
             
@@ -2121,9 +2230,9 @@
             
             <tag> nmap </tag>
             
-            <tag> nc </tag>
-            
             <tag> Scapy </tag>
+            
+            <tag> nc </tag>
             
             <tag> hping3 </tag>
             
@@ -2286,9 +2395,9 @@
       
         <tags>
             
-            <tag> 被动信息收集 </tag>
-            
             <tag> kali </tag>
+            
+            <tag> 被动信息收集 </tag>
             
             <tag> 渗透 </tag>
             
