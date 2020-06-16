@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://c.cat.plus/"/>
-  <updated>2020-05-14T15:12:54.169Z</updated>
+  <updated>2020-06-16T09:18:26.626Z</updated>
   <id>http://c.cat.plus/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>暗网网站搭建和onion域名获取方法</title>
+    <link href="http://c.cat.plus/2018/06/12/Darknet/%E6%9A%97%E7%BD%91%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E5%92%8Conion%E5%9F%9F%E5%90%8D%E7%94%B3%E8%AF%B7%E6%96%B9%E6%B3%95/"/>
+    <id>http://c.cat.plus/2018/06/12/Darknet/%E6%9A%97%E7%BD%91%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E5%92%8Conion%E5%9F%9F%E5%90%8D%E7%94%B3%E8%AF%B7%E6%96%B9%E6%B3%95/</id>
+    <published>2018-06-12T13:22:53.000Z</published>
+    <updated>2020-06-16T09:18:26.626Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><h3 id="tor项目"><a href="#tor项目" class="headerlink" title="tor项目"></a><strong>tor项目</strong></h3><p>tor项目是美国海军的秘密项目，之后被开源用于真正的匿名网络中。在tor的网络中，你的真实的ip地址和其他和你有关的任何暴露于互联网的信息都会被隐藏，真正保护了用户。tor项目不但为一般用户提供客户端，同时也提供了.onion域名和服务，利用.onion域名可以把你网站的真正地址隐藏起来。</p></blockquote><h4 id="暗网网站搭建准备材料"><a href="#暗网网站搭建准备材料" class="headerlink" title="暗网网站搭建准备材料"></a><strong>暗网网站搭建准备材料</strong></h4><ul><li>服务器或本机内网映射</li><li>网站搭建相关技术</li></ul><p><strong>服务器选择</strong></p><p>如何你想真正隐藏自己，你需要做以下步骤</p><ul><li>建议使用Debian或者Ubuntu的服务器，tor官方文档支持较好</li><li>服务器只用来做tor网站不做其他的任何东西</li><li>匿名支付购买服务器</li><li>不要在服务器上运行 Tor 中继，因为 Tor 中继的ip是暴露的</li><li>不要接受和发送电子邮件</li></ul><p><strong>网站配置</strong></p><ul><li><p>安装nginx或者apache，这里以nginx为例（nginx的使用最为广泛）</p></li><li><p>编辑nginx配置文件</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo vi &#x2F;etc&#x2F;nginx&#x2F;sites-available&#x2F;default</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">listen   127.0.0.1:xxxx;#xxxx是你的端口号 不要设置成80为了安全</span><br><span class="line"></span><br><span class="line">…</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sudo service nginx restart#重启服务</span><br></pre></td></tr></table></figure></li><li><p>以Debian服务器搭建暗网网站为例</p></li></ul><h4 id="Tor服务安装"><a href="#Tor服务安装" class="headerlink" title="Tor服务安装"></a><strong>Tor服务安装</strong></h4><ul><li>一般可以通过apt直接安装tor服务 <code>apt install tor</code></li></ul><p>如果不行请进行以下操作</p><ol><li><p>修改source.list</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo vi &#x2F;etc&#x2F;apt&#x2F;sources.list</span><br><span class="line">最后加下面这两行</span><br><span class="line">deb https:&#x2F;&#x2F;deb.torproject.org&#x2F;torproject.org stretch main</span><br><span class="line">deb-src https:&#x2F;&#x2F;deb.torproject.org&#x2F;torproject.org stretch main</span><br></pre></td></tr></table></figure></li><li><p>添加密钥</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl https:&#x2F;&#x2F;deb.torproject.org&#x2F;torproject.org&#x2F;A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import</span><br><span class="line">gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add -</span><br></pre></td></tr></table></figure></li><li><p>安装tor</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">sudo apt-get install tor</span><br></pre></td></tr></table></figure></li><li><p>dns选择</p><p> 默认是deb.torproject.org<br> 备选的有deb-master.torproject.org、mirror.netcologne.de、tor.mirror.youam.de</p></li><li><p>编辑tor配置文件</p><p> vi /etc/tor/torrc<br> 添加<br> HiddenServiceDir /var/lib/tor/hidden_service/<br> HiddenServicePort 80 127.0.0.1:8080</p></li><li><p>启动tor</p><p> <code>sudo service tor start</code><br> 一旦启动，那么你的域名也就生成了</p></li><li><p>查看onion域名</p><p> cat /var/lib/tor/hidden_service/hostname</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;h3 id=&quot;tor项目&quot;&gt;&lt;a href=&quot;#tor项目&quot; class=&quot;headerlink&quot; title=&quot;tor项目&quot;&gt;&lt;/a&gt;&lt;strong&gt;tor项目&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;tor项目是美国海军的秘密项目，之后被开源用于真正的匿名
+      
+    
+    </summary>
+    
+    
+      <category term="Darknet" scheme="http://c.cat.plus/categories/Darknet/"/>
+    
+    
+      <category term="暗网" scheme="http://c.cat.plus/tags/%E6%9A%97%E7%BD%91/"/>
+    
+      <category term="onion" scheme="http://c.cat.plus/tags/onion/"/>
+    
+      <category term="tor" scheme="http://c.cat.plus/tags/tor/"/>
+    
+  </entry>
   
   <entry>
     <title>Python花式导包的几种方法</title>
@@ -69,8 +100,6 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
       <category term="backdoor-factory" scheme="http://c.cat.plus/tags/backdoor-factory/"/>
@@ -82,6 +111,8 @@
       <category term="bdfproxy" scheme="http://c.cat.plus/tags/bdfproxy/"/>
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
+    
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
@@ -112,13 +143,13 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
+    
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
     
       <category term="passing-the-hash" scheme="http://c.cat.plus/tags/passing-the-hash/"/>
     
@@ -155,8 +186,6 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
@@ -164,6 +193,8 @@
       <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
+    
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
     
       <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
     
@@ -197,8 +228,6 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
-      <category term="C" scheme="http://c.cat.plus/tags/C/"/>
-    
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
@@ -208,6 +237,8 @@
       <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
     
       <category term="strings" scheme="http://c.cat.plus/tags/strings/"/>
+    
+      <category term="C" scheme="http://c.cat.plus/tags/C/"/>
     
       <category term="gcc" scheme="http://c.cat.plus/tags/gcc/"/>
     
@@ -277,11 +308,11 @@
       <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
     
     
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
       <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
+    
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
     
       <category term="meterpreter" scheme="http://c.cat.plus/tags/meterpreter/"/>
     
@@ -318,9 +349,9 @@ use pa
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
-      <category term="ruby" scheme="http://c.cat.plus/tags/ruby/"/>
-    
       <category term="shellcode" scheme="http://c.cat.plus/tags/shellcode/"/>
+    
+      <category term="ruby" scheme="http://c.cat.plus/tags/ruby/"/>
     
   </entry>
   
@@ -387,9 +418,9 @@ use pa
       <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
     
     
-      <category term="nmap" scheme="http://c.cat.plus/tags/nmap/"/>
-    
       <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
+      <category term="nmap" scheme="http://c.cat.plus/tags/nmap/"/>
     
       <category term="Metasploit" scheme="http://c.cat.plus/tags/Metasploit/"/>
     
@@ -726,43 +757,6 @@ use pa
       <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
     
       <category term="Bodhi" scheme="http://c.cat.plus/tags/Bodhi/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSH远程端口转发和动态端口转发以及X协议转发</title>
-    <link href="http://c.cat.plus/2015/07/03/Traffic_manipulation/SSH%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E5%92%8C%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BB%A5%E5%8F%8AX%E5%8D%8F%E8%AE%AE%E8%BD%AC%E5%8F%91/"/>
-    <id>http://c.cat.plus/2015/07/03/Traffic_manipulation/SSH%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E5%92%8C%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BB%A5%E5%8F%8AX%E5%8D%8F%E8%AE%AE%E8%BD%AC%E5%8F%91/</id>
-    <published>2015-07-03T11:26:37.000Z</published>
-    <updated>2020-05-29T09:28:41.540Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="SSH远程端口转发"><a href="#SSH远程端口转发" class="headerlink" title="SSH远程端口转发"></a><strong>SSH远程端口转发</strong></h3><p>由于ACL等原因,SSH与应用连接建立方向相反</p></blockquote><h4 id="本地端口转发"><a href="#本地端口转发" class="headerlink" title="本地端口转发"></a><strong>本地端口转发</strong></h4><ul><li>SSH客户端+应用客户端位于FW一端</li><li>SSH服务端+应用服务端位于另一端</li></ul><h4 id="远程端口转发"><a href="#远程端口转发" class="headerlink" title="远程端口转发"></a><strong>远程端口转发</strong></h4><ul><li><p>SSH客户端,应用客户端位于FW两端</p></li><li><p>SSH服务端,应用服务端位于FW两端</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ssh -fNg -R &lt;listen port&gt;:&lt;remote ip&gt;:&lt;remote port&gt; user@&lt;SSH server&gt; -p &lt;ssh server port&gt;</span><br><span class="line">ssh -CfNg -R 7001:1.1.1.11:80 root@192.168.254.118 -p 53#WEB应用端口转发</span><br><span class="line">ssh -CfNg -R 7002:1.1.1.11:3389 root@192.168.254.118 -p 53#RDP应用端口转发</span><br><span class="line">ssh -CfNg -R 7003:1.1.1.11:3333 root@192.168.254.118 -p 53#NC应用端口转发</span><br></pre></td></tr></table></figure></li><li><p>之所以称为远程,是因为SSH侦听端口开在远程的SSH Server上</p></li><li><p>侦听端口永远开在应用客户端一方</p></li><li><p>WEB,RDP,NC应用端口转发测试</p></li></ul><blockquote><h3 id="SSH-动态端口转发"><a href="#SSH-动态端口转发" class="headerlink" title="SSH 动态端口转发"></a><strong>SSH 动态端口转发</strong></h3></blockquote><p><strong>本地,远程端口转发都需要固定应用服务器IP,Port</strong></p><ul><li>应用端口繁多,逐个转发效率低</li><li>某些应用不固定端口</li><li>某些网站不支持IP直接访问</li><li>使用非受信网络上网时保护流量不被嗅探</li></ul><p><strong>本地侦听socks4/5代理端口</strong></p><ul><li>由SSH server决定如何转发</li><li>作为翻墙代理使用</li><li>配置客户端代理(浏览器)</li><li>使用 <strong>proxychains</strong> 支持无代理客户端<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -CfNg -D 7001 root@1.1.1.1 -p 2121</span><br></pre></td></tr></table></figure></li></ul><blockquote><h3 id="X-协议转发"><a href="#X-协议转发" class="headerlink" title="X 协议转发"></a><strong>X 协议转发</strong></h3></blockquote><ul><li>远程登录Linux GUI运行图形化界面工具<br>  VNC<br>  X Windows</li><li>防火墙限制访问时<br>  基于SSH的X转发<br>  <code>ssh -X user@1.1.1.1 -p 53</code></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;SSH远程端口转发&quot;&gt;&lt;a href=&quot;#SSH远程端口转发&quot; class=&quot;headerlink&quot; title=&quot;SSH远程端口转发&quot;&gt;&lt;/a&gt;&lt;strong&gt;SSH远程端口转发&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;由于ACL等原因,SSH
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
-    
-    
-      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
-    
-      <category term="端口转发" scheme="http://c.cat.plus/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
-    
-      <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
-    
-      <category term="VNC" scheme="http://c.cat.plus/tags/VNC/"/>
-    
-      <category term="proxychains" scheme="http://c.cat.plus/tags/proxychains/"/>
     
   </entry>
   

