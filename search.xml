@@ -89,6 +89,89 @@
     
     
     <entry>
+      <title>MongoDB查询操作</title>
+      <link href="/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C/"/>
+      <url>/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MySQL和MongoDB查找操作对比"><a href="#MySQL和MongoDB查找操作对比" class="headerlink" title="MySQL和MongoDB查找操作对比"></a><strong>MySQL和MongoDB查找操作对比</strong></h4><pre><code>mysql:select ... from tableName where ...db.collectionName.find()    同mysql-&gt; select * from tableName</code></pre><h4 id="find-query-field-查找函数"><a href="#find-query-field-查找函数" class="headerlink" title="find(query,field)查找函数"></a><strong>find(query,field)</strong>查找函数</h4><ul><li>功能: 查找所有复合条件的文档</li><li>参数:<ul><li>query:    筛选条件 相当于where子句</li><li>field:    展示的域 相当于select的展示部分</li></ul></li><li>返回: 返回所有查找到的内容</li></ul><p><strong>field 参数</strong>: 选择要展示的域 传一组键值对</p><ul><li><p>键表示域名</p></li><li><p>值表示是否显示该域 0 表示不显示 1 表示显示</p></li><li><p>如果某个域给定0 则表示不显示该域,其他的域均显示</p></li><li><p>如果某个域给定1 则表示显示该域,其他的域都不显示</p></li><li><p><code>_id</code> 永远默认为显示,除非设置为0</p></li><li><p>除_id外其他域必须拥有相同的设置,全为0或者全为1</p></li><li><p>如果不写该参数则表示显示所有域内容</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1,age:1&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>query参数</strong>: 以键值对的形式给出查找条件</p><ul><li>查找年龄 17<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li><li>如果不写第一个参数则表示查找所有内容</li></ul><h5 id="findOne"><a href="#findOne" class="headerlink" title="findOne()"></a><strong>findOne()</strong></h5><ul><li>功能参数和 <code>find()</code> 完全相同,只是只返回第一条查找到的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.findOne(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="query的更多用法"><a href="#query的更多用法" class="headerlink" title="query的更多用法"></a><strong>query的更多用法</strong></h4><ul><li>操作符: 使用$符号注明一个特殊字符串,表示一定的含义<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$lt#表示小于</span><br></pre></td></tr></table></figure></li></ul><h5 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符"></a><strong>比较操作符</strong></h5><pre><code>$eq        #等于    ==db.class0.find({age:{$eq:17}},{_id:0})#筛选年龄等于17的db.class0.find({age:17},{_id:0})    #直接查一样,等于一般用得少$lt        #小于    &lt;db.class0.find({age:{$lt:17}},{_id:0})#mongo中字符串也可以比较大小$lte    #小于等于    &lt;=db.class0.find({age:{$lte:17}},{_id:0})$gt        #大于    &gt;db.class0.find({age:{$gt:17}},{_id:0})$gte    #大于等于    &gt;=db.class0.find({age:{$gte:17}},{_id:0})$ne        #不等于        !=db.class0.find({age:{$ne:17}},{_id:0})#如果一个文档没有这个age域也显示为不等于$in        #包含db.class0.find({age:{$in:[16,17,18]}},{_id:0})#nin    #不包含db.class0.find({age:{$nin:[16,17,18]}},{_id:0})</code></pre><h5 id="逻辑操作符"><a href="#逻辑操作符" class="headerlink" title="逻辑操作符"></a><strong>逻辑操作符</strong></h5><pre><code>$and    #逻辑与#年龄小于19且性别是男db.class0.find({age:{$lt:19},sex:&apos;m&apos;},{_id:0})#年龄小于19且大于15db.class0.find({age:{$lt:19,$gt:15}},{_id:0})$and逻辑语法db.class0.find({$and:[{age:17},{name:&apos;Lei&apos;}]})$or        #逻辑或db.class0.find({$or:[{age:{$lt:22}},{name:&apos;wukong&apos;}]},{_id:0})db.class0.find({$or:[{age:{lt:18}},{age:{$gt:30}}]},{_id:0})$not    #逻辑非db.class0.find({age:{$not:{$eq:17}}},{_id:0})$nor    #既不也不db.class0.find({$nor:[{age:{$gt:18}},{sex:&apos;m&apos;}]},{_id:0})</code></pre><p><strong>条件混合</strong></p><ul><li>(年龄小于20 <strong>或者</strong> 姓名为Lei) <strong>并且</strong> 性别为女的人<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;$and:[&#123;$or:[&#123;age:&#123;$lt:20&#125;&#125;,&#123;name:&#39;Lily&#39;&#125;]&#125;,&#123;sex:&#39;w&#39;&#125;]&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="数组查找"><a href="#数组查找" class="headerlink" title="数组查找"></a><strong>数组查找</strong></h4><pre><code>#查看数组中包含某一项的db.class1.find({hobby:&apos;python&apos;},{_id:0})$all#查找一个数组中同时包含多项的文档db.class1.find({hobby:{$all:[&apos;python&apos;,&apos;mongodb&apos;]}},{_id:0})$size#查找数组元素个数为指定个数的文档db.class1.find({hobby:{$size:3}},{_id:0})#数组切片显示,对数组进行切片显示$slicedb.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:2}})             #显示前两项db.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:[1,2]}})        #显示后两项</code></pre><h4 id="其它查找方法"><a href="#其它查找方法" class="headerlink" title="其它查找方法"></a><strong>其它查找方法</strong></h4><pre><code>#判断一个域是否存在$existse.g.    查找存在hobby域的文档db.class1.find({hobby:{$exists:true}},{_id:0})e.g.    查找不存在sex域的文档db.class1.find({sex:{$exists:false}},{_id:0})$mod#做除数余数查找e.g        查找age域 被2除余1的文档,就是单数db.class1.find({age:{$mod:[2,1]}},{_id:0})e.g        查找age域 被3除余0的文档,整除db.class1.find({age:{$mod:[3,0]}},{_id:0})$type#查找指定数据类型的文档#monggodb为每种数据类型作了编号,对照如下官方文档https://docs.mongodb.com/manual/reference/operator/query/type/index.htmle.g.    查找age域为整数类型db.class1.find({age:{$type:1}},{_id:0})e.g.    查找name域为字符串类型db.class1.find({name:{$type:2}},{_id:0})e.g.    查找hobby域为数组类型db.class1.find({hobby:{$type:4}},{_id:0])</code></pre><h4 id="进一步的信息筛选"><a href="#进一步的信息筛选" class="headerlink" title="进一步的信息筛选"></a><strong>进一步的信息筛选</strong></h4><p><strong>distinct()函数</strong> 去重</p><ul><li>功能: 查看一个集合中某个域值的覆盖范围  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g. 查看集合中hobby域的值都有哪些</span><br><span class="line">db.class1.distinct(&#39;hobby&#39;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>pretty(n)</strong> 格式化显示</p><ul><li>功能: 将查询结果格式化显示  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find().pretty()</span><br></pre></td></tr></table></figure></li></ul><p><strong>limit(n)</strong> 限制</p><ul><li>功能: 查询结果显示前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.查询结果显示前3个</span><br><span class="line">db.class1.find(&#123;&#125;&#123;_id:0&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>skip(n)</strong></p><ul><li>功能: 查询结果跳过前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.显示时跳过前3条</span><br><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).skip(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>count()</strong> 计数</p><ul><li>功能: 对查找结果计数统计  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.统计sex字段为m的文档数量</span><br><span class="line">db.class0.find(&#123;sex:&#39;m&#39;&#125;,&#123;_id:0&#125;).count()</span><br></pre></td></tr></table></figure></li></ul><p><strong>sort({键:1/-1})</strong></p><ul><li>功能: 对查找结果排序</li><li>1表示按照升序排列, -1表示按照降序排列  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.对查询结果按照年龄升序排列</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;)</span><br><span class="line"></span><br><span class="line">e.g复合排序: 当第一排序项相同的时候,按照第二排序项排序</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1,name:-1&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="函数的连续使用"><a href="#函数的连续使用" class="headerlink" title="函数的连续使用"></a><strong>函数的连续使用</strong></h4><ul><li>获取集合中年龄最小的前3个文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MongoDB删除文档操作</title>
+      <link href="/2018/03/13/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%E6%93%8D%E4%BD%9C/"/>
+      <url>/2018/03/13/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MySQL和MongoDB对比删除操作"><a href="#MySQL和MongoDB对比删除操作" class="headerlink" title="MySQL和MongoDB对比删除操作"></a><strong>MySQL和MongoDB对比删除操作</strong></h4><ul><li><strong>MySQL</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from tableName where ...</span><br></pre></td></tr></table></figure></li><li><strong>MongoDB</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.collectionName.remove(query,justOne)</span><br></pre></td></tr></table></figure></li><li>功能: 删除指定的文档</li><li>参数:<ul><li>query: 筛选要删除的文档,类似where子句,同法同查找操作</li><li>justOne: 布尔值 , 默认为 false 表示删除所有筛选数据,如果赋值为true 则表示只删除第一条符合的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.删除age域不存在 或者 age域大于100的文档</span><br><span class="line">db.class0.remove(&#123;$or:[&#123;age:&#123;$exists:false&#125;&#125;,&#123;age:&#123;$gt:100&#125;&#125;]&#125;)</span><br><span class="line"></span><br><span class="line">e.g.删除第一个符合条件的文档</span><br><span class="line">db.class0.remove(&#123;sex:&#123;exists:false&#125;&#125;,true)</span><br></pre></td></tr></table></figure></li></ul></li></ul><p><strong>删除集合中所有文档</strong></p><pre><code>db.collectionName.remove({})e.g.db.class1.remove({})</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>非关系型数据库MongoDB简介</title>
+      <link href="/2018/03/12/MongoDB/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MongoDB%E7%AE%80%E4%BB%8B/"/>
+      <url>/2018/03/12/MongoDB/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93MongoDB%E7%AE%80%E4%BB%8B/</url>
+      
+        <content type="html"><![CDATA[<h4 id="非关系型数据库-NoSQL-–-gt-Not-only-SQL"><a href="#非关系型数据库-NoSQL-–-gt-Not-only-SQL" class="headerlink" title="非关系型数据库 (NoSQL –&gt; Not only SQL)"></a><strong>非关系型数据库</strong> (NoSQL –&gt; Not only SQL)</h4><ul><li><p><strong>优点</strong>:</p><ul><li>高并发,大数据读写能力强</li><li>支持分布式,容易扩展</li><li>弱化了数据结构,降低了数据的一致性</li></ul></li><li><p><strong>缺点</strong></p><ul><li>通用性差,没有像SQL那样一致的操作</li><li>操作灵活,容易混乱</li><li>没有join,有些NoSQL没有事务支持等操作</li></ul></li></ul><h4 id="什么场景需要使用到NoSQL"><a href="#什么场景需要使用到NoSQL" class="headerlink" title="什么场景需要使用到NoSQL?"></a><strong>什么场景需要使用到NoSQL?</strong></h4><ul><li>数据一致性要求低</li><li>数据库并发处理要求高</li><li>数据库设计时对大小的估算不确定,需要分布拓展</li><li>给定的数据比较容易建立起NoSQL的模型</li></ul><h4 id="NoSQL分类"><a href="#NoSQL分类" class="headerlink" title="NoSQL分类"></a><strong>NoSQL分类</strong></h4><ol><li><p>键值型数据库</p><ul><li>Redis, Oracle, BDB, tokyo</li></ul></li><li><p>列存储数据库</p><ul><li>HBase</li></ul></li><li><p>文档型数据库</p><ul><li>MongoDB, CouchDB</li></ul></li><li><p>图形数据库</p></li></ol><blockquote><h4 id="MongoDB简介-非关系型-文档型数据库"><a href="#MongoDB简介-非关系型-文档型数据库" class="headerlink" title="MongoDB简介 (非关系型,文档型数据库)"></a><strong>MongoDB简介</strong> (非关系型,文档型数据库)</h4></blockquote><ol><li>MongoDB 是由C++语言编写的,是一个基于分布式文件存储的开源数据库管理系统.</li><li>支持非常丰富的增删改查数据操作,被评为最像关系型数据库的非关系型数据库</li><li>支持非常丰富的数据类型</li><li>使用方便,便于部署,支持分布式,容易拓展</li><li>支持众多的编程语言接口(python,ruby,c++,php…)</li></ol><p><strong>组成结构</strong><br>键值对 —&gt; 文档 —&gt; 集合 —&gt; 数据库</p><h4 id="MongoDB-安装"><a href="#MongoDB-安装" class="headerlink" title="MongoDB 安装"></a><strong>MongoDB 安装</strong></h4><p><strong>linux自动安装</strong></p><pre><code>apt-get install mongodb#默认安装位置    /var/lib/mongodb/#配置文件        /etc/mongodb.conf#命令集            /usr/bin</code></pre><p><strong>手动安装</strong></p><pre><code>#下载解压wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-4.2.8.tgztar -zxvf mongodb-linux-x86_64-debian92-4.2.8.tgzmv mongodb-linux-x86_64-debian92-4.2.8.tgz /usr/local/mongodb4#将文件夹下的命令集目录(bin目录)添加到环境变量PATH=$PATH:/usr/local/mongodb4/binexport PATH将以上两句写在 /etc/rc.local重启系统</code></pre><ul><li><code>mongodb</code> 命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mongod --dbpath 目录路径</span><br><span class="line">#设置数据库存储位置</span><br><span class="line"></span><br><span class="line">mongod --port 8888</span><br><span class="line">#设置端口号(默认27017)</span><br></pre></td></tr></table></figure></li><li><code>mongo</code> 命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br><span class="line">#进入mongodb的交互shell界面用来操作数据库</span><br></pre></td></tr></table></figure><h4 id="mysql-和-mongodb-概念对比"><a href="#mysql-和-mongodb-概念对比" class="headerlink" title="mysql 和 mongodb 概念对比"></a><strong>mysql 和 mongodb 概念对比</strong></h4></li></ul><table><thead><tr><th align="center">mysql</th><th align="center">mongo</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">database</td><td align="center">database</td><td align="center">数据库</td></tr><tr><td align="center">table</td><td align="center">collection</td><td align="center">表/集合</td></tr><tr><td align="center">column</td><td align="center">field</td><td align="center">字段/域</td></tr><tr><td align="center">row</td><td align="center">document</td><td align="center">记录/文档</td></tr><tr><td align="center">index</td><td align="center">index</td><td align="center">索引</td></tr></tbody></table><h4 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a><strong>创建数据库</strong></h4><pre><code>use databasename#创建一个名为stu的数据库use stu</code></pre><ul><li>use实际功能是表示选择使用哪个数据库,当这个数据库不存在时即表示创建该数据库</li><li>使用use后数据库并不会马上被创建,而是需要插入数据后数据库才会被创建</li></ul><p><strong>数据库名称规则</strong></p><ul><li>原则上是任意满足以下几条的utf-8字符<ol><li>不能是空字符,不能含有空格’ ‘,点 ‘.’ ‘/‘ ‘&#39; ‘\0’</li><li>习惯上使用英文小写</li><li>长度不超过64字节</li><li>不能使用 admin local config 这样的名字</li></ol></li></ul><h5 id="查看数据库"><a href="#查看数据库" class="headerlink" title="查看数据库"></a><strong>查看数据库</strong></h5><pre><code>show dbs#mongo系统库admin: 存储用户local: 存储本地数据config: 存储分片配置信息</code></pre><ul><li><strong>db</strong> : mongo系统全局变量,代表你当前正在使用的数据库<ul><li>db 默认为test 如果插入数据即创建test数据库</li></ul></li></ul><h4 id="数据库的备份和恢复"><a href="#数据库的备份和恢复" class="headerlink" title="数据库的备份和恢复"></a><strong>数据库的备份和恢复</strong></h4><ul><li>备份  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongodump -h dbhost -d dbname -o dbdir</span><br><span class="line">mongodump -h 127.0.0.1 -d stu -o stu</span><br><span class="line">#将本机下 stu 数据库备份到 当前目录的stu文件夹中,会在stu文件夹中自动生成一个stu文件夹则为备份文件</span><br></pre></td></tr></table></figure></li><li>恢复  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongorestore -h &lt;dbhost&gt;:&lt;port&gt; -d dbname &lt;path&gt;</span><br><span class="line">mongorestore -h 127.0.0.1:27017 -d test stu&#x2F;stu</span><br><span class="line">#将stu文件夹下的备份文件stu恢复到本机的test数据库</span><br></pre></td></tr></table></figure></li></ul><h4 id="数据库的监测命令"><a href="#数据库的监测命令" class="headerlink" title="数据库的监测命令"></a><strong>数据库的监测命令</strong></h4><p><strong>mongostat</strong></p><ul><li>insert query update delete        #每秒增查改删的次数</li><li>getmore command                 #每秒运行命令次数</li><li>dirty used flusher                #每秒操作磁盘的次数</li><li>vsize res                        #使用虚拟内存和物理内存</li></ul><p><strong>mongotop</strong></p><ul><li>监测每个数据库的读写时长</li></ul><table><thead><tr><th align="center">ns</th><th align="center">total</th><th align="center">read</th><th align="center">write</th></tr></thead><tbody><tr><td align="center">数据集合</td><td align="center">总时长</td><td align="center">读时长</td><td align="center">写时长</td></tr></tbody></table><h4 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a><strong>删除数据库</strong></h4><pre><code>db.dropDatabase()#删除db所代表的数据库</code></pre><h4 id="集合-表-的创建"><a href="#集合-表-的创建" class="headerlink" title="集合(表)的创建"></a>集合(表)的创建</h4><pre><code>db.createCollection(collection_name)db.createCollection(&quot;class2&quot;)#在当前数据库下创建一个名字为class2的集合</code></pre><p><strong>查看数据库中的集合</strong>    </p><pre><code>show collectionsshow tables</code></pre><ul><li>集合的命名规则:<ol><li>不能为空字符串,不能有’\0’</li><li>不能以system.开头,这是系统集合的保留前缀</li><li>不能和保留字重复</li></ol></li></ul><p><strong>创建集合2</strong></p><pre><code>db.collectionName.insert()#当向一个集合中插入文档时,如果该集合不存在则自动创建db.cat.insert({a:1})#如果cat不存在则会创建cat集合并插入该数据</code></pre><h5 id="删除集合"><a href="#删除集合" class="headerlink" title="删除集合"></a><strong>删除集合</strong></h5><pre><code>db.collectionName.drop()db.cat.drop()#删除cat集合</code></pre><h5 id="集合重命名"><a href="#集合重命名" class="headerlink" title="集合重命名"></a><strong>集合重命名</strong></h5><pre><code>db.collectionName.renameCollection(&apos;new_name&apos;)e.g.db.class2.renameCollection(&apos;class0&apos;)#将class2重命名为class0</code></pre><h4 id="文档-记录"><a href="#文档-记录" class="headerlink" title="文档 (记录)"></a><strong>文档</strong> (记录)</h4><ul><li><p>键值对组成文档 —&gt; 类似Python中的字典</p></li><li><p>bson —&gt; json —&gt; JavaScrip</p></li><li><p>mongodb 中文档的数据组织形式为bson格式,类似Python的字典,也是由键值对构成</p></li><li><p>文档中 <strong>键(域/字段)</strong> 的命名规则:  </p><ol><li>utf-8格式字符串</li><li>不能有\0,习惯上不用 <code>. 和 $</code></li><li>以_开头的多为保留键,自定义时一般不以_开头</li></ol></li><li><p><strong>注意</strong> </p><ul><li>文档键值对是有序的</li><li>mongodb中严格区分大小写</li></ul></li><li><p><strong>值(记录内容)</strong>: mongodb的支持数据类型</p></li><li><p>支持的数据类型</p></li></ul><table><thead><tr><th align="center">类型</th><th align="center">值</th></tr></thead><tbody><tr><td align="center">整型</td><td align="center">整数</td></tr><tr><td align="center">布尔类型</td><td align="center">true false</td></tr><tr><td align="center">浮点型</td><td align="center">小数</td></tr><tr><td align="center">Arrays</td><td align="center">数组类型[1,2,3]</td></tr><tr><td align="center">Timestamp</td><td align="center">时间戳</td></tr><tr><td align="center">Date</td><td align="center">时间日期</td></tr><tr><td align="center">Object</td><td align="center">对象/内部文档</td></tr><tr><td align="center">Null</td><td align="center">空值</td></tr><tr><td align="center">Symbol</td><td align="center">特殊字符</td></tr><tr><td align="center">String</td><td align="center">字符串</td></tr><tr><td align="center">Binary data</td><td align="center">二进制字串</td></tr><tr><td align="center">code</td><td align="center">代码</td></tr><tr><td align="center">regex</td><td align="center">正则表达式</td></tr><tr><td align="center">ObjectId</td><td align="center">ObjectId()字串</td></tr></tbody></table><ul><li>ObjectId : 系统自动为每个文档生成 的不重复的主键<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">键名称: _id</span><br><span class="line">值:ObjectId(&quot;随机24位16进制数&quot;)</span><br><span class="line"></span><br><span class="line">24位16进制数</span><br><span class="line">前8位 文档创建时间</span><br><span class="line">6位 机器ID</span><br><span class="line">4位 进程ID</span><br><span class="line">6位 计数器</span><br></pre></td></tr></table></figure></li></ul><p><strong>集合中文档特点</strong></p><ul><li>集合中的文档域不一定相同 -&gt; 不保证数据一致性</li><li>集合中的文档结构不一定相同</li></ul><p><strong>集合设计原则</strong></p><ul><li>集合中的文档尽可能描述的数据类似</li><li>同一类文档放在相同的集合,不同的文档分集合存放</li><li>层次的包裹不宜太多</li></ul><h4 id="插入文档"><a href="#插入文档" class="headerlink" title="插入文档"></a><strong>插入文档</strong></h4><pre><code>db.collectionName.insert()e.g.db.class0.insert({name:&apos;Lucy&apos;,age:16,sex:&apos;w&apos;})#当作为文档插入时键可以不加引号</code></pre><p><strong>查看插入结果</strong></p><pre><code>db.class0.find()</code></pre><p><strong>插入多条文档</strong></p><pre><code>db.collectionName.insert([{},{},{}])e.g.db.class0.insert([{name:&apos;阿猫&apos;,age:22},{name:&apos;阿狗&apos;,age:23},{name:&apos;宝宝&apos;,age:3}])</code></pre><ul><li><code>_id</code> 为系统自动添加主键,如果自己写 <code>_id</code>域则会使用自己写的值,但是该值仍不允许重复</li></ul><p><strong>save 插入数据</strong></p><pre><code>db.collectionName.save()e.g.db.class0.save({name:&apos;bajie&apos;,age:17,sex:&apos;m&apos;})db.class0.save({_id:2,name:&apos;bajie&apos;,age:17,sex:&apos;m&apos;})db.class0.save({_id:2,name:&apos;wukong&apos;,age:17,sex:&apos;m&apos;})</code></pre><ul><li>在不加_id时使用同 insert</li><li>如果使用save插入的时候加了_id,则如果_id值不存在则正常插入,如果该值存在,则修改原来内容</li><li>save无法一次插入多个文档</li></ul><h4 id="获取集合对象"><a href="#获取集合对象" class="headerlink" title="获取集合对象"></a><strong>获取集合对象</strong></h4><pre><code>db.getCollection(&apos;collection_name&apos;)e.g.db.getCollection(&quot;class0&quot;).insert({name:&apos;wukong&apos;,age:1700})</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+            <tag> nosql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Python编程使用MySQL</title>
       <link href="/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/"/>
       <url>/2018/03/10/MySQL/Python%E7%BC%96%E7%A8%8B%E4%BD%BF%E7%94%A8MySQL/</url>
@@ -192,17 +275,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> MSF </tag>
+            <tag> backdoor-factory </tag>
             
             <tag> msfvenom </tag>
+            
+            <tag> MSF </tag>
+            
+            <tag> bdfproxy </tag>
             
             <tag> payload </tag>
             
             <tag> python </tag>
-            
-            <tag> backdoor-factory </tag>
-            
-            <tag> bdfproxy </tag>
             
             <tag> arpspoof </tag>
             
@@ -235,11 +318,11 @@
             
             <tag> msfvenom </tag>
             
-            <tag> Veil-Framework </tag>
-            
             <tag> payload </tag>
             
             <tag> python </tag>
+            
+            <tag> Veil-Framework </tag>
             
             <tag> passing-the-hash </tag>
             
@@ -274,17 +357,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> MSF </tag>
-            
             <tag> msfvenom </tag>
             
-            <tag> Veil-Framework </tag>
-            
-            <tag> Hyperion </tag>
+            <tag> MSF </tag>
             
             <tag> payload </tag>
             
             <tag> python </tag>
+            
+            <tag> Veil-Framework </tag>
+            
+            <tag> Hyperion </tag>
             
             <tag> Veil-evasion </tag>
             
@@ -315,9 +398,9 @@
             
             <tag> 免杀 </tag>
             
-            <tag> MSF </tag>
-            
             <tag> msfvenom </tag>
+            
+            <tag> MSF </tag>
             
             <tag> Hyperion </tag>
             
@@ -650,11 +733,11 @@
             
             <tag> MSF </tag>
             
-            <tag> meterpreter </tag>
-            
             <tag> metsvc </tag>
             
             <tag> persistence </tag>
+            
+            <tag> meterpreter </tag>
             
             <tag> 后门持久化 </tag>
             
@@ -687,11 +770,11 @@
             
             <tag> MSF </tag>
             
+            <tag> meterpreter </tag>
+            
             <tag> dumplinks </tag>
             
             <tag> hosts编辑 </tag>
-            
-            <tag> meterpreter </tag>
             
             <tag> 迁移进程 </tag>
             
@@ -1195,9 +1278,9 @@
             
             <tag> Kali </tag>
             
-            <tag> Metasploit </tag>
-            
             <tag> ruby </tag>
+            
+            <tag> Metasploit </tag>
             
             <tag> postgresql </tag>
             
@@ -1916,9 +1999,9 @@
       
         <tags>
             
-            <tag> 802.11 </tag>
-            
             <tag> 无线数据帧 </tag>
+            
+            <tag> 802.11 </tag>
             
         </tags>
       
@@ -2217,13 +2300,13 @@
       
         <tags>
             
-            <tag> 离线密码破解 </tag>
-            
             <tag> John </tag>
             
             <tag> 彩虹表 </tag>
             
             <tag> Ophcrack </tag>
+            
+            <tag> 离线密码破解 </tag>
             
             <tag> Linux密码破解 </tag>
             
@@ -2289,19 +2372,19 @@
       
         <tags>
             
-            <tag> mimikatz </tag>
-            
             <tag> kali </tag>
             
+            <tag> mimikatz </tag>
+            
             <tag> nc </tag>
+            
+            <tag> 离线密码破解 </tag>
+            
+            <tag> hashcat </tag>
             
             <tag> hashid </tag>
             
             <tag> hash‐identifier </tag>
-            
-            <tag> hashcat </tag>
-            
-            <tag> 离线密码破解 </tag>
             
         </tags>
       
@@ -2330,9 +2413,9 @@
       
         <tags>
             
-            <tag> hashcat </tag>
-            
             <tag> 彩虹表 </tag>
+            
+            <tag> hashcat </tag>
             
             <tag> GPU </tag>
             
@@ -2365,9 +2448,9 @@
       
         <tags>
             
-            <tag> medusa </tag>
-            
             <tag> 在线密码破解 </tag>
+            
+            <tag> medusa </tag>
             
         </tags>
       
@@ -2429,9 +2512,9 @@
             
             <tag> Linux密码破解 </tag>
             
-            <tag> 在线密码破解 </tag>
-            
             <tag> hydra </tag>
+            
+            <tag> 在线密码破解 </tag>
             
         </tags>
       
@@ -2747,9 +2830,9 @@
             
             <tag> XSS </tag>
             
-            <tag> Xsser </tag>
-            
             <tag> 跨站脚本漏洞 </tag>
+            
+            <tag> Xsser </tag>
             
         </tags>
       
@@ -3698,6 +3781,43 @@
     
     
     <entry>
+      <title>WAF扫描识别及负载均衡识别</title>
+      <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
+      <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a><strong>防火墙识别</strong></h3><p>通过检查回包,可能识别端口是否经过防火墙过滤<br>设备多种多样,结果存在一定误差</p></blockquote><table><thead><tr><th align="center">No.</th><th align="center">Send</th><th align="center">Response</th><th align="left">Type</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">syn</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">1</td><td align="center">ack</td><td align="center">rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">ack</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">3</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">3</td><td align="center">ack</td><td align="center">rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">4</td><td align="center">syn</td><td align="center">No</td><td align="left">Closed</td></tr><tr><td align="center">4</td><td align="center">ack</td><td align="center">No</td><td align="left">Closed</td></tr></tbody></table><h4 id="python–scapy-firewall-detect-py-1-1-1-1-443"><a href="#python–scapy-firewall-detect-py-1-1-1-1-443" class="headerlink" title="python–scapy ./firewall_detect.py 1.1.1.1 443"></a><strong>python–scapy</strong> <code>./firewall_detect.py 1.1.1.1 443</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">3</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage - ./firewall_detect.py [Target IP] [Target Port]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example - ./firewall_detect.py 1.1.1.1 443"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example will determine if filtering exists on port 443 of host 10.0.0.5"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">port=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'A'</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">"S"</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> (ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is either unstatefully filtered or host is down"</span></span><br><span class="line"><span class="keyword">elif</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">or</span> (SYN_response==<span class="literal">None</span>)) <span class="keyword">and</span> <span class="keyword">not</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>)):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Stateful filtering in place"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">18</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and open"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">20</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and closed"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Unable to determine if the port is filtered"</span></span><br></pre></td></tr></table></figure><h4 id="Nmap有系列防火墙过滤检测功能"><a href="#Nmap有系列防火墙过滤检测功能" class="headerlink" title="Nmap有系列防火墙过滤检测功能"></a><strong>Nmap</strong>有系列防火墙过滤检测功能</h4><pre><code>nmap -sA 192.168.254.254 -p 22</code></pre><blockquote><h4 id="负载均衡识别"><a href="#负载均衡识别" class="headerlink" title="负载均衡识别"></a><strong>负载均衡识别</strong></h4><p>广域网负载均衡<br>    DNS轮询<br>    一个域名解析多个A纪录<br>    智能DNS<br>服务器负载均衡<br>HTTP-Loadbalancing<br>    Nginx<br>    Apache</p></blockquote><h4 id="lbd"><a href="#lbd" class="headerlink" title="lbd"></a><strong>lbd</strong></h4><pre><code>lbd www.baidu.comlbd mail.163.com</code></pre><blockquote><h3 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a><strong>WAF识别</strong></h3></blockquote><h4 id="wafw00f-web应用防火墙识别"><a href="#wafw00f-web应用防火墙识别" class="headerlink" title="wafw00f web应用防火墙识别"></a><strong>wafw00f</strong> web应用防火墙识别</h4><pre><code>wafw00f -lwafw00f http://google.com</code></pre><h3 id="nmap-web应用防火墙识别"><a href="#nmap-web应用防火墙识别" class="headerlink" title="nmap web应用防火墙识别"></a><strong>nmap</strong> web应用防火墙识别</h3><pre><code>nmap google.com --script=http-waf-detect.nse</code></pre><h4 id="nmap所有参数-man-nmap"><a href="#nmap所有参数-man-nmap" class="headerlink" title="nmap所有参数 man nmap"></a><strong>nmap所有参数 man nmap</strong></h4><pre><code>-iL filename                   从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段-iR hostnum                    随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描--exclude host1[, host2]      从扫描任务中需要排除的主机--exculdefile exclude_file     排除文件中的IP,格式和-iL指定扫描文件的格式相同</code></pre><p><strong>主机发现</strong></p><pre><code>-sL                     仅仅是显示,扫描的IP数目,不会进行任何扫描-sn                     ping扫描,即主机发现-Pn                     不检测主机存活-PS/PA/PU/PY[portlist]  TCP SYN Ping/TCP ACK Ping/UDP Ping发现-PE/PP/PM               使用ICMP echo, timestamp and netmask 请求包发现主机-PO[prococol list]      使用IP协议包探测对方主机是否开启-n/-R                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析--dns-servers 8.8.8.8     根据DNS服务地址扫描--system-dns            使用系统在DNS扫描--traceroute            路由追踪</code></pre><p><strong>扫描技巧</strong></p><pre><code>-sS/sT/sA/sW/sM                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描-sU                             UDP扫描-sN/sF/sX                       TCP Null，FIN，and Xmas扫描--scanflags                     自定义TCP包中的flags-sI zombie host[:probeport]     Idlescan-sY/sZ                          SCTP INIT/COOKIE-ECHO 扫描-sO                             使用IP protocol 扫描确定目标机支持的协议类型-b “FTP relay host”             使用FTP bounce scan</code></pre><p><strong>指定端口和扫描顺序</strong></p><pre><code>-p                      特定的端口 -p80,443 或者 -p1-65535-p U:PORT               扫描udp的某个端口, -p U:53-F                      快速扫描模式,比默认的扫描端口还少-r                      不随机扫描端口,默认是随机扫描的--top-ports &quot;number&quot;    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个--port-ratio &quot;ratio&quot;    扫描指定频率以上的端口</code></pre><p><strong>服务版本识别</strong></p><pre><code>-sV                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测--version-intensity &quot;level&quot;     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7--version-light                 打开轻量级模式,为--version-intensity 2的别名--version-all                   尝试所有探测,为--version-intensity 9的别名--version-trace                 显示出详细的版本侦测过程信息</code></pre><p><strong>脚本扫描</strong></p><pre><code>-sC　　根据端口识别的服务,调用默认脚本--script=”Lua scripts”　　调用的脚本名--script-args=n1=v1,[n2=v2]　　调用的脚本传递的参数--script-args-file=filename　　使用文本传递参数--script-trace　　显示所有发送和接收到的数据--script-updatedb　　更新脚本的数据库--script-help=”Lua script”　　显示指定脚本的帮助</code></pre><p><strong>OS识别</strong></p><pre><code>-O              启用操作系统检测,-A来同时启用操作系统检测和版本检测--osscan-limit 　　 针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)--osscan-guess  　　推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配</code></pre><p><strong>防火墙/IDS躲避和哄骗</strong></p><pre><code>-f; --mtu value                 指定使用分片、指定数据包的MTU.-D decoy1,decoy2,ME             使用诱饵隐蔽扫描-S IP-ADDRESS                   源地址欺骗-e interface                    使用指定的接口-g/ --source-port PROTNUM       使用指定源端口--proxies url1,[url2],...       使用HTTP或者SOCKS4的代理--data-length NUM               填充随机数据让数据包长度达到NUM--ip-options OPTIONS            使用指定的IP选项来发送数据包--ttl VALUE                     设置IP time-to-live域--spoof-mac ADDR/PREFIX/VEBDOR  MAC地址伪装--badsum                        使用错误的checksum来发送数据包</code></pre><p><strong>Nmap 输出</strong></p><pre><code>-oN                     将标准输出直接写入指定的文件-oX                     输出xml文件-oS                     将所有的输出都改为大写-oG                     输出便于通过bash或者perl处理的格式,非xml-oA BASENAME            可将扫描结果以标准格式、XML格式和Grep格式一次性输出-v                      提高输出信息的详细度-d level                设置debug级别,最高是9--reason                显示端口处于带确认状态的原因--open                  只输出端口状态为open的端口--packet-trace          显示所有发送或者接收到的数据包--iflist                显示路由信息和接口,便于调试--log-errors            把日志等级为errors/warings的日志输出--append-output         追加到指定的文件--resume FILENAME       恢复已停止的扫描--stylesheet PATH/URL   设置XSL样式表，转换XML输出--webxml                从namp.org得到XML的样式--no-sytlesheet         忽略XML声明的XSL样式表</code></pre><p><strong>时间性能优化</strong></p><pre><code>-T 　　时间优化(0-5)(paranoid|sneaky|polite|normal|aggressive|insane)-F　　快速扫描。--max-retries　　调整重传次数。--min-hostgroup/--max-hostgroup size 　　设置组的大小--min-parallelism/--max-parellelism time　　指定时间内的探针数--min-rtt-timrout/--max-rtt-timrout/initial-rtt-timrouttime 　　指定探针超时--scan-delay/-max-scan-delay time 　　指定探针之间的时延--max-retries tries　　指定探针重传转发数--host-timeout time　　设置扫描主机的最大时间--defeat-rst-ratelimit　　设置rst的限制</code></pre><p><strong>其他nmap选项</strong></p><pre><code>-6                      开启IPv6-A                      OS识别,版本探测,脚本扫描和traceroute--datedir DIRNAME       说明用户Nmap数据文件位置--send-eth / --send-ip  使用原以太网帧发送/在原IP层发送--privileged            假定用户具有全部权限--unprovoleged          假定用户不具有全部权限,创建原始套接字需要root权限-V                      打印版本信息-h                      输出帮助</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 信息收集 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> nmap </tag>
+            
+            <tag> lbd </tag>
+            
+            <tag> WAF </tag>
+            
+            <tag> wafw00f </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>SMB扫描及SMTP扫描</title>
       <link href="/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/"/>
       <url>/2013/03/23/Information_Gethering/SMB%E6%89%AB%E6%8F%8F%E5%8F%8ASMTP%E6%89%AB%E6%8F%8F/</url>
@@ -3729,43 +3849,6 @@
             <tag> nbtscan </tag>
             
             <tag> enum4linux </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>WAF扫描识别及负载均衡识别</title>
-      <link href="/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/"/>
-      <url>/2013/03/23/Information_Gethering/WAF%E6%89%AB%E6%8F%8F%E8%AF%86%E5%88%AB%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%86%E5%88%AB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a><strong>防火墙识别</strong></h3><p>通过检查回包,可能识别端口是否经过防火墙过滤<br>设备多种多样,结果存在一定误差</p></blockquote><table><thead><tr><th align="center">No.</th><th align="center">Send</th><th align="center">Response</th><th align="left">Type</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">syn</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">1</td><td align="center">ack</td><td align="center">rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Filtered</td></tr><tr><td align="center">2</td><td align="center">ack</td><td align="center">No</td><td align="left">Filtered</td></tr><tr><td align="center">3</td><td align="center">syn</td><td align="center">syn+ack/syn+rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">3</td><td align="center">ack</td><td align="center">rst</td><td align="left">Unfiltered/Open</td></tr><tr><td align="center">4</td><td align="center">syn</td><td align="center">No</td><td align="left">Closed</td></tr><tr><td align="center">4</td><td align="center">ack</td><td align="center">No</td><td align="left">Closed</td></tr></tbody></table><h4 id="python–scapy-firewall-detect-py-1-1-1-1-443"><a href="#python–scapy-firewall-detect-py-1-1-1-1-443" class="headerlink" title="python–scapy ./firewall_detect.py 1.1.1.1 443"></a><strong>python–scapy</strong> <code>./firewall_detect.py 1.1.1.1 443</code></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">"scapy.runtime"</span>).setLevel(logging.ERROR)</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv)!=<span class="number">3</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Usage - ./firewall_detect.py [Target IP] [Target Port]"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example - ./firewall_detect.py 1.1.1.1 443"</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Example will determine if filtering exists on port 443 of host 10.0.0.5"</span></span><br><span class="line">sys.exit()</span><br><span class="line"></span><br><span class="line">ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">port=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">ACK_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'A'</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line">SYN_response=sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">"S"</span>),timeout=<span class="number">1</span>,verbose=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> (ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is either unstatefully filtered or host is down"</span></span><br><span class="line"><span class="keyword">elif</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">or</span> (SYN_response==<span class="literal">None</span>)) <span class="keyword">and</span> <span class="keyword">not</span> ((ACK_response==<span class="literal">None</span>) <span class="keyword">and</span> (SYN_response==<span class="literal">None</span>)):</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Stateful filtering in place"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">18</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and open"</span></span><br><span class="line"><span class="keyword">elif</span> int(SYN_response[TCP].flags)==<span class="number">20</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Port is unfiltered and closed"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Unable to determine if the port is filtered"</span></span><br></pre></td></tr></table></figure><h4 id="Nmap有系列防火墙过滤检测功能"><a href="#Nmap有系列防火墙过滤检测功能" class="headerlink" title="Nmap有系列防火墙过滤检测功能"></a><strong>Nmap</strong>有系列防火墙过滤检测功能</h4><pre><code>nmap -sA 192.168.254.254 -p 22</code></pre><blockquote><h4 id="负载均衡识别"><a href="#负载均衡识别" class="headerlink" title="负载均衡识别"></a><strong>负载均衡识别</strong></h4><p>广域网负载均衡<br>    DNS轮询<br>    一个域名解析多个A纪录<br>    智能DNS<br>服务器负载均衡<br>HTTP-Loadbalancing<br>    Nginx<br>    Apache</p></blockquote><h4 id="lbd"><a href="#lbd" class="headerlink" title="lbd"></a><strong>lbd</strong></h4><pre><code>lbd www.baidu.comlbd mail.163.com</code></pre><blockquote><h3 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a><strong>WAF识别</strong></h3></blockquote><h4 id="wafw00f-web应用防火墙识别"><a href="#wafw00f-web应用防火墙识别" class="headerlink" title="wafw00f web应用防火墙识别"></a><strong>wafw00f</strong> web应用防火墙识别</h4><pre><code>wafw00f -lwafw00f http://google.com</code></pre><h3 id="nmap-web应用防火墙识别"><a href="#nmap-web应用防火墙识别" class="headerlink" title="nmap web应用防火墙识别"></a><strong>nmap</strong> web应用防火墙识别</h3><pre><code>nmap google.com --script=http-waf-detect.nse</code></pre><h4 id="nmap所有参数-man-nmap"><a href="#nmap所有参数-man-nmap" class="headerlink" title="nmap所有参数 man nmap"></a><strong>nmap所有参数 man nmap</strong></h4><pre><code>-iL filename                   从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段-iR hostnum                    随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描--exclude host1[, host2]      从扫描任务中需要排除的主机--exculdefile exclude_file     排除文件中的IP,格式和-iL指定扫描文件的格式相同</code></pre><p><strong>主机发现</strong></p><pre><code>-sL                     仅仅是显示,扫描的IP数目,不会进行任何扫描-sn                     ping扫描,即主机发现-Pn                     不检测主机存活-PS/PA/PU/PY[portlist]  TCP SYN Ping/TCP ACK Ping/UDP Ping发现-PE/PP/PM               使用ICMP echo, timestamp and netmask 请求包发现主机-PO[prococol list]      使用IP协议包探测对方主机是否开启-n/-R                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析--dns-servers 8.8.8.8     根据DNS服务地址扫描--system-dns            使用系统在DNS扫描--traceroute            路由追踪</code></pre><p><strong>扫描技巧</strong></p><pre><code>-sS/sT/sA/sW/sM                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描-sU                             UDP扫描-sN/sF/sX                       TCP Null，FIN，and Xmas扫描--scanflags                     自定义TCP包中的flags-sI zombie host[:probeport]     Idlescan-sY/sZ                          SCTP INIT/COOKIE-ECHO 扫描-sO                             使用IP protocol 扫描确定目标机支持的协议类型-b “FTP relay host”             使用FTP bounce scan</code></pre><p><strong>指定端口和扫描顺序</strong></p><pre><code>-p                      特定的端口 -p80,443 或者 -p1-65535-p U:PORT               扫描udp的某个端口, -p U:53-F                      快速扫描模式,比默认的扫描端口还少-r                      不随机扫描端口,默认是随机扫描的--top-ports &quot;number&quot;    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个--port-ratio &quot;ratio&quot;    扫描指定频率以上的端口</code></pre><p><strong>服务版本识别</strong></p><pre><code>-sV                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测--version-intensity &quot;level&quot;     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7--version-light                 打开轻量级模式,为--version-intensity 2的别名--version-all                   尝试所有探测,为--version-intensity 9的别名--version-trace                 显示出详细的版本侦测过程信息</code></pre><p><strong>脚本扫描</strong></p><pre><code>-sC　　根据端口识别的服务,调用默认脚本--script=”Lua scripts”　　调用的脚本名--script-args=n1=v1,[n2=v2]　　调用的脚本传递的参数--script-args-file=filename　　使用文本传递参数--script-trace　　显示所有发送和接收到的数据--script-updatedb　　更新脚本的数据库--script-help=”Lua script”　　显示指定脚本的帮助</code></pre><p><strong>OS识别</strong></p><pre><code>-O              启用操作系统检测,-A来同时启用操作系统检测和版本检测--osscan-limit 　　 针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)--osscan-guess  　　推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配</code></pre><p><strong>防火墙/IDS躲避和哄骗</strong></p><pre><code>-f; --mtu value                 指定使用分片、指定数据包的MTU.-D decoy1,decoy2,ME             使用诱饵隐蔽扫描-S IP-ADDRESS                   源地址欺骗-e interface                    使用指定的接口-g/ --source-port PROTNUM       使用指定源端口--proxies url1,[url2],...       使用HTTP或者SOCKS4的代理--data-length NUM               填充随机数据让数据包长度达到NUM--ip-options OPTIONS            使用指定的IP选项来发送数据包--ttl VALUE                     设置IP time-to-live域--spoof-mac ADDR/PREFIX/VEBDOR  MAC地址伪装--badsum                        使用错误的checksum来发送数据包</code></pre><p><strong>Nmap 输出</strong></p><pre><code>-oN                     将标准输出直接写入指定的文件-oX                     输出xml文件-oS                     将所有的输出都改为大写-oG                     输出便于通过bash或者perl处理的格式,非xml-oA BASENAME            可将扫描结果以标准格式、XML格式和Grep格式一次性输出-v                      提高输出信息的详细度-d level                设置debug级别,最高是9--reason                显示端口处于带确认状态的原因--open                  只输出端口状态为open的端口--packet-trace          显示所有发送或者接收到的数据包--iflist                显示路由信息和接口,便于调试--log-errors            把日志等级为errors/warings的日志输出--append-output         追加到指定的文件--resume FILENAME       恢复已停止的扫描--stylesheet PATH/URL   设置XSL样式表，转换XML输出--webxml                从namp.org得到XML的样式--no-sytlesheet         忽略XML声明的XSL样式表</code></pre><p><strong>时间性能优化</strong></p><pre><code>-T 　　时间优化(0-5)(paranoid|sneaky|polite|normal|aggressive|insane)-F　　快速扫描。--max-retries　　调整重传次数。--min-hostgroup/--max-hostgroup size 　　设置组的大小--min-parallelism/--max-parellelism time　　指定时间内的探针数--min-rtt-timrout/--max-rtt-timrout/initial-rtt-timrouttime 　　指定探针超时--scan-delay/-max-scan-delay time 　　指定探针之间的时延--max-retries tries　　指定探针重传转发数--host-timeout time　　设置扫描主机的最大时间--defeat-rst-ratelimit　　设置rst的限制</code></pre><p><strong>其他nmap选项</strong></p><pre><code>-6                      开启IPv6-A                      OS识别,版本探测,脚本扫描和traceroute--datedir DIRNAME       说明用户Nmap数据文件位置--send-eth / --send-ip  使用原以太网帧发送/在原IP层发送--privileged            假定用户具有全部权限--unprovoleged          假定用户不具有全部权限,创建原始套接字需要root权限-V                      打印版本信息-h                      输出帮助</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 信息收集 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-            <tag> nmap </tag>
-            
-            <tag> lbd </tag>
-            
-            <tag> WAF </tag>
-            
-            <tag> wafw00f </tag>
-            
-            <tag> 负载均衡 </tag>
             
         </tags>
       
