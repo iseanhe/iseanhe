@@ -13,9 +13,9 @@
       
       <categories>
           
-          <category> python </category>
+          <category> Python </category>
           
-          <category> python运维 </category>
+          <category> Python运维 </category>
           
       </categories>
       
@@ -62,6 +62,155 @@
     
     
     <entry>
+      <title>通过Python操作MongoDB数据库</title>
+      <link href="/2018/03/18/MongoDB/%E9%80%9A%E8%BF%87Python%E6%93%8D%E4%BD%9CMongoDB%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+      <url>/2018/03/18/MongoDB/%E9%80%9A%E8%BF%87Python%E6%93%8D%E4%BD%9CMongoDB%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
+      
+        <content type="html"><![CDATA[<h4 id="Python操作MongoDB需要安装pymongo库"><a href="#Python操作MongoDB需要安装pymongo库" class="headerlink" title="Python操作MongoDB需要安装pymongo库"></a><strong>Python操作MongoDB需要安装pymongo库</strong></h4><ul><li><p><strong>安装</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install pymongo</span><br></pre></td></tr></table></figure></li><li><p><strong>操作步骤</strong></p><ol><li>创建mongo数据库的连接对象<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conn&#x3D;MongoClient(&#39;localhost&#39;,27017)</span><br></pre></td></tr></table></figure></li><li>生成数据库对象<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db&#x3D;conn.stu</span><br></pre></td></tr></table></figure></li><li>生成集合对象<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_set&#x3D;db.class0</span><br></pre></td></tr></table></figure></li><li>增删改查索引聚合操作<ul><li><strong>插入数据</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">my_set.insert()</span><br><span class="line">my_set.insert_many()</span><br><span class="line">my_set.insert_one()</span><br><span class="line">my_set.save()</span><br></pre></td></tr></table></figure></li><li><strong>删除数据</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_set.remove(&#123;&#125;,multi &#x3D; True)#multi默认为True 表示删除所有符合条件的数据,设置为False 表示只删除一条</span><br></pre></td></tr></table></figure></li><li><strong>查找数据</strong></li><li><code>find()</code></li><li>功能: 查找数据库内容</li><li>参数: 同mongo shell find()</li><li>返回值: 返回一个游标 –&gt; 迭代器<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cursor#可迭代对象属性函数</span><br><span class="line">next()</span><br><span class="line">count()</span><br><span class="line">limit()</span><br><span class="line">skip()</span><br><span class="line">sort()</span><br><span class="line">mongoshell --&gt;sort(&#123;&#39;name&#39;:1&#125;)</span><br><span class="line">pymongo--&gt;sort([(&#39;name&#39;,1)])</span><br></pre></td></tr></table></figure></li><li>进行排序时游标要确保没有被访问过</li><li><code>find_one()</code></li><li>返回值是一个字典</li><li><strong>修改操作</strong></li><li><code>update()</code><ul><li>参数和mongoshell 中 update相同</li><li><code>update_many()</code> : 匹配到多个文档时全部修改</li><li><code>update_one()</code> : 只修改匹配到的第一条文档</li><li>编程中mongo的数据类型null可以用Python中的None替代<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建连接对象</span></span><br><span class="line">conn=MongoClient(<span class="string">'localhost'</span>,<span class="number">27017</span>)</span><br><span class="line"><span class="comment">#创建数据库对象和集合对象</span></span><br><span class="line"><span class="comment">#db=conn.stu</span></span><br><span class="line"><span class="comment">#my_set=db.class3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># __getitem__  __setitem__</span></span><br><span class="line">db=conn[<span class="string">'stu'</span>]</span><br><span class="line">my_set=db[<span class="string">'class3'</span>]</span><br><span class="line"></span><br><span class="line">print(my_set)</span><br><span class="line">print(dir(my_set))</span><br><span class="line"></span><br><span class="line"><span class="comment">#插入数据</span></span><br><span class="line">my_set.insert(&#123;<span class="string">'name'</span>:<span class="string">'HelloKitty'</span>,<span class="string">'age'</span>:<span class="number">3</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除数据</span></span><br><span class="line">my_set.remove(&#123;<span class="string">'name'</span>:<span class="string">'HelloKitty'</span>&#125;,multi = <span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除所有文档</span></span><br><span class="line"><span class="comment">#my_set.remove()</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查找数据</span></span><br><span class="line">sursor=my_set.find(&#123;&#125;,&#123;<span class="string">'_id'</span>:<span class="number">0</span>&#125;)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor:</span><br><span class="line">print(i[<span class="string">'name'</span>],<span class="string">'----'</span>,i[<span class="string">'age'</span>])</span><br><span class="line"></span><br><span class="line">cls=db.class0</span><br><span class="line">cursor=cls.find(&#123;<span class="string">'gender'</span>:&#123;<span class="string">'$exists'</span>:<span class="literal">True</span>&#125;&#125;,&#123;<span class="string">'_id'</span>:<span class="number">0</span>&#125;)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor:</span><br><span class="line">print(i)</span><br><span class="line"></span><br><span class="line">print(cursor)</span><br><span class="line">print(cursor.next())</span><br><span class="line">print(cursor.count())</span><br><span class="line"><span class="comment">#for i in cursor.skip(2).limit(3):</span></span><br><span class="line"><span class="comment">#print(i)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> curser.sort([(<span class="string">'name'</span>,<span class="number">1</span>)]):</span><br><span class="line">print(i)</span><br><span class="line"></span><br><span class="line">dic=&#123;<span class="string">'$or'</span>:[&#123;<span class="string">'name'</span>:&#123;<span class="string">'$gt'</span>:<span class="string">'Tom'</span>&#125;&#125;,&#123;<span class="string">'gender'</span>:<span class="string">'w'</span>&#125;]&#125;</span><br><span class="line">data=cls.find_one(dic)</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改数据</span></span><br><span class="line">my_set.update(&#123;<span class="string">'name'</span>:<span class="string">'Lily'</span>&#125;,&#123;<span class="string">'$set'</span>:&#123;<span class="string">'name'</span>:<span class="string">'amy'</span>&#125;&#125;)</span><br><span class="line">my_set.update(&#123;<span class="string">'name'</span>:<span class="string">'abby'</span>&#125;,&#123;<span class="string">'$set'</span>:&#123;<span class="string">'King'</span>:<span class="string">'amy'</span>&#125;&#125;,upsert=<span class="literal">True</span>)</span><br><span class="line">my_set.update(&#123;<span class="string">'King'</span>:<span class="string">'amy'</span>&#125;,&#123;<span class="string">'$set'</span>:&#123;<span class="string">'age'</span>:<span class="number">16</span>&#125;&#125;,multi=<span class="literal">True</span>)</span><br><span class="line">my_set.update_many(&#123;<span class="string">'King'</span>:<span class="string">'amy'</span>&#125;,&#123;<span class="string">'$set'</span>:&#123;<span class="string">'king_name'</span>:<span class="string">'abby'</span>&#125;&#125;)</span><br><span class="line">my_set.update_one(&#123;<span class="string">'king_name'</span>:<span class="literal">None</span>&#125;,&#123;<span class="string">'$set'</span>:&#123;<span class="string">'king_name'</span>:<span class="string">'lisa'</span>&#125;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">#查找并删除,查找结果会返回</span></span><br><span class="line">print(my_set.find_one_and_delete(&#123;<span class="string">'name'</span>:<span class="string">'abby'</span>&#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭数据库连接</span></span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure></li></ul></li></ul></li></ol></li></ul><h4 id="索引操作"><a href="#索引操作" class="headerlink" title="索引操作"></a><strong>索引操作</strong></h4><ul><li><p>创建索引</p><ul><li><code>ensure_index()</code></li></ul></li><li><p>查看集合中的索引</p><ul><li><code>list_indexes()</code></li></ul></li><li><p>删除索引</p><ul><li><code>drop_index()</code> 删除某一个索引</li><li><code>drop_indexes()</code> 删除所有索引<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line"></span><br><span class="line">conn=MongoClient(<span class="string">'localhost'</span>,<span class="number">27017</span>)</span><br><span class="line">db=conn.stu</span><br><span class="line">my_set=db.class3</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建索引</span></span><br><span class="line">index=my_set.ensure_index(name)</span><br><span class="line"><span class="comment">#返回索引名称</span></span><br><span class="line">print(index)</span><br><span class="line"></span><br><span class="line"><span class="comment">#复合索引</span></span><br><span class="line">index1=my_set.ensure_index([(<span class="string">'name'</span>,<span class="number">1</span>),(<span class="string">'king'</span>,<span class="number">-1</span>)])</span><br><span class="line">print(index1)</span><br><span class="line"></span><br><span class="line">cls=db.class0</span><br><span class="line"><span class="comment">#唯一索引和稀疏索引</span></span><br><span class="line"><span class="comment">#index=cls.ensure_index('name',unique=True)</span></span><br><span class="line"><span class="comment">#print(index)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#index=my_set.ensure_index('king_name',sparse=True)</span></span><br><span class="line"><span class="comment">#print(index)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查看一个集合中的索引</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> my_set.list_indexes():</span><br><span class="line">print(i)</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除一个索引</span></span><br><span class="line">my_set.drop_index(<span class="string">'name'</span>)</span><br><span class="line">my_set.drop_indexes()</span><br><span class="line"></span><br><span class="line"><span class="comment">#同时创建多个索引</span></span><br><span class="line">index1=IndexModel([(<span class="string">'name'</span>,<span class="number">1</span>),(<span class="string">'king'</span>,<span class="number">-1</span>)])</span><br><span class="line">index2=IndexModel([(<span class="string">'king_name'</span>,<span class="number">1</span>)])</span><br><span class="line">indexes=my_set.create_indexes([index1,index2])</span><br><span class="line"></span><br><span class="line"><span class="comment">## 聚合管道</span></span><br><span class="line"></span><br><span class="line">l=[&#123;<span class="string">'$group'</span>:&#123;<span class="string">'_id'</span>:<span class="string">'$king'</span>,<span class="string">'count'</span>:&#123;<span class="string">'$sum'</span>:<span class="number">1</span>&#125;&#125;&#125;,&#123;<span class="string">'$match'</span>:&#123;<span class="string">'count'</span>:&#123;<span class="string">'$gt'</span>:<span class="number">1</span>&#125;&#125;&#125;]</span><br><span class="line"></span><br><span class="line">cursor=my_set.aggregate(l)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor:</span><br><span class="line">print(i)</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="聚合操作"><a href="#聚合操作" class="headerlink" title="聚合操作"></a><strong>聚合操作</strong></h4><ul><li><code>aggregate([])</code></li><li>参数与mongoshell中聚合参数写法一致</li><li>返回值: 迭代器同find的返回值<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 聚合管道</span></span><br><span class="line"></span><br><span class="line">l=[&#123;<span class="string">'$group'</span>:&#123;<span class="string">'_id'</span>:<span class="string">'$king'</span>,<span class="string">'count'</span>:&#123;<span class="string">'$sum'</span>:<span class="number">1</span>&#125;&#125;&#125;,&#123;<span class="string">'$match'</span>:&#123;<span class="string">'count'</span>:&#123;<span class="string">'$gt'</span>:<span class="number">1</span>&#125;&#125;&#125;]</span><br><span class="line"></span><br><span class="line">cursor=my_set.aggregate(l)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor:</span><br><span class="line">print(i)</span><br></pre></td></tr></table></figure></li></ul><h4 id="文件存储及提取"><a href="#文件存储及提取" class="headerlink" title="文件存储及提取"></a><strong>文件存储及提取</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用来获取数据库中gridfs的存储文件 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line"><span class="comment">#和pymongo绑定的</span></span><br><span class="line"><span class="keyword">import</span> gridfs</span><br><span class="line"></span><br><span class="line">conn=MongoClient(<span class="string">'localhost'</span>,<span class="number">20717</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fs=gridfs.GridFS(db)</span><br><span class="line"></span><br><span class="line">files=fs.find()</span><br><span class="line">print(files)</span><br><span class="line">print(files.count())</span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">print(file.filename)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line"><span class="keyword">if</span> file.filename==<span class="string">'abc.mp3'</span>:</span><br><span class="line"><span class="keyword">with</span> open(file.filename,<span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">whith <span class="literal">True</span>:</span><br><span class="line">data=file.read(<span class="number">64</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line"><span class="keyword">break</span></span><br><span class="line">f.write(data)</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure><p><strong>小文件操作</strong></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将文件以二进制存储到数据库</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line"><span class="keyword">import</span> bson.binary</span><br><span class="line"></span><br><span class="line">conn=MongoClient(<span class="string">'localhost'</span>,<span class="number">27017</span>)</span><br><span class="line">db=conn.file</span><br><span class="line">my_set=db.img</span><br><span class="line"></span><br><span class="line"><span class="comment">#存储</span></span><br><span class="line">f=open(<span class="string">'img.jpg'</span>,<span class="string">'rb'</span>)</span><br><span class="line"><span class="comment">#将读取的二进制流变为bson格式二进制字串</span></span><br><span class="line"></span><br><span class="line">content=bson.binary.Binary(f.read())</span><br><span class="line"></span><br><span class="line">my_set.insert(&#123;<span class="string">'filename'</span>:<span class="string">'img.jpg'</span>,<span class="string">'date'</span>:content&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#提取文件</span></span><br><span class="line">data=my_set.find_one(&#123;<span class="string">'filename'</span>:<span class="string">'img.jpg'</span>&#125;)</span><br><span class="line"><span class="keyword">with</span> open(data[<span class="string">'filename'</span>],<span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">f.write(data[<span class="string">'data'</span>])</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+          <category> Python </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> mongodb </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MongoDB固定集合和文件存储</title>
+      <link href="/2018/03/18/MongoDB/MongoDB%E5%9B%BA%E5%AE%9A%E9%9B%86%E5%90%88%E5%92%8C%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/"/>
+      <url>/2018/03/18/MongoDB/MongoDB%E5%9B%BA%E5%AE%9A%E9%9B%86%E5%90%88%E5%92%8C%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/</url>
+      
+        <content type="html"><![CDATA[<h4 id="固定集合"><a href="#固定集合" class="headerlink" title="固定集合"></a><strong>固定集合</strong></h4><ul><li><p>mongo中可以创建大小固定的集合,称之为固定集合,固定集合的性能出色,适用于很多场景</p></li><li><p>比如: 日志处理, 临时缓存</p></li><li><p>特点: </p><ul><li>插入速度快</li><li>顺序查询速度快</li><li>能够淘汰早期数据</li><li>可以控制集合空间</li></ul></li><li><p>创建: </p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(collectionName,&#123;capped:true,size:10000,max:1000&#125;)</span><br></pre></td></tr></table></figure><ul><li>size: 设置固定集合的大小,单位 <code>Kb</code></li><li>max: 最多能容纳多少文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">e.g.创建一个最多包含三条文档的集合</span><br><span class="line">db.createCollection(&#39;log&#39;,&#123;capped:true,size:10,max:3&#125;)</span><br><span class="line">db.log.insert(&#123;&#39;host&#39;:&#39;1.1.1.1&#39;&#125;)</span><br><span class="line">db.log.insert(&#123;&#39;host&#39;:&#39;1.1.1.2&#39;&#125;)</span><br><span class="line">db.log.insert(&#123;&#39;host&#39;:&#39;1.1.1.3&#39;&#125;)</span><br><span class="line">#当插入第4条自动把第一条删除</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a><strong>文件存储</strong></h4><ul><li><p>数据库存储文件的方式</p><ol><li><p>在数据库中以字符串的方式存储文件在本地的路径</p><ul><li>优点: 节省数据库空间</li><li>缺点: 当数据库或者文件位置发生变化即需要相应修改数据库内容</li></ul></li><li><p>将文件以二进制数据的方式存放在数据库里</p><ul><li>优点: 文件存入数据库,数据库在,即文件不会丢失</li><li>缺点: 当文件较大时,数据库空间占用大,提取困难</li></ul></li></ol></li><li><p>mongo中使用 <strong>GridFS</strong>方案 进行大文件存储</p></li><li><p>GridFS: 是mongodb中大文件存储的一种方案,mongo中认为大于16M的文件为大文件</p></li><li><p>方案解释:</p><ul><li>在mongodb中,创建两个集合,共同完成对文件的存储</li><li>fs.files: cunc文件的相关信息,比如: 文件名,文件类型</li><li>fs.chunks: 实际存储文件内容,以二进制方式分块存储,将大文件分为多个小块,每块占一个空间 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mongofiles -d DBName put xxx.zip</span><br><span class="line"> 数据库名 要存储的文件</span><br></pre></td></tr></table></figure></li><li>如果数据库不存在则自动创建<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mongofiles -d code put hellopython.py</span><br><span class="line">mongo</span><br><span class="line">use code</span><br><span class="line">db.fs.files.find(&#123;&#125;,&#123;_id:0&#125;)</span><br><span class="line">db.fs.chunks.find(&#123;&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li><li>获取数据库中文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongofiles -d grid get hellopython.py</span><br></pre></td></tr></table></figure></li><li>优点: 存储方便,方便数据库移植,对文件个数没有太多限制</li><li>缺点: 读写效率低</li></ul></li></ul><h4 id="游标"><a href="#游标" class="headerlink" title="游标"></a><strong>游标</strong></h4><ul><li>为什么使用游标<ol><li>防止网络拥塞,造成数据传输慢</li><li>提高用户解析体验,可以后端解析<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var cursor &#x3D; db.class0.find()#创建游标</span><br><span class="line">cursor.hasNext()#查看是否有下一个数据</span><br><span class="line">cursor.next()#获取下一个数据</span><br></pre></td></tr></table></figure></li></ol></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+            <tag> 游标 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MongoDB聚合</title>
+      <link href="/2018/03/17/MongoDB/MongoDB%E8%81%9A%E5%90%88/"/>
+      <url>/2018/03/17/MongoDB/MongoDB%E8%81%9A%E5%90%88/</url>
+      
+        <content type="html"><![CDATA[<h4 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a><strong>聚合</strong></h4><ul><li><p>对数据文档进行整理统计</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.collectionName.aggregate()</span><br></pre></td></tr></table></figure></li><li><p>功能: 聚合函数,配合聚合条件进行数据整理统计</p></li><li><p>参数: 聚合条件</p></li><li><p><strong>分组操作符</strong></p></li></ul><p><strong>$group</strong> 分组 和分组操作符配合使用确定按什么分组</p><ul><li><strong>分组操作符</strong> (和$group配合)</li></ul><p><strong>$sum</strong> 求和</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">e.g.统计每组个数</span><br><span class="line">db.class0.aggregate(&#123;$group:&#123;_id:&#39;$gender&#39;,num:&#123;$sum:1&#125;&#125;&#125;)</span><br><span class="line">聚合分组按gender分组num为统计结果名</span><br><span class="line"></span><br><span class="line">e.g.统计每组年龄和</span><br><span class="line">db.class0.aggregate(&#123;$group:&#123;_id:&#39;$gender&#39;,num:&#123;$sum:&#39;$age&#39;&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure><p><strong>$avg</strong> 求平均数</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.求平均年龄</span><br><span class="line">db.class0.aggregate(&#123;$group:&#123;_id:&#39;$gender&#39;,num:&#123;$avg:&#39;$age&#39;&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure><p><strong>$min</strong> 求最小值</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.求每组姓名的最小值</span><br><span class="line">db.class0.aggregate(&#123;$group:&#123;_id:&#39;$gender&#39;,name:&#123;$min:&#39;$name&#39;&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure><p><strong>$max</strong> 求最大值</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.求每组姓名的最大值</span><br><span class="line">db.class0.aggregate(&#123;$group:&#123;_id:&#39;$gender&#39;,name:&#123;$max:&#39;$name&#39;&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure><p><strong>$first</strong>    返回每组第一个文档指定域值</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.aggregate(&#123;$group:&#123;_id:&#39;$gender&#39;,name:&#123;$first:&#39;$name&#39;&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure><p><strong>$last</strong> 返回每组最后一个文档指定域值</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.aggregate(&#123;$group:&#123;_id:&#39;$gender&#39;,name:&#123;$last:&#39;$name&#39;&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure><ul><li><p><strong>$project</strong></p></li><li><p>用于修饰文档的显示结构</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.class0.aggregate(&#123;$project:&#123;_id:0,name:1,age:1&#125;&#125;)</span><br><span class="line">db.class0.aggregate(&#123;$project:&#123;_id:0,Name:&#39;$name&#39;,Age:&#39;$age&#39;&#125;&#125;)</span><br></pre></td></tr></table></figure></li><li><p><strong>$match</strong> 过滤数据</p></li><li><p>操作符的值同find的query</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.aggregate(&#123;$match:&#123;name:&#123;$gt:&#39;Tom&#39;&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure></li><li><p><strong>$skip</strong> 跳过前几条文档</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.aggregate(&#123;$skip:2&#125;)</span><br></pre></td></tr></table></figure></li><li><p><strong>$limit</strong> 限制显示几条文档</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.aggregate(&#123;$limit:2&#125;)</span><br></pre></td></tr></table></figure></li><li><p><strong>$sort</strong> 排序</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.aggregate(&#123;$sort:&#123;name:1&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="聚合管道"><a href="#聚合管道" class="headerlink" title="聚合管道"></a><strong>聚合管道</strong></h4><ul><li>将前一个聚合操作的结果给下一个聚合操作继续执行<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db.collectionName.aggregate([聚合1,聚合2,...])</span><br><span class="line">db.class0.aggregate([&#123;$match:&#123;name:&#123;$gt:&#39;Tom&#39;&#125;&#125;&#125;,&#123;$project:&#123;_id:0,name:1,age:1&#125;&#125;,&#123;$sort:&#123;name:-1&#125;&#125;])</span><br><span class="line">db.class0.aggregate([&#123;$group:&#123;_id:&#39;$gender&#39;,num:&#123;$sum:1&#125;&#125;&#125;,&#123;$match:&#123;$nor:[&#123;_id:&#39;m&#39;&#125;,&#123;_id:&#39;w&#39;&#125;]&#125;&#125;])</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+            <tag> 聚合 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MongoDB索引</title>
+      <link href="/2018/03/16/MongoDB/MongoDB%E7%B4%A2%E5%BC%95/"/>
+      <url>/2018/03/16/MongoDB/MongoDB%E7%B4%A2%E5%BC%95/</url>
+      
+        <content type="html"><![CDATA[<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a><strong>索引</strong></h4><ul><li>索引指的是建立指定键值及所在文档中存储位置的对照清单,使用索引以方便我们进行快速查找,减少遍历次数,提高查找效率</li></ul><p><strong>mongo中如何创建索引</strong></p><ul><li><code>ensureIndex()</code></li><li>功能: 创建索引</li><li>参数: 索引类别,索引选项  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.ensureIndex(&#123;&#39;name&#39;:1&#125;)</span><br></pre></td></tr></table></figure></li><li>1表示为该域创建正向索引,-1表示逆向索引</li><li><code>_id</code> 域会自动创建索引</li></ul><p><strong>查看一个集合中的索引</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.getIndexes()</span><br></pre></td></tr></table></figure><p><strong>删除索引</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dropIndex()</span><br></pre></td></tr></table></figure><ul><li>功能: 删除索引</li><li>参数: 删除索引的名称  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">e.g.可以通过索引名称或者索引键值对删除</span><br><span class="line">db.class0.dropIndex(&#39;name-1&#39;)</span><br><span class="line">db.class0.dropIndex(&#123;name:1&#125;)</span><br></pre></td></tr></table></figure></li><li>删除所有索引  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.dropIndexes()</span><br></pre></td></tr></table></figure></li></ul><h4 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a><strong>索引类型</strong></h4><ul><li><p><strong>复合索引</strong></p><ul><li>根据多个域创建一个索引<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.ensureIndex(&#123;name:1,age:-1&#125;)</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>数组索引</strong></p><ul><li>如果对某个数组域创建索引,那么表示对数组中的每个值均创建了索引,通过数组中单个值查询,也是索引查询<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.ensureIndex(&#39;score&#39;:1)</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>子文档索引</strong></p><ul><li>如果对一个域创建索引,值是一个文档则子文档也会同时形成索引</li><li>如果对子文档某一个域进行索引创建,则通过子文档中的该域查找时为索引查找<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.class2.ensureIndex(&#123;&#39;publication&#39;:1&#125;)</span><br><span class="line">db.class2.ensureIndex(&#123;&#39;publication.pulisher&#39;:1&#125;)</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>覆盖索引</strong></p><ul><li>查找时只获取索引项的内容,而不必去获取原数据中的其它内容,这样就不去连接原来的数据直接返回即可<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.name为索引项,显示也只要name域</span><br><span class="line">db.class0.find(&#123;name:&#39;Lily&#39;&#125;,&#123;_id:0,name:1&#125;)</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>唯一索引</strong></p><ul><li>创建索引时希望索引域的值均不相同,也可以据此限制一个域的值<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.ensureIndex(&#123;age:1&#125;,&#123;&#39;unique&#39;:true&#125;)</span><br></pre></td></tr></table></figure></li><li>当对某个域创建了唯一索引后,即不允许再插入相同值的文档</li></ul></li><li><p><strong>稀疏索引</strong> (间隙索引)</p><ul><li>只针对有指定域的文档创建索引表,没有该域的文档,不会插入到索引表中<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class2.ensureIndex(&#123;&#39;date&#39;:1&#125;,&#123;sparse:true&#125;)</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="索引约束"><a href="#索引约束" class="headerlink" title="索引约束"></a><strong>索引约束</strong></h4><ul><li>影响数据的插入,删除,修改操作,当数据发生改变时,索引表必须同步更新</li><li>索引也是需要占用一定的空间资源</li><li>当数据库大量操作是插入,修改,删除操作,而非查询操作时,不适合创建索引,数据量比较小时,考虑到空间成本也不适合创建索引,即使适合创建索引的情况,也不是索引越多越好</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+            <tag> 索引 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MongoDB修改数据</title>
+      <link href="/2018/03/15/MongoDB/MongoDB%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE/"/>
+      <url>/2018/03/15/MongoDB/MongoDB%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE/</url>
+      
+        <content type="html"><![CDATA[<h4 id="MySQL和MongoDB修改数据语句对比"><a href="#MySQL和MongoDB修改数据语句对比" class="headerlink" title="MySQL和MongoDB修改数据语句对比"></a><strong>MySQL和MongoDB修改数据语句对比</strong></h4><ul><li>MySQL:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update tableName set ... where ...</span><br></pre></td></tr></table></figure></li><li>MongoDB:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.collectionName.update(query,update,upsert,multi)</span><br></pre></td></tr></table></figure></li><li>功能: 修改一个文档    </li><li>参数: <ul><li><code>query</code> : 筛选要修改的文档,相当于where子句,用法同查找</li><li><code>update</code>: 将数据更新为别的内容,相当于set操作,需要使用修改器操作符</li><li><code>upsert</code>: bool值,默认为false,表示如果query的文档不存在则无法修改,如果设置为true,表示如果query的文档不存在则根据query和update参数插入新的文档</li><li><code>multi</code> : bool值,默认为false,如果有多条符合筛选条件的文档则只修改第一条,如果设置为true,则修改所有符合条件的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">e.g.将Lily年龄改为24</span><br><span class="line">db.class0.update(&#123;name:&#39;Lily&#39;&#125;,&#123;$set:&#123;age:24&#125;&#125;)</span><br><span class="line"></span><br><span class="line">e.g.如果被修改的数据不存在,则插入一条新的数据</span><br><span class="line">db.class0.update(&#123;name:&#39;Jerry&#39;&#125;,&#123;$set:&#123;age:18,sex:&#39;m&#39;&#125;&#125;,true)</span><br><span class="line"></span><br><span class="line">e.g.筛选年龄大于20的,修改为18,默认修改第一条</span><br><span class="line">db.class0.update(&#123;age:&#123;$gt:20&#125;&#125;,&#123;$set:&#123;age:18&#125;&#125;)</span><br><span class="line"></span><br><span class="line">e.g.筛选性别为女,修改年龄全部为20,第4个multi参数设置为true可同时修改多条</span><br><span class="line">db.class0.update(&#123;sex:&#39;w&#39;&#125;,&#123;$set:&#123;age:20&#125;&#125;,false,true)</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="修改器操作符"><a href="#修改器操作符" class="headerlink" title="修改器操作符"></a><strong>修改器操作符</strong></h4><p><strong>$set</strong></p><ul><li>修改一个域的值</li><li>增加一个域  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.增加sex域</span><br><span class="line">db.class0.update(&#123;name:&#39;Tom&#39;&#125;,&#123;$set:&#123;sex:&#39;m&#39;&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$unset</strong></p><ul><li>删除一个域  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.删除文档的sex和age域(后面的数字习惯写1或0都表示删除)</span><br><span class="line">db.class0.update(&#123;name:&#39;Tom&#39;&#125;,&#123;$unset:&#123;sex:0,age:0&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$rename</strong></p><ul><li>修改域名称  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.修改所有sex域为gender域</span><br><span class="line">db.class0.update(&#123;&#125;,&#123;$rename:&#123;sex:&#39;gender&#39;&#125;&#125;,false,true)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$setOnInsert</strong></p><ul><li>如果update操作插入新的文档,则补充插入内容</li><li>配合$set使用,修改器可以同时使用多个  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.如果插入数据则同时插入sex和tel域内容</span><br><span class="line">db.class0.update(&#123;name:&#39;amy&#39;&#125;,&#123;$set:&#123;age:21&#125;,$setOnInsert:&#123;sex:&#39;w&#39;,tel:&#39;123456&#39;&#125;&#125;,true)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$inc</strong></p><ul><li>数字加减修改器</li><li>正数,负数,小数都可以  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e.g.查询所有年龄小于18的,加1</span><br><span class="line">db.class0.update(&#123;age:&#123;$lt:18&#125;&#125;,&#123;$inc:&#123;age:1&#125;&#125;,false,true)</span><br><span class="line">e.g.查询所有年龄小于18的,减2</span><br><span class="line">db.class0.update(&#123;age:&#123;$lt:18&#125;&#125;,&#123;$inc:&#123;age:-2&#125;&#125;,false,true)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$mul</strong></p><ul><li>乘法修改器</li><li>正数,负数,小数都可以  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.查询所有年龄小于18的,乘以2</span><br><span class="line">db.class0.update(&#123;age:&#123;$lt:18&#125;&#125;,&#123;$mul:&#123;age:2&#125;&#125;,false,true)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$min</strong></p><ul><li>设定最小值: 如果筛选的文档指定的域值小于min值则不变,如果大于min值则改为min值  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.update(&#123;&#125;,&#123;$min:&#123;age:18&#125;&#125;,false,true)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$max</strong></p><ul><li>设定最大值: 如果筛选的文档指定域值大于max值则不变,如果小于max值则修改为max值  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class0.update(&#123;&#125;,&#123;$max:&#123;age:20&#125;&#125;,false,true)</span><br></pre></td></tr></table></figure></li></ul><h5 id="数组修改器"><a href="#数组修改器" class="headerlink" title="数组修改器"></a><strong>数组修改器</strong></h5><p><strong>$push</strong></p><ul><li>向数组中添加一项  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.update(&#123;name:&quot;Abby&quot;&#125;,&#123;$push:&#123;score:30&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$pushAll</strong></p><ul><li>向数组中添加多项  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.update(&#123;name:&quot;Abby&quot;&#125;,&#123;$pushAll:&#123;score:[11,20]&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$each</strong></p><ul><li>逐个操作  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.利用each添加多项</span><br><span class="line">db.class1.update(&#123;name:&quot;Abby&quot;&#125;,&#123;$push:&#123;score:&#123;$each:[10,5]&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$position</strong></p><ul><li><p>选择数据位置进行操作,必须和each合用</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.从位置1开始添加each两项</span><br><span class="line">db.class1.update(&#123;name:&quot;Lucy&quot;&#125;,&#123;$push:&#123;score:&#123;$each:[10,10],$position:1&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$sort</strong></p><ul><li>对数组进行排序,必须和each合用  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.1表示升序,-1降序,each必须有,为空则不添加</span><br><span class="line">db.class1.update(&#123;name:&quot;Lucy&quot;&#125;,&#123;$push:&#123;score:&#123;$each:[],$sort:1&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$pull</strong></p><ul><li><p>从数组中删除一个元素</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.从Lucy的score数组中删除10</span><br><span class="line">db.class1.update(&#123;name:&#39;Lucy&#39;&#125;,&#123;$pull:&#123;score:10&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$pullAll</strong></p><ul><li>从数组中删除多个元素  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.update(&#123;name:&#39;Abby&#39;&#125;,&#123;$pullAll:&#123;score:[10,20]&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>$pop</strong></p><ul><li>弹出数组中的一项</li><li>1表示弹出最后一项,-1表示田川数组中的第一项,多用于弹栈  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.弹出score数组中的最后一项</span><br><span class="line">db.class1.update(&#123;name:&#39;Abby&#39;&#125;,&#123;$pop:&#123;score:1&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>addToSet</strong></p><ul><li>向数组中插入一个元素,但是该元素不能和其他元素重复  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.如果已经存在66则无法插入,如果不存在则插入66</span><br><span class="line">db.class1.update(&#123;name:&#39;Lily&#39;&#125;,&#123;$addToSet:&#123;score:66&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="数据类型补充"><a href="#数据类型补充" class="headerlink" title="数据类型补充"></a><strong>数据类型补充</strong></h4><ul><li><p><strong>时间类型</strong>:</p><ul><li>mongo中存储时间的格式: ISODate</li></ul></li><li><p>方法1: 自动生成当前时间</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class2.insert(&#123;title:&#39;python&#39;,date:new Date()&#125;)</span><br></pre></td></tr></table></figure></li><li><p>方法2: 生成当前时间</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class2.insert(&#123;title:&#39;python AI&#39;,date:ISODate()&#125;)</span><br></pre></td></tr></table></figure></li><li><p>方法3: 将生成时间变为字符串存储</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class2.insert(&#123;title:&#39;python spyder&#39;,date:Date()&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>指定时间的转换</strong>    </p><ul><li>ISODate()</li><li>功能: 生成mongo时间类型</li><li>参数: 如果不加参数则生成当前时间<ul><li>参数格式</li><li>“2018-11-11 11:11:11”</li><li>“20180101 11:11:11”</li><li>“20181102”<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class2.insert(&#123;title:&#39;python web&#39;,date:ISODate(20181111 11:11:11)&#125;)</span><br></pre></td></tr></table></figure></li></ul></li></ul><p><strong>时间戳</strong><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class2.insert(&#123;title:&#39;python web&#39;,date:ISODate().valueOf()&#125;)</span><br></pre></td></tr></table></figure></p><ul><li><p><strong>null</strong></p><ul><li>如果某个域存在却没有值可以设置为null<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class2.insert(&#123;title:&#39;python book&#39;,price:null&#125;)</span><br></pre></td></tr></table></figure></li><li>表示某个域不存在可以通过null进行匹配<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.可以查找到date不存在的文档</span><br><span class="line">db.class2.find(&#123;date:null&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul></li><li><p><strong>Object类型</strong> </p><ul><li>域的值是一个文档</li><li>当使用外层文档引用内部文档的时候可以用 . 的方法引用,在使用时需要加上引号<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.查找内部文档</span><br><span class="line">db.class2.find(&#123;&#39;publication.publisher&#39;:&#39;python study&#39;&#125;,&#123;_id:0&#125;)</span><br><span class="line"></span><br><span class="line">e.g.修改内部文档</span><br><span class="line">db.class2.find(&#123;title:&#39;python data&#39;&#125;,&#123;$set:&#123;&#39;publication.price&#39;:66.6&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul></li></ul><h4 id="数组的下标引用"><a href="#数组的下标引用" class="headerlink" title="数组的下标引用"></a><strong>数组的下标引用</strong></h4><ul><li>使用一个数组时,可以使用 <strong>.序列下标</strong> 的方式使用数组具体的某一项,同样需要引号  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.class1.update(&#123;name:&#39;Lily&#39;&#125;,&#123;$set:&#123;&#39;score.0&#39;:60&#125;&#125;)</span><br><span class="line">db.class1.find(&#123;&#39;score.0&#39;:&#123;$gt:90&#125;&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="文档查找结果的有序性"><a href="#文档查找结果的有序性" class="headerlink" title="文档查找结果的有序性"></a><strong>文档查找结果的有序性</strong></h4><ul><li>可以通过 <code>[]</code> 取查找结果序列的某一项  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;)[0]</span><br><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;)[3]</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> DBMS </category>
+          
+          <category> MongoDB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mongodb </tag>
+            
+            <tag> 数组 </tag>
+            
+            <tag> 序列 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Python花式导包的几种方法</title>
       <link href="/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/"/>
       <url>/2018/03/15/Python/Python%E8%8A%B1%E5%BC%8F%E5%AF%BC%E5%8C%85%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
@@ -71,7 +220,7 @@
       
       <categories>
           
-          <category> python </category>
+          <category> Python </category>
           
       </categories>
       
@@ -89,11 +238,11 @@
     
     
     <entry>
-      <title>MongoDB查询操作</title>
-      <link href="/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C/"/>
-      <url>/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C/</url>
+      <title>MongoDB删除数据</title>
+      <link href="/2018/03/14/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/"/>
+      <url>/2018/03/14/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/</url>
       
-        <content type="html"><![CDATA[<h4 id="MySQL和MongoDB查找操作对比"><a href="#MySQL和MongoDB查找操作对比" class="headerlink" title="MySQL和MongoDB查找操作对比"></a><strong>MySQL和MongoDB查找操作对比</strong></h4><pre><code>mysql:select ... from tableName where ...db.collectionName.find()    同mysql-&gt; select * from tableName</code></pre><h4 id="find-query-field-查找函数"><a href="#find-query-field-查找函数" class="headerlink" title="find(query,field)查找函数"></a><strong>find(query,field)</strong>查找函数</h4><ul><li>功能: 查找所有复合条件的文档</li><li>参数:<ul><li>query:    筛选条件 相当于where子句</li><li>field:    展示的域 相当于select的展示部分</li></ul></li><li>返回: 返回所有查找到的内容</li></ul><p><strong>field 参数</strong>: 选择要展示的域 传一组键值对</p><ul><li><p>键表示域名</p></li><li><p>值表示是否显示该域 0 表示不显示 1 表示显示</p></li><li><p>如果某个域给定0 则表示不显示该域,其他的域均显示</p></li><li><p>如果某个域给定1 则表示显示该域,其他的域都不显示</p></li><li><p><code>_id</code> 永远默认为显示,除非设置为0</p></li><li><p>除_id外其他域必须拥有相同的设置,全为0或者全为1</p></li><li><p>如果不写该参数则表示显示所有域内容</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1,age:1&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>query参数</strong>: 以键值对的形式给出查找条件</p><ul><li>查找年龄 17<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li><li>如果不写第一个参数则表示查找所有内容</li></ul><h5 id="findOne"><a href="#findOne" class="headerlink" title="findOne()"></a><strong>findOne()</strong></h5><ul><li>功能参数和 <code>find()</code> 完全相同,只是只返回第一条查找到的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.findOne(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="query的更多用法"><a href="#query的更多用法" class="headerlink" title="query的更多用法"></a><strong>query的更多用法</strong></h4><ul><li>操作符: 使用$符号注明一个特殊字符串,表示一定的含义<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$lt#表示小于</span><br></pre></td></tr></table></figure></li></ul><h5 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符"></a><strong>比较操作符</strong></h5><pre><code>$eq        #等于    ==db.class0.find({age:{$eq:17}},{_id:0})#筛选年龄等于17的db.class0.find({age:17},{_id:0})    #直接查一样,等于一般用得少$lt        #小于    &lt;db.class0.find({age:{$lt:17}},{_id:0})#mongo中字符串也可以比较大小$lte    #小于等于    &lt;=db.class0.find({age:{$lte:17}},{_id:0})$gt        #大于    &gt;db.class0.find({age:{$gt:17}},{_id:0})$gte    #大于等于    &gt;=db.class0.find({age:{$gte:17}},{_id:0})$ne        #不等于        !=db.class0.find({age:{$ne:17}},{_id:0})#如果一个文档没有这个age域也显示为不等于$in        #包含db.class0.find({age:{$in:[16,17,18]}},{_id:0})#nin    #不包含db.class0.find({age:{$nin:[16,17,18]}},{_id:0})</code></pre><h5 id="逻辑操作符"><a href="#逻辑操作符" class="headerlink" title="逻辑操作符"></a><strong>逻辑操作符</strong></h5><pre><code>$and    #逻辑与#年龄小于19且性别是男db.class0.find({age:{$lt:19},sex:&apos;m&apos;},{_id:0})#年龄小于19且大于15db.class0.find({age:{$lt:19,$gt:15}},{_id:0})$and逻辑语法db.class0.find({$and:[{age:17},{name:&apos;Lei&apos;}]})$or        #逻辑或db.class0.find({$or:[{age:{$lt:22}},{name:&apos;wukong&apos;}]},{_id:0})db.class0.find({$or:[{age:{lt:18}},{age:{$gt:30}}]},{_id:0})$not    #逻辑非db.class0.find({age:{$not:{$eq:17}}},{_id:0})$nor    #既不也不db.class0.find({$nor:[{age:{$gt:18}},{sex:&apos;m&apos;}]},{_id:0})</code></pre><p><strong>条件混合</strong></p><ul><li>(年龄小于20 <strong>或者</strong> 姓名为Lei) <strong>并且</strong> 性别为女的人<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;$and:[&#123;$or:[&#123;age:&#123;$lt:20&#125;&#125;,&#123;name:&#39;Lily&#39;&#125;]&#125;,&#123;sex:&#39;w&#39;&#125;]&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="数组查找"><a href="#数组查找" class="headerlink" title="数组查找"></a><strong>数组查找</strong></h4><pre><code>#查看数组中包含某一项的db.class1.find({hobby:&apos;python&apos;},{_id:0})$all#查找一个数组中同时包含多项的文档db.class1.find({hobby:{$all:[&apos;python&apos;,&apos;mongodb&apos;]}},{_id:0})$size#查找数组元素个数为指定个数的文档db.class1.find({hobby:{$size:3}},{_id:0})#数组切片显示,对数组进行切片显示$slicedb.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:2}})             #显示前两项db.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:[1,2]}})        #显示后两项</code></pre><h4 id="其它查找方法"><a href="#其它查找方法" class="headerlink" title="其它查找方法"></a><strong>其它查找方法</strong></h4><pre><code>#判断一个域是否存在$existse.g.    查找存在hobby域的文档db.class1.find({hobby:{$exists:true}},{_id:0})e.g.    查找不存在sex域的文档db.class1.find({sex:{$exists:false}},{_id:0})$mod#做除数余数查找e.g        查找age域 被2除余1的文档,就是单数db.class1.find({age:{$mod:[2,1]}},{_id:0})e.g        查找age域 被3除余0的文档,整除db.class1.find({age:{$mod:[3,0]}},{_id:0})$type#查找指定数据类型的文档#monggodb为每种数据类型作了编号,对照如下官方文档https://docs.mongodb.com/manual/reference/operator/query/type/index.htmle.g.    查找age域为整数类型db.class1.find({age:{$type:1}},{_id:0})e.g.    查找name域为字符串类型db.class1.find({name:{$type:2}},{_id:0})e.g.    查找hobby域为数组类型db.class1.find({hobby:{$type:4}},{_id:0])</code></pre><h4 id="进一步的信息筛选"><a href="#进一步的信息筛选" class="headerlink" title="进一步的信息筛选"></a><strong>进一步的信息筛选</strong></h4><p><strong>distinct()函数</strong> 去重</p><ul><li>功能: 查看一个集合中某个域值的覆盖范围  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g. 查看集合中hobby域的值都有哪些</span><br><span class="line">db.class1.distinct(&#39;hobby&#39;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>pretty(n)</strong> 格式化显示</p><ul><li>功能: 将查询结果格式化显示  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find().pretty()</span><br></pre></td></tr></table></figure></li></ul><p><strong>limit(n)</strong> 限制</p><ul><li>功能: 查询结果显示前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.查询结果显示前3个</span><br><span class="line">db.class1.find(&#123;&#125;&#123;_id:0&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>skip(n)</strong></p><ul><li>功能: 查询结果跳过前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.显示时跳过前3条</span><br><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).skip(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>count()</strong> 计数</p><ul><li>功能: 对查找结果计数统计  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.统计sex字段为m的文档数量</span><br><span class="line">db.class0.find(&#123;sex:&#39;m&#39;&#125;,&#123;_id:0&#125;).count()</span><br></pre></td></tr></table></figure></li></ul><p><strong>sort({键:1/-1})</strong></p><ul><li>功能: 对查找结果排序</li><li>1表示按照升序排列, -1表示按照降序排列  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.对查询结果按照年龄升序排列</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;)</span><br><span class="line"></span><br><span class="line">e.g复合排序: 当第一排序项相同的时候,按照第二排序项排序</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1,name:-1&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="函数的连续使用"><a href="#函数的连续使用" class="headerlink" title="函数的连续使用"></a><strong>函数的连续使用</strong></h4><ul><li>获取集合中年龄最小的前3个文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+        <content type="html"><![CDATA[<h4 id="MySQL和MongoDB对比删除操作"><a href="#MySQL和MongoDB对比删除操作" class="headerlink" title="MySQL和MongoDB对比删除操作"></a><strong>MySQL和MongoDB对比删除操作</strong></h4><ul><li><strong>MySQL</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from tableName where ...</span><br></pre></td></tr></table></figure></li><li><strong>MongoDB</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.collectionName.remove(query,justOne)</span><br></pre></td></tr></table></figure></li><li>功能: 删除指定的文档</li><li>参数:<ul><li>query: 筛选要删除的文档,类似where子句,同法同查找操作</li><li>justOne: 布尔值 , 默认为 false 表示删除所有筛选数据,如果赋值为true 则表示只删除第一条符合的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.删除age域不存在 或者 age域大于100的文档</span><br><span class="line">db.class0.remove(&#123;$or:[&#123;age:&#123;$exists:false&#125;&#125;,&#123;age:&#123;$gt:100&#125;&#125;]&#125;)</span><br><span class="line"></span><br><span class="line">e.g.删除第一个符合条件的文档</span><br><span class="line">db.class0.remove(&#123;sex:&#123;exists:false&#125;&#125;,true)</span><br></pre></td></tr></table></figure></li></ul></li></ul><p><strong>删除集合中所有文档</strong></p><pre><code>db.collectionName.remove({})e.g.db.class1.remove({})</code></pre>]]></content>
       
       
       <categories>
@@ -116,11 +265,11 @@
     
     
     <entry>
-      <title>MongoDB删除文档操作</title>
-      <link href="/2018/03/13/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%E6%93%8D%E4%BD%9C/"/>
-      <url>/2018/03/13/MongoDB/MongoDB%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%E6%93%8D%E4%BD%9C/</url>
+      <title>MongoDB查询数据</title>
+      <link href="/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/"/>
+      <url>/2018/03/13/MongoDB/MongoDB%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/</url>
       
-        <content type="html"><![CDATA[<h4 id="MySQL和MongoDB对比删除操作"><a href="#MySQL和MongoDB对比删除操作" class="headerlink" title="MySQL和MongoDB对比删除操作"></a><strong>MySQL和MongoDB对比删除操作</strong></h4><ul><li><strong>MySQL</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from tableName where ...</span><br></pre></td></tr></table></figure></li><li><strong>MongoDB</strong>:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.collectionName.remove(query,justOne)</span><br></pre></td></tr></table></figure></li><li>功能: 删除指定的文档</li><li>参数:<ul><li>query: 筛选要删除的文档,类似where子句,同法同查找操作</li><li>justOne: 布尔值 , 默认为 false 表示删除所有筛选数据,如果赋值为true 则表示只删除第一条符合的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.删除age域不存在 或者 age域大于100的文档</span><br><span class="line">db.class0.remove(&#123;$or:[&#123;age:&#123;$exists:false&#125;&#125;,&#123;age:&#123;$gt:100&#125;&#125;]&#125;)</span><br><span class="line"></span><br><span class="line">e.g.删除第一个符合条件的文档</span><br><span class="line">db.class0.remove(&#123;sex:&#123;exists:false&#125;&#125;,true)</span><br></pre></td></tr></table></figure></li></ul></li></ul><p><strong>删除集合中所有文档</strong></p><pre><code>db.collectionName.remove({})e.g.db.class1.remove({})</code></pre>]]></content>
+        <content type="html"><![CDATA[<h4 id="MySQL和MongoDB查找操作对比"><a href="#MySQL和MongoDB查找操作对比" class="headerlink" title="MySQL和MongoDB查找操作对比"></a><strong>MySQL和MongoDB查找操作对比</strong></h4><pre><code>mysql:select ... from tableName where ...db.collectionName.find()    同mysql-&gt; select * from tableName</code></pre><h4 id="find-query-field-查找函数"><a href="#find-query-field-查找函数" class="headerlink" title="find(query,field)查找函数"></a><strong>find(query,field)</strong>查找函数</h4><ul><li>功能: 查找所有复合条件的文档</li><li>参数:<ul><li>query:    筛选条件 相当于where子句</li><li>field:    展示的域 相当于select的展示部分</li></ul></li><li>返回: 返回所有查找到的内容</li></ul><p><strong>field 参数</strong>: 选择要展示的域 传一组键值对</p><ul><li><p>键表示域名</p></li><li><p>值表示是否显示该域 0 表示不显示 1 表示显示</p></li><li><p>如果某个域给定0 则表示不显示该域,其他的域均显示</p></li><li><p>如果某个域给定1 则表示显示该域,其他的域都不显示</p></li><li><p><code>_id</code> 永远默认为显示,除非设置为0</p></li><li><p>除_id外其他域必须拥有相同的设置,全为0或者全为1</p></li><li><p>如果不写该参数则表示显示所有域内容</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1&#125;)</span><br><span class="line">db.class0.find(&#123;&#125;,&#123;_id:0,name:1,age:1&#125;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>query参数</strong>: 以键值对的形式给出查找条件</p><ul><li>查找年龄 17<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li><li>如果不写第一个参数则表示查找所有内容</li></ul><h5 id="findOne"><a href="#findOne" class="headerlink" title="findOne()"></a><strong>findOne()</strong></h5><ul><li>功能参数和 <code>find()</code> 完全相同,只是只返回第一条查找到的文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.findOne(&#123;age:17&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="query的更多用法"><a href="#query的更多用法" class="headerlink" title="query的更多用法"></a><strong>query的更多用法</strong></h4><ul><li>操作符: 使用$符号注明一个特殊字符串,表示一定的含义<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$lt#表示小于</span><br></pre></td></tr></table></figure></li></ul><h5 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符"></a><strong>比较操作符</strong></h5><pre><code>$eq        #等于    ==db.class0.find({age:{$eq:17}},{_id:0})#筛选年龄等于17的db.class0.find({age:17},{_id:0})    #直接查一样,等于一般用得少$lt        #小于    &lt;db.class0.find({age:{$lt:17}},{_id:0})#mongo中字符串也可以比较大小$lte    #小于等于    &lt;=db.class0.find({age:{$lte:17}},{_id:0})$gt        #大于    &gt;db.class0.find({age:{$gt:17}},{_id:0})$gte    #大于等于    &gt;=db.class0.find({age:{$gte:17}},{_id:0})$ne        #不等于        !=db.class0.find({age:{$ne:17}},{_id:0})#如果一个文档没有这个age域也显示为不等于$in        #包含db.class0.find({age:{$in:[16,17,18]}},{_id:0})#nin    #不包含db.class0.find({age:{$nin:[16,17,18]}},{_id:0})</code></pre><h5 id="逻辑操作符"><a href="#逻辑操作符" class="headerlink" title="逻辑操作符"></a><strong>逻辑操作符</strong></h5><pre><code>$and    #逻辑与#年龄小于19且性别是男db.class0.find({age:{$lt:19},sex:&apos;m&apos;},{_id:0})#年龄小于19且大于15db.class0.find({age:{$lt:19,$gt:15}},{_id:0})$and逻辑语法db.class0.find({$and:[{age:17},{name:&apos;Lei&apos;}]})$or        #逻辑或db.class0.find({$or:[{age:{$lt:22}},{name:&apos;wukong&apos;}]},{_id:0})db.class0.find({$or:[{age:{lt:18}},{age:{$gt:30}}]},{_id:0})$not    #逻辑非db.class0.find({age:{$not:{$eq:17}}},{_id:0})$nor    #既不也不db.class0.find({$nor:[{age:{$gt:18}},{sex:&apos;m&apos;}]},{_id:0})</code></pre><p><strong>条件混合</strong></p><ul><li>(年龄小于20 <strong>或者</strong> 姓名为Lei) <strong>并且</strong> 性别为女的人<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.</span><br><span class="line">db.class0.find(&#123;$and:[&#123;$or:[&#123;age:&#123;$lt:20&#125;&#125;,&#123;name:&#39;Lily&#39;&#125;]&#125;,&#123;sex:&#39;w&#39;&#125;]&#125;,&#123;_id:0&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="数组查找"><a href="#数组查找" class="headerlink" title="数组查找"></a><strong>数组查找</strong></h4><pre><code>#查看数组中包含某一项的db.class1.find({hobby:&apos;python&apos;},{_id:0})$all#查找一个数组中同时包含多项的文档db.class1.find({hobby:{$all:[&apos;python&apos;,&apos;mongodb&apos;]}},{_id:0})$size#查找数组元素个数为指定个数的文档db.class1.find({hobby:{$size:3}},{_id:0})#数组切片显示,对数组进行切片显示$slicedb.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:2}})             #显示前两项db.class1.find({hobby:{$size:3}},{_id:0,hobby:{$slice:[1,2]}})        #显示后两项</code></pre><h4 id="其它查找方法"><a href="#其它查找方法" class="headerlink" title="其它查找方法"></a><strong>其它查找方法</strong></h4><pre><code>#判断一个域是否存在$existse.g.    查找存在hobby域的文档db.class1.find({hobby:{$exists:true}},{_id:0})e.g.    查找不存在sex域的文档db.class1.find({sex:{$exists:false}},{_id:0})$mod#做除数余数查找e.g        查找age域 被2除余1的文档,就是单数db.class1.find({age:{$mod:[2,1]}},{_id:0})e.g        查找age域 被3除余0的文档,整除db.class1.find({age:{$mod:[3,0]}},{_id:0})$type#查找指定数据类型的文档#monggodb为每种数据类型作了编号,对照如下官方文档https://docs.mongodb.com/manual/reference/operator/query/type/index.htmle.g.    查找age域为整数类型db.class1.find({age:{$type:1}},{_id:0})e.g.    查找name域为字符串类型db.class1.find({name:{$type:2}},{_id:0})e.g.    查找hobby域为数组类型db.class1.find({hobby:{$type:4}},{_id:0])</code></pre><h4 id="进一步的信息筛选"><a href="#进一步的信息筛选" class="headerlink" title="进一步的信息筛选"></a><strong>进一步的信息筛选</strong></h4><p><strong>distinct()函数</strong> 去重</p><ul><li>功能: 查看一个集合中某个域值的覆盖范围  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g. 查看集合中hobby域的值都有哪些</span><br><span class="line">db.class1.distinct(&#39;hobby&#39;)</span><br></pre></td></tr></table></figure></li></ul><p><strong>pretty(n)</strong> 格式化显示</p><ul><li>功能: 将查询结果格式化显示  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find().pretty()</span><br></pre></td></tr></table></figure></li></ul><p><strong>limit(n)</strong> 限制</p><ul><li>功能: 查询结果显示前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.查询结果显示前3个</span><br><span class="line">db.class1.find(&#123;&#125;&#123;_id:0&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>skip(n)</strong></p><ul><li>功能: 查询结果跳过前 n条  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.显示时跳过前3条</span><br><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).skip(3)</span><br></pre></td></tr></table></figure></li></ul><p><strong>count()</strong> 计数</p><ul><li>功能: 对查找结果计数统计  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e.g.统计sex字段为m的文档数量</span><br><span class="line">db.class0.find(&#123;sex:&#39;m&#39;&#125;,&#123;_id:0&#125;).count()</span><br></pre></td></tr></table></figure></li></ul><p><strong>sort({键:1/-1})</strong></p><ul><li>功能: 对查找结果排序</li><li>1表示按照升序排列, -1表示按照降序排列  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.g.对查询结果按照年龄升序排列</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;)</span><br><span class="line"></span><br><span class="line">e.g复合排序: 当第一排序项相同的时候,按照第二排序项排序</span><br><span class="line">db.class1.find(&#123;age:&#123;$exists:true&#125;&#125;,&#123;_id:0&#125;).sort(&#123;age:1,name:-1&#125;)</span><br></pre></td></tr></table></figure></li></ul><h4 id="函数的连续使用"><a href="#函数的连续使用" class="headerlink" title="函数的连续使用"></a><strong>函数的连续使用</strong></h4><ul><li>获取集合中年龄最小的前3个文档<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.class1.find(&#123;&#125;,&#123;_id:0&#125;).sort(&#123;age:1&#125;).limit(3)</span><br></pre></td></tr></table></figure></li></ul>]]></content>
       
       
       <categories>
@@ -183,9 +332,9 @@
           
           <category> DBMS </category>
           
-          <category> python </category>
-          
           <category> MySQL </category>
+          
+          <category> Python </category>
           
       </categories>
       
@@ -214,7 +363,7 @@
       
       <categories>
           
-          <category> python </category>
+          <category> Python </category>
           
       </categories>
       
@@ -239,7 +388,7 @@
       
       <categories>
           
-          <category> python </category>
+          <category> Python </category>
           
       </categories>
       
@@ -322,9 +471,9 @@
             
             <tag> python </tag>
             
-            <tag> Veil-Framework </tag>
-            
             <tag> passing-the-hash </tag>
+            
+            <tag> Veil-Framework </tag>
             
             <tag> shellter </tag>
             
@@ -1278,9 +1427,9 @@
             
             <tag> Kali </tag>
             
-            <tag> ruby </tag>
-            
             <tag> Metasploit </tag>
+            
+            <tag> ruby </tag>
             
             <tag> postgresql </tag>
             
@@ -1865,9 +2014,9 @@
       
         <tags>
             
-            <tag> mimikatz </tag>
-            
             <tag> 抓包嗅探 </tag>
+            
+            <tag> mimikatz </tag>
             
             <tag> WCE </tag>
             
@@ -1906,9 +2055,9 @@
             
             <tag> gcc </tag>
             
-            <tag> 提权 </tag>
-            
             <tag> mimikatz </tag>
+            
+            <tag> 提权 </tag>
             
         </tags>
       
@@ -2074,43 +2223,6 @@
     
     
     <entry>
-      <title>Ettercap中间人攻击</title>
-      <link href="/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-      <url>/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="Ettercap"><a href="#Ettercap" class="headerlink" title="Ettercap"></a><strong>Ettercap</strong></h3></blockquote><ul><li>统一的中间人攻击工具</li><li>转发MAC与本机相同，但IP与本机不同的数据包</li><li>支持SSH1、SSL中间人攻击<h4 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a><strong>模块划分</strong></h4></li><li>Snifer</li><li>MITM</li><li>Filter</li><li>Log </li><li>Plugin</li></ul><h5 id="Snifer"><a href="#Snifer" class="headerlink" title="Snifer"></a><strong>Snifer</strong></h5><p>负责数据包转发<br><strong>Unified</strong></p><ul><li>单网卡情况下独立完成三层包转发</li><li>始终禁用内核IP_Forward功能</li><li><em>Bridge*</em></li><li>双网卡情况下的一层MITM模式</li><li>可作为IPS过滤数据包</li><li>不可在网关上使用(透明网桥)<h5 id="MITM"><a href="#MITM" class="headerlink" title="MITM"></a><strong>MITM</strong></h5></li><li>把流量重定向到ettercap主机上</li><li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li><li><em>实现MITM的方法*</em></li><li>ARP</li><li>ICMP<br>  ICMP路由重定向，半双工</li><li>DHCP<br>  修改网关地址,半双工<br>  Switch Port Stealing    #交换机端口窃取<br>  flood目标地址是本机，源地址是受害者的包<br>  适用于ARP静态绑定的环境</li><li>NDP<br>  IPv6协议欺骗技术</li></ul><p><strong>2.4以上内核对ARP地址欺骗的约束</strong></p><ul><li>收到非请求的ARP响应包，不更新本地ARP缓存</li><li>Ettercap使用ARP request包进行攻击</li><li><em>Solaris 不根据ARP包更新本地ARP缓存*</em></li><li>Ettercap使用先发ICMP包来更新ARP缓存</li></ul><p><strong>用户操作界面</strong><br>    -T 字符模式界面<br>    -G 图形界面<br>    -C 基于字符的图形界面<br>    -D 后台模式</p><p><strong>指定目标</strong></p><pre><code>IPv4：MAC/IPs/PortsIPv6：MAC/IPs/IPv6/Ports/10.0.0.1-5;10.0.1.33/20-25,80,110</code></pre><p><strong>权限</strong></p><ul><li>需要root权限打开链路层Socket连接,然后使用nobody账号运行</li><li>日志写入目录需要nobody有写入权</li><li>修改etter.conf：EC_UID=65534        #改为0</li></ul><p><strong>基于伪造证书的SSL MITIM</strong></p><pre><code>Bridge模式不支持SSL MITM 需要生成SSL证书openssl genrsa -out etter.ssl.crt 1024openssl req -new-keyetter.ssl.crt -out tmp.csropenssl x509 -req -days 1825 -in tmp.csr -signkey etter.ssl.crt -out tmp.newcat tmp.new&gt;&gt;etter.ssl.crtrm −f tmp.newtmp.csr</code></pre><h3 id="ARP-MITM"><a href="#ARP-MITM" class="headerlink" title="ARP MITM"></a><strong>ARP MITM</strong></h3><p><strong>字符模式</strong></p><pre><code>ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></pre><p><strong>图形界面</strong></p><h5 id="SSL-MITM"><a href="#SSL-MITM" class="headerlink" title="SSL MITM"></a><strong>SSL MITM</strong></h5><p><code>vi /etc/ettercap/etter.conf</code></p><h5 id="DNS欺骗"><a href="#DNS欺骗" class="headerlink" title="DNS欺骗"></a><strong>DNS欺骗</strong></h5><p>dns_spoof插件配置文件<br>    <code>vi /etc/ettercap/etter.dns</code></p><h4 id="Ettercap-日志查看"><a href="#Ettercap-日志查看" class="headerlink" title="Ettercap 日志查看"></a><strong>Ettercap 日志查看</strong></h4><pre><code>etterlog -p log.eci     #查看获取的密码etterlog -c log.ecp     #列出Log中的连接etterlog -c -f /1.1.1.1/ log.ecpetterlog -B -n -s -F TCP:1.1.1.1:20:1.1.1.2:1234 log.ecp &gt; aa     #选择相应的连接并榨取文件</code></pre><h4 id="Filter-过滤器"><a href="#Filter-过滤器" class="headerlink" title="Filter    过滤器"></a><strong>Filter</strong>    过滤器</h4><pre><code>ls /usr/share/ettercap/SSH-2.xx / SSH-1.99 / SSH-1.51etterfilter etter.filter.ssh -o ssh.ef        #编译可执行二进制文件,-F 作SSH嗅探</code></pre><h5 id="替换HTTP内容"><a href="#替换HTTP内容" class="headerlink" title="替换HTTP内容"></a>替换HTTP内容</h5><ul><li>替换图片</li><li>替换exe后门程序<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto &#x3D;&#x3D; TCP &amp;&amp; tcp.src &#x3D;&#x3D; 80) &#123;</span><br><span class="line">msg(&quot;data on TCP 80\n&quot;);</span><br><span class="line">replace(&quot;img src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG SRC&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h4 id="ICMP-中间人攻击"><a href="#ICMP-中间人攻击" class="headerlink" title="ICMP 中间人攻击"></a><strong>ICMP 中间人攻击</strong></h4><pre><code>-M icmp:00:11:22:33:44:55/10.0.0.1        #真实网关的MAC/IP</code></pre><h4 id="DHCP-中间人攻击"><a href="#DHCP-中间人攻击" class="headerlink" title="DHCP 中间人攻击"></a><strong>DHCP 中间人攻击</strong></h4><pre><code>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1        #DNS </code></pre><h4 id="Port-基于交换机端口窃取的中间人攻击"><a href="#Port-基于交换机端口窃取的中间人攻击" class="headerlink" title="Port 基于交换机端口窃取的中间人攻击"></a><strong>Port 基于交换机端口窃取的中间人攻击</strong></h4><pre><code>-M port /1.1.1.1/ /1.1.1.2/</code></pre><h4 id="Ndp-IPv6协议欺骗中间人攻击"><a href="#Ndp-IPv6协议欺骗中间人攻击" class="headerlink" title="Ndp IPv6协议欺骗中间人攻击"></a><strong>Ndp</strong> IPv6协议欺骗中间人攻击</h4><pre><code>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</code></pre><h3 id="Pass-the-Hash-PTH"><a href="#Pass-the-Hash-PTH" class="headerlink" title="Pass the Hash (PTH)"></a><strong>Pass the Hash</strong> (PTH)</h3><ul><li>密码破解耗费时间资源巨大</li><li>使用密文提交给服务器直接完成身份认证</li><li>NTLM/LM是没有加盐的静态HASH密文</li><li>企业中使用ghost等工具克隆安装系统</li></ul><h4 id="利用sam-hash密文远程登录windows"><a href="#利用sam-hash密文远程登录windows" class="headerlink" title="利用sam hash密文远程登录windows"></a><strong>利用sam hash密文远程登录windows</strong></h4><pre><code>pth-winexe -U w7%aad3b435b51404eeaad3b435b51404ee:ed1bfaeb3063 716ab7fe2a11faf126d8 //1.1.1.1 cmd</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 密码攻击 </category>
-          
-          <category> 嗅探欺骗 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> arpspoof </tag>
-            
-            <tag> dnsspoof </tag>
-            
-            <tag> Ettercap </tag>
-            
-            <tag> PTH </tag>
-            
-            <tag> 中间人攻击 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
       <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
       <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
@@ -2140,6 +2252,43 @@
             <tag> XSS </tag>
             
             <tag> beef </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Ettercap中间人攻击</title>
+      <link href="/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+      <url>/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="Ettercap"><a href="#Ettercap" class="headerlink" title="Ettercap"></a><strong>Ettercap</strong></h3></blockquote><ul><li>统一的中间人攻击工具</li><li>转发MAC与本机相同，但IP与本机不同的数据包</li><li>支持SSH1、SSL中间人攻击<h4 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a><strong>模块划分</strong></h4></li><li>Snifer</li><li>MITM</li><li>Filter</li><li>Log </li><li>Plugin</li></ul><h5 id="Snifer"><a href="#Snifer" class="headerlink" title="Snifer"></a><strong>Snifer</strong></h5><p>负责数据包转发<br><strong>Unified</strong></p><ul><li>单网卡情况下独立完成三层包转发</li><li>始终禁用内核IP_Forward功能</li><li><em>Bridge*</em></li><li>双网卡情况下的一层MITM模式</li><li>可作为IPS过滤数据包</li><li>不可在网关上使用(透明网桥)<h5 id="MITM"><a href="#MITM" class="headerlink" title="MITM"></a><strong>MITM</strong></h5></li><li>把流量重定向到ettercap主机上</li><li>可以使用其他工具实现MITM，ettercap之作嗅探和过滤使用</li><li><em>实现MITM的方法*</em></li><li>ARP</li><li>ICMP<br>  ICMP路由重定向，半双工</li><li>DHCP<br>  修改网关地址,半双工<br>  Switch Port Stealing    #交换机端口窃取<br>  flood目标地址是本机，源地址是受害者的包<br>  适用于ARP静态绑定的环境</li><li>NDP<br>  IPv6协议欺骗技术</li></ul><p><strong>2.4以上内核对ARP地址欺骗的约束</strong></p><ul><li>收到非请求的ARP响应包，不更新本地ARP缓存</li><li>Ettercap使用ARP request包进行攻击</li><li><em>Solaris 不根据ARP包更新本地ARP缓存*</em></li><li>Ettercap使用先发ICMP包来更新ARP缓存</li></ul><p><strong>用户操作界面</strong><br>    -T 字符模式界面<br>    -G 图形界面<br>    -C 基于字符的图形界面<br>    -D 后台模式</p><p><strong>指定目标</strong></p><pre><code>IPv4：MAC/IPs/PortsIPv6：MAC/IPs/IPv6/Ports/10.0.0.1-5;10.0.1.33/20-25,80,110</code></pre><p><strong>权限</strong></p><ul><li>需要root权限打开链路层Socket连接,然后使用nobody账号运行</li><li>日志写入目录需要nobody有写入权</li><li>修改etter.conf：EC_UID=65534        #改为0</li></ul><p><strong>基于伪造证书的SSL MITIM</strong></p><pre><code>Bridge模式不支持SSL MITM 需要生成SSL证书openssl genrsa -out etter.ssl.crt 1024openssl req -new-keyetter.ssl.crt -out tmp.csropenssl x509 -req -days 1825 -in tmp.csr -signkey etter.ssl.crt -out tmp.newcat tmp.new&gt;&gt;etter.ssl.crtrm −f tmp.newtmp.csr</code></pre><h3 id="ARP-MITM"><a href="#ARP-MITM" class="headerlink" title="ARP MITM"></a><strong>ARP MITM</strong></h3><p><strong>字符模式</strong></p><pre><code>ettercap -i eth0 -T -M arp -q /192.168.1.1// /192.168.1.2// -F 1.ef -P autoadd -w a.cap -l loginfo -L logall -m message</code></pre><p><strong>图形界面</strong></p><h5 id="SSL-MITM"><a href="#SSL-MITM" class="headerlink" title="SSL MITM"></a><strong>SSL MITM</strong></h5><p><code>vi /etc/ettercap/etter.conf</code></p><h5 id="DNS欺骗"><a href="#DNS欺骗" class="headerlink" title="DNS欺骗"></a><strong>DNS欺骗</strong></h5><p>dns_spoof插件配置文件<br>    <code>vi /etc/ettercap/etter.dns</code></p><h4 id="Ettercap-日志查看"><a href="#Ettercap-日志查看" class="headerlink" title="Ettercap 日志查看"></a><strong>Ettercap 日志查看</strong></h4><pre><code>etterlog -p log.eci     #查看获取的密码etterlog -c log.ecp     #列出Log中的连接etterlog -c -f /1.1.1.1/ log.ecpetterlog -B -n -s -F TCP:1.1.1.1:20:1.1.1.2:1234 log.ecp &gt; aa     #选择相应的连接并榨取文件</code></pre><h4 id="Filter-过滤器"><a href="#Filter-过滤器" class="headerlink" title="Filter    过滤器"></a><strong>Filter</strong>    过滤器</h4><pre><code>ls /usr/share/ettercap/SSH-2.xx / SSH-1.99 / SSH-1.51etterfilter etter.filter.ssh -o ssh.ef        #编译可执行二进制文件,-F 作SSH嗅探</code></pre><h5 id="替换HTTP内容"><a href="#替换HTTP内容" class="headerlink" title="替换HTTP内容"></a>替换HTTP内容</h5><ul><li>替换图片</li><li>替换exe后门程序<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (ip.proto &#x3D;&#x3D; TCP &amp;&amp; tcp.src &#x3D;&#x3D; 80) &#123;</span><br><span class="line">msg(&quot;data on TCP 80\n&quot;);</span><br><span class="line">replace(&quot;img src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG src&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">replace(&quot;IMG SRC&#x3D;&quot;, &quot;img src&#x3D;\&quot;http:&#x2F;&#x2F;1.1.1.1&#x2F;1.gif\&quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h4 id="ICMP-中间人攻击"><a href="#ICMP-中间人攻击" class="headerlink" title="ICMP 中间人攻击"></a><strong>ICMP 中间人攻击</strong></h4><pre><code>-M icmp:00:11:22:33:44:55/10.0.0.1        #真实网关的MAC/IP</code></pre><h4 id="DHCP-中间人攻击"><a href="#DHCP-中间人攻击" class="headerlink" title="DHCP 中间人攻击"></a><strong>DHCP 中间人攻击</strong></h4><pre><code>−M dhcp:192.168.0.30,35,50−60/255.255.255.0/192.168.0.1        #DNS </code></pre><h4 id="Port-基于交换机端口窃取的中间人攻击"><a href="#Port-基于交换机端口窃取的中间人攻击" class="headerlink" title="Port 基于交换机端口窃取的中间人攻击"></a><strong>Port 基于交换机端口窃取的中间人攻击</strong></h4><pre><code>-M port /1.1.1.1/ /1.1.1.2/</code></pre><h4 id="Ndp-IPv6协议欺骗中间人攻击"><a href="#Ndp-IPv6协议欺骗中间人攻击" class="headerlink" title="Ndp IPv6协议欺骗中间人攻击"></a><strong>Ndp</strong> IPv6协议欺骗中间人攻击</h4><pre><code>-M ndp //fe80::260d:afff:fe6e:f378/ //2001:db8::2:1/</code></pre><h3 id="Pass-the-Hash-PTH"><a href="#Pass-the-Hash-PTH" class="headerlink" title="Pass the Hash (PTH)"></a><strong>Pass the Hash</strong> (PTH)</h3><ul><li>密码破解耗费时间资源巨大</li><li>使用密文提交给服务器直接完成身份认证</li><li>NTLM/LM是没有加盐的静态HASH密文</li><li>企业中使用ghost等工具克隆安装系统</li></ul><h4 id="利用sam-hash密文远程登录windows"><a href="#利用sam-hash密文远程登录windows" class="headerlink" title="利用sam hash密文远程登录windows"></a><strong>利用sam hash密文远程登录windows</strong></h4><pre><code>pth-winexe -U w7%aad3b435b51404eeaad3b435b51404ee:ed1bfaeb3063 716ab7fe2a11faf126d8 //1.1.1.1 cmd</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 密码攻击 </category>
+          
+          <category> 嗅探欺骗 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> arpspoof </tag>
+            
+            <tag> dnsspoof </tag>
+            
+            <tag> Ettercap </tag>
+            
+            <tag> PTH </tag>
+            
+            <tag> 中间人攻击 </tag>
             
         </tags>
       
@@ -2300,13 +2449,13 @@
       
         <tags>
             
+            <tag> 离线密码破解 </tag>
+            
             <tag> John </tag>
             
             <tag> 彩虹表 </tag>
             
             <tag> Ophcrack </tag>
-            
-            <tag> 离线密码破解 </tag>
             
             <tag> Linux密码破解 </tag>
             
@@ -2378,13 +2527,13 @@
             
             <tag> nc </tag>
             
-            <tag> 离线密码破解 </tag>
-            
-            <tag> hashcat </tag>
-            
             <tag> hashid </tag>
             
             <tag> hash‐identifier </tag>
+            
+            <tag> hashcat </tag>
+            
+            <tag> 离线密码破解 </tag>
             
         </tags>
       
@@ -2413,9 +2562,9 @@
       
         <tags>
             
-            <tag> 彩虹表 </tag>
-            
             <tag> hashcat </tag>
+            
+            <tag> 彩虹表 </tag>
             
             <tag> GPU </tag>
             
@@ -2923,9 +3072,9 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> ARP欺骗 </tag>
             
@@ -3078,11 +3227,11 @@
       
         <tags>
             
+            <tag> 索引 </tag>
+            
             <tag> mysql </tag>
             
             <tag> SQL查询 </tag>
-            
-            <tag> 索引 </tag>
             
         </tags>
       
@@ -3235,9 +3384,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> 联合查询 </tag>
-            
             <tag> Burpsuit </tag>
+            
+            <tag> 联合查询 </tag>
             
         </tags>
       
@@ -3268,9 +3417,9 @@
             
             <tag> SQL注入 </tag>
             
-            <tag> Burpsuit </tag>
-            
             <tag> SQL盲注 </tag>
+            
+            <tag> Burpsuit </tag>
             
         </tags>
       
@@ -3406,9 +3555,9 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> 入侵检测 </tag>
             
@@ -3482,9 +3631,9 @@
             
             <tag> python </tag>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> 缓冲区溢出 </tag>
             
@@ -3587,11 +3736,11 @@
       
         <tags>
             
+            <tag> 拒绝服务攻击 </tag>
+            
             <tag> DNS </tag>
             
             <tag> dig </tag>
-            
-            <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
@@ -3622,9 +3771,9 @@
             
             <tag> python </tag>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> teardrop </tag>
             
@@ -3657,11 +3806,11 @@
             
             <tag> C </tag>
             
+            <tag> DoS攻击 </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
-            
-            <tag> DoS攻击 </tag>
             
             <tag> Smurf </tag>
             
@@ -3696,11 +3845,11 @@
             
             <tag> python </tag>
             
+            <tag> DoS攻击 </tag>
+            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
-            
-            <tag> DoS攻击 </tag>
             
             <tag> TCP </tag>
             
@@ -3729,13 +3878,13 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DoS攻击 </tag>
             
             <tag> DDoS攻击 </tag>
             
             <tag> CC </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> 缓冲区溢出 </tag>
             
@@ -3953,9 +4102,9 @@
             
             <tag> nmap </tag>
             
-            <tag> nc </tag>
-            
             <tag> Scapy </tag>
+            
+            <tag> nc </tag>
             
             <tag> hping3 </tag>
             
